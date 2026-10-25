@@ -1,13 +1,12 @@
 /* Perfil (/perfil). En la web el perfil de la app se separa en dos: Perfil
-   muestra quien sos y lo acumulado; tema, unidades y esfuerzo pasan a
-   Configuracion (kit web, Web · 7). Se llega desde el usuario al pie de la
-   navegacion.
+   muestra quien sos; tema, unidades y esfuerzo pasan a Configuracion (kit
+   web, Web · 7). Lo acumulado (sesiones, tiempo, tonelaje) vive en el
+   Historial. Se llega desde el usuario al pie de la navegacion.
    Tocar el avatar abre el modal de la foto (ModalFoto).
-   Pendiente del diseño: Editar perfil y la "Racha mas larga", que todavia no
-   tiene una definicion: la racha de la app se mide contra la rutina activa.
+   Pendiente del diseño: Editar perfil.
    Fondo: cumbre. */
 
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { Camera, ChevronRight, LogOut, Pencil, Settings } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
@@ -19,16 +18,14 @@ import { Boton } from '@/design/components/Boton';
 import { Fondo } from '@/design/components/Fondo';
 import { Icono } from '@/design/components/Icono';
 import { claseFila, Encabezado, Fila, Lista, Pagina } from '@/design/components/Pagina';
-import { Esqueleto, Tarjeta } from '@/design/components/varios';
+import { Tarjeta } from '@/design/components/varios';
 import texto from '@/design/texto.module.css';
 import { mostrarAltura, type UnidadAltura } from '@/lib/altura';
 import { fechaNacimientoAEdad } from '@/lib/edad';
-import { contarSesiones, tonelajeTotalKg } from '@/lib/estadisticas';
 import { useFotoPerfil, useNombre, usePerfil } from '@/lib/perfil';
 import { mostrarPeso, type UnidadPeso } from '@/lib/peso';
 import { supabase } from '@/lib/supabase';
 import { MESES_LARGO } from '@/lib/tiempo';
-import { miles } from '@/lib/numeros';
 import { ModalFoto } from './ModalFoto';
 import styles from './Perfil.module.css';
 
@@ -42,15 +39,8 @@ function textoEdad(fecha: string | null): string | null {
   return `${edad} ${edad === 1 ? 'año' : 'años'} · ${d}/${m}/${a}`;
 }
 
-/** Tonelaje en la unidad del usuario: toneladas si es kg, libras si es lb. */
-function textoTonelaje(kg: number, unidad: UnidadPeso): { valor: string; unidad: string } {
-  if (unidad === 'lb') return { valor: miles(mostrarPeso(kg, 'lb')), unidad: 'lb' };
-  return { valor: (Math.round(kg / 100) / 10).toFixed(1), unidad: 't' };
-}
-
 export function Perfil() {
   const { user } = useSesion();
-  const userId = user?.id ?? '';
   const perfil = usePerfil();
   const { completo, semilla } = useNombre();
   const foto = useFotoPerfil(perfil.data?.avatar_path);
@@ -58,9 +48,6 @@ export function Perfil() {
   const avisar = useAvisos();
   const cliente = useQueryClient();
   const [cambiandoFoto, setCambiandoFoto] = useState(false);
-
-  const sesiones = useQuery({ queryKey: ['estadisticas', 'sesiones', userId], queryFn: () => contarSesiones(userId), enabled: !!userId });
-  const tonelaje = useQuery({ queryKey: ['estadisticas', 'tonelaje', userId], queryFn: () => tonelajeTotalKg(userId), enabled: !!userId });
 
   const p = perfil.data;
   const unidadPeso = (p?.unidad_peso ?? 'kg') as UnidadPeso;
@@ -79,8 +66,6 @@ export function Perfil() {
     cliente.clear();
     avisar('Sesión cerrada', 'info');
   }
-
-  const tonelajeVisible = tonelaje.data != null ? textoTonelaje(tonelaje.data, unidadPeso) : null;
 
   return (
     <>
@@ -131,30 +116,6 @@ export function Perfil() {
           </div>
 
           <div className={styles.columna}>
-            <span className={`${texto.label} ${texto.terciario}`}>Desde que empezaste</span>
-            <Tarjeta className={styles.metricas}>
-              <div className={styles.metrica}>
-                <span className={`${texto.label} ${texto.terciario}`}>Sesiones</span>
-                {sesiones.data != null ? (
-                  <span className={styles.valor}>{miles(sesiones.data)}</span>
-                ) : (
-                  <Esqueleto className={styles.esqValor} />
-                )}
-              </div>
-              <div className={styles.metrica}>
-                <span className={`${texto.label} ${texto.terciario}`}>Tonelaje total</span>
-                {tonelajeVisible ? (
-                  <span className={styles.valor}>
-                    {tonelajeVisible.valor}
-                    <small>{tonelajeVisible.unidad}</small>
-                  </span>
-                ) : tonelaje.isError ? (
-                  <span className={`${texto.bodySm} ${texto.terciario}`}>No pudimos calcularlo.</span>
-                ) : (
-                  <Esqueleto className={styles.esqValor} />
-                )}
-              </div>
-            </Tarjeta>
             <Lista>
               <Link to="/configuracion" className={claseFila(true)}>
                 <Icono icono={Settings} tamano={20} className={texto.secundario} />

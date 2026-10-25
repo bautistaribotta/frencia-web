@@ -1,4 +1,4 @@
-/* Perfil (kit web, Web · 7): .w-dos, la tarjeta del usuario y .w-metrica. */
+/* Perfil (kit web, Web · 7): .w-dos y la tarjeta del usuario. */
 
 .dos { display: grid; grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr); gap: var(--space-8); align-items: start; }
 .columna { display: flex; flex-direction: column; gap: var(--space-5); min-width: 0; }
@@ -8,22 +8,6 @@
 
 .crece { flex: 1; min-width: 0; }
 
-.metricas { display: flex; flex-direction: column; gap: var(--space-5); }
-.metrica { display: flex; flex-direction: column; gap: var(--space-2); }
-.valor {
-  font: var(--fw-medium) 34px/1 var(--font-sans);
-  font-variation-settings: var(--vs-condensed);
-  letter-spacing: -0.02em;
-  font-variant-numeric: tabular-nums;
-  color: var(--text-primary);
-}
-.valor small {
-  font-size: 15px;
-  margin-left: 4px;
-  font-variation-settings: var(--vs-normal);
-  font-weight: var(--fw-medium);
-}
-.esqValor { width: 96px; height: 34px; }
 
 /* El avatar es el boton para cambiar la foto, con la camara en un circulo
    de accent abajo a la derecha (kit web, .w-avatar-editar). */
