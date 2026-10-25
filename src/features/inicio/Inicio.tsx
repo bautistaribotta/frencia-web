@@ -13,7 +13,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { ArrowRight, Check, Flame, Plus, RotateCw, Smartphone } from 'lucide-react';
-import { Link, useNavigate } from 'react-router';
+import { Link } from 'react-router';
 
 import { Boton } from '@/design/components/Boton';
 import { Fondo } from '@/design/components/Fondo';
@@ -46,7 +46,6 @@ export function Inicio() {
   const { user } = useSesion();
   const userId = user?.id ?? '';
   const { nombre } = useNombre();
-  const navegar = useNavigate();
   const ahora = new Date();
 
   const rutina = useQuery({ queryKey: ['rutina-activa', userId], queryFn: () => cargarRutinaActiva(userId), enabled: !!userId });
@@ -74,8 +73,6 @@ export function Inicio() {
       </Insignia>
     ) : null;
 
-  const nuevaRutina = () => navegar('/rutinas/nueva');
-
   let contenido;
   if (rutina.isPending) contenido = <Cargando />;
   else if (rutina.isError)
@@ -87,7 +84,7 @@ export function Inicio() {
         </Boton>
       </Tarjeta>
     );
-  else if (!conRutina) contenido = <Vacio onCrear={nuevaRutina} />;
+  else if (!conRutina) contenido = <Vacio />;
   else
     contenido = (
       <ConRutina
@@ -251,7 +248,7 @@ const PASOS = [
   ['Revisá tu progreso', 'Historial, mejores marcas y tonelaje, en la pantalla grande.'],
 ];
 
-function Vacio({ onCrear }: { onCrear: () => void }) {
+function Vacio() {
   return (
     <>
       <Tarjeta className={styles.hero}>
@@ -260,7 +257,8 @@ function Vacio({ onCrear }: { onCrear: () => void }) {
         <span className={`${texto.body} ${texto.secundario} ${styles.heroTexto}`}>
           Todavía no tenés rutinas. Cargala acá con el teclado y el catálogo a mano; después la entrenás desde el celular.
         </span>
-        <Boton tamano="lg" icono={Plus} onClick={onCrear}>
+        {/* El constructor todavia no existe: queda a la vista, desactivado. */}
+        <Boton tamano="lg" icono={Plus} disabled title="Muy pronto">
           Crear primera rutina
         </Boton>
       </Tarjeta>

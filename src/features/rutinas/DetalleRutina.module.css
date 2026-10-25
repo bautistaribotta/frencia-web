@@ -1,0 +1,44 @@
+/* Detalle de una rutina (kit web, Web · 4): .w-migas, el nombre grande
+   (.w-nombre-rutina), los dias en .w-tres y las filas de ejercicio
+   (.w-ej-fila). */
+
+.sinMargen { margin: 0; }
+.unaLinea { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Volver queda alineado con el texto: el boton fantasma tiene su padding. */
+.migas { display: flex; margin: 0 0 calc(var(--space-6) * -1) calc(var(--space-3) * -1); }
+
+.encabezado { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-6); }
+.encabezadoTextos { display: flex; flex-direction: column; gap: var(--space-3); min-width: 0; }
+.nombre {
+  margin: 0;
+  font: var(--fw-medium) 44px/1.02 var(--font-display);
+  letter-spacing: -0.032em;
+  color: var(--text-primary);
+}
+.acciones { display: flex; align-items: center; gap: var(--space-3); flex: none; }
+
+.dias { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--space-5); align-items: start; }
+.dia { display: flex; flex-direction: column; gap: var(--space-5); min-width: 0; }
+.diaCabeza { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-4); }
+.diaTextos { display: flex; flex-direction: column; gap: var(--space-1); min-width: 0; }
+
+.ejercicios { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; }
+.ejercicio { display: flex; align-items: center; gap: var(--space-4); padding: var(--space-4) 0; }
+.ejercicio + .ejercicio { border-top: 1px solid var(--divider); }
+.numero {
+  width: 20px;
+  flex: none;
+  text-align: right;
+  font: var(--fw-semibold) 12px/1 var(--font-sans);
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+.ejercicioTextos { display: flex; flex-direction: column; gap: var(--space-1); flex: 1; min-width: 0; }
+
+.aviso { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-3); padding-top: var(--space-6); }
+
+.esqNombre { width: 320px; height: 40px; }
+.esqTitulo { width: 40%; height: 20px; }
+.esqLinea { width: 60%; }
+.esqRotulo { width: 80px; }

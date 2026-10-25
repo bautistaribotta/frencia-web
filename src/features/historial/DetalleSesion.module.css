@@ -1,0 +1,26 @@
+/* Detalle de una sesion (kit web, Web · 6). Sin el ticket al costado, la
+   columna de la izquierda de .w-dos--ticket ocupa sola hasta 900 px. */
+
+.sinMargen { margin: 0; }
+.fila { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); }
+
+/* Volver queda alineado con el texto: el boton fantasma tiene su padding. */
+.migas { display: flex; margin: 0 0 calc(var(--space-6) * -1) calc(var(--space-3) * -1); }
+
+.columna { display: flex; flex-direction: column; gap: var(--space-7); max-width: 900px; }
+.encabezado { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-4); }
+.nombre {
+  margin: 0;
+  font: var(--fw-medium) 44px/1.02 var(--font-display);
+  letter-spacing: -0.032em;
+  color: var(--text-primary);
+}
+.cuatro { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-5); }
+.ejercicio { display: flex; flex-direction: column; gap: var(--space-4); }
+
+.aviso { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-3); padding-top: var(--space-6); }
+
+.esqNombre { width: 240px; height: 40px; }
+.esqTitulo { width: 40%; height: 20px; }
+.esqLinea { width: 60%; }
+.esqRotulo { width: 96px; }

@@ -31,6 +31,9 @@ const ITEMS: Item[] = [
 ];
 
 const NUEVA_RUTINA = '/rutinas/nueva';
+// El constructor todavia no existe: el boton queda a la vista, desactivado,
+// y N no hace nada. Pasa a true cuando llegue /rutinas/nueva.
+const CREAR_RUTINA_LISTO = false;
 
 function claseItem({ isActive }: { isActive: boolean }) {
   return `${styles.item} ${isActive ? styles.activo : ''}`;
@@ -57,7 +60,7 @@ function useAtajos() {
         return;
       }
       if (tecla === 'G') esperandoG = Date.now();
-      else if (tecla === 'N') navegar(NUEVA_RUTINA);
+      else if (tecla === 'N' && CREAR_RUTINA_LISTO) navegar(NUEVA_RUTINA);
     }
     window.addEventListener('keydown', alTeclear);
     return () => window.removeEventListener('keydown', alTeclear);
@@ -84,7 +87,8 @@ export function Navegacion() {
         icono={Plus}
         ancho
         className={styles.nueva}
-        title="Nueva rutina (N)"
+        title={CREAR_RUTINA_LISTO ? 'Nueva rutina (N)' : 'Nueva rutina: muy pronto'}
+        disabled={!CREAR_RUTINA_LISTO}
         onClick={() => navegar(NUEVA_RUTINA)}
       >
         <span className={styles.texto}>Nueva rutina</span>
@@ -92,7 +96,7 @@ export function Navegacion() {
 
       <div className={styles.grupo}>
         {ITEMS.map((item) => (
-          <NavLink key={item.ruta} to={item.ruta} end className={claseItem} title={`${item.etiqueta} (G ${item.tecla})`}>
+          <NavLink key={item.ruta} to={item.ruta} end={item.ruta === '/'} className={claseItem} title={`${item.etiqueta} (G ${item.tecla})`}>
             <Icono icono={item.icono} tamano={20} className={styles.icono} />
             <span className={styles.texto}>{item.etiqueta}</span>
             <span className={styles.atajo}>

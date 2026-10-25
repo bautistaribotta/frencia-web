@@ -1,0 +1,43 @@
+/* Historial (kit web, Web · 6): los totales en .w-cuatro, una tabla por mes,
+   el pie que carga mas (o .w-aviso-pie si falla) y el vacio punteado. */
+
+.sinMargen { margin: 0; }
+.crece { flex: 1; min-width: 0; }
+.fila { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); }
+
+.cuatro { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-5); }
+
+.mes { display: flex; flex-direction: column; gap: var(--space-4); }
+
+.cargandoMas { display: flex; align-items: center; justify-content: center; gap: var(--space-3); color: var(--text-secondary); }
+
+.avisoPie {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-3) var(--space-3) var(--space-5);
+  border-radius: var(--radius-lg);
+  background: var(--surface-card);
+  border: 1px solid var(--glass-line);
+  box-shadow: var(--shadow-glass);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+}
+
+.vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+  padding: var(--space-11) var(--space-8);
+  text-align: center;
+  border-radius: var(--radius-xl);
+  background: var(--surface-inset);
+  border: 1px dashed var(--border-strong);
+}
+
+.esqValor { width: 72px; height: 34px; }
+.esqTitulo { width: 120px; height: 20px; }
+.esqFila { padding: var(--space-5) var(--space-6); }
+.esqFila + .esqFila { border-top: 1px solid var(--divider); }
+.esqLinea { width: 60%; }

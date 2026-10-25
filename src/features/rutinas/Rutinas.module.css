@@ -1,0 +1,51 @@
+/* Rutinas (kit web, Web · 4): la en curso (.w-tarjeta--activa), la tabla de
+   anteriores y el vacio punteado. */
+
+.crece { flex: 1; min-width: 0; }
+.unaLinea { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fila { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); }
+
+/* La en curso: vidrio elevado con el filo de lume a la izquierda. */
+.activa {
+  display: flex;
+  align-items: center;
+  gap: var(--space-7);
+  padding: var(--pad-card);
+  border-radius: var(--radius-xl);
+  background: var(--surface-card-elevated);
+  border: 1px solid var(--surface-signal-line);
+  box-shadow: var(--shadow-glass), inset 3px 0 0 var(--signal);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+.activa:hover { border-color: var(--signal); }
+.activa:focus-visible { outline: var(--foco-w) solid var(--focus-ring); outline-offset: var(--foco-offset); }
+.activaTextos { display: flex; flex-direction: column; gap: var(--space-3); flex: 1; min-width: 0; }
+.activaDias { display: flex; gap: var(--space-5); flex-wrap: wrap; justify-content: flex-end; }
+.activaDia { display: flex; flex-direction: column; gap: var(--space-2); max-width: 206px; }
+
+.anteriores { display: flex; flex-direction: column; gap: var(--space-4); }
+
+.aviso { display: flex; align-items: center; gap: var(--space-3); }
+
+.vacia {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+  padding: var(--space-11) var(--space-8);
+  text-align: center;
+  border-radius: var(--radius-xl);
+  background: var(--surface-inset);
+  border: 1px dashed var(--border-strong);
+}
+
+.esqActiva { display: flex; flex-direction: column; gap: var(--space-3); }
+.esqFila { padding: var(--space-5) var(--space-6); }
+.esqFila + .esqFila { border-top: 1px solid var(--divider); }
+.esqTitulo { width: 40%; height: 22px; }
+.esqLinea { width: 55%; }
+.esqRotulo { width: 25%; }

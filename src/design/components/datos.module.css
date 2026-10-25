@@ -1,0 +1,92 @@
+/* Piezas de datos del kit web: .w-metrica, .w-res, .w-tipo, .w-serie-n y
+   .w-tabla. */
+
+.metrica { display: flex; flex-direction: column; gap: var(--space-2); min-width: 0; }
+.metricaValor {
+  font: var(--fw-medium) 34px/1 var(--font-sans);
+  font-variation-settings: var(--vs-condensed);
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+.metricaValor small {
+  font-size: 15px;
+  margin-left: 4px;
+  font-variation-settings: var(--vs-normal);
+  font-weight: var(--fw-medium);
+}
+
+.resumen {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: var(--fw-medium) 12.5px/1 var(--font-sans);
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.resumen b { font-weight: var(--fw-semibold); color: var(--intensity-text); }
+.resumen i { font-style: normal; color: var(--text-tertiary); }
+
+.tipo {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-inset);
+  border: 1px solid var(--glass-line);
+  color: var(--text-secondary);
+}
+
+.serieN {
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-inset);
+  border: 1px solid var(--glass-line);
+  font: var(--fw-semibold) 12px/1 var(--font-sans);
+  color: var(--text-secondary);
+}
+
+/* Tabla dentro de una Lista de vidrio. Toda la fila es el enlace: el clic
+   lo maneja la fila y el teclado, el enlace de la primera celda con texto. */
+.tabla { width: 100%; border-collapse: separate; border-spacing: 0; }
+.tabla th {
+  text-align: left;
+  padding: var(--space-4) var(--space-6);
+  font: var(--text-label);
+  font-variation-settings: var(--vs-semi);
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  border-bottom: 1px solid var(--divider);
+}
+.tabla td {
+  padding: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--divider);
+  font: var(--text-body-sm);
+  color: var(--text-primary);
+  vertical-align: middle;
+}
+.tabla tr:last-child td { border-bottom: 0; }
+.tabla .num { text-align: right; font-variant-numeric: tabular-nums; }
+.filaEnlace { cursor: pointer; transition: background var(--dur-fast) var(--ease-out); }
+.filaEnlace:hover td { background: var(--surface-chip); }
+.enlace { color: inherit; text-decoration: none; font-weight: var(--fw-semibold); border-radius: 4px; }
+.enlace:focus-visible { outline: var(--foco-w) solid var(--focus-ring); outline-offset: 2px; }
+.acc { width: 56px; text-align: right; color: var(--text-tertiary); }
+.acc > * { vertical-align: middle; }
+
+/* Series: celdas mas apretadas y sin hover, no son enlaces. */
+.series th,
+.series td { padding: var(--space-3) var(--space-4); }
+.series th:first-child,
+.series td:first-child { padding-left: 0; width: 56px; }
+.esfuerzo { color: var(--intensity-text); font-weight: var(--fw-semibold); white-space: nowrap; }
+.esfuerzo > :first-child { margin-right: 4px; vertical-align: -2px; }
