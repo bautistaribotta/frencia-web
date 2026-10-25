@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" role="img" aria-label="Frencia">
+  <rect width="120" height="120" rx="27" fill="#0d0e10"/>
+  <g fill="#ebeae6">
+    <path transform="translate(35.90 88.80) scale(0.08000 -0.08000)" d="M50 0V720H192V0ZM122 286V396H348V286ZM122 610V720H358V610Z"/>
+    <circle cx="79.60" cy="82.30" r="6.5"/>
+  </g>
+</svg>

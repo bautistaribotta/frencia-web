@@ -1,0 +1,9 @@
+/* ============================================================
+   FRENCIA DESIGN SYSTEM · Entrada global de las paginas del kit
+   Import list only — no rules here.
+   tokens.css lo genera la pagina desde tokens.json; bundle.css trae
+   las fuentes, los roles de texto, el movimiento y la base.
+   ============================================================ */
+
+@import url('./tokens.css');
+@import url('./components/bundle.css');

@@ -1,0 +1,61 @@
+/* Campo de texto en vidrio: rotulo arriba, caja con icono y una accion final
+   opcional, y debajo la ayuda o el error. */
+
+.campo { display: flex; flex-direction: column; gap: var(--space-3); min-width: 0; }
+
+.rotulo { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-3); }
+
+.caja {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  height: var(--control-h-lg);
+  padding: 0 var(--space-5);
+  border-radius: var(--radius-lg);
+  cursor: text;
+  background: var(--surface-card);
+  border: 1px solid var(--glass-line);
+  box-shadow: var(--shadow-glass);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.caja > svg:first-child { color: var(--text-tertiary); flex: none; }
+
+.caja:hover { border-color: var(--border-default); background: var(--surface-card-elevated); }
+
+.caja:focus-within {
+  background: var(--surface-card-elevated);
+  border-color: var(--signal);
+  box-shadow: var(--shadow-glass), 0 0 0 1px var(--signal), var(--halo-signal);
+}
+.caja:focus-within > svg:first-child { color: var(--signal); }
+
+.error .caja,
+.error .caja:focus-within { border-color: var(--danger); box-shadow: var(--shadow-glass), 0 0 0 1px var(--danger); }
+
+.off .caja { background: var(--surface-chip); border-color: transparent; box-shadow: none; cursor: not-allowed; }
+.off .valor,
+.off .caja > svg:first-child { color: var(--text-disabled); }
+
+.valor {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font: var(--fw-regular) 16px/22px var(--font-sans);
+  color: var(--text-primary);
+}
+.valor::placeholder { color: var(--text-tertiary); opacity: 1; }
+.valor:disabled { cursor: not-allowed; }
+
+.ayuda { font: var(--text-body-sm); color: var(--text-tertiary); }
+
+.mensajeError { display: flex; align-items: center; gap: var(--space-2); font: var(--text-body-sm); color: var(--danger-text); }

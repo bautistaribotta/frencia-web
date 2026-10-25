@@ -1,0 +1,41 @@
+/* Piezas chicas del sistema: la marca, la tarjeta de vidrio, el atajo de
+   teclado y el divisor con texto. */
+
+.marca {
+  font: var(--fw-bold) 22px/1 var(--font-sans);
+  font-variation-settings: "wdth" 75;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+.marcaGrande { font-size: 40px; }
+
+.tarjeta {
+  position: relative;
+  padding: var(--pad-card);
+  border-radius: var(--radius-xl);
+  background: var(--surface-card);
+  border: 1px solid var(--glass-line);
+  box-shadow: var(--shadow-glass);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+}
+.tarjetaElevada { background: var(--surface-card-elevated); }
+
+.kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 6px;
+  background: var(--surface-inset);
+  border: 1px solid var(--border-default);
+  border-bottom-width: 2px;
+  font: var(--fw-medium) 11px/1 var(--font-mono);
+  color: var(--text-secondary);
+}
+
+.divisor { display: flex; align-items: center; gap: var(--space-4); }
+.divisor::before,
+.divisor::after { content: ''; flex: 1; height: 1px; background: var(--divider); }

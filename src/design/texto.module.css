@@ -1,0 +1,19 @@
+/* Roles de texto y tonos (equivalen a .t-* y .c-* del kit). Se componen
+   con la clase propia de cada componente. */
+
+.hero { font: var(--fw-medium) 72px/1 var(--font-display); font-variation-settings: var(--vs-condensed); letter-spacing: -0.035em; }
+.display { font: var(--text-display); letter-spacing: -0.028em; text-wrap: balance; }
+.title { font: var(--text-title); letter-spacing: -0.02em; }
+.subtitle { font: var(--text-subtitle); letter-spacing: -0.012em; }
+.body { font: var(--text-body); }
+.bodySm { font: var(--text-body-sm); }
+.data { font: var(--text-data); font-variant-numeric: tabular-nums; }
+.label { font: var(--text-label); font-variation-settings: var(--vs-semi); letter-spacing: var(--ls-wider); text-transform: uppercase; }
+.meta { font: var(--text-meta); letter-spacing: var(--ls-wide); text-transform: uppercase; }
+
+.primario { color: var(--text-primary); }
+.secundario { color: var(--text-secondary); }
+.terciario { color: var(--text-tertiary); }
+.acento { color: var(--signal-text); }
+.peligro { color: var(--danger-text); }
+.semi { font-weight: var(--fw-semibold); }

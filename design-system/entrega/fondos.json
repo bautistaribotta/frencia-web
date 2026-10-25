@@ -1,0 +1,319 @@
+{
+  "$comentario": "Fondo de luces de Frencia (Lume). Generado desde components/src/superficie/Fondo.jsx y tokens.json; no editar a mano.",
+  "geometria": {
+    "x_y": "centro de la luz en % del ancho y del alto de la pantalla (puede salir de 0–100)",
+    "radio": "radio en % del ANCHO de la pantalla",
+    "paradas": [
+      {
+        "offset": 0,
+        "opacidad": "alfa"
+      },
+      {
+        "offset": 0.42,
+        "opacidad": "alfa × 0.45"
+      },
+      {
+        "offset": 1,
+        "opacidad": 0
+      }
+    ],
+    "orden": "base bg-app, luces a → b → c, grano (opcional), velo",
+    "velo": "degradado lineal vertical: velo-top en 0 %, transparente en 30 % y 64 %, velo-bottom en 100 %"
+  },
+  "intensidad": {
+    "pleno": {
+      "a": 1,
+      "b": 1,
+      "c": 1
+    },
+    "suave": {
+      "a": 0.8,
+      "b": 0.95,
+      "c": 0.8
+    }
+  },
+  "ganancia": {
+    "oscuro": 1,
+    "claro": 1.7,
+    "reducir_transparencia": 0.45,
+    "uso": "multiplica el alfa de cada luz (tope 1)"
+  },
+  "temas": {
+    "oscuro": {
+      "bg-app": "#08090a",
+      "glow-a": "#c9e25f",
+      "glow-b": "#2f4a1a",
+      "glow-c": "#5d7fd6",
+      "velo-top": "rgba(8, 9, 10, 0.55)",
+      "velo-bottom": "rgba(8, 9, 10, 0.70)"
+    },
+    "claro": {
+      "bg-app": "#eef0e6",
+      "glow-a": "#d6ec78",
+      "glow-b": "#ffffff",
+      "glow-c": "#b4c3f5",
+      "velo-top": "rgba(238, 240, 230, 0.45)",
+      "velo-bottom": "rgba(238, 240, 230, 0.60)"
+    }
+  },
+  "posiciones": {
+    "cumbre": {
+      "uso": "Luz arriba a la derecha. Pestañas, listas y formularios que arrancan debajo del título.",
+      "luces": [
+        {
+          "capa": "a",
+          "x": 92,
+          "y": 2,
+          "radio": 95,
+          "alfa": 0.5
+        },
+        {
+          "capa": "b",
+          "x": 8,
+          "y": 62,
+          "radio": 115,
+          "alfa": 0.9
+        },
+        {
+          "capa": "c",
+          "x": 96,
+          "y": 94,
+          "radio": 70,
+          "alfa": 0.22
+        }
+      ]
+    },
+    "centro": {
+      "uso": "Luz detrás del centro. Un control protagonista en vidrio: rueda, regla, esfera del descanso, ticket.",
+      "luces": [
+        {
+          "capa": "a",
+          "x": 56,
+          "y": 54,
+          "radio": 92,
+          "alfa": 0.42
+        },
+        {
+          "capa": "b",
+          "x": 4,
+          "y": 14,
+          "radio": 95,
+          "alfa": 0.85
+        },
+        {
+          "capa": "c",
+          "x": 100,
+          "y": 96,
+          "radio": 72,
+          "alfa": 0.2
+        }
+      ]
+    },
+    "flanco": {
+      "uso": "Luz en el borde derecho, a media altura. Formularios alineados a la izquierda: acceso, nombre de rutina.",
+      "luces": [
+        {
+          "capa": "a",
+          "x": 112,
+          "y": 42,
+          "radio": 88,
+          "alfa": 0.5
+        },
+        {
+          "capa": "b",
+          "x": -2,
+          "y": 82,
+          "radio": 115,
+          "alfa": 0.9
+        },
+        {
+          "capa": "c",
+          "x": -6,
+          "y": -2,
+          "radio": 62,
+          "alfa": 0.2
+        }
+      ]
+    },
+    "base": {
+      "uso": "Luz que sube desde abajo a la izquierda. Pantallas con el contenido arriba y aire abajo: días de la rutina, menú.",
+      "luces": [
+        {
+          "capa": "a",
+          "x": -4,
+          "y": 86,
+          "radio": 90,
+          "alfa": 0.42
+        },
+        {
+          "capa": "b",
+          "x": 100,
+          "y": 18,
+          "radio": 110,
+          "alfa": 0.9
+        },
+        {
+          "capa": "c",
+          "x": 70,
+          "y": 104,
+          "radio": 60,
+          "alfa": 0.18
+        }
+      ]
+    },
+    "velada": {
+      "uso": "Luz solo en los bordes: entra por abajo a la derecha (detrás del botón o la barra de pestañas) y por arriba a la izquierda. Pantallas densas en datos: la serie, el historial, el catálogo.",
+      "luces": [
+        {
+          "capa": "a",
+          "x": 102,
+          "y": 104,
+          "radio": 82,
+          "alfa": 0.4
+        },
+        {
+          "capa": "b",
+          "x": 12,
+          "y": 58,
+          "radio": 110,
+          "alfa": 0.85
+        },
+        {
+          "capa": "c",
+          "x": -6,
+          "y": -4,
+          "radio": 62,
+          "alfa": 0.22
+        }
+      ]
+    }
+  },
+  "onboarding": {
+    "recorrido": [
+      "flanco",
+      "cumbre",
+      "centro",
+      "centro"
+    ],
+    "deriva_s": {
+      "a": 20,
+      "b": 26,
+      "c": 31
+    },
+    "deriva": "cada luz va y vuelve entre (0,0, escala 1) → (+5 %, −4 %, 1.08) → (−4 %, +5 %, 0.96), ease-in-out, en loop alternado",
+    "entre_pasos": "interpolar x, y, radio y alfa de cada luz hacia la posición del paso siguiente en 600 ms ease-in-out"
+  },
+  "wizard_fuera_del_onboarding": {
+    "entre_pasos": "fundido cruzado de 420 ms entre los dos fondos; las luces no se desplazan"
+  },
+  "rutas": [
+    {
+      "ruta": "(auth)/login · register · forgot-password",
+      "posicion": "flanco",
+      "intensidad": "pleno",
+      "animado": true
+    },
+    {
+      "ruta": "legal-consent · terms · privacy",
+      "posicion": "cumbre",
+      "intensidad": "pleno",
+      "animado": true
+    },
+    {
+      "ruta": "setup · paso 1 (sexo)",
+      "posicion": "cumbre",
+      "intensidad": "pleno",
+      "animado": true
+    },
+    {
+      "ruta": "setup · pasos 2 a 4 (edad, altura, peso)",
+      "posicion": "centro",
+      "intensidad": "pleno",
+      "animado": true
+    },
+    {
+      "ruta": "account-recovery · profile-error",
+      "posicion": "cumbre",
+      "intensidad": "pleno",
+      "animado": false
+    },
+    {
+      "ruta": "(main)/home · routines · history · profile",
+      "posicion": "cumbre",
+      "intensidad": "pleno",
+      "animado": false
+    },
+    {
+      "ruta": "create-routine · paso nombre",
+      "posicion": "base",
+      "intensidad": "pleno",
+      "animado": false
+    },
+    {
+      "ruta": "create-routine · paso cantidad de días",
+      "posicion": "cumbre",
+      "intensidad": "pleno",
+      "animado": false
+    },
+    {
+      "ruta": "create-routine · cada día (DayEditor)",
+      "posicion": "cumbre",
+      "intensidad": "pleno",
+      "animado": false
+    },
+    {
+      "ruta": "ExercisePickerModal (catálogo y configurar)",
+      "posicion": "velada",
+      "intensidad": "pleno",
+      "animado": false
+    },
+    {
+      "ruta": "session · serie (fuerza, cardio, isométrico)",
+      "posicion": "velada",
+      "intensidad": "pleno",
+      "animado": false
+    },
+    {
+      "ruta": "session · descanso (RestRing)",
+      "posicion": "centro",
+      "intensidad": "pleno",
+      "animado": false
+    },
+    {
+      "ruta": "session · ticket (ResumenSesion)",
+      "posicion": "centro",
+      "intensidad": "pleno",
+      "animado": false
+    },
+    {
+      "ruta": "session · conflicto · día sin ejercicios",
+      "posicion": "cumbre",
+      "intensidad": "pleno",
+      "animado": false
+    },
+    {
+      "ruta": "session-history",
+      "posicion": "velada",
+      "intensidad": "pleno",
+      "animado": false
+    },
+    {
+      "ruta": "session-ticket",
+      "posicion": "centro",
+      "intensidad": "pleno",
+      "animado": false
+    },
+    {
+      "ruta": "routine · edit-routine · edit-day",
+      "posicion": "cumbre",
+      "intensidad": "pleno",
+      "animado": false
+    },
+    {
+      "ruta": "edit-profile · settings",
+      "posicion": "cumbre",
+      "intensidad": "pleno",
+      "animado": false
+    }
+  ]
+}

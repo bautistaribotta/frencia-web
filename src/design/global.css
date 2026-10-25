@@ -1,14 +1,11 @@
 /* ============================================================
    Frencia · Base global
-   Reset minimo. Los tokens de Lume (colores en oklch, tipografia,
-   radios, espaciado, sombras y movimiento) llegan en la etapa 1 en
-   tokens/ y se importan aca. Hasta entonces la pagina usa los colores
-   del sistema (Canvas / CanvasText) segun el tema del navegador.
+   Tokens de Lume (tokens/tokens.css, copia de tokens.web.css del
+   design system) y la base del documento. El tema sale del atributo
+   data-theme de <html>: dark, light o system (sigue al navegador).
    ============================================================ */
 
-:root {
-  color-scheme: dark light;
-}
+@import './tokens/tokens.css';
 
 *,
 *::before,
@@ -19,14 +16,26 @@
 html,
 body {
   margin: 0;
+  padding: 0;
   min-height: 100%;
 }
 
 body {
-  background: Canvas;
-  color: CanvasText;
-  font-family: system-ui, sans-serif;
+  background: var(--bg-app);
+  color: var(--text-primary);
+  font: var(--text-body);
+  font-variant-numeric: tabular-nums;
   -webkit-font-smoothing: antialiased;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: inherit;
 }
 
 #root {

@@ -1,0 +1,32 @@
+.botonIcono {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.sm { width: 32px; height: 32px; border-radius: var(--radius-sm); }
+
+.surface {
+  background: var(--surface-card);
+  border-color: var(--glass-line);
+  box-shadow: var(--shadow-glass);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+}
+
+.botonIcono:hover { background: var(--surface-chip); color: var(--text-primary); }
+.surface:hover { background: var(--surface-card-elevated); }
+.botonIcono:focus-visible { outline: var(--foco-w) solid var(--focus-ring); outline-offset: var(--foco-offset); color: var(--text-primary); }
+.botonIcono:disabled { color: var(--text-disabled); background: transparent; cursor: not-allowed; }

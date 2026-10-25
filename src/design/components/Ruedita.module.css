@@ -1,0 +1,23 @@
+/* El anillo de carga: pista en data-track, un cuarto en el color del texto,
+   una vuelta cada 1,2 s (3 s con reducir movimiento). */
+
+.ruedita {
+  display: inline-block;
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-circle);
+  border: 2px solid var(--data-track);
+  border-top-color: currentColor;
+  animation: gira 1.2s linear infinite;
+}
+
+.lg { width: 28px; height: 28px; border-width: 2.5px; }
+
+@keyframes gira {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ruedita { animation-duration: 3s; }
+}

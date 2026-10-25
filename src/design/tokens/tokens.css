@@ -1,0 +1,415 @@
+/* ============================================================
+   FRENCIA WEB · tokens exportables (Lume)
+   Mismos nombres semánticos que tokens.json / la app iOS. Todos los
+   colores en oklch. Generado desde tokens.json: si cambia un valor,
+   se regenera este archivo; no se edita a mano.
+
+   Tema:
+   - <html data-theme="dark">   fuerza oscuro
+   - <html data-theme="light">  fuerza claro
+   - <html data-theme="system"> o sin atributo: sigue al sistema
+     (prefers-color-scheme). Es el valor por defecto de la cuenta
+     (profiles.tema = 'sistema').
+   El cambio de tema sobreescribe colores, sombras/halos y la ganancia
+   de las luces del fondo (--fondo-ganancia).
+   ============================================================ */
+
+@font-face { font-family: "Instrument Sans"; src: url("../fuentes/InstrumentSans-latin-var.woff2") format("woff2"); font-weight: 400 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "DM Mono"; src: url("../fuentes/DMMono-latin-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "DM Mono"; src: url("../fuentes/DMMono-latin-500.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
+
+/* ---- Constantes: no dependen del tema ---- */
+:root {
+  --space-0: 0;
+  --space-1: 2px;
+  --space-2: 4px;
+  --space-3: 8px;
+  --space-4: 12px;
+  --space-5: 16px;
+  --space-6: 20px;
+  --space-7: 24px;
+  --space-8: 32px;
+  --space-9: 40px;
+  --space-10: 48px;
+  --space-11: 64px;
+  --space-12: 80px;
+  --gap-inline: 8px;
+  --gap-stack: 16px;
+  --gap-section: 32px;
+  --pad-card: 20px;
+  --pad-screen: 20px;
+  --pad-control: 16px;
+  --radius-xs: 3px;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 22px;
+  --radius-2xl: 28px;
+  --radius-3xl: 36px;
+  --radius-pill: 999px;
+  --radius-circle: 50%;
+  --hit-min: 44px;
+  --control-h-sm: 36px;
+  --control-h-md: 44px;
+  --control-h-lg: 54px;
+  --tabbar-h: 84px;
+  --navbar-h: 52px;
+  --hairline: 1px;
+  --fs-display-2xl: 72px;
+  --fs-display-xl: 56px;
+  --fs-display-lg: 40px;
+  --fs-display-md: 34px;
+  --fs-title-xl: 28px;
+  --fs-title-lg: 26px;
+  --fs-title-md: 19px;
+  --fs-title-sm: 17px;
+  --fs-body-lg: 16px;
+  --fs-body-md: 14px;
+  --fs-body-sm: 13px;
+  --fs-label-lg: 12px;
+  --fs-label-md: 11px;
+  --fs-label-sm: 10px;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --fw-extrabold: 700;
+  --fw-black: 700;
+  --lh-tight: 1;
+  --lh-snug: 1.15;
+  --lh-heading: 1.25;
+  --lh-body: 1.5;
+  --lh-relaxed: 1.6;
+  --ls-display: -0.03em;
+  --ls-tight: -0.015em;
+  --ls-normal: 0;
+  --ls-wide: 0.04em;
+  --ls-wider: 0.08em;
+  --ls-widest: 0.16em;
+  --blur-glass: 22px;
+  --blur-sheet: 30px;
+  --blur-glow: 46px;
+  --wdth-condensed: 78;
+  --wdth-semi: 88;
+  --wdth-normal: 100;
+  --font-display: "Instrument Sans", "Helvetica Neue", system-ui, sans-serif;
+  --font-sans: "Instrument Sans", "Helvetica Neue", system-ui, -apple-system, sans-serif;
+  --font-mono: "DM Mono", ui-monospace, "SF Mono", monospace;
+
+  /* ---- Web: anchos de la variable (eje wdth de Instrument Sans) ---- */
+  --vs-condensed: "wdth" 78;
+  --vs-semi: "wdth" 88;
+  --vs-normal: "wdth" 100;
+
+  /* ---- Roles de texto (font shorthand), iguales a la app ---- */
+  --text-hero: var(--fw-medium) var(--fs-display-2xl)/var(--lh-tight) var(--font-display);
+  --text-display: var(--fw-medium) var(--fs-display-md)/1.08 var(--font-display);
+  --text-title: var(--fw-semibold) var(--fs-title-lg)/var(--lh-snug) var(--font-sans);
+  --text-subtitle: var(--fw-semibold) var(--fs-title-md)/var(--lh-heading) var(--font-sans);
+  --text-body: var(--fw-regular) var(--fs-body-lg)/var(--lh-body) var(--font-sans);
+  --text-body-sm: var(--fw-regular) var(--fs-body-md)/1.45 var(--font-sans);
+  --text-data: var(--fw-medium) 15px/1.2 var(--font-sans);
+  --text-label: var(--fw-semibold) var(--fs-label-md)/1.25 var(--font-sans);
+  --text-meta: var(--fw-regular) var(--fs-label-md)/1.3 var(--font-mono);
+
+  /* ---- Vidrio real: backdrop-filter ---- */
+  --glass-filter: blur(var(--blur-glass)) saturate(1.5);
+  --sheet-filter: blur(var(--blur-sheet)) saturate(1.5);
+
+  /* ---- Movimiento: preciso, sin rebote ---- */
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 110ms;
+  --dur-base: 180ms;
+  --dur-slow: 280ms;
+  --dur-fundido: 420ms;
+  --press-scale: 0.985;
+
+  /* ---- Web: estructura de escritorio ---- */
+  --nav-w: 248px;            /* navegación lateral expandida */
+  --nav-w-rail: 76px;        /* riel: pantallas medianas o colapsada */
+  --contenido-max: 1200px;   /* ancho máximo del contenido de una página */
+  --pad-pagina: 40px;        /* margen lateral del contenido (32px en mediana) */
+  --barra-h: 64px;           /* barra superior del constructor */
+  --catalogo-w: 340px;       /* catálogo del constructor (296px en mediana) */
+  --panel-w: 400px;          /* panel lateral de configuración */
+  --columna-dia-w: 300px;    /* columna de un día en el constructor */
+  --modal-w-sm: 440px;
+  --modal-w-md: 560px;
+  --foco-w: 2px;             /* anillo de foco de teclado */
+  --foco-offset: 2px;
+  --z-nav: 20; --z-panel: 30; --z-arrastre: 40; --z-modal: 50; --z-toast: 60; --z-tooltip: 70;
+  /* Breakpoints (para @media, documentados acá; CSS no los lee como var):
+     mínimo 1024 · mediana 1024–1279 · grande 1280–1599 · amplia ≥ 1600 */
+}
+
+/* ---- Lume oscuro (por defecto) ---- */
+:root, [data-theme="dark"] {
+  --graphite-1000: oklch(0% 0 0);
+  --graphite-950: oklch(12.1% 0.0039 245.5);
+  --graphite-900: oklch(13.9% 0.0029 246.3);
+  --graphite-850: oklch(17.74% 0.0044 264.5);
+  --graphite-700: oklch(25.68% 0.0076 274.7);
+  --graphite-500: oklch(47.17% 0.0068 128.6);
+  --graphite-400: oklch(72.5% 0.0088 121.7);
+  --graphite-300: oklch(78.01% 0.0084 114.3);
+  --graphite-100: oklch(95.45% 0.0067 97.4);
+  --graphite-50: oklch(98.48% 0.0054 95.1);
+  --ivory-0: oklch(100% 0 0);
+  --ivory-50: oklch(97.94% 0.0093 113.2);
+  --ivory-100: oklch(95.09% 0.0134 115.8);
+  --ivory-200: oklch(91.88% 0.019 116.6);
+  --ivory-400: oklch(81.76% 0.0291 115.8);
+  --ivory-500: oklch(67.23% 0.0207 119.9);
+  --ivory-600: oklch(47.58% 0.0176 119.5);
+  --ivory-700: oklch(38.21% 0.0135 118.5);
+  --ivory-800: oklch(26.89% 0.0144 113.2);
+  --ivory-900: oklch(19.3% 0.008 118.6);
+  --lume-300: oklch(92.77% 0.1246 116.4);
+  --lume-400: oklch(90.28% 0.1438 118.2);
+  --lume-500: oklch(86.87% 0.1583 118.9);
+  --lume-600: oklch(80.16% 0.1563 119.4);
+  --lume-800: oklch(48.52% 0.1184 125.6);
+  --lume-900: oklch(40.91% 0.0999 125.7);
+  --forest-600: oklch(37.53% 0.0806 133.5);
+  --steel-300: oklch(82.29% 0.0725 271.7);
+  --steel-500: oklch(61.16% 0.1378 266.3);
+  --steel-900: oklch(27.2% 0.0534 270.5);
+  --crimson-400: oklch(74.6% 0.1219 25.9);
+  --crimson-500: oklch(58.98% 0.1779 27.9);
+  --crimson-600: oklch(50.77% 0.175 28.7);
+  --crimson-700: oklch(46.9% 0.1625 28.7);
+  --success: var(--signal);
+  --warning: var(--text-primary);
+  --danger: var(--crimson-500);
+  --danger-text: var(--crimson-400);
+  --info: var(--graphite-300);
+  --bg-app: var(--graphite-900);
+  --bg-app-deep: oklch(12.1% 0.0039 245.5);
+  --glow-a: var(--lume-500);
+  --glow-b: var(--forest-600);
+  --glow-c: var(--steel-500);
+  --velo-top: oklch(13.9% 0.0029 246.3 / 0.55);
+  --velo-bottom: oklch(13.9% 0.0029 246.3 / 0.7);
+  --surface-card: oklch(19.64% 0.0084 128.9 / 0.42);
+  --surface-card-elevated: oklch(27.33% 0.0078 128.8 / 0.55);
+  --surface-raised: oklch(17.74% 0.0044 264.5 / 0.82);
+  --surface-chip: oklch(100% 0 0 / 0.06);
+  --surface-card-opaco: oklch(21.17% 0.0037 229);
+  --surface-card-elevated-opaco: oklch(25.91% 0.0048 248);
+  --surface-raised-opaco: oklch(18.65% 0.0044 264.5);
+  --surface-inset: oklch(0% 0 0 / 0.28);
+  --glass-line: oklch(100% 0 0 / 0.13);
+  --glass-highlight: oklch(100% 0 0 / 0.12);
+  --surface-signal-soft: oklch(86.87% 0.1583 118.9 / 0.1);
+  --surface-signal-line: oklch(86.87% 0.1583 118.9 / 0.6);
+  --surface-intensity-soft: oklch(95.45% 0.0067 97.4 / 0.06);
+  --surface-intensity-line: oklch(95.45% 0.0067 97.4 / 0.32);
+  --text-primary: var(--graphite-100);
+  --text-secondary: var(--graphite-300);
+  --text-tertiary: var(--graphite-400);
+  --text-disabled: var(--graphite-500);
+  --text-on-accent: oklch(15.23% 0.0045 128.8);
+  --text-on-signal: oklch(15.23% 0.0045 128.8);
+  --text-on-intensity: var(--graphite-900);
+  --text-inverse: var(--graphite-900);
+  --border-subtle: oklch(100% 0 0 / 0.1);
+  --border-default: oklch(100% 0 0 / 0.18);
+  --border-strong: oklch(100% 0 0 / 0.42);
+  --divider: oklch(100% 0 0 / 0.08);
+  --scrim: oklch(10.52% 0.005 244.3 / 0.62);
+  --focus-ring: var(--lume-500);
+  --accent: var(--lume-500);
+  --accent-hover: var(--lume-400);
+  --accent-press: var(--lume-600);
+  --signal: var(--lume-500);
+  --signal-press: var(--lume-600);
+  --signal-text: var(--lume-500);
+  --intensity: var(--graphite-100);
+  --intensity-hover: var(--graphite-50);
+  --intensity-press: oklch(88.13% 0.0082 98.9);
+  --intensity-text: var(--graphite-100);
+  --data-volume: var(--lume-500);
+  --data-intensity: var(--graphite-100);
+  --data-track: oklch(100% 0 0 / 0.14);
+  --data-tick: oklch(100% 0 0 / 0.28);
+  --stage-bg: var(--graphite-950);
+  --shadow-none: none;
+  --shadow-sm: 0 1px 2px oklch(0% 0 0 / 0.5);
+  --shadow-glass: inset 0 1px 0 oklch(100% 0 0 / 0.12), 0 10px 30px oklch(0% 0 0 / 0.25);
+  --shadow-md: inset 0 1px 0 oklch(100% 0 0 / 0.1), 0 12px 32px oklch(0% 0 0 / 0.45);
+  --shadow-lg: inset 0 1px 0 oklch(100% 0 0 / 0.1), 0 24px 56px oklch(0% 0 0 / 0.55);
+  --shadow-sheet: 0 -12px 48px oklch(0% 0 0 / 0.55);
+  --shadow-inset: inset 0 1px 2px oklch(0% 0 0 / 0.5);
+  --halo-accent: 0 8px 24px oklch(86.87% 0.1583 118.9 / 0.28);
+  --halo-signal: 0 0 12px oklch(86.87% 0.1583 118.9 / 0.45);
+  --halo-intensity: 0 0 0 1px oklch(95.45% 0.0067 97.4 / 0.32);
+  --fondo-ganancia: 1;
+  --drop-shadow-lg: drop-shadow(0 10px 20px oklch(0% 0 0 / 0.55));
+  color-scheme: dark;
+}
+
+/* ---- Lume claro ---- */
+[data-theme="light"] {
+  --success: var(--signal);
+  --warning: var(--text-primary);
+  --danger: var(--crimson-600);
+  --danger-text: var(--crimson-700);
+  --info: var(--ivory-700);
+  --bg-app: var(--ivory-100);
+  --bg-app-deep: var(--ivory-200);
+  --glow-a: var(--lume-400);
+  --glow-b: var(--ivory-0);
+  --glow-c: var(--steel-300);
+  --velo-top: oklch(95.09% 0.0134 115.8 / 0.45);
+  --velo-bottom: oklch(95.09% 0.0134 115.8 / 0.6);
+  --surface-card: oklch(100% 0 0 / 0.55);
+  --surface-card-elevated: oklch(100% 0 0 / 0.78);
+  --surface-raised: oklch(97.94% 0.0093 113.2 / 0.86);
+  --surface-chip: oklch(19.3% 0.008 118.6 / 0.06);
+  --surface-card-opaco: oklch(100% 0 0);
+  --surface-card-elevated-opaco: oklch(98.89% 0.0067 115.7);
+  --surface-raised-opaco: oklch(97.94% 0.0093 113.2);
+  --surface-inset: oklch(19.3% 0.008 118.6 / 0.05);
+  --glass-line: oklch(100% 0 0 / 0.8);
+  --glass-highlight: oklch(100% 0 0 / 0.95);
+  --surface-signal-soft: oklch(48.52% 0.1184 125.6 / 0.08);
+  --surface-signal-line: oklch(48.52% 0.1184 125.6 / 0.55);
+  --surface-intensity-soft: oklch(19.3% 0.008 118.6 / 0.05);
+  --surface-intensity-line: oklch(19.3% 0.008 118.6 / 0.32);
+  --text-primary: var(--ivory-900);
+  --text-secondary: var(--ivory-700);
+  --text-tertiary: var(--ivory-600);
+  --text-disabled: var(--ivory-500);
+  --text-on-accent: var(--ivory-50);
+  --text-on-signal: var(--ivory-50);
+  --text-on-intensity: var(--ivory-50);
+  --text-inverse: var(--ivory-50);
+  --border-subtle: oklch(19.3% 0.008 118.6 / 0.08);
+  --border-default: oklch(19.3% 0.008 118.6 / 0.16);
+  --border-strong: oklch(19.3% 0.008 118.6 / 0.55);
+  --divider: oklch(19.3% 0.008 118.6 / 0.08);
+  --scrim: oklch(19.3% 0.008 118.6 / 0.28);
+  --focus-ring: var(--lume-800);
+  --accent: var(--ivory-900);
+  --accent-hover: var(--ivory-800);
+  --accent-press: oklch(0% 0 0);
+  --signal: var(--lume-800);
+  --signal-press: var(--lume-900);
+  --signal-text: var(--lume-900);
+  --intensity: var(--ivory-900);
+  --intensity-hover: var(--ivory-800);
+  --intensity-press: oklch(0% 0 0);
+  --intensity-text: var(--ivory-900);
+  --data-volume: var(--lume-800);
+  --data-intensity: var(--ivory-900);
+  --data-track: oklch(19.3% 0.008 118.6 / 0.12);
+  --data-tick: oklch(19.3% 0.008 118.6 / 0.26);
+  --stage-bg: var(--ivory-400);
+  --shadow-sm: 0 1px 2px oklch(19.3% 0.008 118.6 / 0.08);
+  --shadow-glass: inset 0 1px 0 oklch(100% 0 0 / 0.95), 0 10px 30px oklch(19.3% 0.008 118.6 / 0.06);
+  --shadow-md: inset 0 1px 0 oklch(100% 0 0 / 0.95), 0 12px 32px oklch(19.3% 0.008 118.6 / 0.1);
+  --shadow-lg: inset 0 1px 0 oklch(100% 0 0 / 0.95), 0 24px 56px oklch(19.3% 0.008 118.6 / 0.14);
+  --shadow-sheet: 0 -12px 48px oklch(19.3% 0.008 118.6 / 0.1);
+  --shadow-inset: inset 0 1px 2px oklch(19.3% 0.008 118.6 / 0.06);
+  --halo-accent: 0 8px 24px oklch(19.3% 0.008 118.6 / 0.18);
+  --halo-signal: 0 0 10px oklch(74.62% 0.1729 124.2 / 0.45);
+  --halo-intensity: 0 0 0 1px oklch(19.3% 0.008 118.6 / 0.3);
+  --fondo-ganancia: 1.7;
+  --drop-shadow-lg: drop-shadow(0 1px 2px oklch(19.3% 0.008 118.6 / 0.06)) drop-shadow(0 10px 20px oklch(19.3% 0.008 118.6 / 0.1));
+  color-scheme: light;
+}
+
+/* ---- Seguir al sistema ---- */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]):not([data-theme="light"]), [data-theme="system"] {
+  --success: var(--signal);
+  --warning: var(--text-primary);
+  --danger: var(--crimson-600);
+  --danger-text: var(--crimson-700);
+  --info: var(--ivory-700);
+  --bg-app: var(--ivory-100);
+  --bg-app-deep: var(--ivory-200);
+  --glow-a: var(--lume-400);
+  --glow-b: var(--ivory-0);
+  --glow-c: var(--steel-300);
+  --velo-top: oklch(95.09% 0.0134 115.8 / 0.45);
+  --velo-bottom: oklch(95.09% 0.0134 115.8 / 0.6);
+  --surface-card: oklch(100% 0 0 / 0.55);
+  --surface-card-elevated: oklch(100% 0 0 / 0.78);
+  --surface-raised: oklch(97.94% 0.0093 113.2 / 0.86);
+  --surface-chip: oklch(19.3% 0.008 118.6 / 0.06);
+  --surface-card-opaco: oklch(100% 0 0);
+  --surface-card-elevated-opaco: oklch(98.89% 0.0067 115.7);
+  --surface-raised-opaco: oklch(97.94% 0.0093 113.2);
+  --surface-inset: oklch(19.3% 0.008 118.6 / 0.05);
+  --glass-line: oklch(100% 0 0 / 0.8);
+  --glass-highlight: oklch(100% 0 0 / 0.95);
+  --surface-signal-soft: oklch(48.52% 0.1184 125.6 / 0.08);
+  --surface-signal-line: oklch(48.52% 0.1184 125.6 / 0.55);
+  --surface-intensity-soft: oklch(19.3% 0.008 118.6 / 0.05);
+  --surface-intensity-line: oklch(19.3% 0.008 118.6 / 0.32);
+  --text-primary: var(--ivory-900);
+  --text-secondary: var(--ivory-700);
+  --text-tertiary: var(--ivory-600);
+  --text-disabled: var(--ivory-500);
+  --text-on-accent: var(--ivory-50);
+  --text-on-signal: var(--ivory-50);
+  --text-on-intensity: var(--ivory-50);
+  --text-inverse: var(--ivory-50);
+  --border-subtle: oklch(19.3% 0.008 118.6 / 0.08);
+  --border-default: oklch(19.3% 0.008 118.6 / 0.16);
+  --border-strong: oklch(19.3% 0.008 118.6 / 0.55);
+  --divider: oklch(19.3% 0.008 118.6 / 0.08);
+  --scrim: oklch(19.3% 0.008 118.6 / 0.28);
+  --focus-ring: var(--lume-800);
+  --accent: var(--ivory-900);
+  --accent-hover: var(--ivory-800);
+  --accent-press: oklch(0% 0 0);
+  --signal: var(--lume-800);
+  --signal-press: var(--lume-900);
+  --signal-text: var(--lume-900);
+  --intensity: var(--ivory-900);
+  --intensity-hover: var(--ivory-800);
+  --intensity-press: oklch(0% 0 0);
+  --intensity-text: var(--ivory-900);
+  --data-volume: var(--lume-800);
+  --data-intensity: var(--ivory-900);
+  --data-track: oklch(19.3% 0.008 118.6 / 0.12);
+  --data-tick: oklch(19.3% 0.008 118.6 / 0.26);
+  --stage-bg: var(--ivory-400);
+  --shadow-sm: 0 1px 2px oklch(19.3% 0.008 118.6 / 0.08);
+  --shadow-glass: inset 0 1px 0 oklch(100% 0 0 / 0.95), 0 10px 30px oklch(19.3% 0.008 118.6 / 0.06);
+  --shadow-md: inset 0 1px 0 oklch(100% 0 0 / 0.95), 0 12px 32px oklch(19.3% 0.008 118.6 / 0.1);
+  --shadow-lg: inset 0 1px 0 oklch(100% 0 0 / 0.95), 0 24px 56px oklch(19.3% 0.008 118.6 / 0.14);
+  --shadow-sheet: 0 -12px 48px oklch(19.3% 0.008 118.6 / 0.1);
+  --shadow-inset: inset 0 1px 2px oklch(19.3% 0.008 118.6 / 0.06);
+  --halo-accent: 0 8px 24px oklch(19.3% 0.008 118.6 / 0.18);
+  --halo-signal: 0 0 10px oklch(74.62% 0.1729 124.2 / 0.45);
+  --halo-intensity: 0 0 0 1px oklch(19.3% 0.008 118.6 / 0.3);
+    --fondo-ganancia: 1.7;
+    --drop-shadow-lg: drop-shadow(0 1px 2px oklch(19.3% 0.008 118.6 / 0.06)) drop-shadow(0 10px 20px oklch(19.3% 0.008 118.6 / 0.1));
+    color-scheme: light;
+  }
+}
+
+/* ---- Accesibilidad: reducir transparencia (prefers-reduced-transparency
+   y el ajuste "Reducir transparencia" de Configuración) ---- */
+[data-transparencia="reducida"] {
+  --surface-card: var(--surface-card-opaco);
+  --surface-card-elevated: var(--surface-card-elevated-opaco);
+  --surface-raised: var(--surface-raised-opaco);
+  --glass-filter: none;
+  --sheet-filter: none;
+  --fondo-ganancia: 0.45;
+}
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --surface-card: var(--surface-card-opaco);
+    --surface-card-elevated: var(--surface-card-elevated-opaco);
+    --surface-raised: var(--surface-raised-opaco);
+    --glass-filter: none;
+    --sheet-filter: none;
+    --fondo-ganancia: 0.45;
+  }
+}
