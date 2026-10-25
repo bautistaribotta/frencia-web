@@ -1,0 +1,56 @@
+/* ============================================================
+   Frencia · Cruce entre login y registro (View Transitions API)
+   El billete y la columna del formulario cambian de lado. El
+   navegador anima cada pieza nombrada (view-transition-name) desde
+   su lugar viejo al nuevo:
+   - billete: se desliza al otro lado, por encima de todo.
+   - formulario: cruza en sentido contrario, por detras del billete.
+     El contenido cambia (login a registro) a mitad de camino, cuando
+     la foto lo tapa: el viejo se apaga y el nuevo se enciende en
+     esa franja.
+   - tema: el switch acompaña al formulario.
+   Es CSS global porque los pseudoelementos ::view-transition-* viven
+   en la raiz del documento, fuera de cualquier CSS Module.
+   ============================================================ */
+
+::view-transition-group(billete),
+::view-transition-group(formulario),
+::view-transition-group(tema) {
+  animation-duration: 700ms;
+  animation-timing-function: var(--ease-in-out);
+}
+
+::view-transition-group(billete) { z-index: 3; }
+::view-transition-group(tema) { z-index: 2; }
+::view-transition-group(formulario) { z-index: 1; }
+
+/* El billete es el mismo de los dos lados: sin fundido, solo se mueve. */
+::view-transition-old(billete) { animation: none; opacity: 0; }
+::view-transition-new(billete) { animation: none; }
+
+/* La tarjeta pasa de login a registro mientras la foto la tapa. */
+::view-transition-old(formulario) {
+  animation: 700ms var(--ease-in-out) both apagar-a-mitad;
+}
+::view-transition-new(formulario) {
+  animation: 700ms var(--ease-in-out) both encender-a-mitad;
+}
+
+@keyframes apagar-a-mitad {
+  0%, 42% { opacity: 1; }
+  52%, 100% { opacity: 0; }
+}
+
+@keyframes encender-a-mitad {
+  0%, 48% { opacity: 0; }
+  58%, 100% { opacity: 1; }
+}
+
+/* Con reducir movimiento el cambio es directo. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

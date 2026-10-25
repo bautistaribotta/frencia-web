@@ -1,0 +1,80 @@
+/* Marco del acceso, variante billete: el formulario en vidrio de un lado y
+   el billete grabado del otro. El registro lleva el billete a la derecha; el
+   login lo espeja y lo lleva a la izquierda. */
+
+.acceso {
+  position: relative;
+  z-index: 1;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: 1fr auto;
+}
+
+/* El billete ocupa lo que pide su proporcion; el resto es del formulario. */
+.billeteIzq { grid-template-columns: auto 1fr; }
+
+/* La tarjeta y el texto legal van centrados en el espacio que deja el
+   billete hasta el borde de la pantalla. */
+.columna {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-7);
+  padding: var(--space-9) var(--space-11);
+  /* Al pasar entre login y registro cruza de lado por detras del billete
+     (ver transicion.css). */
+  view-transition-name: formulario;
+}
+
+/* El switch de tema, en la esquina de arriba del lado del formulario. */
+.tema { position: absolute; top: var(--space-8); left: var(--space-11); view-transition-name: tema; }
+.billeteIzq .tema { left: auto; right: var(--space-11); }
+
+/* Dos clases para ganarle al padding propio de la Tarjeta. */
+.columna .tarjeta {
+  max-width: 460px;
+  width: 100%;
+  padding: var(--space-8);
+}
+
+.formulario { display: flex; flex-direction: column; gap: var(--space-6); }
+
+.legal { max-width: 460px; width: 100%; text-align: center; }
+
+/* "¿No tenés cuenta?" y "¿Ya tenés cuenta?", al pie de la tarjeta. */
+.alPie { text-align: center; }
+.encabezado { display: flex; flex-direction: column; gap: var(--space-2); margin: 0; }
+.encabezado h1 { margin: 0; }
+.campos { display: flex; flex-direction: column; gap: var(--space-4); }
+.fila { display: flex; gap: var(--space-3); }
+.fila > * { flex: 1; }
+.pista { display: flex; align-items: center; gap: var(--space-2); }
+.conLogo { display: inline-flex; align-items: center; gap: var(--space-3); }
+
+.enlace {
+  color: var(--signal-text);
+  font-weight: var(--fw-semibold);
+  text-decoration: none;
+  border-radius: var(--radius-xs);
+}
+.enlace:hover { text-decoration: underline; text-underline-offset: 3px; }
+.enlace:focus-visible { outline: var(--foco-w) solid var(--focus-ring); outline-offset: var(--foco-offset); }
+
+.logo { width: 18px; height: 18px; flex: none; }
+.logoApple path { fill: currentColor; }
+.googleAzul { fill: oklch(63.04% 0.18 260); }
+.googleVerde { fill: oklch(64.75% 0.1603 148.5); }
+.googleAmarillo { fill: oklch(83.04% 0.1698 84); }
+.googleRojo { fill: oklch(62.57% 0.2058 29.1); }
+
+/* Debajo del ancho minimo de la web (1024 px) el billete se oculta y el
+   formulario queda centrado. */
+@media (max-width: 1023px) {
+  .acceso,
+  .billeteIzq { grid-template-columns: 1fr; }
+  .acceso > [aria-hidden='true'] { display: none; }
+  .columna { padding: var(--space-11) var(--space-6) var(--space-12); }
+  .tema,
+  .billeteIzq .tema { left: auto; right: var(--space-6); top: var(--space-6); }
+}

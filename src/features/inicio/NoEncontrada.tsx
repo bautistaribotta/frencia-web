@@ -1,13 +1,23 @@
-import { Link } from 'react-router';
+import { ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router';
 
-import styles from './Portada.module.css';
+import { Boton } from '@/design/components/Boton';
+import { Fondo } from '@/design/components/Fondo';
+import texto from '@/design/texto.module.css';
+import styles from './NoEncontrada.module.css';
 
 export function NoEncontrada() {
+  const navegar = useNavigate();
   return (
-    <main className={styles.portada}>
-      <h1 className={styles.marca}>404</h1>
-      <p className={styles.estado}>Esta página no existe.</p>
-      <Link to="/">Volver al inicio</Link>
-    </main>
+    <>
+      <Fondo posicion="cumbre" />
+      <main className={styles.pagina}>
+        <span className={`${texto.label} ${texto.terciario}`}>Error 404</span>
+        <h1 className={`${texto.title} ${styles.titulo}`}>Esta página no existe</h1>
+        <Boton variante="secondary" icono={ArrowLeft} onClick={() => navegar('/')}>
+          Volver al inicio
+        </Boton>
+      </main>
+    </>
   );
 }
