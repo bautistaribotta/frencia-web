@@ -1,0 +1,26 @@
+# dependencias
+node_modules/
+
+# build
+dist/
+*.tsbuildinfo
+
+# entorno (las claves locales no se suben; ver .env.example)
+.env
+.env.local
+.env.*.local
+
+# Cloudflare
+.wrangler/
+
+# logs
+npm-debug.log*
+
+# sistema
+.DS_Store
+desktop.ini
+Thumbs.db
+
+# editor y agentes
+.claude/settings.local.json
+.claude/launch.json
