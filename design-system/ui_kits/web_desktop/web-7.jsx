@@ -16,12 +16,6 @@ function Perfil({ capa, toast }) {
             </div>
           </div>
           <div className="col g5">
-            <span className="t-label c-ter">Desde que empezaste</span>
-            <div className="w-tarjeta col g5">
-              <div className="w-metrica"><span className="t-label c-ter">Sesiones</span><span className="w-metrica__valor">86</span></div>
-              <div className="w-metrica"><span className="t-label c-ter">Tonelaje total</span><span className="w-metrica__valor">412.7<small>t</small></span></div>
-              <div className="w-metrica"><span className="t-label c-ter">Racha más larga</span><span className="w-metrica__valor">21<small>días</small></span></div>
-            </div>
             <div className="w-lista"><div className="w-fila w-fila--link"><Ico n="settings" s={20} c="c-sec" /><span className="t-bodysm semi f1">Configuración</span><Ico n="chevron-right" s={18} c="c-ter" /></div><div className="w-fila w-fila--link"><Ico n="log-out" s={20} c="c-dang" /><span className="t-bodysm semi c-dang f1">Cerrar sesión</span></div></div>
           </div>
         </div>
@@ -100,7 +94,7 @@ function Configuracion({ capa, tema = 'system' }) {
 
 function AppWeb() {
   return (
-    <Lienzo titulo="Perfil y configuración" bajada="En la web el perfil se separa en dos: Perfil muestra quién sos y lo acumulado; Configuración junta tema, unidades y medidores, legales y la cuenta. Todo se guarda en profiles y se aplica en vivo en la web y en la app. Fondo cumbre en todas.">
+    <Lienzo titulo="Perfil y configuración" bajada="En la web el perfil se separa en dos: Perfil muestra quién sos (lo acumulado vive en el Historial); Configuración junta tema, unidades y medidores, legales y la cuenta. Todo se guarda en profiles y se aplica en vivo en la web y en la app. Fondo cumbre en todas.">
       <Seccion titulo="Perfil" nota="(main)/profile — se llega desde el usuario al pie de la navegación.">
         <Mesa nombre="Perfil" ruta="(main)/profile" url="frencia.app/perfil"><Perfil /></Mesa>
         <Mesa nombre="Foto de perfil" nota="La hoja de la app pasa a un modal con zona para soltar una imagen. Cada acción se guarda en el momento y la vista previa la refleja; Listo solo cierra." ruta="(main)/profile · modal" url="frencia.app/perfil"><Perfil capa={<ModalFoto />} /></Mesa>

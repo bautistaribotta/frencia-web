@@ -18,7 +18,7 @@ function Historial({ menu, error, filtro }) {
       <Pagina>
         <Encabezado rotulo="Historial" titulo="Lo que hiciste" acciones={<><Selector md ico="layers" valor={filtro ? 'Push Pull Legs' : 'Todas las rutinas'} /><Seg ops={[['30', '30 días'], ['90', '3 meses'], ['todo', 'Todo']]} sel="90" /></>} />
         <div className="w-cuatro">
-          {[['Sesiones', '23', ''], ['Tiempo total', '21', 'h'], ['Tonelaje', '128.4', 't'], ['Racha', '12', 'días']].map(([l, v, u]) => (
+          {[['Sesiones', '23', ''], ['Tiempo total', '21', 'h'], ['Tonelaje', '128.4', 't'], ['Racha', '12', 'entrenamientos']].map(([l, v, u]) => (
             <div key={l} className="w-tarjeta w-metrica"><span className="t-label c-ter">{l}</span><span className="w-metrica__valor">{v}{u ? <small>{u}</small> : null}</span></div>
           ))}
         </div>

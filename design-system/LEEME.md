@@ -1,7 +1,7 @@
 # Copia del design system
 
 Copia de referencia del design system **Frencia 2.0 (Lume)** de Claude Design
-(https://claude.ai/artifact/UUp4wXWL7CrPVELCR42nEX), tomada el 25 de octubre de 2026 (version 50: unidades y medidores en una sola seccion de Configuracion, selectores del mismo ancho y los legales en el modal de lectura).
+(https://claude.ai/artifact/UUp4wXWL7CrPVELCR42nEX), tomada el 25 de octubre de 2026 (version 51: el Perfil sin "Desde que empezaste" y la racha del Historial en entrenamientos).
 La fuente de verdad sigue siendo Claude Design: esta carpeta es un respaldo para
 consultar sin conexion y para ver que cambio entre una copia y la siguiente.
 
