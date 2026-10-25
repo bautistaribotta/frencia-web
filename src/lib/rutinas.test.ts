@@ -1,8 +1,11 @@
 /* Correr con `npm test` (Vitest). */
 
-import { assert, test } from 'vitest';
+import { assert, test, vi } from 'vitest';
 
 import { cuentaRutina, resumenEjercicio, type EjercicioPlan } from './rutinas';
+
+// Solo se prueban funciones puras: sin cliente real, que pide el .env.local.
+vi.mock('./supabase', () => ({ supabase: {} }));
 
 const fuerza: EjercicioPlan = {
   name: 'Press de banca con barra',

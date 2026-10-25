@@ -1,8 +1,11 @@
 /* Correr con `npm test` (Vitest). */
 
-import { assert, test } from 'vitest';
+import { assert, test, vi } from 'vitest';
 
 import { agruparPorMes, inicioPeriodo, tonelajeKg, type SesionTerminada } from './historial';
+
+// Solo se prueban funciones puras: sin cliente real, que pide el .env.local.
+vi.mock('./supabase', () => ({ supabase: {} }));
 
 function sesion(id: string, fecha: string): SesionTerminada {
   const ms = new Date(fecha).getTime();
