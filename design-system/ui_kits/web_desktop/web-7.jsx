@@ -9,7 +9,7 @@ function Perfil({ capa, toast }) {
           <div className="col g6">
             <div className="w-tarjeta row g6">
               <button className="w-avatar-editar" aria-label="Cambiar foto de perfil"><Avatar s={96} /><span className="w-avatar-editar__badge"><Ico n="camera" s={14} /></span></button>
-              <div className="col g2 f1"><span className="t-subtitle">Bautista Ribotta</span><span className="t-bodysm c-sec">bauti@correo.com</span><span className="t-label c-ter">En Frencia desde junio de 2026</span></div>
+              <div className="col g2 f1"><span className="t-subtitle">Bautista Ribotta</span><span className="t-bodysm c-sec">bauti@correo.com</span><span className="t-label c-ter">Miembro desde junio de 2026</span></div>
             </div>
             <div className="w-lista">
               {[['Sexo', 'Masculino'], ['Edad', '25 años · 14/03/2001'], ['Altura', '178 cm'], ['Peso', '72.5 kg']].map(([l, v]) => <div key={l} className="w-fila"><span className="t-bodysm c-sec f1">{l}</span><span className="t-data">{v}</span></div>)}
@@ -29,12 +29,12 @@ function Perfil({ capa, toast }) {
     </App>
   );
 }
-function ModalFoto() {
+function ModalFoto({ conFoto }) {
   return (
     <Modal chico titulo="Foto de perfil" texto="Sin foto, Frencia dibuja un avatar con los colores de la app.">
       <div className="row centro"><Avatar s={128} /></div>
       <div className="w-soltar"><Ico n="image-up" s={22} c="c-sec" /><span className="t-bodysm c-pri">Arrastrá una imagen o <span className="c-acc semi">elegila</span></span><span className="t-label c-ter">JPG o PNG · hasta 5 MB</span></div>
-      <div className="w-modal__pie"><Boton v="ghost" ico="repeat" anima>Generar otro avatar</Boton><Boton>Listo</Boton></div>
+      <div className="w-modal__pie">{conFoto ? <Boton v="ghost" ico="x">Quitar foto</Boton> : null}<Boton v="ghost" ico="repeat" anima>Generar otro avatar</Boton><Boton>Listo</Boton></div>
     </Modal>
   );
 }
@@ -76,18 +76,17 @@ function Configuracion({ capa, tema = 'system' }) {
             <div className="w-fila"><div className="col g1 f1"><span className="t-bodysm semi">Tema</span><span className="t-bodysm c-ter">{sub}</span></div><Seg ops={[['system', 'Sistema', 'monitor'], ['dark', 'Oscuro', 'moon'], ['light', 'Claro', 'sun']]} sel={tema} /></div>
             <div className="w-fila"><div className="col g1 f1"><span className="t-bodysm semi">Reducir transparencia</span><span className="t-bodysm c-ter">Superficies opacas y luces más bajas. Se guarda en este navegador y arranca siguiendo al sistema.</span></div><Switch /></div>
           </div>
-          <span className="t-label c-ter">Unidades</span>
+          <span className="t-label c-ter">Unidades / medidores</span>
           <div className="w-lista">
-            <div className="w-fila"><span className="t-bodysm semi f1">Peso</span><Seg ops={[['kg', 'kg'], ['lb', 'lb']]} sel="kg" /></div>
-            <div className="w-fila"><span className="t-bodysm semi f1">Altura</span><Seg ops={[['cm', 'cm'], ['ft', 'ft']]} sel="cm" /></div>
-            <div className="w-fila"><span className="t-bodysm semi f1">Distancia</span><Seg ops={[['km', 'km'], ['mi', 'mi']]} sel="km" /></div>
+            <div className="w-fila"><span className="t-bodysm semi f1">Peso</span><Seg ops={[['kg', 'kg'], ['lb', 'lb']]} sel="kg" parejo /></div>
+            <div className="w-fila"><span className="t-bodysm semi f1">Altura</span><Seg ops={[['cm', 'cm'], ['ft', 'ft']]} sel="cm" parejo /></div>
+            <div className="w-fila"><span className="t-bodysm semi f1">Distancia</span><Seg ops={[['km', 'km'], ['mi', 'mi']]} sel="km" parejo /></div>
+            <div className="w-fila"><div className="col g1 f1"><span className="t-bodysm semi">Esfuerzo</span><span className="t-bodysm c-ter">Lo que se propone al armar una rutina. Cada ejercicio puede cambiarlo.</span></div><Seg ops={[['rir', 'RIR'], ['rpe', 'RPE']]} sel="rir" parejo /></div>
           </div>
-          <span className="t-label c-ter">Esfuerzo</span>
-          <div className="w-lista"><div className="w-fila"><div className="col g1 f1"><span className="t-bodysm semi">Medir con</span><span className="t-bodysm c-ter">Lo que se propone al armar una rutina. Cada ejercicio puede cambiarlo.</span></div><Seg ops={[['rir', 'RIR'], ['rpe', 'RPE']]} sel="rir" /></div></div>
           <span className="t-label c-ter">Legal</span>
           <div className="w-lista">
-            <div className="w-fila w-fila--link"><Ico n="file-text" s={20} c="c-sec" /><span className="t-bodysm semi f1">Términos y Condiciones</span><Ico n="arrow-up-right" s={18} c="c-ter" /></div>
-            <div className="w-fila w-fila--link"><Ico n="shield" s={20} c="c-sec" /><span className="t-bodysm semi f1">Política de Privacidad</span><Ico n="arrow-up-right" s={18} c="c-ter" /></div>
+            <div className="w-fila w-fila--link"><Ico n="file-text" s={20} c="c-sec" /><span className="t-bodysm semi f1">Términos y condiciones</span><Ico n="arrow-up-right" s={18} c="c-ter" /></div>
+            <div className="w-fila w-fila--link"><Ico n="shield" s={20} c="c-sec" /><span className="t-bodysm semi f1">Política de privacidad</span><Ico n="arrow-up-right" s={18} c="c-ter" /></div>
           </div>
           <span className="t-label c-ter">Cuenta</span>
           <div className="w-lista">
@@ -101,17 +100,18 @@ function Configuracion({ capa, tema = 'system' }) {
 
 function AppWeb() {
   return (
-    <Lienzo titulo="Perfil y configuración" bajada="En la web el perfil se separa en dos: Perfil muestra quién sos y lo acumulado; Configuración junta tema, unidades, esfuerzo, legales y la cuenta. Todo se guarda en profiles y se aplica en vivo en la web y en la app. Fondo cumbre en todas.">
+    <Lienzo titulo="Perfil y configuración" bajada="En la web el perfil se separa en dos: Perfil muestra quién sos y lo acumulado; Configuración junta tema, unidades y medidores, legales y la cuenta. Todo se guarda en profiles y se aplica en vivo en la web y en la app. Fondo cumbre en todas.">
       <Seccion titulo="Perfil" nota="(main)/profile — se llega desde el usuario al pie de la navegación.">
         <Mesa nombre="Perfil" ruta="(main)/profile" url="frencia.app/perfil"><Perfil /></Mesa>
-        <Mesa nombre="Foto de perfil" nota="La hoja de la app pasa a un modal con zona para soltar una imagen." ruta="(main)/profile · modal" url="frencia.app/perfil"><Perfil capa={<ModalFoto />} /></Mesa>
+        <Mesa nombre="Foto de perfil" nota="La hoja de la app pasa a un modal con zona para soltar una imagen. Cada acción se guarda en el momento y la vista previa la refleja; Listo solo cierra." ruta="(main)/profile · modal" url="frencia.app/perfil"><Perfil capa={<ModalFoto />} /></Mesa>
+        <Mesa nombre="Foto de perfil · con foto" nota="Con foto cargada suma Quitar foto, como la hoja de la app: vuelve al avatar generado." ruta="(main)/profile · modal" url="frencia.app/perfil"><Perfil capa={<ModalFoto conFoto />} /></Mesa>
       </Seccion>
       <Seccion titulo="Editar perfil" nota="edit-profile — la rueda de la app pasa a fecha, regla y arco en la misma página; nada se abre aparte.">
         <Mesa nombre="Sin cambios" nota="Guardar se habilita cuando algo cambió." ruta="edit-profile" url="frencia.app/perfil/editar"><EditarPerfil /></Mesa>
         <Mesa nombre="Con cambios y error de rango" nota="El aviso va en tinta, con icono; Guardar no confirma un valor fuera de rango." ruta="edit-profile" url="frencia.app/perfil/editar"><EditarPerfil sucio error /></Mesa>
         <Mesa nombre="Guardado" ruta="(main)/profile · toast" url="frencia.app/perfil"><Perfil toast={<Toast texto="Perfil actualizado" confirma />} /></Mesa>
       </Seccion>
-      <Seccion titulo="Configuración" nota="settings — Sistema es el valor por defecto (profiles.tema = 'sistema'): la web sigue a prefers-color-scheme.">
+      <Seccion titulo="Configuración" nota="settings — Sistema es el valor por defecto (profiles.tema = 'sistema'): la web sigue a prefers-color-scheme. Las tres unidades y el medidor de esfuerzo van en una sola lista, con los selectores del mismo ancho. Términos y privacidad abren el documento en el modal de lectura de Web · 3.">
         <Mesa nombre="Configuración" ruta="settings" url="frencia.app/configuracion"><Configuracion /></Mesa>
         <Mesa nombre="Eliminar cuenta · confirmar" nota="Dos pasos, como en la app. El foco arranca en Cancelar." ruta="settings · alerta" url="frencia.app/configuracion"><Configuracion capa={<Modal chico titulo="Eliminar cuenta" texto="Tu cuenta y todos tus datos (rutinas, sesiones e historial) se eliminan en 30 días. Hasta entonces podés recuperarla iniciando sesión. Después no se pueden recuperar." pie={<><Boton v="secondary" estado="foco">Cancelar</Boton><Boton v="danger" ico="trash-2">Eliminar cuenta</Boton></>} />} /></Mesa>
         <Mesa nombre="Eliminar cuenta · programada" nota="No se puede descartar: Entendido cierra la sesión." ruta="settings · alerta" url="frencia.app/configuracion"><Configuracion capa={<Modal chico titulo="Cuenta programada para eliminarse" texto="Se elimina el 23 de noviembre de 2026. Si cambiás de idea, entrá antes de esa fecha y vas a poder recuperarla con todos tus datos." pie={<Boton>Entendido</Boton>} />} /></Mesa>

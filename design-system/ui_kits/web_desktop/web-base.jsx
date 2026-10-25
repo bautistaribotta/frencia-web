@@ -208,9 +208,9 @@ function MenuItem({ ico, children, kbd, estado, sel, dang }) {
   );
 }
 function MenuSep() { return <div className="w-menu__sep"></div>; }
-function Seg({ ops, sel, ancho, acento, estados = {} }) {
+function Seg({ ops, sel, ancho, parejo, acento, estados = {} }) {
   return (
-    <div className={`w-seg${ancho ? ' w-seg--ancho' : ''}${acento ? ' w-seg--acento' : ''}`} role="radiogroup">
+    <div className={`w-seg${ancho ? ' w-seg--ancho' : ''}${parejo ? ' w-seg--parejo' : ''}${acento ? ' w-seg--acento' : ''}`} role="radiogroup">
       {ops.map((o) => {
         const [v, l, ico] = Array.isArray(o) ? o : [o, o];
         return <button key={v} className={`w-seg__op${v === sel ? ' is-sel' : ''}${est(estados[v])}`} role="radio" aria-checked={v === sel}>{ico ? <Ico n={ico} s={16} /> : null}{l}</button>;

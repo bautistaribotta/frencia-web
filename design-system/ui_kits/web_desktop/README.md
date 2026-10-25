@@ -55,7 +55,7 @@ cinco posiciones y la regla de lectura son las de la app.
 
 | Ruta (React Router) | Pantalla | Fondo |
 |---|---|---|
-| `/entrar`, `/registro`, `/recuperar`, `/nueva-contrasena` | Acceso | `flanco` · anima |
+| `/login`, `/registro`, `/recuperar`, `/nueva-contrasena` | Acceso | `flanco` · anima |
 | `/bienvenida` | Términos y privacidad | `cumbre` · anima |
 | `/bienvenida/perfil` | Setup: sexo | `cumbre` · anima |
 | `/bienvenida/perfil` | Setup: fecha, altura, peso | `centro` · anima (fundido de 420 ms entre pasos) |
@@ -180,14 +180,14 @@ Componentes nuevos del sistema (no existían en la app): `Tooltip`, `Kbd`, `Menu
 
 ## Iconos
 
-Lucide, trazo 1.75, `currentColor`. Los que existen en `@animateicons/react/lucide` se usan
-animados solo así; si no existe la versión animada, `lucide-react` estático.
+Lucide, trazo 1.75, `currentColor`. Todo icono que exista en `@animateicons/react/lucide` se
+usa en su versión animada (con el trazo llevado a 1.75); si no existe, `lucide-react` estático.
 
 | Cuándo | Iconos | Regla |
 |---|---|---|
-| Hover y foco del control | plus, share, pencil, search, settings, rotate-ccw, copy, download, repeat | Una vez por entrada del puntero o del foco; nunca en bucle |
+| Al aparecer | todos los animados, navegación lateral incluida | Una vez, al entrar a la vista (150 ms después de montarse) |
+| Hover y foco del control | los mismos | Una vez por entrada del puntero o del foco de teclado al control que lo contiene (botón, enlace, fila); si no hay control, el hover del propio icono. Nunca en bucle |
 | Al confirmar | check (guardado, agregado), copy → check, trash-2 (en el aviso de quitado) | Una vez, en el botón o el aviso que confirma |
-| Siempre quietos | navegación lateral, chevrons, tipos de ejercicio, flame, iconos de campos, agarre | Son señalización |
 | Reducir movimiento | todos | Versión estática |
 
 Verificar en el paquete el nombre y la forma de disparar cada animación (hover o controlada);
@@ -200,7 +200,9 @@ el kit las simula con `.w-ico--anima` y `.w-ico--confirma`.
 - `:root, [data-theme="dark"]` → Lume oscuro (por defecto) · `[data-theme="light"]` → Lume claro.
 - `@media (prefers-color-scheme: light)` aplicado a `:root` sin `data-theme` o con `data-theme="system"`.
 - El cambio de tema sobreescribe colores, sombras y halos, `--drop-shadow-lg` y `--fondo-ganancia`.
-- `[data-transparencia="reducida"]` y `prefers-reduced-transparency` pasan el vidrio a opaco.
+- `[data-transparencia="reducida"]` y `prefers-reduced-transparency` pasan el vidrio a opaco;
+  `[data-transparencia="normal"]` lo deja en vidrio aunque el sistema pida reducirla (el
+  ajuste de Configuración apagado).
 
 ```ts
 // profiles.tema: 'sistema' | 'oscuro' | 'claro'
