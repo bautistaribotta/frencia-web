@@ -1,12 +1,14 @@
-/* Iniciar sesion (/entrar). Variante billete: el billete a la izquierda y el
+/* Iniciar sesion (/login). Variante billete: el billete a la izquierda y el
    formulario a la derecha. Ingresar queda deshabilitado hasta tener correo y
    contraseña; Enter envia siempre el formulario.
-   Por ahora es solo la vista: el ingreso contra Supabase llega con la etapa
-   de auth. */
+   Tras un ingreso exitoso no se navega a mano: la puerta SoloInvitado ve la
+   sesion nueva y lleva al inicio, como el gate de la app. */
 
 import { ArrowRight, Eye, EyeOff, Lock, Mail } from 'lucide-react';
 import { useState, type FormEvent } from 'react';
 import { Link } from 'react-router';
+
+import { supabase } from '@/lib/supabase';
 
 import { Boton } from '@/design/components/Boton';
 import { BotonIcono } from '@/design/components/BotonIcono';
@@ -22,13 +24,36 @@ export function Login() {
   const [contrasena, setContrasena] = useState('');
   const [mostrar, setMostrar] = useState(false);
   const [enFocoContrasena, setEnFocoContrasena] = useState(false);
+  const [enviando, setEnviando] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const listo = email.trim().length > 0 && contrasena.length > 0;
 
-  function ingresar(evento: FormEvent<HTMLFormElement>) {
+  async function ingresar(evento: FormEvent<HTMLFormElement>) {
     evento.preventDefault();
-    if (!listo) return;
-    // Pendiente: supabase.auth.signInWithPassword en la etapa de auth.
+    if (!listo || enviando) return;
+    setEnviando(true);
+    setError(null);
+
+    const { error: fallo } = await supabase.auth.signInWithPassword({ email: email.trim(), password: contrasena });
+    if (!fallo) return;
+
+    // El servidor puede fallar por credenciales (400) o por un problema
+    // temporal (500, timeout, proyecto despertando de una pausa). En ese
+    // segundo caso el SDK a veces deja la sesion creada igual: se confirma
+    // antes de culpar a la contraseña, como en la app.
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    if (session) return;
+
+    const credencialesInvalidas = fallo.status === 400 || /invalid login credentials/i.test(fallo.message);
+    setError(
+      credencialesInvalidas
+        ? 'Correo o contraseña incorrectos.'
+        : 'No pudimos conectar con el servidor. Probá de nuevo en unos segundos.',
+    );
+    setEnviando(false);
   }
 
   return (
@@ -41,7 +66,8 @@ export function Login() {
           autoComplete="email"
           placeholder="nombre@correo.com"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => { setEmail(e.target.value); setError(null); }}
+          disabled={enviando}
           autoFocus
         />
         <Campo
@@ -56,7 +82,9 @@ export function Login() {
           autoComplete="current-password"
           placeholder="Tu contraseña"
           value={contrasena}
-          onChange={(e) => setContrasena(e.target.value)}
+          onChange={(e) => { setContrasena(e.target.value); setError(null); }}
+          disabled={enviando}
+          error={error}
           onFocus={() => setEnFocoContrasena(true)}
           onBlur={() => setEnFocoContrasena(false)}
           final={
@@ -69,8 +97,8 @@ export function Login() {
           }
         />
       </div>
-      <Boton type="submit" tamano="lg" ancho iconoDer={ArrowRight} disabled={!listo}>
-        Ingresar
+      <Boton type="submit" tamano="lg" ancho iconoDer={ArrowRight} disabled={!listo} cargando={enviando}>
+        {enviando ? 'Ingresando…' : 'Ingresar'}
       </Boton>
       {enFocoContrasena ? (
         <span className={`${styles.pista} ${texto.bodySm} ${texto.terciario}`}>

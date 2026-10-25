@@ -1,0 +1,119 @@
+/* Navegacion lateral (kit web, .w-nav). Expandida mide 248 px; entre 1024 y
+   1279 px pasa a riel de 76 px con solo iconos, y el nombre y el atajo de
+   cada item quedan en el title. */
+
+.nav {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  z-index: var(--z-nav);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-6) var(--space-4) var(--space-5);
+  background: var(--surface-raised);
+  border-right: 1px solid var(--glass-line);
+  -webkit-backdrop-filter: var(--sheet-filter);
+  backdrop-filter: var(--sheet-filter);
+}
+
+.cabeza { display: flex; align-items: center; padding: 0 var(--space-3); min-height: 36px; }
+.marcaCorta {
+  display: none;
+  font: var(--fw-bold) 22px/1 var(--font-sans);
+  font-variation-settings: "wdth" 75;
+  color: var(--text-primary);
+}
+
+.grupo { display: flex; flex-direction: column; gap: var(--space-1); }
+
+.item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  height: 42px;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  font: var(--fw-medium) 15px/1 var(--font-sans);
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.item:hover { background: var(--surface-chip); color: var(--text-primary); }
+.item:focus-visible {
+  outline: var(--foco-w) solid var(--focus-ring);
+  outline-offset: calc(var(--foco-offset) * -1);
+  color: var(--text-primary);
+}
+
+/* La pestaña activa: vidrio elevado, icono en lume y marca de 3 px pegada
+   al borde, como en la app. */
+.activo {
+  background: var(--surface-card-elevated);
+  border-color: var(--glass-line);
+  box-shadow: var(--shadow-glass);
+  color: var(--text-primary);
+}
+.activo .icono { color: var(--signal); }
+.activo::before {
+  content: '';
+  position: absolute;
+  left: -16px;
+  top: 11px;
+  bottom: 11px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--signal);
+  box-shadow: var(--halo-signal);
+}
+.icono { flex: none; }
+
+.atajo { margin-left: auto; opacity: 0; transition: opacity var(--dur-fast) var(--ease-out); }
+.item:hover .atajo,
+.item:focus-visible .atajo { opacity: 1; }
+
+.pie { margin-top: auto; display: flex; flex-direction: column; gap: var(--space-3); }
+
+.notaMovil {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--surface-inset);
+  border: 1px dashed var(--border-strong);
+}
+.notaMovil svg { flex: none; }
+
+.usuario {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+}
+.usuario:hover,
+.usuarioActivo { background: var(--surface-chip); }
+.usuario:focus-visible { outline: var(--foco-w) solid var(--focus-ring); outline-offset: calc(var(--foco-offset) * -1); }
+.usuarioTextos { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.semi { font-weight: var(--fw-semibold); }
+.unaLinea { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* Riel: pantallas medianas. */
+@media (max-width: 1279px) {
+  .nav { padding-left: var(--space-3); padding-right: var(--space-3); align-items: center; }
+  .cabeza { padding: 0; justify-content: center; }
+  .marca { display: none; }
+  .marcaCorta { display: inline; }
+  .nav .nueva { width: 48px; padding: 0; }
+  .item { width: 48px; justify-content: center; padding: 0; }
+  .activo::before { left: -12px; }
+  .texto,
+  .atajo,
+  .notaMovil,
+  .usuarioTextos { display: none; }
+  .usuario { padding: var(--space-2); }
+}

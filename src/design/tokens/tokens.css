@@ -404,7 +404,7 @@
   --fondo-ganancia: 0.45;
 }
 @media (prefers-reduced-transparency: reduce) {
-  :root {
+  :root:not([data-transparencia="normal"]) {
     --surface-card: var(--surface-card-opaco);
     --surface-card-elevated: var(--surface-card-elevated-opaco);
     --surface-raised: var(--surface-raised-opaco);

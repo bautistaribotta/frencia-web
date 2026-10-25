@@ -96,7 +96,7 @@ export function Registro() {
       </Boton>
       <span className={`${texto.bodySm} ${texto.secundario} ${styles.alPie}`}>
         ¿Ya tenés cuenta?{' '}
-        <Link to="/entrar" className={styles.enlace} viewTransition>
+        <Link to="/login" className={styles.enlace} viewTransition>
           Iniciá sesión
         </Link>
       </span>

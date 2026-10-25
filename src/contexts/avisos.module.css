@@ -1,0 +1,33 @@
+/* Toasts (kit web, .w-toasts y .w-toast). */
+
+.avisos {
+  position: fixed;
+  right: var(--space-7);
+  bottom: var(--space-7);
+  z-index: var(--z-toast);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  align-items: flex-end;
+}
+
+.aviso {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-width: 300px;
+  max-width: 420px;
+  padding: var(--space-4) var(--space-4) var(--space-4) var(--space-5);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+  border: 1px solid var(--glass-line);
+  box-shadow: var(--shadow-lg);
+  -webkit-backdrop-filter: var(--sheet-filter);
+  backdrop-filter: var(--sheet-filter);
+}
+
+.icono { flex: none; }
+.ok .icono { color: var(--signal); }
+.error .icono { color: var(--danger-text); }
+.info .icono { color: var(--text-secondary); }
+.mensaje { flex: 1; }

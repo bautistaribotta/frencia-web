@@ -1,0 +1,53 @@
+/* Correr con `npm test` (Vitest). */
+
+import { assert, test } from 'vitest';
+
+import { duracionCompacta, duracionSesion, fechaLarga, fechaSesion, indiceSemanaLunes, reloj } from './tiempo';
+
+test('el reloj va en m:ss por debajo de una hora, sin cero inicial', () => {
+  assert.strictEqual(reloj(45), '0:45');
+  assert.strictEqual(reloj(90), '1:30');
+  assert.strictEqual(reloj(1800), '30:00');
+});
+
+test('desde una hora el reloj pasa a h:mm:ss', () => {
+  assert.strictEqual(reloj(3600), '1:00:00');
+  assert.strictEqual(reloj(3900), '1:05:00');
+  assert.strictEqual(reloj(5025), '1:23:45');
+});
+
+test('el resumen compacto usa segundos, minutos u horas segun el valor', () => {
+  assert.strictEqual(duracionCompacta(45), '45 s');
+  assert.strictEqual(duracionCompacta(120), '2 min');
+  assert.strictEqual(duracionCompacta(1800), '30 min');
+  assert.strictEqual(duracionCompacta(3600), '1 h');
+  assert.strictEqual(duracionCompacta(4500), '1 h 15 min');
+});
+
+test('lo que no cae en minutos exactos se resume como reloj', () => {
+  assert.strictEqual(duracionCompacta(90), '1:30');
+  assert.strictEqual(duracionCompacta(3630), '1:00:30');
+});
+
+test('el reloj trunca decimales y acota negativos a cero', () => {
+  assert.strictEqual(reloj(-5), '0:00');
+  assert.strictEqual(reloj(45.9), '0:45');
+});
+
+test('duracionSesion formatea en minutos u horas y redondea como minimo a 1 min', () => {
+  assert.strictEqual(duracionSesion(0, 10_000), '1 min');
+  assert.strictEqual(duracionSesion(0, 48 * 60_000), '48 min');
+  assert.strictEqual(duracionSesion(0, 60 * 60_000), '1 h');
+  assert.strictEqual(duracionSesion(0, 72 * 60_000), '1 h 12 min');
+});
+
+test('indiceSemanaLunes devuelve 0 para lunes y 6 para domingo', () => {
+  assert.strictEqual(indiceSemanaLunes(new Date(2026, 9, 19)), 0); // Lunes 19 oct 2026
+  assert.strictEqual(indiceSemanaLunes(new Date(2026, 9, 25)), 6); // Domingo 25 oct 2026
+});
+
+test('fechaLarga y fechaSesion formatean manualmente en espanol sin Intl', () => {
+  const d = new Date(2026, 9, 21, 15, 0, 0); // Miércoles 21 oct 2026
+  assert.strictEqual(fechaLarga(d), '21 de octubre de 2026');
+  assert.strictEqual(fechaSesion(d.getTime()), 'miércoles, 21 de octubre de 2026');
+});

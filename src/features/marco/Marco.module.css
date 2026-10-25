@@ -1,0 +1,16 @@
+/* La navegacion fija a la izquierda y la pagina, que scrollea con la
+   ventana. Por encima del fondo de luces. */
+
+.marco {
+  position: relative;
+  z-index: 1;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: var(--nav-w) minmax(0, 1fr);
+}
+
+.principal { min-width: 0; }
+
+@media (max-width: 1279px) {
+  .marco { grid-template-columns: var(--nav-w-rail) minmax(0, 1fr); }
+}

@@ -39,3 +39,46 @@
 .divisor { display: flex; align-items: center; gap: var(--space-4); }
 .divisor::before,
 .divisor::after { content: ''; flex: 1; height: 1px; background: var(--divider); }
+
+.insignia {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-default);
+  font: var(--fw-semibold) 10.5px/1 var(--font-sans);
+  font-variation-settings: var(--vs-semi);
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.signal { border-color: var(--surface-signal-line); color: var(--signal-text); background: var(--surface-signal-soft); }
+.intensity { border-color: var(--surface-intensity-line); color: var(--intensity-text); background: var(--surface-intensity-soft); }
+
+.semana { display: flex; gap: 4px; }
+.semana span {
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font: var(--fw-semibold) 11px/1 var(--font-sans);
+  color: var(--text-tertiary);
+  background: var(--surface-inset);
+}
+.semana .semanaOn { background: var(--text-primary); color: var(--bg-app); }
+
+.esqueleto {
+  display: block;
+  height: 12px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(90deg, var(--surface-chip) 0%, var(--surface-card-elevated) 50%, var(--surface-chip) 100%);
+  background-size: 200% 100%;
+  animation: brillo 1.6s var(--ease-in-out) infinite;
+}
+@keyframes brillo { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+@media (prefers-reduced-motion: reduce) { .esqueleto { animation: none; } }

@@ -3,11 +3,15 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router/dom';
 
+import { ProveedorAvisos } from '@/contexts/avisos';
+import { ProveedorSesion } from '@/contexts/sesion';
 import '@/design/global.css';
 import { aplicarTemaGuardado } from '@/design/tema';
+import { aplicarTransparenciaGuardada } from '@/design/transparencia';
 import { router } from '@/router';
 
 aplicarTemaGuardado();
+aplicarTransparenciaGuardada();
 
 // Solo en desarrollo: ?tema=claro u ?tema=oscuro fuerza el tema de esa carga
 // para revisar las pantallas, por encima de lo que guardo el switch.
@@ -22,7 +26,11 @@ const queryClient = new QueryClient();
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <ProveedorSesion>
+        <ProveedorAvisos>
+          <RouterProvider router={router} />
+        </ProveedorAvisos>
+      </ProveedorSesion>
     </QueryClientProvider>
   </StrictMode>,
 );

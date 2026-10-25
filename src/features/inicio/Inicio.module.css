@@ -1,0 +1,124 @@
+/* Inicio (kit web, Web · 4): .w-semanal, .w-dos, .w-tres y .w-tarjeta. La
+   pagina, el encabezado y la lista vienen de Pagina. */
+
+.sinMargen { margin: 0; }
+
+.fila { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); }
+.columna { display: flex; flex-direction: column; gap: var(--space-5); min-width: 0; }
+.nombreRutina { display: flex; align-items: center; gap: var(--space-4); min-width: 0; }
+
+/* Esta semana */
+.semanal { display: flex; flex-direction: column; gap: var(--space-5); }
+.hoyToca { display: inline-flex; align-items: center; gap: var(--space-2); }
+.semana { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: var(--space-3); }
+.dia {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--surface-inset);
+  border: 1px solid transparent;
+  min-width: 0;
+}
+.diaPlan { color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.diaEstado {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+  font: var(--fw-medium) 12.5px/1 var(--font-sans);
+  color: var(--text-tertiary);
+}
+.hecho .diaEstado { color: var(--text-primary); }
+.hoy { background: var(--surface-card-elevated); border-color: var(--signal); box-shadow: 0 0 0 1px var(--signal), var(--halo-signal); }
+.hoy .diaEstado { color: var(--signal-text); font-weight: var(--fw-semibold); }
+.libre .diaPlan { color: var(--text-tertiary); }
+
+/* La rutina a la izquierda (dos tercios) y lo ultimo que paso a la derecha. */
+.dos { display: grid; grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr); gap: var(--space-8); align-items: start; }
+.tres { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-5); align-items: start; }
+.dos .tres { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+
+.tarjetaDia {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--pad-card);
+  border-radius: var(--radius-xl);
+  background: var(--surface-card);
+  border: 1px solid var(--glass-line);
+  box-shadow: var(--shadow-glass);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+  text-decoration: none;
+  transition: background var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+.tarjetaDia:hover { background: var(--surface-card-elevated); border-color: var(--border-default); }
+.tarjetaDia:focus-visible { outline: var(--foco-w) solid var(--focus-ring); outline-offset: var(--foco-offset); }
+/* Solo el dia de hoy sube a vidrio elevado. */
+.tarjetaHoy { background: var(--surface-card-elevated); }
+.diaTextos { display: flex; flex-direction: column; gap: var(--space-1); }
+
+.filaTextos { display: flex; flex-direction: column; gap: var(--space-1); flex: 1; min-width: 0; }
+
+/* "Ver rutina →" y "Historial →": boton fantasma chico. */
+.enlace {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 32px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-md);
+  font: var(--fw-semibold) 14px/1 var(--font-sans);
+  color: var(--text-primary);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.enlace:hover { background: var(--surface-chip); }
+.enlace:focus-visible { outline: var(--foco-w) solid var(--focus-ring); outline-offset: var(--foco-offset); }
+
+.punteada {
+  padding: var(--pad-card);
+  border-radius: var(--radius-xl);
+  background: var(--surface-inset);
+  border: 1px dashed var(--border-strong);
+}
+
+.aviso { display: flex; align-items: center; justify-content: space-between; gap: var(--space-5); }
+
+/* Cuenta nueva */
+.hero { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-6); padding: var(--space-9); }
+.heroTexto { max-width: 560px; }
+.paso {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--pad-card);
+  border-radius: var(--radius-xl);
+  background: var(--surface-card);
+  border: 1px solid var(--glass-line);
+  box-shadow: var(--shadow-glass);
+}
+.paso.punteada { background: var(--surface-inset); border: 1px dashed var(--border-strong); box-shadow: none; }
+.pasoN {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font: var(--fw-semibold) 13px/1 var(--font-sans);
+  color: var(--text-tertiary);
+  border: 1px solid var(--border-default);
+}
+.pasoOn { background: var(--accent); color: var(--text-on-accent); border-color: var(--accent); }
+
+/* Primera carga */
+.cargando { display: flex; flex-direction: column; gap: var(--space-8); }
+.esqTarjeta,
+.listaCargando { display: flex; flex-direction: column; gap: var(--space-4); }
+.esqBloque { height: 96px; }
+.esqTitulo { width: 70%; height: 22px; }
+.esqLinea { width: 55%; }
+.esqRotulo { width: 40%; }

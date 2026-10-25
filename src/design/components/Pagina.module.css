@@ -1,0 +1,48 @@
+/* Pagina, encabezado, lista y fila (kit web). */
+
+/* Por encima del fondo de luces, que es fijo. */
+.pagina {
+  position: relative;
+  z-index: 1;
+  max-width: var(--contenido-max);
+  margin: 0 auto;
+  padding: var(--space-9) var(--pad-pagina) var(--space-12);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.encabezado { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-6); }
+.encabezadoTextos { display: flex; flex-direction: column; gap: var(--space-3); min-width: 0; }
+.titulo { margin: 0; }
+.acciones { display: flex; align-items: center; gap: var(--space-3); flex: none; }
+
+.lista {
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: var(--surface-card);
+  border: 1px solid var(--glass-line);
+  box-shadow: var(--shadow-glass);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+}
+
+.fila {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  width: 100%;
+  min-height: 60px;
+  padding: var(--space-4) var(--space-6);
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  text-decoration: none;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+.fila + .fila { border-top: 1px solid var(--divider); }
+.filaEnlace { cursor: pointer; }
+.filaEnlace:hover { background: var(--surface-chip); }
+.filaEnlace:focus-visible { outline: var(--foco-w) solid var(--focus-ring); outline-offset: -2px; }
+.filaEnlace:disabled { cursor: not-allowed; }

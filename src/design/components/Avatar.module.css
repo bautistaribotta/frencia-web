@@ -1,0 +1,26 @@
+/* Avatar redondo con el filo de 1 px en border-default por dentro. */
+
+.avatar {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--surface-chip);
+}
+.avatar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px var(--border-default);
+  pointer-events: none;
+}
+
+.foto { display: block; object-fit: cover; }
+
+.mascara { fill: oklch(100% 0 0); }
+.acento { fill: var(--accent); }
+.fondo { fill: var(--bg-app); }
+.trazoAcento { stroke: var(--accent); }
+.trazoFondo { stroke: var(--bg-app); }
