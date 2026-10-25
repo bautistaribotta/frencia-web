@@ -1,0 +1,13 @@
+/* Configuracion (kit web, Web · 7, .w-ajustes): una columna de 820 px con
+   un rotulo encima de cada grupo. */
+
+.ajustes { max-width: 820px; display: flex; flex-direction: column; gap: var(--space-4); }
+.ajustes > span { margin-top: var(--space-4); }
+
+.ajusteTextos { display: flex; flex-direction: column; gap: var(--space-1); flex: 1; min-width: 0; }
+.crece { flex: 1; min-width: 0; }
+
+/* Los cuatro selectores de unidades y medidor, del mismo ancho: lo marca el
+   mas largo (RIR / RPE) y las opciones se reparten parejo. */
+.unidad { width: 132px; }
+.unidad > * { flex: 1 1 0; }

@@ -1,0 +1,39 @@
+/* Selector segmentado (kit web, .w-seg). */
+
+.seg {
+  align-self: flex-start;
+  display: inline-flex;
+  flex: none;
+  padding: 3px;
+  gap: 2px;
+  border-radius: var(--radius-md);
+  background: var(--surface-inset);
+  border: 1px solid var(--glass-line);
+}
+.ancho { display: flex; align-self: stretch; }
+.ancho .opcion { flex: 1; }
+
+.opcion {
+  height: 34px;
+  padding: 0 var(--space-5);
+  border: 1px solid transparent;
+  border-radius: 11px;
+  background: transparent;
+  cursor: pointer;
+  font: var(--fw-semibold) 13.5px/1 var(--font-sans);
+  color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+.opcion:hover { color: var(--text-primary); background: var(--surface-chip); }
+.opcion:focus-visible { outline: var(--foco-w) solid var(--focus-ring); outline-offset: -2px; }
+.elegida,
+.elegida:hover {
+  background: var(--surface-card-elevated);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-glass);
+  border-color: var(--glass-line);
+}
+.opcion:disabled { color: var(--text-disabled); cursor: not-allowed; background: transparent; }

@@ -1,0 +1,25 @@
+/* Modal (kit web, .w-modal): vidrio denso sobre el scrim. */
+
+.modal {
+  width: var(--modal-w-md);
+  max-width: calc(100vw - var(--space-9) * 2);
+  padding: 0;
+  border-radius: var(--radius-2xl);
+  background: var(--surface-raised);
+  border: 1px solid var(--glass-line);
+  box-shadow: var(--shadow-lg);
+  color: var(--text-primary);
+  -webkit-backdrop-filter: var(--sheet-filter);
+  backdrop-filter: var(--sheet-filter);
+}
+.modal::backdrop { background: var(--scrim); }
+.chico { width: var(--modal-w-sm); }
+.documento { width: 720px; height: min(640px, calc(100vh - var(--space-9) * 2)); }
+.documento .contenido { height: 100%; }
+
+.contenido { display: flex; flex-direction: column; gap: var(--space-7); padding: var(--space-8); }
+.cabeza { display: flex; align-items: flex-start; gap: var(--space-4); }
+.textos { display: flex; flex-direction: column; gap: var(--space-3); flex: 1; min-width: 0; }
+.titulo,
+.bajada { margin: 0; }
+.pie { display: flex; justify-content: flex-end; gap: var(--space-3); }

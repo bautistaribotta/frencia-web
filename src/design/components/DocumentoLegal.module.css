@@ -1,0 +1,32 @@
+/* Documento legal (kit web, .w-doc): el texto scrollea dentro del modal y
+   se funde en los ultimos 48 px. */
+
+.doc {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+  padding: 0 var(--space-4) var(--space-9) 0;
+  -webkit-mask-image: linear-gradient(180deg, var(--text-primary) calc(100% - 48px), transparent);
+  mask-image: linear-gradient(180deg, var(--text-primary) calc(100% - 48px), transparent);
+}
+.doc:focus-visible { outline: var(--foco-w) solid var(--focus-ring); outline-offset: var(--foco-offset); }
+
+.seccion { display: flex; flex-direction: column; gap: var(--space-4); }
+.titulo,
+.parrafo { margin: 0; }
+
+/* Vineta: una raya corta alineada con la primera linea, como en la app. */
+.lista { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--space-3); }
+.lista li { position: relative; padding-left: var(--space-6); }
+.lista li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.75em;
+  width: 8px;
+  height: 1px;
+  background: var(--text-tertiary);
+}
