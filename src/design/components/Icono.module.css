@@ -1,0 +1,6 @@
+/* El icono animado viene envuelto en un div de la libreria: se lo deja en
+   linea y se le pone el trazo del sistema, que la libreria trae en 2. */
+
+.icono { display: inline-flex; flex: none; line-height: 0; }
+.dibujo { display: inline-flex; align-items: center; justify-content: center; }
+.dibujo svg { stroke-width: 1.75; }
