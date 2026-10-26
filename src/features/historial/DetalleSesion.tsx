@@ -3,7 +3,7 @@
    series de cada ejercicio en una tabla con el esfuerzo en tinta y la llama
    (kit web, Web · 6).
    Pendiente del diseño: el ticket al costado (descargar, ver grande), el
-   Nuevo PR en la mejor serie y eliminar la sesion.
+   Nuevo PR en la mejor serie.
    Fondo: velada. */
 
 import { useQuery } from '@tanstack/react-query';
@@ -26,6 +26,7 @@ import { miles } from '@/lib/numeros';
 import { usePerfil } from '@/lib/perfil';
 import { mostrarPeso, type UnidadPeso } from '@/lib/peso';
 import { fechaSesion, reloj } from '@/lib/tiempo';
+import { EliminarSesion } from '@/features/historial/EliminarSesion';
 import styles from './DetalleSesion.module.css';
 
 /** "58" + "min", o "1 h 12" + "min". */
@@ -98,6 +99,7 @@ function Contenido({ sesion }: { sesion: SesionDetalle }) {
           {cuando(sesion.startedAt)}
           {sesion.rutina ? ` · ${sesion.rutina}` : ''}
         </span>
+        <EliminarSesion id={sesion.id} nombre={sesion.dayName} fecha={sesion.finishedAt} detalle />
       </header>
       <div className={styles.cuatro}>
         <Metrica rotulo="Duración" valor={duracion.valor} unidad={duracion.unidad} />

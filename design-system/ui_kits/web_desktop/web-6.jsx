@@ -34,7 +34,7 @@ function Historial({ menu, error, filtro }) {
                     <tr key={f} className={abierto || (mi === 0 && i === 1 && !menu) ? 'is-hover' : ''}>
                       <td className="c-sec">{f}</td><td><span className="semi">{d}</span></td><td className="c-sec">{r}</td><td className="num">{dur}</td><td className="num">{s}</td>
                       <td className="w-tabla__acc">
-                        {abierto ? <BotonIco ico="ellipsis" t="sm" estado="foco" label="Más acciones" /> : <Ico n="chevron-right" s={18} c="c-ter" />}
+                        {abierto ? <BotonIco ico="ellipsis" t="sm" estado="foco" label="Más acciones" /> : <BotonIco ico="trash-2" t="sm" label="Eliminar entrenamiento" />}
                         {abierto ? <Menu className="w-menu--flota"><MenuItem ico="ticket" estado="hover">Ver ticket</MenuItem><MenuItem ico="download">Descargar ticket</MenuItem><MenuSep /><MenuItem ico="trash-2" dang kbd="Supr">Eliminar</MenuItem></Menu> : null}
                       </td>
                     </tr>
@@ -80,6 +80,7 @@ function Detalle({ capa }) {
           <div className="col g7">
             <div className="col g4 items-inicio">
               <Badge tono="signal" ico="check">Completada</Badge>
+              <Boton v="danger" t="sm" ico="trash-2">Eliminar entrenamiento</Boton>
               <span className="w-nombre-rutina">Push</span>
               <span className="t-data c-sec">jueves, 22 de octubre de 2026 · 07:42 · Push Pull Legs</span>
             </div>
@@ -122,14 +123,14 @@ function AppWeb() {
   return (
     <Lienzo titulo="Historial" bajada="Las sesiones se registran en el celular y se revisan acá. La lista es una tabla agrupada por mes con totales arriba; el detalle pone las series en tablas y el ticket al costado. Fondo velada en lista y detalle (densas en datos); centro para el ticket solo.">
       <Seccion titulo="Lista" nota="(main)/history — sin filtro de período. Arriba, sesiones y tiempo total de todo el historial (no cambian al bajar); sin tonelaje ni racha. La lista entra con los últimos 3 meses y, al llegar al final, trae de a 20 sesiones más viejas hasta el principio; el total del mes aparece cuando ya no quedan páginas por traer.">
-        <Mesa nombre="Lista con hover" nota="Toda la fila es el enlace; el chevron indica que abre el detalle." ruta="(main)/history" fondo="velada" url="frencia.app/historial"><Historial /></Mesa>
+        <Mesa nombre="Lista con hover" nota="La fila abre el detalle; la papelera abre la confirmación sin navegar." ruta="(main)/history" fondo="velada" url="frencia.app/historial"><Historial /></Mesa>
         <Mesa nombre="Menú de una fila" nota="Clic derecho o ⋯: ver o descargar el ticket y eliminar. En la app esto era deslizar." ruta="(main)/history" fondo="velada" url="frencia.app/historial"><Historial menu="menu" /></Mesa>
         <Mesa nombre="Error al cargar más" nota="Lo cargado queda; al pie, el aviso en vidrio con Reintentar. Sin carmín: es un error de lectura." ruta="(main)/history" fondo="velada" url="frencia.app/historial"><Historial error filtro /></Mesa>
         <Mesa nombre="Vacío" ruta="(main)/history" fondo="velada" url="frencia.app/historial"><HistorialVacio /></Mesa>
       </Seccion>
       <Seccion titulo="Detalle de una sesión" nota="session-history — las series de cada ejercicio en una tabla: el esfuerzo en tinta con la llama, el check en lume y el PR como único relleno de tinta de esfuerzo.">
         <Mesa nombre="Detalle con el ticket al costado" ruta="session-history" fondo="velada" url="frencia.app/historial/7c1e2a9b"><Detalle /></Mesa>
-        <Mesa nombre="Eliminar la sesión" ruta="session-history · alerta" fondo="velada" url="frencia.app/historial/7c1e2a9b"><Detalle capa={<Modal chico titulo="Eliminar este entrenamiento" texto="Se borran sus 15 series y tus mejores marcas se recalculan. No se puede deshacer." pie={<><Boton v="secondary" estado="foco">Cancelar</Boton><Boton v="danger" ico="trash-2">Eliminar</Boton></>} />} /></Mesa>
+        <Mesa nombre="Eliminar la sesión" ruta="session-history · alerta" fondo="velada" url="frencia.app/historial/7c1e2a9b"><Detalle capa={<Modal chico titulo="Eliminar este entrenamiento" texto="Se borran esta sesión y sus series del historial. Tu rutina no cambia. No se puede deshacer." pie={<><Boton v="secondary" estado="foco">Cancelar</Boton><Boton v="danger" ico="trash-2">Eliminar</Boton></>} />} /></Mesa>
       </Seccion>
       <Seccion titulo="Ticket" nota="session-ticket — el pase solo, sobre la luz del centro, para descargarlo como imagen o copiarlo al portapapeles.">
         <Mesa nombre="Ticket de la sesión" ruta="session-ticket" fondo="centro" url="frencia.app/historial/7c1e2a9b/ticket"><TicketGrande /></Mesa>

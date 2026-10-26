@@ -1,4 +1,4 @@
-/* Historial: las sesiones terminadas, solo lectura. Las consultas son las de
+/* Historial: consulta y eliminación de sesiones terminadas. Las consultas son las de
    src/lib/history.ts y session-history.ts del repo mobile con lo que suma el
    escritorio: la rutina y la cantidad de series de cada sesion en la tabla,
    y los totales de todo el historial arriba.
@@ -288,4 +288,18 @@ export async function cargarDetalleSesion(userId: string, sessionId: string): Pr
     finishedAt: Date.parse(sesion.finished_at as string),
     ejercicios,
   };
+}
+
+/** La base elimina sus series en cascada; nunca se modifica el plan del dia. */
+export async function eliminarSesion(userId: string, sessionId: string): Promise<void> {
+  if (!esUuid(userId) || !esUuid(sessionId)) throw new Error('Sesión inválida');
+  const { data, error } = await supabase
+    .from('workout_sessions')
+    .delete()
+    .eq('id', sessionId)
+    .eq('user_id', userId)
+    .not('finished_at', 'is', null)
+    .select('id');
+  if (error) throw error;
+  if (data?.length !== 1) throw new Error('No se eliminó la sesión');
 }

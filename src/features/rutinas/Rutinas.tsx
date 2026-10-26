@@ -61,7 +61,7 @@ export function Rutinas() {
           titulo="Tus rutinas"
           bajada="Una en curso; al poner otra en curso, la actual pasa a Anteriores con su historial."
           acciones={
-            <Boton icono={Plus} disabled title={PRONTO}>
+            <Boton icono={Plus} aria-disabled className={styles.nueva} title={PRONTO}>
               Nueva rutina
             </Boton>
           }

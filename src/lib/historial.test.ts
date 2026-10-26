@@ -1,9 +1,10 @@
 /* Correr con `npm test` (Vitest). */
 
-import { assert, test, vi } from 'vitest';
+import { assert, expect, test, vi } from 'vitest';
 
 import {
   agruparPorMes,
+  eliminarSesion,
   cargarPaginaHistorial,
   HISTORIAL_PAGINA,
   inicioPrimeraPagina,
@@ -108,4 +109,28 @@ test('las paginas siguientes van de a HISTORIAL_PAGINA y avisan si quedan mas', 
   const pagina = await cargarPaginaHistorial('u', { id: '11111111-1111-1111-1111-111111111111', finishedAt: '2026-06-01T10:00:00+00:00' });
   assert.strictEqual(pagina.sesiones.length, HISTORIAL_PAGINA);
   assert.strictEqual(pagina.siguiente?.id, `s${HISTORIAL_PAGINA - 1}`);
+});
+
+for (const caso of ['ok', 'sin filas', 'error'] as const) {
+  test(`eliminar sesion: ${caso}`, async () => {
+    const filtros: unknown[][] = [];
+    const consulta = {
+      delete: () => consulta,
+      eq: (...args: unknown[]) => { filtros.push(args); return consulta; },
+      not: (...args: unknown[]) => { filtros.push(args); return consulta; },
+      select: async () => ({ data: caso === 'ok' ? [{ id: 'sesion' }] : [], error: caso === 'error' ? new Error('Sin permiso') : null }),
+    };
+    vi.mocked(supabase.from).mockReturnValue(consulta as never);
+    const usuario = '00000000-0000-0000-0000-000000000001';
+    const sesion = '00000000-0000-0000-0000-000000001000';
+    if (caso === 'ok') await eliminarSesion(usuario, sesion);
+    else await expect(eliminarSesion(usuario, sesion)).rejects.toThrow();
+    assert.deepEqual(filtros, [['id', sesion], ['user_id', usuario], ['finished_at', 'is', null]]);
+  });
+}
+
+test('eliminar rechaza identificadores invalidos antes de consultar', async () => {
+  vi.mocked(supabase.from).mockClear();
+  await expect(eliminarSesion('', 'invalido')).rejects.toThrow();
+  assert.strictEqual(vi.mocked(supabase.from).mock.calls.length, 0);
 });

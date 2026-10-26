@@ -89,7 +89,7 @@ function Rutinas({ menu }) {
   return (
     <App activo="routines">
       <Pagina>
-        <Encabezado rotulo="Rutinas" titulo="Tus rutinas" sub="Una en curso; al poner otra en curso, la actual pasa a Anteriores con su historial." acciones={<Boton ico="plus">Nueva rutina</Boton>} />
+        <Encabezado rotulo="Rutinas" titulo="Tus rutinas" sub="Una en curso; al poner otra en curso, la actual pasa a Anteriores con su historial." acciones={<Boton ico="plus" className="w-nueva-rutina">Nueva rutina</Boton>} />
         <div className="w-tarjeta w-tarjeta--activa w-tarjeta--link row g7">
           <div className="col g3 f1"><span className="t-label c-acc">En curso · desde 29 JUL 2026</span><span className="t-title">Push Pull Legs</span><span className="t-bodysm c-sec">3 días · 18 ejercicios · 24 sesiones</span></div>
           <div className="row g5">{RUTINA.dias.map((d) => <div key={d.n} className="col g2"><span className="t-label c-ter">{d.n}</span><Semana on={d.sem} /></div>)}</div>
@@ -199,7 +199,7 @@ function ModalCompartir({ paso }) {
 
 function AppWeb() {
   return (
-    <Lienzo titulo="Inicio y Rutinas" bajada="Inicio responde qué toca esta semana y qué pasó; no hay Empezar, porque desde la web no se entrena. Rutinas lista los planes y el detalle muestra los días lado a lado. Fondo cumbre en todas: la luz arriba a la derecha queda detrás del encabezado y de los números grandes.">
+    <Lienzo titulo="Inicio y Rutinas" bajada="Nueva rutina destaca en verde Lume en la navegación. Inicio responde qué toca esta semana y qué pasó; no hay Empezar, porque desde la web no se entrena. Rutinas lista los planes y el detalle muestra los días lado a lado. Fondo cumbre en todas: la luz arriba a la derecha queda detrás del encabezado y de los números grandes.">
       <Seccion titulo="Inicio" nota="(main)/home — la semana en curso arriba, la rutina con sus días y, a la derecha, lo último que pasó.">
         <Mesa nombre="Con rutina en curso" nota="La semana muestra lo hecho en tinta, hoy en lume y lo no entrenado en terciario. Solo el día de hoy sube a vidrio elevado. Las mejores marcas llevan la llama, sin color." ruta="(main)/home" url="frencia.app"><Inicio /></Mesa>
         <Mesa nombre="Cuenta nueva" ruta="(main)/home" url="frencia.app"><InicioVacio /></Mesa>

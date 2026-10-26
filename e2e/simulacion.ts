@@ -3,6 +3,8 @@
    pedido a Supabase se responde aca. */
 
 import type { Page } from '@playwright/test';
+import { readFile } from 'node:fs/promises';
+import { resolve, basename } from 'node:path';
 
 import type { Tables } from '../src/lib/database.types';
 
@@ -41,6 +43,16 @@ export async function conSesion(
   page: Page,
   { perfil = PERFIL, demoraPerfil = 0, tablas = {} }: { perfil?: Perfil; demoraPerfil?: number; tablas?: Record<string, unknown> } = {},
 ) {
+  // Permite verificar el build sin servidor cuando localhost no esta disponible.
+  if (process.env.FRENCIA_E2E_DIST === '1') {
+    await page.route('http://localhost:5180/**', async (ruta) => {
+      const path = new URL(ruta.request().url()).pathname;
+      const asset = path.startsWith('/assets/');
+      const archivo = asset ? resolve('dist/assets', basename(path)) : resolve('dist/index.html');
+      const tipo = path.endsWith('.js') ? 'application/javascript' : path.endsWith('.css') ? 'text/css' : asset ? 'application/octet-stream' : 'text/html';
+      await ruta.fulfill({ body: await readFile(archivo), contentType: tipo });
+    });
+  }
   await page.addInitScript(
     ([clave, usuario]) => {
       const ahora = Math.floor(Date.now() / 1000);

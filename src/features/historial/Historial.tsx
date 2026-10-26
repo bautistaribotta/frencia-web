@@ -5,12 +5,11 @@
    HISTORIAL_PAGINA mas viejas hasta el principio, como en la app. El total
    de un mes aparece cuando ya no quedan paginas por traer.
    Toda la fila abre el detalle.
-   Pendiente del diseño: el filtro por rutina (falta el selector) y el menu
-   de cada fila (ticket y eliminar).
+   Pendiente del diseño: el filtro por rutina (falta el selector) y el ticket de cada fila.
    Fondo: velada. */
 
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { ChevronRight, History, RotateCw } from 'lucide-react';
+import { History, RotateCw } from 'lucide-react';
 import { useEffect, useRef, type ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router';
 
@@ -32,6 +31,7 @@ import {
 } from '@/lib/historial';
 import { miles } from '@/lib/numeros';
 import { duracionSesion, indiceSemanaLunes, MESES_LARGO } from '@/lib/tiempo';
+import { EliminarSesion } from '@/features/historial/EliminarSesion';
 import styles from './Historial.module.css';
 
 const DIAS_CORTO = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
@@ -148,7 +148,7 @@ function Mes({ mes }: { mes: MesHistorial }) {
               <th>Rutina</th>
               <th className={tabla.num}>Duración</th>
               <th className={tabla.num}>Series</th>
-              <th aria-label="Abrir" />
+              <th aria-label="Acciones" />
             </tr>
           </thead>
           <tbody>
@@ -168,7 +168,7 @@ function Mes({ mes }: { mes: MesHistorial }) {
                   <td className={tabla.num}>{duracionSesion(s.startedAt, s.finishedAt)}</td>
                   <td className={tabla.num}>{s.series}</td>
                   <td className={tabla.acc}>
-                    <Icono icono={ChevronRight} tamano={18} />
+                    <EliminarSesion id={s.id} nombre={s.dayName} fecha={s.finishedAt} />
                   </td>
                 </tr>
               );

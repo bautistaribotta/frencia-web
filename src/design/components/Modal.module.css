@@ -1,6 +1,7 @@
 /* Modal (kit web, .w-modal): vidrio denso sobre el scrim. */
 
 .modal {
+  text-align: left;
   width: var(--modal-w-md);
   max-width: calc(100vw - var(--space-9) * 2);
   padding: 0;

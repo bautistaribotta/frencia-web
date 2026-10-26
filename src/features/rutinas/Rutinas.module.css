@@ -50,3 +50,6 @@
 .esqTitulo { width: 40%; height: 22px; }
 .esqLinea { width: 55%; }
 .esqRotulo { width: 25%; }
+
+.nueva { cursor: pointer; background: var(--signal); color: var(--text-on-signal); box-shadow: var(--halo-signal); }
+.nueva:hover, .nueva:active { background: var(--signal-press); }

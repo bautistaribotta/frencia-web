@@ -3,7 +3,7 @@
 
 import { expect, test, type Page } from '@playwright/test';
 
-import { conSesion } from './simulacion';
+import { conSesion, USUARIO } from './simulacion';
 
 const AHORA = new Date('2026-10-26T12:00:00-03:00');
 const DIA = 24 * 60 * 60 * 1000;
@@ -24,11 +24,21 @@ const SESIONES = Array.from({ length: 60 }, (_, i) => {
  *  limite y desplazamiento. Lleva la cuenta de cuantas filas trajo cada
  *  pagina de la lista. */
 async function conSesiones(page: Page) {
+  let guardadas = [...SESIONES];
   const pedidas: number[] = [];
   await page.route('**/rest/v1/workout_sessions**', (ruta) => {
     const url = new URL(ruta.request().url());
     const p = url.searchParams;
-    let filas = SESIONES;
+    if (ruta.request().method() === 'DELETE') {
+      expect(p.get('user_id')).toBe(`eq.${USUARIO.id}`);
+      expect(p.get('finished_at')).toBe('not.is.null');
+      const id = p.get('id')?.slice(3);
+      const borradas = guardadas.filter((s) => s.id === id);
+      guardadas = guardadas.filter((s) => s.id !== id);
+      return ruta.fulfill({ json: borradas.map((s) => ({ id: s.id })) });
+    }
+    if (p.has('id')) return ruta.fulfill({ json: guardadas.find((s) => `eq.${s.id}` === p.get('id')) ?? null });
+    let filas = guardadas;
     for (const filtro of p.getAll('finished_at')) {
       const [op, valor] = [filtro.slice(0, filtro.indexOf('.')), filtro.slice(filtro.indexOf('.') + 1)];
       const t = Date.parse(valor);
@@ -90,4 +100,72 @@ test('historial: sin filtro, tres meses primero y despues scroll infinito', asyn
   }
   await expect(filas).toHaveCount(SESIONES.length);
   await expect(page.getByRole('status')).toHaveCount(0);
+});
+
+for (const tema of ['dark', 'light'] as const) {
+  test(`eliminar: confirmación y totales en ${tema}`, async ({ page }) => {
+    await page.clock.setFixedTime(AHORA);
+    await page.emulateMedia({ colorScheme: tema, reducedMotion: 'reduce' });
+    await conSesion(page);
+    await conSesiones(page);
+    await page.goto('/historial');
+    const nueva = page.getByRole('button', { name: 'Nueva rutina', exact: true });
+    await expect(nueva).toHaveAttribute('aria-disabled', 'true');
+    await nueva.focus();
+    await page.keyboard.press('Enter');
+    await expect(page).toHaveURL(/historial$/);
+    await nueva.hover();
+    await page.screenshot({ path: `capturas/nueva-rutina-${tema}.png` });
+    const borrar = page.getByRole('button', { name: /^Eliminar Push del/ }).first();
+    await borrar.hover();
+    await borrar.click();
+    const modal = page.getByRole('dialog');
+    await expect(modal.getByRole('button', { name: 'Cancelar' })).toBeFocused();
+    await page.screenshot({ path: `capturas/eliminar-sesion-${tema}.png` });
+    await page.keyboard.press('Escape');
+    await expect(modal).not.toBeVisible();
+    await borrar.click();
+    await modal.getByRole('button', { name: 'Eliminar', exact: true }).click();
+    await expect(page.getByText('Entrenamiento eliminado.', { exact: true })).toBeVisible();
+    await expect(page.getByText('59', { exact: true })).toBeVisible();
+    await expect(page.getByText('59h', { exact: true })).toBeVisible();
+    await expect(page.locator(`a[href="/historial/${SESIONES[0].id}"]`)).toHaveCount(0);
+  });
+}
+
+test('eliminar: error, carga y reintento desde el detalle', async ({ page }) => {
+  await conSesion(page);
+  await conSesiones(page);
+  let intentos = 0;
+  let liberar: () => void = () => {};
+  await page.route('**/rest/v1/workout_sessions**', async (ruta) => {
+    if (ruta.request().method() !== 'DELETE') return ruta.fallback();
+    intentos++;
+    if (intentos === 1) return ruta.fulfill({ status: 500, json: { message: 'Error simulado' } });
+    await new Promise<void>((resolve) => { liberar = resolve; });
+    return ruta.fallback();
+  });
+  await page.goto(`/historial/${SESIONES[0].id}`);
+  await page.getByRole('button', { name: 'Eliminar entrenamiento', exact: true }).click();
+  const modal = page.getByRole('dialog');
+  await modal.getByRole('button', { name: 'Eliminar', exact: true }).click();
+  await expect(modal.getByRole('alert')).toBeVisible();
+  await page.screenshot({ path: 'capturas/eliminar-error.png' });
+  await modal.getByRole('button', { name: 'Eliminar', exact: true }).click();
+  await expect(modal.getByRole('button', { name: 'Eliminar', exact: true })).toHaveAttribute('aria-busy', 'true');
+  await expect(modal.getByRole('button', { name: 'Cancelar' })).toBeDisabled();
+  await page.keyboard.press('Escape');
+  await expect(modal).toBeVisible();
+  await page.screenshot({ path: 'capturas/eliminar-cargando.png' });
+  await expect.poll(() => intentos).toBe(2);
+  liberar();
+  await expect(page).toHaveURL(/historial$/);
+});
+
+test('historial vacío', async ({ page }) => {
+  await conSesion(page);
+  await page.goto('/historial');
+  await expect(page.getByText('Todavía no hay sesiones')).toBeVisible();
+  await expect(page.getByRole('button', { name: /^Eliminar/ })).toHaveCount(0);
+  await page.screenshot({ path: 'capturas/historial-vacio.png' });
 });

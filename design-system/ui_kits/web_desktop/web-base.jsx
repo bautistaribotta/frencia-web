@@ -166,9 +166,9 @@ function Boton({ v = 'primary', t = 'md', ico, icoDer, ancho, estado, anima, con
     </button>
   );
 }
-function BotonIco({ ico, v = 'ghost', t = 'md', estado, tip, tipLado = 'arriba', dang, anima, label }) {
+function BotonIco({ ico, v = 'ghost', t = 'md', estado, tip, tipLado = 'arriba', dang, anima, label, className = '' }) {
   return (
-    <button className={`w-btn-ico${v === 'surface' ? ' w-btn-ico--surface' : ''}${t === 'sm' ? ' w-btn-ico--sm' : ''}${dang ? ' w-btn-ico--dang' : ''}${est(estado)}${anima ? ' w-anima-hover' : ''}`}
+    <button className={`w-btn-ico${v === 'surface' ? ' w-btn-ico--surface' : ''}${t === 'sm' ? ' w-btn-ico--sm' : ''}${dang ? ' w-btn-ico--dang' : ''}${est(estado)}${anima ? ' w-anima-hover' : ''} ${className}`}
       aria-label={label || tip} disabled={estado === 'off'}>
       <Ico n={ico} s={t === 'sm' ? 16 : 20} anima={anima} />
       {tip && estado === 'hover' ? <span className={`w-tooltip w-tooltip--${tipLado}`}>{tip}</span> : null}
@@ -403,8 +403,8 @@ function Nav({ activo, rail, hover }) {
         {rail ? <span className="w-marca">F.</span> : <Marca />}
         {rail ? null : <BotonIco ico="panel-left-close" t="sm" label="Colapsar navegación" />}
       </div>
-      {rail ? <BotonIco ico="plus" v="surface" label="Nueva rutina" estado={hover === 'crear' ? 'hover' : undefined} tip="Nueva rutina  N" tipLado="der" />
-        : <Boton v="secondary" ico="plus" ancho>Nueva rutina</Boton>}
+      {rail ? <BotonIco ico="plus" v="surface" className="w-nueva-rutina" label="Nueva rutina" estado={hover === 'crear' ? 'hover' : undefined} tip="Nueva rutina  N" tipLado="der" />
+        : <Boton ico="plus" ancho className="w-nueva-rutina">Nueva rutina</Boton>}
       <div className="w-nav__grupo">
         {NAV.map((it) => (
           <a key={it.v} className={`w-nav__item${activo === it.v ? ' is-activo' : ''}${hover === it.v ? ' is-hover' : ''}`} aria-current={activo === it.v ? 'page' : undefined}>

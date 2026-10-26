@@ -13,12 +13,13 @@ export default defineConfig({
   reporter: 'list',
   use: {
     ...devices['Desktop Chrome'],
+    channel: process.env.FRENCIA_E2E_CHANNEL || undefined,
     baseURL: `http://localhost:${PUERTO}`,
     viewport: { width: 1440, height: 900 },
     locale: 'es-AR',
     timezoneId: 'America/Argentina/Buenos_Aires',
   },
-  webServer: {
+  webServer: process.env.FRENCIA_E2E_DIST === '1' ? undefined : {
     command: `npm run dev -- --port ${PUERTO} --strictPort`,
     url: `http://localhost:${PUERTO}`,
     reuseExistingServer: true,

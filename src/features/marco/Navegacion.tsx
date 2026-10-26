@@ -83,13 +83,13 @@ export function Navegacion() {
       </div>
 
       <Boton
-        variante="secondary"
+        variante="primary"
         icono={Plus}
         ancho
         className={styles.nueva}
         title={CREAR_RUTINA_LISTO ? 'Nueva rutina (N)' : 'Nueva rutina: muy pronto'}
-        disabled={!CREAR_RUTINA_LISTO}
-        onClick={() => navegar(NUEVA_RUTINA)}
+        aria-disabled={!CREAR_RUTINA_LISTO}
+        onClick={() => { if (CREAR_RUTINA_LISTO) navegar(NUEVA_RUTINA); }}
       >
         <span className={styles.texto}>Nueva rutina</span>
       </Boton>

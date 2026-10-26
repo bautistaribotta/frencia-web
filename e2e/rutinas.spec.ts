@@ -40,6 +40,13 @@ for (const [tema, nombre] of [
     await conSesion(page, { tablas: { routines: RUTINAS } });
     await page.goto('/rutinas');
     await expect(page.getByText('Push Pull Legs').first()).toBeVisible();
+    for (const boton of await page.getByRole('button', { name: 'Nueva rutina', exact: true }).all()) {
+      await boton.hover();
+      await expect(boton).toHaveCSS('cursor', 'pointer');
+      await boton.focus();
+      await page.keyboard.press('Enter');
+      await expect(page).toHaveURL(/rutinas$/);
+    }
     await page.screenshot({ path: `capturas/rutinas-${nombre}.png` });
   });
 }

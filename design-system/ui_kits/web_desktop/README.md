@@ -40,8 +40,10 @@ página), `tools/tokens_web.py` (regenera los tokens desde `tokens.json`).
 
 - La barra de pestañas se vuelve navegación lateral en vidrio denso (`surface-raised` +
   `blur-sheet`): Inicio, Rutinas, Historial; Configuración y el usuario (→ Perfil) al pie.
-- **Nueva rutina** reemplaza al botón central de la barra. Va en secundario: el lume queda
-  para la acción principal de cada página.
+- **Nueva rutina** reemplaza al botón central de la barra. Va con relleno `signal` y texto `text-on-signal`: lima en oscuro, oliva en claro.
+  Mientras el constructor no esté disponible conserva el color, `aria-disabled` y el
+  título «Nueva rutina: muy pronto», sin navegar al activarlo. Tanto en la barra lateral como en el encabezado de Rutinas,
+  el cursor es de mano (`pointer`), nunca de bloqueo.
 - La pestaña activa: icono en lume y marca de 3 px pegada al borde, como en la app.
 - Se colapsa a riel con `[` o con el botón de la cabecera (preferencia en `localStorage`).
 - El **constructor** es pantalla completa, sin navegación lateral: es una tarea de foco.
@@ -232,3 +234,19 @@ solo del kit y se reemplazan por las pseudoclases.
 - Peso en el plan: solo `weight_kg` en isométricos que registran peso.
 - Sin intensidad: solo cardio. RIR `-1` = al fallo.
 - Reducir transparencia no está en `profiles`: se guarda en el navegador.
+
+## Eliminar una sesión
+
+La lista ofrece una papelera visible por fila; no abre el detalle al pulsarla. El detalle
+también ofrece «Eliminar entrenamiento». Ambas acciones abren el mismo modal chico,
+con día y fecha, aviso de borrado irreversible de las series y foco inicial en Cancelar.
+Durante el borrado no se puede cerrar ni repetir la acción. Si falla, se conserva el
+modal con un aviso y la posibilidad de reintentar. Al confirmar, se actualizan lista,
+totales y resúmenes de inicio y rutinas. La rutina y su planificación se conservan.
+
+### Verificación sin servidor
+
+Si el entorno no permite conexiones a localhost, ejecutar primero `npm run build` y
+luego Playwright con `FRENCIA_E2E_DIST=1`: la simulación responde los archivos de `dist/`
+sin red. `FRENCIA_E2E_CHANNEL=chrome` permite usar Chrome instalado. Por defecto,
+`npm run e2e` sigue usando Vite y el Chromium de Playwright.
