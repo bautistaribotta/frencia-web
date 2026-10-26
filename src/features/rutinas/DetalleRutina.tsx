@@ -101,14 +101,14 @@ function Dia({ dia }: { dia: DiaDetalle }) {
   const unidadDistancia = (perfil?.unidad_distancia ?? 'km') as UnidadDistancia;
   return (
     <Tarjeta className={styles.dia}>
+      {/* De arriba hacia abajo: el nombre, los dias de la semana y la cantidad
+          de ejercicios; despues, la lista. */}
       <div className={styles.diaCabeza}>
-        <div className={styles.diaTextos}>
-          <h2 className={`${texto.subtitle} ${styles.sinMargen}`}>{dia.name}</h2>
-          <span className={`${texto.label} ${texto.terciario}`}>
-            {dia.ejercicios} {dia.ejercicios === 1 ? 'ejercicio' : 'ejercicios'}
-          </span>
-        </div>
+        <h2 className={`${texto.subtitle} ${styles.sinMargen}`}>{dia.name}</h2>
         <TiraSemana marcados={dia.weekdays} />
+        <span className={`${texto.label} ${texto.terciario}`}>
+          {dia.ejercicios} {dia.ejercicios === 1 ? 'ejercicio' : 'ejercicios'}
+        </span>
       </div>
       {dia.plan.length > 0 ? (
         <ol className={styles.ejercicios}>

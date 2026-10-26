@@ -162,7 +162,7 @@ function Detalle({ archivada, capa }) {
         <div className="w-tres">
           {RUTINA.dias.map((d) => (
             <div key={d.n} className="w-tarjeta col g5">
-              <div className="row entre"><div className="col g1"><span className="t-subtitle">{d.n}</span><span className="t-label c-ter">{d.ej.length} ejercicios</span></div><Semana on={d.sem} /></div>
+              <div className="col g3"><span className="t-subtitle">{d.n}</span><Semana on={d.sem} /><span className="t-label c-ter">{d.ej.length} ejercicios</span></div>
               <div className="col">{d.ej.map((e, i) => (
                 <div key={e.n} className="w-ej-fila">
                   <span className="w-ej__n">{String(i + 1).padStart(2, '0')}</span>
