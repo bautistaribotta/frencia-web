@@ -27,7 +27,7 @@
   view-transition-name: formulario;
 }
 
-/* El switch de tema, en la esquina de arriba del lado del formulario. */
+/* El boton de tema, en la esquina de arriba del lado del formulario. */
 .tema { position: absolute; top: var(--space-8); left: var(--space-11); view-transition-name: tema; }
 .billeteIzq .tema { left: auto; right: var(--space-11); }
 

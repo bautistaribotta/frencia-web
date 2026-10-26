@@ -1,5 +1,5 @@
 /* Marco comun de login y registro: el fondo de luces (cumbre, anima, como
-   todo el onboarding), el switch de tema arriba del lado del formulario, el
+   todo el onboarding), el boton de tema arriba del lado del formulario, el
    formulario en vidrio y el billete, que lleva la marca. Los terminos y la
    politica de privacidad se leen en el modal de lectura, sin salir de la
    pantalla. */
@@ -8,7 +8,7 @@ import { useState, type FormEvent, type ReactNode } from 'react';
 
 import { DocumentoLegal, type Documento } from '@/design/components/DocumentoLegal';
 import { Fondo } from '@/design/components/Fondo';
-import { SwitchTema } from '@/design/components/SwitchTema';
+import { BotonTema } from '@/design/components/BotonTema';
 import { Tarjeta } from '@/design/components/varios';
 import texto from '@/design/texto.module.css';
 import styles from './Acceso.module.css';
@@ -30,7 +30,7 @@ export function Acceso({ billete, titulo, bajada, onSubmit, children }: Props) {
 
   const columna = (
     <div className={styles.columna}>
-      <SwitchTema className={styles.tema} />
+      <BotonTema className={styles.tema} />
       <Tarjeta className={styles.tarjeta}>
         <form className={styles.formulario} onSubmit={onSubmit} noValidate>
           <div className={styles.encabezado}>
