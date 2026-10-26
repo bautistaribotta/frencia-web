@@ -120,6 +120,7 @@ function Registro({ caso, variante }) {
       </div>
       {caso === 'tomado' ? <span className="t-bodysm c-sec">¿Es tuya? <span className="c-acc semi">Entrá</span> o <span className="c-acc semi">recuperá la contraseña</span>.</span> : null}
       <Boton t="lg" ancho icoDer="arrow-right" estado={caso === 'distintas' || caso === 'vacio' ? 'off' : undefined}>Crear cuenta</Boton>
+      <Sociales />
       <span className="t-bodysm c-sec w-acceso__pie">¿Ya tenés cuenta? <span className="c-acc semi">Iniciá sesión</span></span>
     </Acceso>
   );
@@ -287,12 +288,12 @@ function AppWeb() {
       <Seccion titulo="Variante: billete grabado" nota="Propuesta. La foto pasa a un grabado de líneas como el de un billete (talla dulce con tramado cruzado en las sombras y guilloché en las luces) y va enmarcada a la derecha con microtexto, número de serie y una cartela con la marca FRENCIA. El switch de tema va arriba, del lado del formulario, donde antes estaba la marca. La tarjeta y los textos van centrados en su columna. En oscuro la línea es la luz (marfil sobre grafito); en claro, la sombra (tinta sobre marfil). Las placas pasan a lume como único color, igual que el tejado naranja de la referencia. Fondo cumbre: la luz queda detrás del billete y el formulario en la zona oscura.">
         <Mesa nombre="Login · billete a la izquierda" nota="Iniciar sesión espeja al registro: el billete pasa a la izquierda y el formulario a la derecha. Al ir de una pantalla a la otra, el billete y el formulario cruzan de lado con un fundido de 420 ms." ruta="(auth)/login · variante" fondo="cumbre" animado url="frencia.app/login"><Login email="bauti@correo.com" pass="••••••" foco="pass" variante="billete-izq" /></Mesa>
         <Mesa nombre="Login · billete, vacío" nota="Sin texto, cada rótulo está adentro de su campo." ruta="(auth)/login · variante" fondo="cumbre" animado url="frencia.app/login"><Login variante="billete-izq" /></Mesa>
-        <Mesa nombre="Registro · billete, vacío" nota="Al hacer clic en Nombre, el rótulo sube y aparece el cursor; los demás siguen con el rótulo adentro." ruta="(auth)/register · variante" fondo="cumbre" animado url="frencia.app/registro"><Registro caso="vacio" variante="billete" /></Mesa>
-        <Mesa nombre="Registro · billete a la derecha" nota="Crear cuenta: formulario a la izquierda y billete a la derecha." ruta="(auth)/register · variante" fondo="cumbre" animado url="frencia.app/registro"><Registro caso="distintas" variante="billete" /></Mesa>
+        <Mesa nombre="Registro · billete, vacío" nota="Al hacer clic en Nombre, el rótulo sube y aparece el cursor; los demás siguen con el rótulo adentro." ruta="(auth)/register · variante" fondo="cumbre" animado url="frencia.app/signup"><Registro caso="vacio" variante="billete" /></Mesa>
+        <Mesa nombre="Registro · billete a la derecha" nota="Crear cuenta: formulario a la izquierda y billete a la derecha. Debajo de Crear cuenta, Apple y Google, igual que en el login: si la cuenta no existe la crean, y después pasan por términos y el setup del perfil como el alta con correo." ruta="(auth)/register · variante" fondo="cumbre" animado url="frencia.app/signup"><Registro caso="distintas" variante="billete" /></Mesa>
       </Seccion>
       <Seccion titulo="Registro" nota="(auth)/register — mismo esqueleto; nombre y apellido comparten fila.">
-        <Mesa nombre="Contraseñas distintas" ruta="(auth)/register" fondo="flanco" animado url="frencia.app/registro"><Registro caso="distintas" /></Mesa>
-        <Mesa nombre="Correo ya registrado" nota="Ofrece entrar o recuperar la contraseña en el mismo lugar." ruta="(auth)/register" fondo="flanco" animado url="frencia.app/registro"><Registro caso="tomado" /></Mesa>
+        <Mesa nombre="Contraseñas distintas" ruta="(auth)/register" fondo="flanco" animado url="frencia.app/signup"><Registro caso="distintas" /></Mesa>
+        <Mesa nombre="Correo ya registrado" nota="Ofrece entrar o recuperar la contraseña en el mismo lugar." ruta="(auth)/register" fondo="flanco" animado url="frencia.app/signup"><Registro caso="tomado" /></Mesa>
       </Seccion>
       <Seccion titulo="Recuperar y nueva contraseña" nota="(auth)/forgot-password y (auth)/reset-password — el enlace del correo abre la web en reset-password con el token de Supabase.">
         <Mesa nombre="Pedir el enlace" ruta="(auth)/forgot-password" fondo="flanco" animado url="frencia.app/recuperar"><Recuperar /></Mesa>

@@ -55,7 +55,7 @@ cinco posiciones y la regla de lectura son las de la app.
 
 | Ruta (React Router) | Pantalla | Fondo |
 |---|---|---|
-| `/login`, `/registro`, `/recuperar`, `/nueva-contrasena` | Acceso | `flanco` · anima |
+| `/login`, `/signup`, `/recuperar`, `/nueva-contrasena` | Acceso | `flanco` · anima |
 | `/bienvenida` | Términos y privacidad | `cumbre` · anima |
 | `/bienvenida/perfil` | Setup: sexo | `cumbre` · anima |
 | `/bienvenida/perfil` | Setup: fecha, altura, peso | `centro` · anima (fundido de 420 ms entre pasos) |
@@ -78,6 +78,9 @@ con microtexto, número de serie y una cartela con la marca `FRENCIA.` (en lugar
 - El login lleva el billete a la izquierda y el formulario a la derecha; el registro, al revés.
 - La tarjeta del formulario, el texto legal y "¿No tenés cuenta?" / "¿Ya tenés cuenta?" van
   centrados en la columna del formulario.
+- Login y registro llevan Apple y Google debajo del botón principal, con el divisor "o
+  continuá con". En el registro crean la cuenta si no existe; el alta sigue por términos y
+  el setup del perfil, igual que con correo.
 - Arriba, en la esquina del lado del formulario, va el switch de tema (sol · interruptor ·
   luna; encendido = oscuro) en el lugar donde estaba la marca. Sin sesión la elección se
   guarda en el navegador; con sesión manda `profiles.tema`.
