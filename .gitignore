@@ -13,6 +13,11 @@ dist/
 # Cloudflare
 .wrangler/
 
+# Playwright: capturas y resultados de cada corrida
+capturas/
+e2e/resultados/
+playwright-report/
+
 # logs
 npm-debug.log*
 

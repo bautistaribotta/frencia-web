@@ -73,6 +73,11 @@ revisar lo hecho.
      antes de dar el cambio por terminado.
   4. Revisá también hover, foco de teclado y estados vacío, error y carga.
 
+  Las pruebas viven en `e2e/` (una por pantalla, como `e2e/perfil.spec.ts`) y
+  se corren con `npm run e2e`, que levanta Vite solo. `e2e/simulacion.ts` deja
+  una sesion falsa y responde los pedidos a Supabase: ninguna prueba toca la
+  base real. Las capturas quedan en `capturas/`, que no se sube.
+
 ## Codigo y estilos
 
 - Usar **EXCLUSIVAMENTE** el sistema de color `oklch` para cualquier
