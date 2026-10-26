@@ -1,9 +1,10 @@
 /* Marco de la app con sesion: la navegacion lateral y, al lado, la pagina
-   de la ruta. Aplica el tema guardado en la cuenta. El fondo de luces lo
+   de la ruta (o lo que se le pase, como la 404). Aplica el tema guardado en
+   la cuenta. El fondo de luces lo
    pone cada pagina, porque cada ruta tiene su posicion (ver la tabla del
    kit web). */
 
-import { useEffect } from 'react';
+import { useEffect, type ReactNode } from 'react';
 import { Outlet } from 'react-router';
 
 import { aplicarPreferencia, preferenciaDePerfil } from '@/design/tema';
@@ -11,7 +12,7 @@ import { usePerfil } from '@/lib/perfil';
 import styles from './Marco.module.css';
 import { Navegacion } from './Navegacion';
 
-export function Marco() {
+export function Marco({ children }: { children?: ReactNode }) {
   // Con sesion manda el tema de la cuenta (profiles.tema), igual que en la app.
   const tema = usePerfil().data?.tema;
   useEffect(() => {
@@ -22,7 +23,7 @@ export function Marco() {
     <div className={styles.marco}>
       <Navegacion />
       <main className={styles.principal}>
-        <Outlet />
+        {children ?? <Outlet />}
       </main>
     </div>
   );
