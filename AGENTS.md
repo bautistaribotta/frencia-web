@@ -115,3 +115,15 @@ revisar lo hecho.
 ## Comunicacion
 
 - **Siempre** responder en español.
+- Me gusta que me contradigas si me equivoco, no necesariamente precisas llevarme la contraria en todo, pero tampoco darme el visto bueno, si me equivoco, marcame el error de forma tranquila.
+
+## Sobre los commits y sus mensajes:
+- Nunca usar emojis.
+- Nunca agregar el coauthored con Claude, Gemini y/o ChatGPT.
+- Siempre los mensajes en español.
+- Siempre iniciar los mensajes con letra mayúscula.
+- Siempre redactar los mensajes en primera persona del singular (ej: "Agrego", "Inicializo", "Corrijo"; nunca "Agrega", "Inicializa", "Corrige").
+
+Estilos:
+- Usar EXCLUSIVAMENTE el sistema de color oklch para cualquier declaración de color en CSS, HTML o JS (evitar Hexadecimal, RGB, HSL, etc).
+- Nunca usar estilos en línea (inline) con CSS. Solo se usarán si ya se estaba usando Tailwind en el proyecto.
