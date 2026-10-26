@@ -40,6 +40,13 @@ revisar lo hecho.
   **siempre estaticos**, sin giro ni animacion. El boton que los contiene
   conserva su hover (fondo iluminado y recuadro). Se resuelve dejando el icono
   fuera del mapa `ANIMADOS` de `src/design/components/Icono.tsx`.
+- Los iconos dentro de un input (el icono del campo y los botones de la caja,
+  como mostrar la contraseña) van **siempre quietos**: no animan al aparecer
+  ni con hover o foco. La unica excepcion es el icono del campo cuando aparece
+  un error (por ejemplo el candado con "Correo o contraseña incorrectos"), que
+  anima una vez cada vez que se muestra. Los iconos de los botones (Ingresar,
+  Crear cuenta, etc.) siguen animando. Se resuelve en `Campo`, que envuelve la
+  caja con `IconosQuietos` y le pasa el error al icono como `disparo`.
 
 ## Codigo y estilos
 

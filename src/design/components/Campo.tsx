@@ -3,14 +3,16 @@
    - Flotante (acceso, .w-campo--flotante): sin placeholder; con el campo
      vacio el rotulo va adentro, en el lugar del texto, y con foco o con valor
      sube al borde de arriba al 75 %. El extra ("¿La olvidaste?") baja a la
-     linea de debajo, junto a la ayuda o el error. */
+     linea de debajo, junto a la ayuda o el error.
+   Los iconos de la caja van quietos (tambien el del boton final); el icono
+   del campo anima solo cuando aparece un error. */
 
 import { CircleAlert, type LucideIcon } from 'lucide-react';
 import { useId, type InputHTMLAttributes, type ReactNode } from 'react';
 
 import texto from '../texto.module.css';
 import styles from './Campo.module.css';
-import { Icono } from './Icono';
+import { Icono, IconosQuietos } from './Icono';
 
 interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, 'className'> {
   rotulo: string;
@@ -61,14 +63,16 @@ export function Campo({ rotulo, extra, icono, final, ayuda, error, flotante = fa
     return (
       <div className={clases}>
         <div className={styles.caja}>
-          {icono ? <Icono icono={icono} tamano={20} /> : null}
-          <div className={styles.cuerpo}>
-            {campo}
-            <label htmlFor={idCampo} className={styles.flota}>
-              {rotulo}
-            </label>
-          </div>
-          {final}
+          <IconosQuietos>
+            {icono ? <Icono icono={icono} tamano={20} disparo={error} /> : null}
+            <div className={styles.cuerpo}>
+              {campo}
+              <label htmlFor={idCampo} className={styles.flota}>
+                {rotulo}
+              </label>
+            </div>
+            {final}
+          </IconosQuietos>
         </div>
         {mensaje || extra ? (
           <div className={styles.pie}>
@@ -89,9 +93,11 @@ export function Campo({ rotulo, extra, icono, final, ayuda, error, flotante = fa
         {extra ? <span className={`${texto.label} ${texto.terciario}`}>{extra}</span> : null}
       </span>
       <div className={styles.caja}>
-        {icono ? <Icono icono={icono} tamano={20} /> : null}
-        {campo}
-        {final}
+        <IconosQuietos>
+          {icono ? <Icono icono={icono} tamano={20} disparo={error} /> : null}
+          {campo}
+          {final}
+        </IconosQuietos>
       </div>
       {mensaje}
     </div>

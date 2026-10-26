@@ -6,7 +6,11 @@
    control toma el foco de teclado. Con reducir movimiento queda quieto; la
    libreria ya lo respeta. Los que no tienen version animada van estaticos.
    La cruz (X) va siempre estatica aunque tenga version animada: cerrar no
-   gira. El boton que la contiene conserva su hover (fondo y recuadro). */
+   gira. El boton que la contiene conserva su hover (fondo y recuadro).
+   Dentro de la caja de un campo (input) los iconos van quietos: ni al
+   aparecer ni con hover o foco, tampoco el boton de mostrar la contraseña.
+   Solo animan cuando se los dispara a proposito con `disparo`, como el
+   icono del campo cuando aparece un error. */
 
 import {
   ArrowLeftIcon,
@@ -93,7 +97,7 @@ import {
   User,
   type LucideIcon,
 } from 'lucide-react';
-import { useEffect, useRef, type ComponentType, type RefAttributes } from 'react';
+import { createContext, useContext, useEffect, useRef, type ComponentType, type ReactNode, type RefAttributes } from 'react';
 
 import styles from './Icono.module.css';
 
@@ -156,28 +160,50 @@ const DEMORA_AL_APARECER_MS = 150;
 // lo disparan; si no, el hover del propio icono.
 const CONTROL = 'a, button, label, [role="button"]';
 
+const Quietos = createContext(false);
+
+/** Deja quietos todos los iconos de adentro (la caja de un campo). */
+export function IconosQuietos({ children }: { children: ReactNode }) {
+  return <Quietos.Provider value={true}>{children}</Quietos.Provider>;
+}
+
 interface Props {
   icono: LucideIcon;
   tamano?: 12 | 14 | 16 | 18 | 20 | 24 | 26 | 28 | 32;
   className?: string;
+  /** Anima cada vez que pasa a un valor verdadero, aunque el icono este quieto. */
+  disparo?: unknown;
 }
 
-export function Icono({ icono, tamano = 20, className = '' }: Props) {
+export function Icono({ icono, tamano = 20, className = '', disparo }: Props) {
+  const quieto = useContext(Quietos);
   const Animado = ANIMADOS.get(icono);
   if (!Animado) {
     const Estatico = icono;
     return <Estatico size={tamano} strokeWidth={1.75} className={className} aria-hidden="true" focusable="false" />;
   }
-  return <IconoAnimado animado={Animado} tamano={tamano} className={className} />;
+  return <IconoAnimado animado={Animado} tamano={tamano} className={className} quieto={quieto} disparo={disparo} />;
 }
 
-function IconoAnimado({ animado: Animado, tamano, className }: { animado: IconoAnimable; tamano: number; className: string }) {
+interface PropsAnimado {
+  animado: IconoAnimable;
+  tamano: number;
+  className: string;
+  quieto: boolean;
+  disparo: unknown;
+}
+
+function IconoAnimado({ animado: Animado, tamano, className, quieto, disparo }: PropsAnimado) {
   const caja = useRef<HTMLSpanElement>(null);
   const manejo = useRef<ManejoAnimacion>(null);
 
   useEffect(() => {
+    if (disparo) manejo.current?.startAnimation();
+  }, [disparo]);
+
+  useEffect(() => {
     const el = caja.current;
-    if (!el) return;
+    if (!el || quieto) return;
     const disparador = el.closest<HTMLElement>(CONTROL) ?? el;
     const animar = () => manejo.current?.startAnimation();
     const alEnfocar = () => {
@@ -191,7 +217,7 @@ function IconoAnimado({ animado: Animado, tamano, className }: { animado: IconoA
       disparador.removeEventListener('mouseenter', animar);
       disparador.removeEventListener('focus', alEnfocar);
     };
-  }, []);
+  }, [quieto]);
 
   return (
     <span ref={caja} className={`${styles.icono} ${className}`} aria-hidden="true">
