@@ -7,8 +7,11 @@
    cover, en una pantalla ancha, se recortaba y quedaba muy cerca. Con ese
    tope el encuadre es el mismo en cualquier pantalla. */
 .billete {
-  position: relative;
-  align-self: center;
+  /* Fijo al scrollear: si el formulario es mas alto que la ventana (el
+     signup en una notebook), el billete no se corre ni se corta. */
+  position: sticky;
+  top: var(--space-6);
+  align-self: start;
   height: calc(100dvh - var(--space-6) * 2);
   width: min(calc(56vw - var(--space-6) * 2), calc((100dvh - var(--space-6) * 2) * 0.92));
   margin: var(--space-6);

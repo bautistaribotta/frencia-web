@@ -71,6 +71,14 @@
 .googleAmarillo { fill: oklch(83.04% 0.1698 84); }
 .googleRojo { fill: oklch(62.57% 0.2058 29.1); }
 
+/* Pantallas bajas (una notebook de 1366 x 768): menos aire para que el
+   login entre sin scroll. */
+@media (max-height: 820px) {
+  .columna { gap: var(--space-5); padding-block: var(--space-6); }
+  .columna .tarjeta { padding: var(--space-7); }
+  .formulario { gap: var(--space-5); }
+}
+
 /* Debajo del ancho minimo de la web (1024 px) el billete se oculta y el
    formulario queda centrado. */
 @media (max-width: 1023px) {

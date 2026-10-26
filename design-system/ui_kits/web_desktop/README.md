@@ -88,6 +88,10 @@ con microtexto, número de serie y una cartela con la marca `FRENCIA.` (en lugar
   guarda en el navegador; con sesión manda `profiles.tema`.
 - En el repo web el billete ocupa el 56 % del ancho, con tope de 0,92 × su alto para que el
   grabado (vertical) no se acerque en pantallas anchas.
+- En pantallas bajas (alto de 820 px o menos, como una notebook de 1366 × 768) el acceso
+  se compacta: la columna baja su relleno a `space-6`, la separación entre bloques a
+  `space-5` y la tarjeta su relleno a `space-7`. Si el formulario igual no entra (el signup),
+  scrollea solo la columna y el billete queda fijo, del alto de la ventana.
 
 - Se genera una vez con `tools/grabado.py foto.jpg salida 1400` (Python + OpenCV) y se sirve
   en WebP, una imagen por tema: en oscuro la línea es la luz (marfil sobre grafito), en claro
