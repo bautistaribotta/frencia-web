@@ -1,10 +1,12 @@
 /* Marco comun de login y registro: el fondo de luces (cumbre, anima, como
    todo el onboarding), el switch de tema arriba del lado del formulario, el
-   formulario en vidrio y el billete, que lleva la marca. */
+   formulario en vidrio y el billete, que lleva la marca. Los terminos y la
+   politica de privacidad se leen en el modal de lectura, sin salir de la
+   pantalla. */
 
-import type { FormEvent, ReactNode } from 'react';
-import { Link } from 'react-router';
+import { useState, type FormEvent, type ReactNode } from 'react';
 
+import { DocumentoLegal, type Documento } from '@/design/components/DocumentoLegal';
 import { Fondo } from '@/design/components/Fondo';
 import { SwitchTema } from '@/design/components/SwitchTema';
 import { Tarjeta } from '@/design/components/varios';
@@ -24,6 +26,7 @@ interface Props {
 
 export function Acceso({ billete, titulo, bajada, onSubmit, children }: Props) {
   const izquierda = billete === 'izquierda';
+  const [documento, setDocumento] = useState<Documento | null>(null);
 
   const columna = (
     <div className={styles.columna}>
@@ -39,13 +42,13 @@ export function Acceso({ billete, titulo, bajada, onSubmit, children }: Props) {
       </Tarjeta>
       <span className={`${texto.bodySm} ${texto.terciario} ${styles.legal}`}>
         Al continuar, aceptás los{' '}
-        <Link to="/terminos" className={styles.enlace}>
-          Términos y Condiciones
-        </Link>{' '}
+        <button type="button" className={`${styles.enlace} ${styles.enlaceBoton}`} onClick={() => setDocumento('terminos')}>
+          Términos y condiciones
+        </button>{' '}
         y la{' '}
-        <Link to="/privacidad" className={styles.enlace}>
-          Política de Privacidad
-        </Link>
+        <button type="button" className={`${styles.enlace} ${styles.enlaceBoton}`} onClick={() => setDocumento('privacidad')}>
+          Política de privacidad
+        </button>
         .
       </span>
     </div>
@@ -67,6 +70,7 @@ export function Acceso({ billete, titulo, bajada, onSubmit, children }: Props) {
           </>
         )}
       </main>
+      <DocumentoLegal documento={documento} onCerrar={() => setDocumento(null)} />
     </>
   );
 }

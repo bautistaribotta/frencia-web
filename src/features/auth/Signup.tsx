@@ -20,7 +20,7 @@ import { Sociales } from './Sociales';
 
 const MINIMO_CONTRASENA = 6;
 
-export function Registro() {
+export function Signup() {
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState('');
   const [email, setEmail] = useState('');

@@ -100,11 +100,15 @@ export function Login() {
       <Boton type="submit" tamano="lg" ancho iconoDer={ArrowRight} disabled={!listo} cargando={enviando}>
         {enviando ? 'Ingresando…' : 'Ingresar'}
       </Boton>
-      {enFocoContrasena ? (
-        <span className={`${styles.pista} ${texto.bodySm} ${texto.terciario}`}>
-          <Kbd>Enter</Kbd>para ingresar
-        </span>
-      ) : null}
+      {/* Su lugar queda reservado aunque no se vea: si apareciera y
+          desapareciera, al salir de la contraseña todo lo de abajo saltaria y
+          el clic en un enlace del pie caeria en el vacio. */}
+      <span
+        className={`${styles.pista} ${enFocoContrasena ? '' : styles.oculta} ${texto.bodySm} ${texto.terciario}`}
+        aria-hidden={!enFocoContrasena}
+      >
+        <Kbd>Enter</Kbd>para ingresar
+      </span>
       <Sociales />
       <span className={`${texto.bodySm} ${texto.secundario} ${styles.alPie}`}>
         ¿No tenés cuenta?{' '}

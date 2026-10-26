@@ -6,10 +6,10 @@
    constructor, ticket, editar perfil y /r/:codigo) y las fases de legal y
    setup se suman en las etapas siguientes. */
 
-import { createBrowserRouter } from 'react-router';
+import { createBrowserRouter, Navigate } from 'react-router';
 
 import { Login } from '@/features/auth/Login';
-import { Registro } from '@/features/auth/Registro';
+import { Signup } from '@/features/auth/Signup';
 import { Configuracion } from '@/features/configuracion/Configuracion';
 import { DetalleSesion } from '@/features/historial/DetalleSesion';
 import { Historial } from '@/features/historial/Historial';
@@ -26,7 +26,9 @@ export const router = createBrowserRouter([
     element: <SoloInvitado />,
     children: [
       { path: '/login', element: <Login /> },
-      { path: '/signup', element: <Registro /> },
+      { path: '/signup', element: <Signup /> },
+      // La direccion vieja del registro, por si quedo guardada en el navegador.
+      { path: '/registro', element: <Navigate to="/signup" replace /> },
     ],
   },
   {
