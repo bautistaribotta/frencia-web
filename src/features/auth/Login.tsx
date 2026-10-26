@@ -108,7 +108,7 @@ export function Login() {
       <Sociales />
       <span className={`${texto.bodySm} ${texto.secundario} ${styles.alPie}`}>
         ¿No tenés cuenta?{' '}
-        <Link to="/registro" className={styles.enlace} viewTransition>
+        <Link to="/signup" className={styles.enlace} viewTransition>
           Creá una
         </Link>
       </span>

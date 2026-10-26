@@ -1,5 +1,5 @@
 /* Frencia · Rutas de la web.
-   - /login y /registro: solo sin sesion (SoloInvitado).
+   - /login y /signup: solo sin sesion (SoloInvitado).
    - /, /rutinas, /historial, /perfil y /configuracion, con sus detalles:
      dentro del marco con la navegacion lateral (ConSesion).
    Las demas rutas del kit (recuperar, nueva contraseña, bienvenida,
@@ -26,7 +26,7 @@ export const router = createBrowserRouter([
     element: <SoloInvitado />,
     children: [
       { path: '/login', element: <Login /> },
-      { path: '/registro', element: <Registro /> },
+      { path: '/signup', element: <Registro /> },
     ],
   },
   {

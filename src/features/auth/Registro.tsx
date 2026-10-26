@@ -1,8 +1,10 @@
-/* Crear cuenta (/registro). Variante billete: el formulario a la izquierda y
+/* Crear cuenta (/signup). Variante billete: el formulario a la izquierda y
    el billete a la derecha. Mismas reglas que la app: nombre de 2 letras o
    mas, contraseña de 6 o mas y repetida igual.
-   Por ahora es solo la vista: el alta contra Supabase llega con la etapa de
-   auth. Ojo: la base guarda un solo `name`; nombre y apellido se van a unir
+   Debajo de Crear cuenta, Apple y Google como en el login: si la cuenta no
+   existe la crean.
+   Por ahora es solo la vista: el alta contra Supabase (con correo, Apple o
+   Google) llega con la etapa de auth. Ojo: la base guarda un solo `name`; nombre y apellido se van a unir
    al enviar. */
 
 import { ArrowRight, Lock, Mail, User } from 'lucide-react';
@@ -14,6 +16,7 @@ import { Campo } from '@/design/components/Campo';
 import texto from '@/design/texto.module.css';
 import { Acceso } from './Acceso';
 import styles from './Acceso.module.css';
+import { Sociales } from './Sociales';
 
 const MINIMO_CONTRASENA = 6;
 
@@ -98,6 +101,7 @@ export function Registro() {
       <Boton type="submit" tamano="lg" ancho iconoDer={ArrowRight} disabled={!listo}>
         Crear cuenta
       </Boton>
+      <Sociales />
       <span className={`${texto.bodySm} ${texto.secundario} ${styles.alPie}`}>
         ¿Ya tenés cuenta?{' '}
         <Link to="/login" className={styles.enlace} viewTransition>
