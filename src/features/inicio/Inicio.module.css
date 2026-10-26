@@ -33,7 +33,10 @@
 .hecho .diaEstado { color: var(--text-primary); }
 .hoy { background: var(--surface-card-elevated); border-color: var(--signal); box-shadow: 0 0 0 1px var(--signal), var(--halo-signal); }
 .hoy .diaEstado { color: var(--signal-text); font-weight: var(--fw-semibold); }
-.libre .diaPlan { color: var(--text-tertiary); }
+/* Descanso: apagado como un control no disponible (relleno chip, texto
+   disabled), solo la fecha y "Descanso". */
+.libre { background: var(--surface-chip); }
+.libre > span { color: var(--text-disabled); }
 
 /* La rutina a la izquierda (dos tercios) y lo ultimo que paso a la derecha. */
 .dos { display: grid; grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr); gap: var(--space-8); align-items: start; }

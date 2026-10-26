@@ -16,7 +16,7 @@ function Semanal() {
           <div key={x.d} className={`w-semanal__dia is-${x.e}`}>
             <span className="t-label c-ter">{x.d}</span>
             <span className="t-bodysm semi">{x.n || 'Descanso'}</span>
-            <span className="w-semanal__estado">{x.e === 'hecho' ? <><Ico n="check" s={14} />Hecho</> : x.e === 'hoy' ? 'Hoy' : x.e === 'salteado' ? 'No entrenado' : '—'}</span>
+            {x.e === 'libre' ? null : <span className="w-semanal__estado">{x.e === 'hecho' ? <><Ico n="check" s={14} />Hecho</> : x.e === 'hoy' ? 'Hoy' : x.e === 'salteado' ? 'No entrenado' : '—'}</span>}
           </div>
         ))}
       </div>

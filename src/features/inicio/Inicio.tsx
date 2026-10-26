@@ -227,7 +227,7 @@ function DiaDeLaSemana({ dia }: { dia: DiaSemana }) {
     <div className={`${styles.dia} ${styles[dia.estado] ?? ''}`}>
       <span className={`${texto.label} ${texto.terciario}`}>{DIAS_CORTO[indiceSemanaLunes(dia.fecha)]} {dia.fecha.getDate()}</span>
       <span className={`${texto.bodySm} ${texto.semi} ${styles.diaPlan}`}>{dia.plan ?? 'Descanso'}</span>
-      <span className={styles.diaEstado}>{estado}</span>
+      {dia.estado === 'libre' ? null : <span className={styles.diaEstado}>{estado}</span>}
     </div>
   );
 }
