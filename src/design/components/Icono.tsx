@@ -4,7 +4,9 @@
    anima al aparecer (cuando se entra a la vista) y cada vez que el mouse
    entra al control que lo contiene (el boton, el enlace, la fila) o el
    control toma el foco de teclado. Con reducir movimiento queda quieto; la
-   libreria ya lo respeta. Los que no tienen version animada van estaticos. */
+   libreria ya lo respeta. Los que no tienen version animada van estaticos.
+   La cruz (X) va siempre estatica aunque tenga version animada: cerrar no
+   gira. El boton que la contiene conserva su hover (fondo y recuadro). */
 
 import {
   ArrowLeftIcon,
@@ -47,7 +49,6 @@ import {
   TriangleAlertIcon,
   UploadIcon,
   UserIcon,
-  XIcon,
 } from '@animateicons/react/lucide';
 import {
   ArrowLeft,
@@ -90,7 +91,6 @@ import {
   TriangleAlert,
   Upload,
   User,
-  X,
   type LucideIcon,
 } from 'lucide-react';
 import { useEffect, useRef, type ComponentType, type RefAttributes } from 'react';
@@ -147,7 +147,6 @@ const ANIMADOS = new Map<LucideIcon, IconoAnimable>([
   [TriangleAlert, TriangleAlertIcon],
   [Upload, UploadIcon],
   [User, UserIcon],
-  [X, XIcon],
 ]);
 
 /** Lo que tarda en animar al aparecer: deja que la vista termine de entrar. */

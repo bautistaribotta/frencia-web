@@ -34,6 +34,12 @@ revisar lo hecho.
   temas (oscuro y claro) comparten las mismas claves; el tema sobreescribe
   colores, sombras y la ganancia de las luces del fondo.
 - No hardcodear colores en componentes: siempre `var(--token)`.
+- Iconos animados (`@animateicons/react/lucide`): animan al aparecer y en el
+  hover o foco del control. Excepcion: la cruz de cerrar (`X`) y cualquier
+  control que cierre (modales, avisos, paneles, borrar una busqueda) van
+  **siempre estaticos**, sin giro ni animacion. El boton que los contiene
+  conserva su hover (fondo iluminado y recuadro). Se resuelve dejando el icono
+  fuera del mapa `ANIMADOS` de `src/design/components/Icono.tsx`.
 
 ## Codigo y estilos
 

@@ -1,8 +1,8 @@
 /* Foto de perfil (kit web, Web · 7, ModalFoto): la hoja de la app pasa a un
    modal. Arriba la vista previa, que refleja cada cambio en el acto; abajo la
-   zona para soltar o elegir una imagen; al pie, Generar otro avatar y Listo.
-   Con foto cargada suma Quitar foto, como la hoja de la app. Cada accion se
-   guarda en el momento: Listo solo cierra. */
+   zona para soltar o elegir una imagen; al pie, Listo y Generar otro avatar
+   a lo ancho de la zona. Con foto cargada suma Quitar foto, como la hoja de
+   la app. Cada accion se guarda en el momento: Listo solo cierra. */
 
 import { Repeat, Upload, X } from 'lucide-react';
 import { useRef, useState, type DragEvent } from 'react';
@@ -73,19 +73,27 @@ export function ModalFoto({ abierto, onCerrar }: { abierto: boolean; onCerrar: (
       texto="Sin foto, Frencia dibuja un avatar con los colores de la app."
       onCerrar={ocupado ? undefined : onCerrar}
       pie={
-        <>
-          {ruta ? (
-            <Boton variante="ghost" icono={X} disabled={ocupado} onClick={() => void generar(perfil.data?.avatar_seed ?? semillaNueva())}>
-              Quitar foto
-            </Boton>
-          ) : null}
-          <Boton variante="ghost" icono={Repeat} disabled={ocupado} onClick={() => void generar(semillaNueva())}>
-            Generar otro avatar
-          </Boton>
+        // Listo a la izquierda y Generar otro avatar a la derecha, a lo ancho
+        // de la zona para soltar. Quitar foto, si hay foto, abajo y entero.
+        <div className={styles.pie}>
           <Boton data-foco-inicial disabled={ocupado} onClick={onCerrar}>
             Listo
           </Boton>
-        </>
+          <Boton variante="secondary" icono={Repeat} disabled={ocupado} onClick={() => void generar(semillaNueva())}>
+            Generar otro avatar
+          </Boton>
+          {ruta ? (
+            <Boton
+              variante="ghost"
+              icono={X}
+              disabled={ocupado}
+              className={styles.entero}
+              onClick={() => void generar(perfil.data?.avatar_seed ?? semillaNueva())}
+            >
+              Quitar foto
+            </Boton>
+          ) : null}
+        </div>
       }
     >
       <div className={styles.vista}>
