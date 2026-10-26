@@ -1,0 +1,40 @@
+<!-- @dsCard group="Feedback" width=1100 height=400 page subtitle="Carga: el círculo clásico, una vuelta cada 1,2 s, en los dos temas y en sus tres tamaños" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Cargando</title>
+<style>
+html,body{margin:0}
+body{background:var(--stage-bg);font-family:var(--font-sans);padding:24px;display:flex;gap:20px;min-height:100vh;box-sizing:border-box}
+.pane{flex:1;border-radius:var(--radius-3xl);border:1px solid var(--glass-line);padding:28px;box-sizing:border-box;color:var(--text-primary);display:flex;flex-direction:column;gap:22px;
+  background:radial-gradient(52% 60% at 96% 0%,color-mix(in srgb,var(--glow-a) 30%,transparent),transparent 72%),radial-gradient(70% 80% at 0% 90%,color-mix(in srgb,var(--glow-b) 80%,transparent),transparent 72%),var(--bg-app)}
+.cap{font:var(--text-label);font-variation-settings:var(--vs-semi);letter-spacing:var(--ls-wider);text-transform:uppercase;color:var(--text-tertiary)}
+.fila{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.caja{border-radius:var(--radius-xl);background:var(--surface-card);border:1px solid var(--glass-line);box-shadow:var(--shadow-glass);height:150px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;position:relative}
+.caja .cap{position:absolute;left:14px;top:12px}
+.tams{display:flex;align-items:center;gap:22px}
+.boton{height:46px;width:150px;border-radius:var(--radius-lg);background:var(--accent);box-shadow:var(--halo-accent);display:flex;align-items:center;justify-content:center}
+.boton .frencia-carga__circulo{border-color:color-mix(in srgb,var(--text-on-accent) 25%,transparent);border-top-color:var(--text-on-accent)}
+</style>
+</head>
+<body>
+<div id="root" style="display:contents"></div>
+<script>
+var NS = window.FrenciaDesignSystem_377129, h = React.createElement;
+function Pane(t) {
+  return h('section', { className: 'pane', 'data-theme': t },
+    h('span', { className: 'cap' }, t === 'dark' ? 'Lume oscuro' : 'Lume claro'),
+    h('div', { className: 'fila' },
+      h('div', { className: 'caja' }, h('span', { className: 'cap' }, 'Pantalla cargando'), h(NS.Cargando, { texto: 'Cargando rutinas…' })),
+      h('div', { className: 'caja' }, h('span', { className: 'cap' }, 'Arrastrar para actualizar'), h(NS.Cargando, { tam: 'lg' }))),
+    h('div', { className: 'fila' },
+      h('div', { className: 'caja' }, h('span', { className: 'cap' }, 'Tamaños sm · md · lg'),
+        h('div', { className: 'tams' }, h(NS.Cargando, { tam: 'sm' }), h(NS.Cargando, { tam: 'md' }), h(NS.Cargando, { tam: 'lg' }))),
+      h('div', { className: 'caja' }, h('span', { className: 'cap' }, 'Dentro de un botón'),
+        h('div', { className: 'boton' }, h(NS.Cargando, { tam: 'sm' })))));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(h(React.Fragment, null, Pane('dark'), Pane('light')));
+</script>
+</body>
+</html>

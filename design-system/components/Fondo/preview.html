@@ -1,0 +1,51 @@
+<!-- @dsCard group="Superficie" height=420 -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Fondo</title>
+<style>
+  body { padding: 20px; background: var(--stage-bg); }
+  .fila { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+  .tel { position: relative; aspect-ratio: 9 / 18; border-radius: 22px; overflow: hidden; box-shadow: 0 0 0 1px var(--border-subtle); }
+  .cap { margin-top: 8px; font: var(--text-label); letter-spacing: var(--ls-wider); text-transform: uppercase; color: var(--text-primary); }
+  .uso { margin-top: 2px; font: var(--fw-regular) 11px/1.35 var(--font-sans); color: var(--text-secondary); }
+  .cont { position: absolute; inset: 0; padding: 12% 9%; display: flex; flex-direction: column; gap: 6%; }
+  .b { border-radius: 8px; background: var(--surface-card); border: 1px solid var(--glass-line); -webkit-backdrop-filter: var(--glass-filter); backdrop-filter: var(--glass-filter); }
+  .t { height: 5%; width: 62%; border-radius: 3px; background: var(--text-primary); opacity: .85; }
+  .cta { margin-top: auto; height: 7%; border-radius: 10px; background: var(--accent); box-shadow: var(--halo-accent); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+var NS = window.FrenciaDesignSystem_377129;
+var h = React.createElement;
+var LAYOUT = {
+  cumbre: [['t'], ['b', 14], ['b', 14], ['b', 14]],
+  centro: [['t'], ['sp'], ['b', 34], ['cta']],
+  flanco: [['t'], ['b', 9, '70%'], ['b', 9, '70%'], ['cta']],
+  base: [['t'], ['b', 22], ['cta']],
+  velada: [['t'], ['b', 10], ['b', 10], ['b', 10], ['b', 10], ['b', 10]],
+};
+function Bloque(spec, i) {
+  if (spec[0] === 't') return h('div', { key: i, className: 't' });
+  if (spec[0] === 'sp') return h('div', { key: i, style: { flex: '0 0 12%' } });
+  if (spec[0] === 'cta') return h('div', { key: i, className: 'cta' });
+  return h('div', { key: i, className: 'b', style: { height: spec[1] + '%', width: spec[2] || 'auto' } });
+}
+function Demo() {
+  var P = NS.Fondo.POSICIONES;
+  return h('div', { className: 'fila' }, Object.keys(P).map(function (k) {
+    return h('div', { key: k },
+      h('div', { className: 'tel' },
+        h(NS.Fondo, { posicion: k }),
+        h('div', { className: 'cont' }, LAYOUT[k].map(Bloque))),
+      h('div', { className: 'cap' }, k),
+      h('div', { className: 'uso' }, P[k].uso.split('.')[0] + '.'));
+  }));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(h(Demo));
+</script>
+</body>
+</html>

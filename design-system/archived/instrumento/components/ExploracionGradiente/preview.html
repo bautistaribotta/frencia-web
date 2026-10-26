@@ -1,0 +1,191 @@
+<!-- archivado (era @dsCard) group="Direcciones" width=1440 height=2560 page subtitle="Exploración, no aplicada: el setup del perfil con fondos de gradiente animado y paneles de vidrio, en lume y en tinta" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Frencia · Exploración gradiente y vidrio</title>
+<style>
+html,body{margin:0}
+body{background:#060708;color:#ebeae6;font-family:var(--font-sans);padding:48px 40px 64px;box-sizing:border-box;font-variant-numeric:tabular-nums}
+.cap{font:var(--text-label);font-variation-settings:var(--vs-semi);letter-spacing:var(--ls-wider);text-transform:uppercase;color:#868891}
+h1{margin:10px 0 14px;font:500 48px/1.02 var(--font-sans);letter-spacing:-0.04em}
+.lede{max-width:760px;margin:0;font:400 15px/1.6 var(--font-sans);color:#a9abb2}
+.sec{margin-top:56px}
+.sec-h{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:22px;padding-bottom:16px;border-bottom:1px solid rgba(235,234,230,.1)}
+.sec-h h2{margin:6px 0 0;font:600 24px/1.2 var(--font-sans);letter-spacing:-0.02em}
+.sec-h p{margin:0;max-width:640px;font:400 13.5px/1.55 var(--font-sans);color:#a9abb2}
+.fila{display:flex;gap:24px}
+.mesa{display:flex;flex-direction:column;gap:12px;width:320px}
+.mesa > span{font:600 13px var(--font-sans);color:#cfd0d3}
+
+/* ---------- Telefono ---------- */
+.tel{position:relative;width:320px;height:692px;border-radius:46px;overflow:hidden;isolation:isolate;
+  box-shadow:0 0 0 1px rgba(255,255,255,.08),0 30px 60px rgba(0,0,0,.5);background:var(--base)}
+.isla{position:absolute;top:10px;left:50%;width:100px;height:30px;margin-left:-50px;border-radius:20px;background:#000;z-index:20}
+.sb{position:absolute;top:0;left:0;right:0;height:46px;display:flex;align-items:center;justify-content:space-between;padding:4px 30px 0;font:600 14px var(--font-sans);color:var(--ink);z-index:15}
+.home{position:absolute;bottom:8px;left:50%;width:110px;height:4px;margin-left:-55px;border-radius:3px;background:var(--ink);opacity:.7;z-index:15}
+
+/* Fondo: manchas de color desenfocadas que derivan despacio, mas grano */
+.fondo{position:absolute;inset:-20%;z-index:0;filter:blur(46px) saturate(1.15)}
+.mancha{position:absolute;border-radius:50%;mix-blend-mode:var(--blend);animation:deriva 18s ease-in-out infinite alternate}
+.mancha:nth-child(2){animation-duration:23s;animation-delay:-6s}
+.mancha:nth-child(3){animation-duration:29s;animation-delay:-11s}
+@keyframes deriva{0%{transform:translate(0,0) scale(1)}50%{transform:translate(8%,-6%) scale(1.12)}100%{transform:translate(-6%,7%) scale(.94)}}
+.grano{position:absolute;inset:0;z-index:1;opacity:var(--grano);mix-blend-mode:overlay;pointer-events:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.velo{position:absolute;inset:0;z-index:2;background:linear-gradient(180deg,var(--velo-a) 0%,transparent 34%,transparent 62%,var(--velo-b) 100%)}
+
+/* Contenido */
+.ui{position:absolute;inset:0;z-index:10;display:flex;flex-direction:column;padding:48px 18px 22px;color:var(--ink)}
+.vidrio{background:var(--glass);border:1px solid var(--glass-line);backdrop-filter:blur(22px) saturate(1.5);-webkit-backdrop-filter:blur(22px) saturate(1.5);
+  box-shadow:inset 0 1px 0 var(--glass-hi),0 10px 30px rgba(0,0,0,var(--glass-sombra))}
+.barra{display:grid;grid-template-columns:64px 1fr 64px;align-items:center;height:42px;border-radius:21px;padding:0 6px;margin-top:4px}
+.barra .b{display:flex;align-items:center;gap:3px;font:600 13px var(--font-sans);color:var(--ink-2);padding:0 8px}
+.barra .b svg{width:15px;height:15px}
+.barra .b.d{justify-content:flex-end}
+.cont{justify-self:center;font:600 12.5px var(--font-sans);color:var(--ink)}
+.cont i{font-style:normal;color:var(--ink-3);font-weight:500}
+.escala{display:flex;gap:3px;margin:12px 6px 0}
+.escala i{flex:1;height:2px;border-radius:1px;background:var(--track)}
+.escala i.h{background:var(--ink)}
+.escala i.a{background:var(--acc);box-shadow:0 0 10px var(--acc-glow)}
+.enun{margin-top:34px;padding:0 6px;display:flex;flex-direction:column;gap:10px}
+.rot{font:600 10.5px/1.2 var(--font-sans);font-variation-settings:'wdth' 88;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.preg{font:500 30px/1.06 var(--font-sans);letter-spacing:-0.032em;text-wrap:balance}
+.ayuda{font:400 13px/1.45 var(--font-sans);color:var(--ink-2);max-width:250px}
+.ctrl{margin-top:26px;flex:1;min-height:0;display:flex;flex-direction:column}
+.cta{height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;gap:8px;font:600 15px var(--font-sans);background:var(--cta);color:var(--cta-ink);box-shadow:0 8px 24px var(--cta-glow)}
+.cta svg{width:16px;height:16px}
+
+/* Opciones */
+.ops{display:flex;flex-direction:column;gap:8px}
+.op{height:58px;border-radius:18px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;font:500 15.5px var(--font-sans)}
+.op .r{width:20px;height:20px;border-radius:50%;border:1px solid var(--ink-3);position:relative}
+.op.sel{border-color:var(--acc-line);box-shadow:inset 0 1px 0 var(--glass-hi),0 0 0 1px var(--acc-line),0 12px 32px var(--acc-glow)}
+.op.sel .r{border-color:var(--acc)}
+.op.sel .r::after{content:'';position:absolute;inset:4px;border-radius:50%;background:var(--acc)}
+
+/* Rueda */
+.rueda{border-radius:24px;height:270px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.rueda .it{position:relative;z-index:1;height:40px;display:flex;align-items:center;font:500 22px var(--font-sans);font-variation-settings:'wdth' 78;color:var(--ink);letter-spacing:-0.02em}
+.rueda .d3{opacity:.12;font-size:17px}.rueda .d2{opacity:.24;font-size:19px}.rueda .d1{opacity:.46;font-size:22px}
+.rueda .s{font-size:36px;opacity:1}
+.rueda .banda{position:absolute;left:14px;right:14px;top:50%;height:46px;margin-top:-23px;border-radius:14px;background:var(--band);border:1px solid var(--glass-line)}
+.rueda .u{position:absolute;right:26px;top:50%;transform:translateY(-50%);font:500 14px var(--font-sans);color:var(--ink-3)}
+
+/* Lectura + regla */
+.seg{align-self:center;display:flex;padding:3px;border-radius:13px;gap:2px}
+.seg b{height:32px;padding:0 18px;border-radius:10px;display:flex;align-items:center;font:600 13px var(--font-sans);color:var(--ink-3)}
+.seg b.on{background:var(--seg-on);color:var(--ink);box-shadow:inset 0 1px 0 var(--glass-hi)}
+.lect{display:flex;align-items:baseline;justify-content:center;gap:6px;margin-top:22px}
+.lect .n{font:500 92px/.9 var(--font-sans);font-variation-settings:'wdth' 78;letter-spacing:-0.05em}
+.lect .u{font:500 16px var(--font-sans);color:var(--ink-3)}
+.regla{position:relative;margin-top:22px;height:86px;border-radius:22px;overflow:hidden}
+.regla .m{position:absolute;top:14px;left:0;right:0;height:34px;display:flex;justify-content:space-between;padding:0 4px}
+.regla .m i{width:1px;height:10px;background:var(--ink-3);opacity:.55}
+.regla .m i.md{height:16px;opacity:.75}
+.regla .m i.my{height:26px;opacity:1;background:var(--ink-2)}
+.regla .nums{position:absolute;bottom:12px;left:0;right:0;height:14px}
+.regla .nums b{position:absolute;transform:translateX(-50%);font:500 10.5px var(--font-sans);color:var(--ink-3)}
+.regla .ag{position:absolute;left:50%;top:8px;width:2px;height:44px;margin-left:-1px;background:var(--acc);box-shadow:0 0 12px var(--acc-glow);border-radius:1px}
+.regla .f{position:absolute;top:0;bottom:0;width:56px;pointer-events:none}
+
+/* ---------- Temas de la exploracion ---------- */
+.lume{--base:#08090a;--ink:#f1f0eb;--ink-2:rgba(241,240,235,.72);--ink-3:rgba(241,240,235,.5);--track:rgba(241,240,235,.16);
+  --acc:#c9e25f;--acc-line:rgba(201,226,95,.7);--acc-glow:rgba(201,226,95,.28);
+  --glass:rgba(255,255,255,.06);--glass-line:rgba(255,255,255,.13);--glass-hi:rgba(255,255,255,.12);--glass-sombra:.25;--band:rgba(255,255,255,.07);--seg-on:rgba(255,255,255,.14);
+  --cta:#c9e25f;--cta-ink:#0b0c0a;--cta-glow:rgba(201,226,95,.3);--blend:screen;--grano:.22;--velo-a:rgba(8,9,10,.55);--velo-b:rgba(8,9,10,.7)}
+.tinta{--base:#0a0b0d;--ink:#f1f0eb;--ink-2:rgba(241,240,235,.72);--ink-3:rgba(241,240,235,.5);--track:rgba(241,240,235,.16);
+  --acc:#f1f0eb;--acc-line:rgba(241,240,235,.75);--acc-glow:rgba(241,240,235,.16);
+  --glass:rgba(255,255,255,.055);--glass-line:rgba(255,255,255,.14);--glass-hi:rgba(255,255,255,.14);--glass-sombra:.25;--band:rgba(255,255,255,.08);--seg-on:rgba(255,255,255,.16);
+  --cta:#f1f0eb;--cta-ink:#0b0c0d;--cta-glow:rgba(241,240,235,.14);--blend:screen;--grano:.24;--velo-a:rgba(10,11,13,.5);--velo-b:rgba(10,11,13,.66)}
+.lumeclaro{--base:#eef0e6;--ink:#141511;--ink-2:rgba(20,21,17,.7);--ink-3:rgba(20,21,17,.5);--track:rgba(20,21,17,.14);
+  --acc:#4f6a0a;--acc-line:rgba(79,106,10,.6);--acc-glow:rgba(150,190,40,.3);
+  --glass:rgba(255,255,255,.5);--glass-line:rgba(255,255,255,.75);--glass-hi:rgba(255,255,255,.9);--glass-sombra:.06;--band:rgba(255,255,255,.6);--seg-on:rgba(255,255,255,.9);
+  --cta:#141511;--cta-ink:#f6f7ef;--cta-glow:rgba(20,21,17,.18);--blend:multiply;--grano:.18;--velo-a:rgba(238,240,230,.45);--velo-b:rgba(238,240,230,.6)}
+</style>
+</head>
+<body>
+<span class="cap">Exploración · Gradientes y vidrio</span>
+<h1>El setup, con luz detrás.</h1>
+<p class="lede">El mismo wizard de cuatro pasos del sistema, con el fondo como una luz que se mueve despacio y los controles sobre vidrio esmerilado. El color del fondo avanza con los pasos: cada pantalla es un poco más luminosa que la anterior. Los gradientes se animan; si la página está quieta, esperá unos segundos.</p>
+<div id="raiz"></div>
+<script>
+var ICO = {
+  izq: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>',
+  der: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>',
+  ok: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>'
+};
+/* Manchas de cada paso: [color, x%, y%, tamanio%, opacidad] */
+var MANCHAS = {
+  lume: [
+    [['#c9e25f', 70, 2, 70, .55], ['#2f4a1a', 10, 40, 90, .9], ['#5d7fd6', 90, 70, 60, .22]],
+    [['#c9e25f', 20, 10, 80, .6], ['#36521c', 80, 50, 90, .9], ['#93aaf2', 30, 85, 50, .18]],
+    [['#d6ec78', 60, 30, 90, .62], ['#3e5c1f', 10, 70, 90, .9], ['#93aaf2', 95, 10, 50, .2]],
+    [['#e2f28f', 40, 45, 110, .7], ['#4a6b22', 90, 85, 80, .85], ['#c9e25f', 0, 0, 60, .5]]
+  ],
+  tinta: [
+    [['#f1f0eb', 80, 0, 60, .2], ['#34363c', 10, 50, 90, .9], ['#93aaf2', 90, 80, 50, .12]],
+    [['#f1f0eb', 15, 15, 70, .24], ['#3a3d44', 85, 55, 90, .9], ['#93aaf2', 20, 90, 50, .12]],
+    [['#f1f0eb', 60, 35, 80, .26], ['#44474f', 5, 75, 90, .9], ['#b4c3f5', 95, 5, 50, .14]],
+    [['#f1f0eb', 40, 45, 100, .32], ['#4b4e57', 90, 90, 80, .85], ['#93aaf2', 0, 0, 55, .16]]
+  ],
+  lumeclaro: [
+    [['#d8ec7a', 75, 5, 70, .75], ['#ffffff', 10, 45, 90, .9], ['#b4c3f5', 90, 80, 55, .45]],
+    [['#d8ec7a', 20, 10, 80, .8], ['#ffffff', 80, 50, 90, .9], ['#b4c3f5', 25, 90, 50, .4]],
+    [['#cfe76a', 60, 30, 90, .8], ['#ffffff', 10, 75, 90, .9], ['#c3cff7', 95, 10, 55, .5]],
+    [['#c4e05a', 40, 45, 100, .85], ['#ffffff', 90, 90, 80, .9], ['#d8ec7a', 0, 0, 60, .7]]
+  ]
+};
+function fondo(tema, paso) {
+  return '<div class="fondo">' + MANCHAS[tema][paso].map(function (m) {
+    return '<i class="mancha" style="left:' + (m[1] - m[3] / 2) + '%;top:' + (m[2] - m[3] / 2) + '%;width:' + m[3] + '%;height:' + (m[3] * .8) + '%;background:' + m[0] + ';opacity:' + m[4] + '"></i>';
+  }).join('') + '</div><div class="grano"></div><div class="velo"></div>';
+}
+function escala(p) { var s = ''; for (var i = 0; i < 4; i++) s += '<i class="' + (i < p ? 'h' : i === p ? 'a' : '') + '"></i>'; return s; }
+function regla(valor, paso, mayor, media, n, fmt) {
+  var m = '', nums = '';
+  for (var i = -n; i <= n; i++) {
+    var v = Math.round((valor + i * paso) * 100) / 100, k = Math.round(v / paso);
+    var c = k % mayor === 0 ? 'my' : k % media === 0 ? 'md' : '';
+    m += '<i class="' + c + '"></i>';
+    if (c === 'my') nums += '<b style="left:calc(4px + (100% - 9px) * ' + ((i + n) / (2 * n)) + ')">' + (fmt ? fmt(v) : v) + '</b>';
+  }
+  return '<div class="regla vidrio"><div class="m">' + m + '</div><div class="nums">' + nums + '</div><span class="ag"></span></div>';
+}
+var PASOS = [
+  { rot: 'Tu perfil · Sexo', preg: '¿Con qué sexo te identificás?', ayuda: 'Afina los cálculos de progreso.',
+    ctrl: function () { return '<div class="ops">' + ['Masculino', 'Femenino', 'Otro'].map(function (o, i) { return '<div class="op vidrio' + (i === 0 ? ' sel' : '') + '"><span>' + o + '</span><span class="r"></span></div>'; }).join('') + '</div>'; } },
+  { rot: 'Tu perfil · Edad', preg: '¿Cuántos años tenés?', ayuda: 'Lo usamos para ajustar tus referencias.',
+    ctrl: function () { var it = '', cl = ['d3', 'd2', 'd1', 's', 'd1', 'd2', 'd3']; for (var i = 0; i < 7; i++) it += '<div class="it ' + cl[i] + '">' + (22 + i) + '</div>'; return '<div class="rueda vidrio"><div class="banda"></div>' + it + '<span class="u">años</span></div>'; } },
+  { rot: 'Tu perfil · Altura', preg: '¿Cuál es tu altura?', ayuda: 'Deslizá la regla.',
+    ctrl: function () { return '<div class="seg vidrio"><b class="on">cm</b><b>ft</b></div><div class="lect"><span class="n">175</span><span class="u">cm</span></div>' + regla(175, 1, 10, 5, 22); } },
+  { rot: 'Tu perfil · Peso', preg: '¿Cuál es tu peso?', ayuda: 'Lo podés cambiar desde tu perfil.',
+    ctrl: function () { return '<div class="seg vidrio"><b class="on">kg</b><b>lb</b></div><div class="lect"><span class="n">72.5</span><span class="u">kg</span></div>' + regla(72.5, .5, 10, 2, 22, function (v) { return v.toFixed(0); }); } }
+];
+function telefono(tema, p) {
+  var P = PASOS[p], ult = p === 3;
+  return '<div class="tel ' + tema + '">' + fondo(tema, p) +
+    '<div class="isla"></div><div class="sb"><span>9:41</span><span>●●●</span></div>' +
+    '<div class="ui">' +
+      '<div class="barra vidrio"><span class="b">' + ICO.izq + 'Atrás</span><span class="cont">0' + (p + 1) + ' <i>/ 04</i></span><span class="b d">Saltar</span></div>' +
+      '<div class="escala">' + escala(p) + '</div>' +
+      '<div class="enun"><span class="rot">' + P.rot + '</span><span class="preg">' + P.preg + '</span><span class="ayuda">' + P.ayuda + '</span></div>' +
+      '<div class="ctrl">' + P.ctrl() + '</div>' +
+      '<div class="cta">' + (ult ? ICO.ok + 'Finalizar' : 'Continuar' + ICO.der) + '</div>' +
+    '</div><div class="home"></div></div>';
+}
+var SEC = [
+  { tema: 'lume', titulo: 'Lume · oscuro', nota: 'La luz verde amarillenta de las agujas, desenfocada detrás de todo, con un dejo del acero. El acento sólido (botón, aguja, opción elegida) es lume pleno; el resto vive en vidrio.' },
+  { tema: 'tinta', titulo: 'Tinta · oscuro', nota: 'Sin color: halos de marfil y grafito, con un frío de acero apenas perceptible. Es la versión más cara y silenciosa; la acción es marfil sólido.' },
+  { tema: 'lumeclaro', titulo: 'Lume · claro', nota: 'El mismo lume como bruma sobre marfil. El vidrio pasa a blanco lechoso y la acción vuelve a tinta: el lume pleno no se lee como texto sobre fondo claro, por eso aguja y radio van en oliva.' }
+];
+document.getElementById('raiz').innerHTML = SEC.map(function (s) {
+  return '<section class="sec"><div class="sec-h"><div><span class="cap">Variante</span><h2>' + s.titulo + '</h2></div><p>' + s.nota + '</p></div><div class="fila">' +
+    [0, 1, 2, 3].map(function (p) { return '<div class="mesa">' + telefono(s.tema, p) + '<span>Paso ' + (p + 1) + ' · ' + PASOS[p].rot.split('· ')[1] + '</span></div>'; }).join('') +
+    '</div></section>';
+}).join('') +
+'<section class="sec"><div class="sec-h"><div><span class="cap">Para tener en cuenta</span><h2>Qué implica llevarlo a la app</h2></div><p>En iOS el vidrio sale nativo (materiales del sistema; en React Native, expo-blur). Las manchas animadas cuestan batería si se mueven siempre: conviene animarlas solo en el setup y en el cierre de la sesión, y quietas en el resto. El texto nunca va directo sobre la parte más luminosa del gradiente: el velo de arriba y abajo está para eso.</p></div></section>';
+</script>
+</body>
+</html>

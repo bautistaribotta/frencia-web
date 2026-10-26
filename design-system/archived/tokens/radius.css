@@ -1,0 +1,67 @@
+/* ============================================================
+   FRENCIA · Radius & Shadow
+   Generous iOS rounding. Dark UI leans on surface elevation +
+   hairline borders; reserve shadow for floating + glow for active.
+   ============================================================ */
+
+:root {
+  /* ---- Radius ---- */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 14px;     /* buttons, inputs */
+  --radius-lg: 18px;     /* chips, small cards */
+  --radius-xl: 24px;     /* cards */
+  --radius-2xl: 30px;    /* hero cards, sheets */
+  --radius-3xl: 38px;
+  --radius-pill: 999px;
+  --radius-circle: 50%;
+
+  /* ---- Elevation shadows (dark UI — subtle; light theme overrides below) ---- */
+  --shadow-none: none;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.55);
+  --shadow-sheet: 0 -8px 40px rgba(0, 0, 0, 0.6);
+
+  /* Sombra para formas recortadas (ticket con muescas y festones): un filtro
+     sigue el contorno real, box-shadow sigue la caja. Ojo: en drop-shadow()
+     el desenfoque es el desvio estandar, la mitad del blur de box-shadow;
+     equivale a --shadow-lg. */
+  --drop-shadow-lg: drop-shadow(0 12px 16px oklch(0% 0 0 / 0.55));  /* @kind other */
+
+  /* ---- Brand glow — halo retirado a pedido; el CTA se sostiene por color ---- */
+  --glow-green: 0 0 0 1px rgba(34, 197, 94, 0.30);
+  --glow-green-soft: none;   /* @kind shadow */
+  --glow-orange: 0 0 0 1px rgba(255, 109, 41, 0.32);
+
+  /* ---- Inner / inset (data wells, progress tracks) ---- */
+  --shadow-inset: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+
+  /* ---- Motion ---- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);     /* @kind other */
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);  /* @kind other */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* @kind other */
+  --dur-fast: 120ms;  /* @kind other */
+  --dur-base: 200ms;  /* @kind other */
+  --dur-slow: 320ms;  /* @kind other */
+
+  /* Press scale (tactile feedback) */
+  --press-scale: 0.97; /* @kind other */
+}
+
+/* ============================================================
+   LIGHT THEME — sombras "cemento".
+   La sombra negra fuerte del oscuro sobre el gris piedra se lee como
+   una mancha (y dibuja el rectangulo debajo de recortes como los del
+   ticket). Aca va teñida con la tinta del tema (stone-900) y mucho mas
+   tenue, con una capa corta de contacto para que no flote.
+   Port RN: src/design/tokens/radius.ts (una sola capa: la larga).
+   ============================================================ */
+:root[data-theme="light"], [data-theme="light"] {
+  --shadow-sm: 0 1px 2px oklch(15.1% 0.005 145.3 / 0.10);
+  --shadow-md: 0 1px 2px oklch(15.1% 0.005 145.3 / 0.04), 0 4px 16px oklch(15.1% 0.005 145.3 / 0.08);
+  --shadow-lg: 0 2px 6px oklch(15.1% 0.005 145.3 / 0.04), 0 12px 32px oklch(15.1% 0.005 145.3 / 0.12);
+  --shadow-sheet: 0 -8px 40px oklch(15.1% 0.005 145.3 / 0.14);
+  --shadow-inset: inset 0 1px 2px oklch(15.1% 0.005 145.3 / 0.10);
+  --drop-shadow-lg: drop-shadow(0 2px 3px oklch(15.1% 0.005 145.3 / 0.04)) drop-shadow(0 12px 16px oklch(15.1% 0.005 145.3 / 0.12));  /* @kind other */
+}

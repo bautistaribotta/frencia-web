@@ -1,0 +1,39 @@
+<!-- @dsCard group="Superficie" height=260 -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Vidrio</title>
+<style>
+  body { margin: 0; }
+  .esc { position: relative; height: 260px; overflow: hidden; }
+  .fila { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; padding: 24px 20px 0; }
+  .p { padding: 18px; min-height: 120px; display: flex; flex-direction: column; justify-content: space-between; }
+  .cap { font: var(--text-label); letter-spacing: var(--ls-wider); text-transform: uppercase; color: var(--text-tertiary); }
+  .v { font: var(--fw-medium) 40px/1 var(--font-display); font-variation-settings: var(--vs-condensed); letter-spacing: var(--ls-display); color: var(--text-primary); }
+  .d { font: var(--text-body-sm); color: var(--text-secondary); }
+  .pills { position: relative; display: flex; gap: 10px; padding: 18px 20px; }
+  .pl { padding: 8px 14px; font: var(--text-label); color: var(--text-primary); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+var NS = window.FrenciaDesignSystem_377129;
+var h = React.createElement;
+function Demo() {
+  var V = NS.Vidrio;
+  return h('div', { className: 'esc' },
+    h(NS.Fondo, { posicion: 'centro' }),
+    h('div', { className: 'fila' },
+      h(V, { className: 'p' }, h('span', { className: 'cap' }, 'normal'), h('span', { className: 'v' }, '82.5'), h('span', { className: 'd' }, 'Tarjetas, opciones, campos')),
+      h(V, { nivel: 'fuerte', className: 'p' }, h('span', { className: 'cap' }, 'fuerte'), h('span', { className: 'v' }, '4 × 8'), h('span', { className: 'd' }, 'Lo que se elige o flota')),
+      h(V, { nivel: 'denso', className: 'p' }, h('span', { className: 'cap' }, 'denso'), h('span', { className: 'v' }, '1:30'), h('span', { className: 'd' }, 'Barras, hojas, paneles'))),
+    h('div', { className: 'pills' },
+      h(V, { pill: true, className: 'pl' }, 'Paso 2 de 4'),
+      h(V, { pill: true, nivel: 'fuerte', className: 'pl' }, 'Pecho · 6')));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(h(Demo));
+</script>
+</body>
+</html>

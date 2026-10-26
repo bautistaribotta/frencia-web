@@ -1,0 +1,98 @@
+<!-- archivado (era @dsCard) group="Colors" width=1440 height=980 page subtitle="Los dos temas lado a lado: tinta, una señal de acero, ámbar para el esfuerzo y carmín solo para el peligro" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Frencia · Paleta</title>
+<style>
+html,body{margin:0}
+body{background:var(--ivory-500);font-family:var(--font-sans);padding:32px;display:flex;gap:24px;align-items:stretch;min-height:100vh;box-sizing:border-box;font-variant-numeric:tabular-nums}
+.pane{flex:1;border-radius:var(--radius-2xl);padding:36px;box-sizing:border-box;display:flex;flex-direction:column;gap:30px;background:var(--bg-app);color:var(--text-primary);border:1px solid var(--border-subtle)}
+.cap{font:var(--text-label);font-variation-settings:var(--vs-semi);letter-spacing:var(--ls-wider);text-transform:uppercase;color:var(--text-tertiary)}
+h2{margin:0;font:var(--fw-medium) 32px/1.05 var(--font-sans);letter-spacing:-0.03em}
+.roles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.role{display:flex;flex-direction:column;gap:10px}
+.chip{height:96px;border-radius:var(--radius-lg);display:flex;align-items:flex-end;padding:12px;box-sizing:border-box;font:var(--fw-semibold) 13px/1 var(--font-sans)}
+.role b{font:var(--fw-semibold) 14px/1.2 var(--font-sans)}
+.role span{font:var(--fw-regular) 12.5px/1.45 var(--font-sans);color:var(--text-secondary)}
+.role code{font:var(--text-meta);color:var(--text-tertiary)}
+.ladder{display:flex;border-radius:var(--radius-md);overflow:hidden;border:1px solid var(--border-subtle)}
+.ladder i{flex:1;height:56px;display:block}
+.ladder-l{display:flex;justify-content:space-between;font:var(--text-meta);color:var(--text-tertiary)}
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:10px 24px;margin:0;padding:0;list-style:none}
+.rules li{font:var(--fw-regular) 13px/1.5 var(--font-sans);color:var(--text-secondary);padding-top:10px;border-top:1px solid var(--divider)}
+.rules b{color:var(--text-primary);font-weight:var(--fw-semibold)}
+.demo{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn{height:44px;padding:0 18px;border-radius:var(--radius-md);display:inline-flex;align-items:center;font:var(--fw-semibold) 15px var(--font-sans)}
+.pill{height:22px;padding:0 8px;border-radius:var(--radius-sm);display:inline-flex;align-items:center;font:var(--fw-semibold) 10.5px var(--font-sans);font-variation-settings:var(--vs-semi);letter-spacing:var(--ls-wider);text-transform:uppercase;border:1px solid}
+.tick{display:flex;gap:3px;width:180px}
+.tick i{flex:1;height:2px;background:var(--data-track)}
+</style>
+</head>
+<body>
+<section class="pane" data-theme="dark">
+  <div><span class="cap">Tema oscuro · grafito</span><h2>Tinta sobre grafito</h2></div>
+  <div class="roles">
+    <div class="role"><div class="chip" style="background:var(--accent);color:var(--text-on-accent)">accent</div><b>Tinta</b><span>La acción principal y lo hecho. No es un color: es contraste.</span><code>graphite-100</code></div>
+    <div class="role"><div class="chip" style="background:var(--signal);color:var(--text-on-signal)">signal</div><b>Acero</b><span>La única señal: lo que está en curso, en foco o corriendo.</span><code>steel-400</code></div>
+    <div class="role"><div class="chip" style="background:var(--intensity);color:var(--text-on-intensity)">intensity</div><b>Ámbar</b><span>Esfuerzo: RIR, RPE, PR y el cronómetro isométrico.</span><code>amber-500</code></div>
+    <div class="role"><div class="chip" style="background:var(--danger);color:var(--ivory-0)">danger</div><b>Carmín</b><span>Solo lo que borra o pone en riesgo la cuenta.</span><code>crimson-500</code></div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <span class="cap">Superficies · de lo profundo a lo elevado</span>
+    <div class="ladder"><i style="background:var(--graphite-950)"></i><i style="background:var(--graphite-900)"></i><i style="background:var(--graphite-850)"></i><i style="background:var(--graphite-800)"></i><i style="background:var(--graphite-750)"></i><i style="background:var(--graphite-700)"></i><i style="background:var(--graphite-600)"></i></div>
+    <div class="ladder-l"><span>inset 950</span><span>bg-app 900</span><span>raised 850</span><span>card 800</span><span>elevated 750</span><span>chip 700</span><span>border 600</span></div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <span class="cap">Texto</span>
+    <div class="ladder"><i style="background:var(--graphite-100)"></i><i style="background:var(--graphite-300)"></i><i style="background:var(--graphite-400)"></i><i style="background:var(--graphite-500)"></i></div>
+    <div class="ladder-l"><span>primary 16:1</span><span>secondary 8:1</span><span>tertiary 5.5:1</span><span>disabled</span></div>
+  </div>
+  <div class="demo">
+    <span class="btn" style="background:var(--accent);color:var(--text-on-accent)">Registrar serie</span>
+    <span class="btn" style="border:1px solid var(--border-default)">Editar</span>
+    <span class="pill" style="color:var(--signal-text);border-color:var(--surface-signal-line);background:var(--surface-signal-soft)">En curso</span>
+    <span class="pill" style="color:var(--intensity-text);border-color:var(--surface-intensity-line);background:var(--surface-intensity-soft)">RIR 2</span>
+    <span class="tick"><i style="background:var(--accent)"></i><i style="background:var(--accent)"></i><i style="background:var(--signal)"></i><i></i><i></i></span>
+  </div>
+  <ul class="rules">
+    <li><b>Una señal por pantalla.</b> Si dos cosas están en acero, una de las dos no está en curso.</li>
+    <li><b>El ámbar no es alerta.</b> Es esfuerzo. Los avisos de algo que falta lo usan con icono.</li>
+    <li><b>Lo hecho es tinta.</b> Series hechas, días marcados, pasos cumplidos: sin verde.</li>
+    <li><b>Hairlines antes que rellenos.</b> Las superficies se separan por luz y una línea de 1 px.</li>
+  </ul>
+</section>
+<section class="pane" data-theme="light">
+  <div><span class="cap">Tema claro · marfil</span><h2>Tinta sobre marfil</h2></div>
+  <div class="roles">
+    <div class="role"><div class="chip" style="background:var(--accent);color:var(--text-on-accent)">accent</div><b>Tinta</b><span>Casi negro cálido. El mismo rol que en oscuro, invertido.</span><code>ivory-900</code></div>
+    <div class="role"><div class="chip" style="background:var(--signal);color:var(--text-on-signal)">signal</div><b>Acero</b><span>Más profundo para sostener 5:1 sobre el papel.</span><code>steel-600</code></div>
+    <div class="role"><div class="chip" style="background:var(--intensity);color:var(--text-on-intensity)">intensity</div><b>Ámbar</b><span>Bronceado: el ámbar del oscuro se pierde sobre marfil.</span><code>amber-600</code></div>
+    <div class="role"><div class="chip" style="background:var(--danger);color:var(--ivory-0)">danger</div><b>Carmín</b><span>Relleno solo al deslizar; si no, delineado.</span><code>crimson-600</code></div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <span class="cap">Superficies · de lo profundo a lo elevado</span>
+    <div class="ladder"><i style="background:var(--ivory-200)"></i><i style="background:var(--ivory-100)"></i><i style="background:var(--ivory-0)"></i><i style="background:var(--ivory-300)"></i><i style="background:var(--ivory-400)"></i><i style="background:var(--ivory-500)"></i></div>
+    <div class="ladder-l"><span>inset 200</span><span>bg-app 100</span><span>card 0</span><span>chip 300</span><span>stage 400</span><span>disabled 500</span></div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <span class="cap">Texto</span>
+    <div class="ladder"><i style="background:var(--ivory-900)"></i><i style="background:var(--ivory-700)"></i><i style="background:var(--ivory-600)"></i><i style="background:var(--ivory-500)"></i></div>
+    <div class="ladder-l"><span>primary 16:1</span><span>secondary 8.7:1</span><span>tertiary 5:1</span><span>disabled</span></div>
+  </div>
+  <div class="demo">
+    <span class="btn" style="background:var(--accent);color:var(--text-on-accent)">Registrar serie</span>
+    <span class="btn" style="border:1px solid var(--border-default)">Editar</span>
+    <span class="pill" style="color:var(--signal-text);border-color:var(--surface-signal-line);background:var(--surface-signal-soft)">En curso</span>
+    <span class="pill" style="color:var(--intensity-text);border-color:var(--surface-intensity-line);background:var(--surface-intensity-soft)">RIR 2</span>
+    <span class="tick"><i style="background:var(--accent)"></i><i style="background:var(--accent)"></i><i style="background:var(--signal)"></i><i></i><i></i></span>
+  </div>
+  <ul class="rules">
+    <li><b>Mismos nombres, otro valor.</b> Ningún componente elige color por tema: lo resuelven los tokens.</li>
+    <li><b>Sombras cálidas.</b> En claro las sombras se tiñen con la tinta del tema, nunca con negro puro.</li>
+    <li><b>Acero y ámbar se distinguen por luz.</b> Azul profundo contra ámbar claro: se separan también sin color.</li>
+    <li><b>Contraste medido.</b> Todo texto pasa 4.5:1 sobre las superficies que nombra su token.</li>
+  </ul>
+</section>
+</body>
+</html>

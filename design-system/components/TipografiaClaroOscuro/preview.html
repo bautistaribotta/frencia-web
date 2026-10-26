@@ -1,0 +1,64 @@
+<!-- @dsCard group="Type" width=1440 height=940 page subtitle="Instrument Sans en tres anchos y DM Mono solo para sellos, en los dos temas" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Frencia · Tipografía</title>
+<style>
+html,body{margin:0}
+body{background:var(--stage-bg);font-family:var(--font-sans);padding:32px;display:flex;gap:24px;align-items:stretch;min-height:100vh;box-sizing:border-box}
+.pane{flex:1;border-radius:var(--radius-3xl);padding:36px 36px 28px;box-sizing:border-box;display:flex;flex-direction:column;background:radial-gradient(52% 42% at 96% 0%,color-mix(in srgb,var(--glow-a) 30%,transparent),transparent 72%),radial-gradient(70% 60% at 0% 80%,color-mix(in srgb,var(--glow-b) 80%,transparent),transparent 72%),var(--bg-app);color:var(--text-primary);border:1px solid var(--glass-line);font-variant-numeric:tabular-nums}
+.cap{font:var(--text-label);font-variation-settings:var(--vs-semi);letter-spacing:var(--ls-wider);text-transform:uppercase;color:var(--text-tertiary)}
+.row{display:grid;grid-template-columns:1fr 168px;gap:20px;align-items:end;padding:18px 0;border-top:1px solid var(--divider)}
+.row:first-of-type{border-top:none}
+.meta{font:var(--text-meta);color:var(--text-tertiary);line-height:1.6;text-align:right}
+.hero{font:var(--fw-medium) 84px/0.9 var(--font-sans);font-variation-settings:var(--vs-condensed);letter-spacing:-0.045em}
+.hero small{font:var(--fw-medium) 20px var(--font-sans);letter-spacing:0;color:var(--text-tertiary);margin-left:6px;font-variation-settings:var(--vs-normal)}
+.display{font:var(--text-display);letter-spacing:-0.028em}
+.title{font:var(--text-title);letter-spacing:-0.02em}
+.subtitle{font:var(--text-subtitle);letter-spacing:-0.012em}
+.body{font:var(--text-body);color:var(--text-secondary);margin:0;max-width:440px}
+.label{font:var(--text-label);font-variation-settings:var(--vs-semi);letter-spacing:var(--ls-wider);text-transform:uppercase;color:var(--text-tertiary)}
+.data{font:var(--text-data);display:flex;gap:14px;align-items:baseline}
+.data em{font-style:normal;color:var(--intensity-text);font-weight:var(--fw-semibold)}
+.stamp{font:var(--text-meta);letter-spacing:var(--ls-wide);text-transform:uppercase;color:var(--text-secondary)}
+.widths{display:flex;gap:28px;align-items:baseline;margin-top:auto;padding-top:18px;border-top:1px solid var(--border-subtle)}
+.widths div{display:flex;flex-direction:column;gap:6px}
+.w{font:var(--fw-semibold) 30px/1 var(--font-sans);letter-spacing:-0.02em}
+</style>
+</head>
+<body>
+<section class="pane" data-theme="dark">
+  <span class="cap" style="margin-bottom:12px">Tema oscuro</span>
+  <div class="row"><div class="hero">82.5<small>kg</small></div><span class="meta">text-hero<br>500 · 72–84 · ancho 78</span></div>
+  <div class="row"><div class="display">¿Cuántos días tiene tu rutina?</div><span class="meta">text-display<br>500 · 34 / 1.08</span></div>
+  <div class="row"><div class="title">Entrá a tu cuenta</div><span class="meta">text-title<br>600 · 26 / 1.15</span></div>
+  <div class="row"><div class="subtitle">Press de banca con barra</div><span class="meta">text-subtitle<br>600 · 19 / 1.25</span></div>
+  <div class="row"><p class="body">Registrá cada serie con el peso, las reps y el RIR. El historial se arma solo, sin planillas.</p><span class="meta">text-body<br>400 · 16 / 1.5</span></div>
+  <div class="row"><div class="data">82.5 kg × 8 <em>RIR 2</em> 2:00</div><span class="meta">text-data<br>500 · 15 · tabular</span></div>
+  <div class="row"><div class="label">Volumen · RIR medio · Series</div><span class="meta">text-label<br>600 · 11 · ancho 88</span></div>
+  <div class="row"><div class="stamp">09 oct 2026 · 07:42 · Nº 7C1E2A</div><span class="meta">text-meta · DM Mono<br>solo sellos</span></div>
+  <div class="widths">
+    <div><span class="w" style="font-variation-settings:'wdth' 78">1:24</span><span class="cap">Condensado 78</span></div>
+    <div><span class="w" style="font-variation-settings:'wdth' 88">SERIES</span><span class="cap">Semi 88</span></div>
+    <div><span class="w" style="font-variation-settings:'wdth' 100">Frencia</span><span class="cap">Normal 100</span></div>
+  </div>
+</section>
+<section class="pane" data-theme="light">
+  <span class="cap" style="margin-bottom:12px">Tema claro</span>
+  <div class="row"><div class="hero">82.5<small>kg</small></div><span class="meta">text-hero<br>500 · 72–84 · ancho 78</span></div>
+  <div class="row"><div class="display">¿Cuántos días tiene tu rutina?</div><span class="meta">text-display<br>500 · 34 / 1.08</span></div>
+  <div class="row"><div class="title">Entrá a tu cuenta</div><span class="meta">text-title<br>600 · 26 / 1.15</span></div>
+  <div class="row"><div class="subtitle">Press de banca con barra</div><span class="meta">text-subtitle<br>600 · 19 / 1.25</span></div>
+  <div class="row"><p class="body">Registrá cada serie con el peso, las reps y el RIR. El historial se arma solo, sin planillas.</p><span class="meta">text-body<br>400 · 16 / 1.5</span></div>
+  <div class="row"><div class="data">82.5 kg × 8 <em>RIR 2</em> 2:00</div><span class="meta">text-data<br>500 · 15 · tabular</span></div>
+  <div class="row"><div class="label">Volumen · RIR medio · Series</div><span class="meta">text-label<br>600 · 11 · ancho 88</span></div>
+  <div class="row"><div class="stamp">09 oct 2026 · 07:42 · Nº 7C1E2A</div><span class="meta">text-meta · DM Mono<br>solo sellos</span></div>
+  <div class="widths">
+    <div><span class="w" style="font-variation-settings:'wdth' 78">1:24</span><span class="cap">Condensado 78</span></div>
+    <div><span class="w" style="font-variation-settings:'wdth' 88">SERIES</span><span class="cap">Semi 88</span></div>
+    <div><span class="w" style="font-variation-settings:'wdth' 100">Frencia</span><span class="cap">Normal 100</span></div>
+  </div>
+</section>
+</body>
+</html>

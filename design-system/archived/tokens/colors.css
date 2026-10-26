@@ -1,0 +1,184 @@
+/* ============================================================
+   FRENCIA · Colors
+   Dark-first athletic palette. Warm-black base, emerald green
+   as the signature, orange as the intensity/effort accent.
+   ============================================================ */
+
+:root {
+  /* ---- Base brand greens (emerald, the signature) ---- */
+  --green-300: #86EFAC;
+  --green-400: #4ADE80;   /* highlight / hover lift */
+  --green-500: #22C55E;   /* PRIMARY — actions, success, completed */
+  --green-600: #16A34A;   /* pressed / deep */
+  --green-700: #15803D;
+  --green-deep: #334635;  /* muted forest — tinted surfaces, borders */
+
+  /* ---- Orange (intensity / effort / PR heat) ---- */
+  --orange-300: #FFB088;
+  --orange-400: #FF8A4C;
+  --orange-500: #FF6D29;  /* SECONDARY — intensity, PRs, alerts */
+  --orange-600: #E85002;  /* pressed / deep */
+  --orange-700: #C2410C;
+
+  /* ---- Warm-dark neutral scale (ink) ---- */
+  --ink-1000: #000000;    /* OLED true black */
+  --ink-950: #0D0B0E;     /* deepest app bg */
+  --ink-900: #161317;     /* BASE background (brand) */
+  --ink-850: #1C181D;     /* raised surface */
+  --ink-800: #221E24;     /* card */
+  --ink-750: #29242B;     /* card elevated */
+  --ink-700: #322C34;     /* hairline-strong / chips */
+  --ink-600: #443D47;     /* border */
+  --ink-500: #5C5460;     /* disabled fill / faint */
+  --ink-400: #7A7280;     /* tertiary text */
+  --ink-300: #9C949F;     /* secondary text */
+  --ink-200: #C4BEC6;     /* muted body */
+  --ink-100: #E8E4E9;     /* primary text (off-white) */
+  --ink-50:  #F4F2F5;
+  --ink-0:   #F9F9F9;     /* pure white (brand) */
+
+  /* ---- Status ---- */
+  --success: var(--green-500);
+  --warning: var(--orange-500);
+  --danger:  #EF4444;
+  /* Texto de error y acciones destructivas: mas claro que --danger para leerse
+     sobre el campo oscuro. Port RN: colors.dangerText. */
+  --danger-text: oklch(80.8% 0.103 19.6);
+  --info:    #60A5FA;
+
+  /* ============================================================
+     SEMANTIC ALIASES — reach for these in product code
+     ============================================================ */
+
+  /* Surfaces */
+  --bg-app: var(--ink-900);
+  --bg-app-deep: var(--ink-950);
+  --surface-raised: var(--ink-850);
+  --surface-card: var(--ink-800);
+  --surface-card-elevated: var(--ink-750);
+  --surface-chip: var(--ink-700);
+  --surface-inset: var(--ink-950);
+
+  /* Tinted surfaces (subtle brand wash) */
+  --surface-green-soft: rgba(34, 197, 94, 0.10);
+  --surface-green-line: rgba(34, 197, 94, 0.28);
+  --surface-orange-soft: rgba(255, 109, 41, 0.10);
+  --surface-orange-line: rgba(255, 109, 41, 0.30);
+
+  /* Text */
+  --text-primary: var(--ink-100);
+  --text-secondary: var(--ink-300);
+  --text-tertiary: var(--ink-400);
+  --text-disabled: var(--ink-500);
+  --text-on-accent: var(--ink-1000);   /* black sits on green/orange */
+  --text-inverse: var(--ink-1000);
+
+  /* Borders / dividers */
+  --border-subtle: var(--ink-700);
+  --border-default: var(--ink-600);
+  --border-strong: var(--ink-500);
+  --divider: rgba(255, 255, 255, 0.07);
+
+  /* Scrim — dims the field behind bottom sheets and dialogs */
+  --scrim: oklch(0% 0 0 / 0.6);
+
+  /* Accents — primary action */
+  --accent: var(--green-500);
+  --accent-hover: var(--green-400);
+  --accent-press: var(--green-600);
+  --accent-text: var(--green-400);     /* green text on dark */
+
+  /* Accents — intensity */
+  --intensity: var(--orange-500);
+  --intensity-hover: var(--orange-400);
+  --intensity-press: var(--orange-600);
+  --intensity-text: var(--orange-400);
+
+  /* Data viz */
+  --data-volume: var(--green-500);
+  --data-intensity: var(--orange-500);
+  --data-track: var(--ink-700);
+
+  /* Stage — backdrop behind device frames / canvases */
+  --stage-bg: var(--ink-950);
+}
+
+/* ============================================================
+   LIGHT THEME — "cemento": cool grey ground, white cards,
+   blunt near-black ink, forest green for action.
+   Apply with <html data-theme="light">.
+   ============================================================ */
+:root[data-theme="light"], [data-theme="light"] {
+  /* ---- Cool grey neutral scale (concrete) ---- */
+  --stone-0:   #FFFFFF;
+  --stone-50:  #F7F8F7;
+  --stone-100: #EDEFED;
+  --stone-200: #E4E7E4;   /* BASE background */
+  --stone-300: #D9DDD9;
+  --stone-400: #C3C9C3;
+  --stone-500: #9AA19A;
+  --stone-600: #737B73;
+  --stone-700: #4A524A;
+  --stone-800: #2A2F2A;
+  --stone-900: #0A0C0A;   /* primary ink */
+
+  /* Surfaces */
+  --bg-app: var(--stone-200);
+  --bg-app-deep: #D5D9D5;
+  --surface-raised: var(--stone-0);
+  --surface-card: var(--stone-0);
+  --surface-card-elevated: var(--stone-0);
+  --surface-chip: #DADEDA;
+  --surface-inset: var(--stone-300);
+
+  /* Tinted surfaces — keyed to the mid green */
+  --surface-green-soft: rgba(19, 148, 71, 0.10);
+  --surface-green-line: rgba(19, 148, 71, 0.28);
+  --surface-orange-soft: rgba(214, 74, 14, 0.10);
+  --surface-orange-line: rgba(214, 74, 14, 0.28);
+
+  /* Text */
+  --text-primary: var(--stone-900);
+  --text-secondary: var(--stone-700);
+  --text-tertiary: var(--stone-600);
+  --text-disabled: var(--stone-500);
+  --text-on-accent: #FFFFFF;           /* white sits on forest green */
+  --text-inverse: var(--stone-0);
+
+  /* Borders / dividers */
+  --border-subtle: rgba(10, 12, 10, 0.12);
+  --border-default: rgba(10, 12, 10, 0.22);
+  --border-strong: rgba(10, 12, 10, 0.40);
+  --divider: rgba(10, 12, 10, 0.10);
+
+  /* Texto de error: sobre claro alcanza el rojo de status. Port RN: colors.dangerText. */
+  --danger-text: oklch(63.7% 0.208 25.3);
+
+  /* Scrim */
+  --scrim: oklch(0% 0 0 / 0.6);
+
+  /* Accents — primary action (verde medio: legible sobre claro, sin vibrar) */
+  --accent: #0F8440;
+  --accent-hover: #139447;
+  --accent-press: var(--green-700);
+  --accent-text: #11793B;
+
+  /* Accents — intensity */
+  --intensity: #D64A0E;
+  --intensity-hover: #E85002;
+  --intensity-press: var(--orange-700);
+  --intensity-text: #B93D0B;
+
+  /* Data viz */
+  --data-volume: #139447;
+  --data-intensity: #D64A0E;
+  --data-track: #CDD2CD;
+
+  /* Stage */
+  --stage-bg: #9EA69E;
+
+  /* Brand glow — keyed to este tema, no al esmeralda brillante */
+  --glow-green: 0 0 0 1px rgba(15, 132, 64, 0.30);
+  --glow-green-soft: none;   /* @kind shadow */
+  --glow-orange: 0 0 0 1px rgba(214, 74, 14, 0.30);
+}

@@ -1,0 +1,55 @@
+<!-- archivado (era @dsCard) group="Brand" width=1100 height=330 page subtitle="Lucide a 1.75 de trazo, en currentColor. Tinta por defecto; acero solo para lo que está en curso, ámbar solo para el esfuerzo." -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Frencia · Iconografía</title>
+<style>
+html,body{margin:0}
+body{background:var(--bg-app);color:var(--text-primary);font-family:var(--font-sans);padding:36px 44px;box-sizing:border-box}
+.cap{font:var(--text-label);font-variation-settings:var(--vs-semi);letter-spacing:var(--ls-wider);text-transform:uppercase;color:var(--text-tertiary)}
+.row{display:grid;grid-template-columns:repeat(12,1fr);gap:0;margin-top:16px;border:1px solid var(--border-subtle);border-radius:var(--radius-lg);overflow:hidden}
+.ic{display:flex;flex-direction:column;align-items:center;gap:10px;padding:20px 0 14px}
+.ic + .ic{border-left:1px solid var(--divider)}
+.ic svg{width:24px;height:24px;color:var(--text-primary);stroke-width:1.75}
+.ic .nm{font:var(--text-meta);color:var(--text-tertiary)}
+.ic.s svg{color:var(--signal)}
+.ic.i svg{color:var(--intensity)}
+.sizes{display:flex;gap:32px;align-items:flex-end;margin-top:22px}
+.sizes div{display:flex;flex-direction:column;align-items:center;gap:8px}
+.sizes span{font:var(--text-meta);color:var(--text-tertiary)}
+.reglas{display:flex;gap:28px;margin-left:auto;max-width:560px}
+.reglas p{margin:0;font:var(--fw-regular) 12.5px/1.5 var(--font-sans);color:var(--text-secondary)}
+.reglas b{color:var(--text-primary);font-weight:var(--fw-semibold)}
+</style>
+</head>
+<body>
+<span class="cap">Iconografía · Lucide</span>
+<div class="row">
+  <div class="ic"><i data-lucide="dumbbell"></i><span class="nm">dumbbell</span></div>
+  <div class="ic"><i data-lucide="layers"></i><span class="nm">layers</span></div>
+  <div class="ic"><i data-lucide="history"></i><span class="nm">history</span></div>
+  <div class="ic s"><i data-lucide="timer"></i><span class="nm">timer</span></div>
+  <div class="ic i"><i data-lucide="flame"></i><span class="nm">flame</span></div>
+  <div class="ic"><i data-lucide="skip-forward"></i><span class="nm">skip</span></div>
+  <div class="ic"><i data-lucide="trending-up"></i><span class="nm">trending</span></div>
+  <div class="ic"><i data-lucide="check"></i><span class="nm">check</span></div>
+  <div class="ic"><i data-lucide="plus"></i><span class="nm">plus</span></div>
+  <div class="ic"><i data-lucide="calendar"></i><span class="nm">calendar</span></div>
+  <div class="ic"><i data-lucide="circle-alert"></i><span class="nm">alert</span></div>
+  <div class="ic"><i data-lucide="ellipsis"></i><span class="nm">menu</span></div>
+</div>
+<div class="sizes">
+  <div><i data-lucide="timer" style="width:16px;height:16px;stroke-width:1.75"></i><span>16</span></div>
+  <div><i data-lucide="timer" style="width:20px;height:20px;stroke-width:1.75"></i><span>20</span></div>
+  <div><i data-lucide="timer" style="width:24px;height:24px;stroke-width:1.75"></i><span>24</span></div>
+  <div class="reglas">
+    <p><b>Trazo 1.75</b> en todos los tamaños; 2 solo dentro de un botón de 36 px. Nunca relleno.</p>
+    <p><b>Color</b> heredado del texto. Acero si el icono es lo que corre (cronómetro activo); ámbar para el fuego del esfuerzo.</p>
+    <p><b>Sin emoji</b> en la interfaz. Glifos permitidos: × · ↑ ↓.</p>
+  </div>
+</div>
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<script>lucide.createIcons();</script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!-- archivado (era @dsCard) group="Colors" width=1440 height=1440 page subtitle="Propuestas para reemplazar el ámbar en el rol de intensidad (RIR, RPE, PR, cronómetro de esfuerzo), con los componentes reales en los dos temas" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Frencia · Variantes de intensidad</title>
+<style>
+html,body{margin:0}
+body{background:var(--ivory-500);font-family:var(--font-sans);padding:32px;box-sizing:border-box;color:var(--graphite-900)}
+.cab{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:24px}
+.cab h1{margin:6px 0 0;font:var(--fw-medium) 36px/1.05 var(--font-sans);letter-spacing:-0.03em;color:var(--ivory-900)}
+.cab p{margin:0;max-width:560px;font:var(--fw-regular) 14px/1.5 var(--font-sans);color:var(--ivory-800)}
+.cap{font:var(--text-label);font-variation-settings:var(--vs-semi);letter-spacing:var(--ls-wider);text-transform:uppercase}
+.fila{display:grid;grid-template-columns:260px 1fr 1fr;gap:16px;margin-bottom:16px}
+.info{display:flex;flex-direction:column;gap:8px;padding:6px 4px}
+.info .n{font:var(--fw-semibold) 13px var(--font-sans);color:var(--ivory-700);font-variant-numeric:tabular-nums}
+.info b{font:var(--fw-semibold) 20px/1.15 var(--font-sans);letter-spacing:-0.015em;color:var(--ivory-900)}
+.info p{margin:0;font:var(--fw-regular) 13px/1.5 var(--font-sans);color:var(--ivory-800)}
+.info .chips{display:flex;gap:6px;margin-top:4px}
+.info .chips i{width:28px;height:28px;border-radius:6px;display:block;box-shadow:0 0 0 1px rgba(21,20,18,.15)}
+.info .actual{display:inline-block;align-self:flex-start;padding:3px 7px;border-radius:4px;border:1px solid var(--ivory-700);font:var(--fw-semibold) 10px var(--font-sans);letter-spacing:.08em;text-transform:uppercase;color:var(--ivory-800)}
+.pane{border-radius:var(--radius-xl);padding:20px;background:var(--bg-app);color:var(--text-primary);border:1px solid var(--border-subtle);display:grid;grid-template-columns:1fr 1fr;gap:16px 20px;align-items:start}
+.col{display:flex;flex-direction:column;gap:12px;min-width:0}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.res{font:var(--fw-medium) 13px var(--font-sans);color:var(--text-secondary);font-variant-numeric:tabular-nums}
+.res b{color:var(--text-primary);font-weight:600}
+.res em{font-style:normal;font-weight:600;color:var(--intensity-text)}
+.ap{display:flex;flex-direction:column;gap:6px}
+</style>
+</head>
+<body>
+<div class="cab">
+  <div><span class="cap" style="color:var(--ivory-700)">Paleta · rol de intensidad</span><h1>¿Qué reemplaza al ámbar?</h1></div>
+  <p>El acero (señal) y la tinta (acción) no cambian. Esto prueba solo el color del esfuerzo: RIR y RPE, el PR, la barra y el botón del cronómetro isométrico. Todas pasan 4.5:1 como texto en los dos temas.</p>
+</div>
+<div id="root"></div>
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<script>
+var NS = window.FrenciaDesignSystem_377129;
+var h = React.createElement;
+function vars(f, t, on, alphaSoft, alphaLine) {
+  var rgb = function (hex) { var n = parseInt(hex.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255].join(', '); };
+  return {
+    '--intensity': f, '--intensity-hover': f, '--intensity-press': f, '--intensity-text': t,
+    '--text-on-intensity': on, '--data-intensity': f,
+    '--surface-intensity-soft': 'rgba(' + rgb(f) + ', ' + alphaSoft + ')',
+    '--surface-intensity-line': 'rgba(' + rgb(f) + ', ' + alphaLine + ')',
+    '--halo-intensity': '0 0 0 1px rgba(' + rgb(f) + ', .4)'
+  };
+}
+var V = [
+  { n: '00', id: 'ambar', nombre: 'Ámbar', actual: true, txt: 'El de hoy, como referencia.',
+    d: vars('#d9a043', '#e9bd6c', '#0d0e10', .10, .34), l: vars('#a8761f', '#7d570f', '#0d0e10', .10, .30) },
+  { n: '01', id: 'tinta', nombre: 'Sin color: tinta', txt: 'El esfuerzo no tiene color propio: se marca con peso, el icono de fuego y el relleno de tinta. La más sobria y la más de instrumento; el acero queda como único color de toda la app.',
+    d: vars('#ebeae6', '#ebeae6', '#0d0e10', .06, .30), l: vars('#151412', '#151412', '#faf9f5', .05, .30) },
+  { n: '02', id: 'senal', nombre: 'Rojo segundero', txt: 'El rojo de la aguja de segundos de un reloj suizo junto al acero. Muy de instrumento, pero se acerca al carmín de peligro: habría que mover el peligro a solo-texto con icono.',
+    d: vars('#ef5b45', '#f47c69', '#0d0e10', .10, .36), l: vars('#c4311e', '#b02a19', '#faf9f5', .07, .30) },
+  { n: '03', id: 'oxido', nombre: 'Óxido', txt: 'Un terracota quemado, como cuero o ladrillo. Cálido y adulto, contrasta con el acero frío. Más cerca del lujo que del deporte.',
+    d: vars('#c97452', '#dc9172', '#0d0e10', .10, .36), l: vars('#9a4a2b', '#8c4226', '#faf9f5', .07, .30) },
+  { n: '04', id: 'lume', nombre: 'Lume', txt: 'El verde amarillento de la pintura luminiscente de las agujas. Se lee perfecto en la oscuridad del gimnasio. Es el más deportivo y el que más se parece al verde que dejaste.',
+    d: vars('#c4dc5c', '#c4dc5c', '#0d0e10', .09, .34), l: vars('#56700d', '#4d640b', '#faf9f5', .08, .30) },
+  { n: '05', id: 'frambuesa', nombre: 'Frambuesa', txt: 'Un rosa profundo, frío, que convive bien con el acero. Es la menos obvia para una app de entrenamiento: no se parece a ninguna plantilla.',
+    d: vars('#e3678c', '#ec89a7', '#0d0e10', .10, .36), l: vars('#b3335b', '#a12b50', '#faf9f5', .07, .30) }
+];
+function Muestra(p) {
+  var B = NS.Badge, S = NS.StatTile, R = NS.SetRow, P = NS.ProgressBar, Bt = NS.Button, M = NS.MetricPill;
+  return h('div', { className: 'pane', 'data-theme': p.tema, style: p.vars },
+    h('div', { className: 'col' },
+      h('div', { className: 'row' },
+        h(B, { tone: 'intensity-solid', icon: 'flame' }, 'Nuevo PR'),
+        h(B, { tone: 'intensity' }, 'RIR 2'),
+        h(B, { tone: 'signal' }, 'En curso')),
+      h('div', { className: 'row', style: { gap: 20 } },
+        h(S, { label: 'RIR medio', value: '1.8', tone: 'intensity', size: 'sm' }),
+        h(S, { label: 'Mejor serie', value: '85', unit: 'kg', size: 'sm' })),
+      h('span', { className: 'res' }, h('b', null, '4x8'), ' · ', h('em', null, 'RIR 2'), ' · 2:00')),
+    h('div', { className: 'col' },
+      h(R, { index: 1, load: 82.5, reps: 8, rir: 2, state: 'done' }),
+      h('div', { className: 'ap' },
+        h(P, { value: 31, max: 54, tone: 'intensity', label: 'Plancha · 0:31 de 0:45' })),
+      h('div', { className: 'row' },
+        h(Bt, { variant: 'intensity', size: 'md', icon: 'square' }, 'Frenar'),
+        h(M, { icon: 'flame', label: 'RPE', value: '8', tone: 'intensity', layout: 'inline' }))));
+}
+function Pagina() {
+  return h('div', null, V.map(function (v) {
+    return h('div', { className: 'fila', key: v.id },
+      h('div', { className: 'info' },
+        h('span', { className: 'n' }, v.n),
+        h('b', null, v.nombre),
+        v.actual ? h('span', { className: 'actual' }, 'Actual') : null,
+        h('p', null, v.txt),
+        h('div', { className: 'chips' },
+          h('i', { style: { background: v.d['--intensity'] } }),
+          h('i', { style: { background: v.l['--intensity'] } }))),
+      h(Muestra, { tema: 'dark', vars: v.d }),
+      h(Muestra, { tema: 'light', vars: v.l }));
+  }));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(h(Pagina));
+var veces = 0;
+var iconos = setInterval(function () { if (window.lucide) lucide.createIcons(); if (++veces > 12) clearInterval(iconos); }, 150);
+</script>
+</body>
+</html>

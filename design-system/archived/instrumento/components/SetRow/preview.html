@@ -1,0 +1,77 @@
+<!-- archivado (era @dsCard) group="Data" height=200 -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>SetRow</title>
+<style>
+  body { padding: 20px; }
+  .pv { display: flex; flex-direction: column; gap: 16px; }
+  .fila { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .fila--abajo { align-items: flex-end; gap: 28px; }
+  .grilla2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 24px; align-items: start; }
+  .col { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+  .cap { font: var(--text-data-label); letter-spacing: var(--ls-wider); text-transform: uppercase; color: var(--text-tertiary); }
+  .ancho { max-width: 360px; }
+  .ancho-l { max-width: 420px; }
+  .rel { position: relative; }
+  .item { display: flex; align-items: center; gap: 12px; }
+  .lbl { font: var(--fw-medium) 15px var(--font-sans); color: var(--text-secondary); }
+  .tarjeta-texto { font: var(--text-data); color: var(--text-primary); }
+  .marco-tel { max-width: 380px; border: 1px solid var(--border-subtle); border-radius: var(--radius-xl); overflow: hidden; background: var(--bg-app); }
+  .lista-mq { display: flex; flex-direction: column; gap: 8px; width: 295px; }
+  .fila-mq { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: var(--radius-xl); background: var(--surface-card); border: 1px solid var(--border-subtle); }
+  .fila-mq__col { flex: 1; min-width: 0; }
+  .fila-mq__nombre { font: var(--fw-semibold) 15px var(--font-sans); color: var(--text-primary); }
+  .fila-mq__resumen { font: var(--fw-medium) 13px var(--font-sans); color: var(--text-secondary); margin-top: 4px; }
+  .metricas { display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; font: var(--text-data); }
+  .metricas dt { color: var(--text-tertiary); }
+  .metricas dd { margin: 0; color: var(--text-primary); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<script>
+var NS = window.FrenciaDesignSystem_377129;
+function Demo() {
+  const {
+    SetRow,
+    Card
+  } = NS;
+  return /*#__PURE__*/React.createElement("div", {
+    className: "pv ancho-l"
+  }, /*#__PURE__*/React.createElement(Card, {
+    variant: "inset"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "col"
+  }, /*#__PURE__*/React.createElement(SetRow, {
+    index: 1,
+    load: 82.5,
+    reps: 8,
+    rir: 2,
+    state: "done",
+    onToggle: () => {}
+  }), /*#__PURE__*/React.createElement(SetRow, {
+    index: 2,
+    load: 82.5,
+    reps: 8,
+    state: "active",
+    onToggle: () => {}
+  }), /*#__PURE__*/React.createElement(SetRow, {
+    index: 3,
+    load: 85,
+    reps: 6,
+    state: "pending",
+    onToggle: () => {}
+  }))));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(Demo, null));
+var veces = 0;
+var iconos = setInterval(function () {
+  if (window.lucide) lucide.createIcons();
+  if (++veces > 10) clearInterval(iconos);
+}, 150);
+</script>
+</body>
+</html>

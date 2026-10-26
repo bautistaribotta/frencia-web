@@ -1,0 +1,166 @@
+<!-- @dsCard group="Components" width=1440 height=980 page subtitle="Vista partida sobre el Fondo: botones, chips, métricas, progreso y filas de serie en vidrio" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Frencia · Componentes en ambos temas</title>
+<style>
+html,body{margin:0}
+body{background:var(--stage-bg);font-family:var(--font-sans);padding:36px;display:flex;gap:28px;align-items:stretch;min-height:100vh;box-sizing:border-box}
+.pane{flex:1;border-radius:var(--radius-3xl);border:1px solid var(--glass-line);padding:30px;box-sizing:border-box;display:flex;flex-direction:column;gap:22px;color:var(--text-primary);overflow:hidden;
+  background:
+    radial-gradient(52% 42% at 96% 0%,color-mix(in srgb,var(--glow-a) 32%,transparent),transparent 72%),
+    radial-gradient(70% 60% at 0% 80%,color-mix(in srgb,var(--glow-b) 80%,transparent),transparent 72%),
+    radial-gradient(40% 30% at 100% 100%,color-mix(in srgb,var(--glow-c) 16%,transparent),transparent 70%),
+    var(--bg-app)}
+.tag{font:var(--text-data-label);letter-spacing:var(--ls-wider);text-transform:uppercase;color:var(--text-tertiary)}
+.group{display:flex;flex-direction:column;gap:11px}
+.label{font:var(--text-data-label);letter-spacing:var(--ls-wide);text-transform:uppercase;color:var(--text-tertiary)}
+.mount{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.stack{display:flex;flex-direction:column;gap:10px}
+</style>
+</head>
+<body>
+<div id="dark" class="pane" data-theme="dark"></div>
+<div id="light" class="pane" data-theme="light"></div>
+
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+
+<script>
+const {
+  Button,
+  IconButton,
+  Badge,
+  Tag,
+  MetricPill,
+  ProgressBar,
+  StatTile,
+  Card,
+  Avatar,
+  SetRow,
+  Switch
+} = window.FrenciaDesignSystem_377129;
+function Group({
+  label,
+  children
+}) {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "group"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "label"
+  }, label), /*#__PURE__*/React.createElement("div", {
+    className: "mount"
+  }, children));
+}
+function Specimen({
+  theme
+}) {
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("span", {
+    className: "tag"
+  }, theme === 'dark' ? 'Tema oscuro' : 'Tema claro'), /*#__PURE__*/React.createElement(Group, {
+    label: "Botones"
+  }, /*#__PURE__*/React.createElement(Button, {
+    variant: "primary",
+    size: "md",
+    icon: "play"
+  }, "Empezar"), /*#__PURE__*/React.createElement(Button, {
+    variant: "secondary",
+    size: "md"
+  }, "Ver rutina"), /*#__PURE__*/React.createElement(Button, {
+    variant: "ghost",
+    size: "md"
+  }, "Saltar"), /*#__PURE__*/React.createElement(Button, {
+    variant: "primary",
+    size: "md",
+    disabled: true
+  }, "Bloqueado")), /*#__PURE__*/React.createElement(Group, {
+    label: "Controles de icono"
+  }, /*#__PURE__*/React.createElement(IconButton, {
+    icon: "chevron-left",
+    variant: "ghost",
+    size: "md",
+    "aria-label": "Volver"
+  }), /*#__PURE__*/React.createElement(IconButton, {
+    icon: "plus",
+    variant: "primary",
+    size: "md",
+    "aria-label": "Agregar"
+  }), /*#__PURE__*/React.createElement(IconButton, {
+    icon: "settings",
+    variant: "secondary",
+    size: "md",
+    "aria-label": "Ajustes"
+  }), /*#__PURE__*/React.createElement(Switch, {
+    checked: true,
+    onChange: () => {}
+  })), /*#__PURE__*/React.createElement(Group, {
+    label: "Etiquetas y estados"
+  }, /*#__PURE__*/React.createElement(Badge, {
+    tone: "signal"
+  }, "PR nuevo"), /*#__PURE__*/React.createElement(Badge, {
+    tone: "neutral"
+  }, "D\xEDa 1"), /*#__PURE__*/React.createElement(Tag, null, "Empuje"), /*#__PURE__*/React.createElement(Tag, null, "Tracci\xF3n"), /*#__PURE__*/React.createElement(MetricPill, {
+    label: "RIR",
+    value: "2"
+  })), /*#__PURE__*/React.createElement(Group, {
+    label: "Datos"
+  }, /*#__PURE__*/React.createElement(StatTile, {
+    label: "Volumen",
+    value: "12 480",
+    unit: "kg"
+  }), /*#__PURE__*/React.createElement(StatTile, {
+    label: "Sesiones",
+    value: "18",
+    unit: "sem"
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "group"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "label"
+  }, "Progreso"), /*#__PURE__*/React.createElement("div", {
+    className: "stack"
+  }, /*#__PURE__*/React.createElement(ProgressBar, {
+    value: 64
+  }), /*#__PURE__*/React.createElement(ProgressBar, {
+    value: 28
+  }))), /*#__PURE__*/React.createElement("div", {
+    className: "group"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "label"
+  }, "Identidad y tarjeta"), /*#__PURE__*/React.createElement("div", {
+    className: "mount"
+  }, /*#__PURE__*/React.createElement(Avatar, {
+    name: "Marco R\xEDos",
+    size: "md",
+    ring: true
+  }), /*#__PURE__*/React.createElement(Card, {
+    style: {
+      flex: 1,
+      minWidth: 200,
+      padding: 16
+    }
+  }, /*#__PURE__*/React.createElement(SetRow, {
+    index: 1,
+    load: "82.5",
+    reps: 8,
+    rir: 2,
+    state: "done"
+  }), /*#__PURE__*/React.createElement(SetRow, {
+    index: 2,
+    load: "82.5",
+    reps: 8,
+    rir: 2,
+    state: "pending"
+  })))));
+}
+ReactDOM.createRoot(document.getElementById('dark')).render(/*#__PURE__*/React.createElement(Specimen, {
+  theme: "dark"
+}));
+ReactDOM.createRoot(document.getElementById('light')).render(/*#__PURE__*/React.createElement(Specimen, {
+  theme: "light"
+}));
+setInterval(() => {
+  window.lucide && lucide.createIcons();
+}, 400);
+</script>
+</body>
+</html>

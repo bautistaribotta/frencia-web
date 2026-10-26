@@ -1,0 +1,266 @@
+<!-- archivado (era @dsCard) group="iOS App" width=402 height=720 page subtitle="Interactive — Hoy, registro de serie, progreso, stub de sesión" -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Frencia iOS app</title>
+
+<style>
+  html, body { height: 100%; }
+  body { display: flex; align-items: flex-start; justify-content: center; min-height: 100vh; padding: 24px; background-color: var(--stage-bg); }
+  #root { transform-origin: center; }
+  .stage { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<script src="../../ui_kits/ios_app/cargar-kit.js"></script>
+<script>
+cargarKit(["../../ui_kits/ios_app/data.js","../../ui_kits/ios_app/ios-frame.jsx","../../ui_kits/ios_app/theme-toggle.jsx","../../ui_kits/ios_app/HomeScreen.jsx","../../ui_kits/ios_app/WorkoutLogScreen.jsx","../../ui_kits/ios_app/ProgressScreen.jsx","../../ui_kits/ios_app/RoutinesScreen.jsx","../../ui_kits/ios_app/SessionStub.jsx"]).then(function () {
+const {
+  TabBar,
+  Card,
+  StatTile,
+  Badge,
+  Switch,
+  Avatar,
+  Button
+} = window.FrenciaDesignSystem_377129;
+
+// ---- Lightweight extra screens (history + profile) ----
+function HistoryScreen() {
+  const s = window.FRENCIA_DATA.session;
+  const rows = [{
+    d: 'Hoy · 07:42',
+    r: 'Empuje · A',
+    v: '12 480',
+    pr: 1
+  }, {
+    d: 'Mar · 06:55',
+    r: 'Tirón · A',
+    v: '14 220',
+    pr: 0
+  }, {
+    d: 'Dom · 09:10',
+    r: 'Pierna · A',
+    v: '21 050',
+    pr: 2
+  }, {
+    d: '9 jun · 07:30',
+    r: 'Empuje · B',
+    v: '11 900',
+    pr: 0
+  }];
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: '56px 20px 120px',
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 14
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", {
+    className: "frencia-label"
+  }, "Historial"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      font: 'var(--text-title)',
+      color: 'var(--text-primary)',
+      marginTop: 4
+    }
+  }, "Junio")), rows.map((row, i) => /*#__PURE__*/React.createElement(Card, {
+    key: i,
+    hairline: true,
+    interactive: true,
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between'
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      font: 'var(--fw-bold) 16px var(--font-sans)',
+      color: 'var(--text-primary)'
+    }
+  }, row.r), /*#__PURE__*/React.createElement("span", {
+    className: "frencia-label",
+    style: {
+      marginTop: 3,
+      display: 'block'
+    }
+  }, row.d)), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: 12
+    }
+  }, row.pr > 0 ? /*#__PURE__*/React.createElement(Badge, {
+    tone: "intensity",
+    icon: "flame"
+  }, row.pr, " PR") : null, /*#__PURE__*/React.createElement(StatTile, {
+    value: row.v,
+    unit: "kg",
+    size: "sm"
+  })))));
+}
+function ProfileScreen() {
+  const [a, setA] = React.useState(true);
+  const [b, setB] = React.useState(false);
+  const [c, setC] = React.useState(true);
+  const Setting = ({
+    label,
+    sub,
+    val,
+    set
+  }) => /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      padding: '14px 16px',
+      borderBottom: '1px solid var(--divider)'
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      font: 'var(--fw-medium) 15px var(--font-sans)',
+      color: 'var(--text-primary)'
+    }
+  }, label), sub ? /*#__PURE__*/React.createElement("span", {
+    className: "frencia-label",
+    style: {
+      display: 'block',
+      marginTop: 2
+    }
+  }, sub) : null), /*#__PURE__*/React.createElement(Switch, {
+    checked: val,
+    onChange: set
+  }));
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: '56px 20px 120px',
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 20
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: 14
+    }
+  }, /*#__PURE__*/React.createElement(Avatar, {
+    name: "Marco R\xEDos",
+    size: "lg",
+    ring: true
+  }), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      font: 'var(--text-subtitle)',
+      color: 'var(--text-primary)'
+    }
+  }, "Marco R\xEDos"), /*#__PURE__*/React.createElement("span", {
+    className: "frencia-label"
+  }, "12 d\xEDas seguidos \xB7 148 sesiones"))), /*#__PURE__*/React.createElement(Card, {
+    variant: "inset",
+    style: {
+      padding: 0,
+      overflow: 'hidden'
+    }
+  }, /*#__PURE__*/React.createElement(Setting, {
+    label: "Avisar al terminar el descanso",
+    sub: "Notificaci\xF3n + vibraci\xF3n",
+    val: a,
+    set: setA
+  }), /*#__PURE__*/React.createElement(Setting, {
+    label: "Unidades en libras (lb)",
+    val: b,
+    set: setB
+  }), /*#__PURE__*/React.createElement(Setting, {
+    label: "Mostrar RIR al registrar",
+    val: c,
+    set: setC
+  })), /*#__PURE__*/React.createElement(Button, {
+    variant: "secondary",
+    size: "lg",
+    icon: "settings",
+    fullWidth: true
+  }, "Ajustes avanzados"));
+}
+
+// ---- App shell ----
+function App() {
+  const [view, setView] = React.useState('tabs'); // tabs | workout | stub
+  const [tab, setTab] = React.useState('home');
+  const [theme, setTheme] = useTheme();
+  React.useEffect(() => {
+    window.lucide && lucide.createIcons();
+  });
+  let content;
+  if (view === 'workout') content = /*#__PURE__*/React.createElement(WorkoutLogScreen, {
+    onFinish: () => setView('stub')
+  });else if (view === 'stub') content = /*#__PURE__*/React.createElement(SessionStub, {
+    onDone: () => {
+      setView('tabs');
+      setTab('home');
+    }
+  });else if (tab === 'home') content = /*#__PURE__*/React.createElement(HomeScreen, {
+    onStart: () => setView('workout')
+  });else if (tab === 'hist') content = /*#__PURE__*/React.createElement(HistoryScreen, null);else if (tab === 'rutinas') content = /*#__PURE__*/React.createElement(RoutinesScreen, {
+    onStart: () => setView('workout')
+  });else content = /*#__PURE__*/React.createElement(ProfileScreen, null);
+  const showTabs = view === 'tabs';
+  return /*#__PURE__*/React.createElement("div", {
+    className: "stage"
+  }, /*#__PURE__*/React.createElement(IOSDevice, {
+    key: theme,
+    dark: theme === 'dark',
+    width: 402,
+    height: 812
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'relative',
+      minHeight: '100%',
+      background: 'var(--bg-app)'
+    }
+  }, content, showTabs ? /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      bottom: 0,
+      zIndex: 40
+    }
+  }, /*#__PURE__*/React.createElement(TabBar, {
+    value: tab,
+    onChange: setTab,
+    items: [{
+      value: 'home',
+      label: 'Hoy',
+      icon: 'home'
+    }, {
+      value: 'hist',
+      label: 'Historial',
+      icon: 'calendar'
+    }, {
+      value: 'rutinas',
+      label: 'Rutinas',
+      icon: 'list'
+    }, {
+      value: 'perfil',
+      label: 'Perfil',
+      icon: 'user'
+    }],
+    fab: {
+      icon: 'play',
+      label: 'Empezar',
+      onClick: () => setView('workout')
+    }
+  })) : null)), /*#__PURE__*/React.createElement(ThemeToggle, {
+    theme: theme,
+    onChange: setTheme
+  }));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(App, null));
+});
+</script>
+</body>
+</html>

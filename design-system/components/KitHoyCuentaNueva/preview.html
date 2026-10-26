@@ -1,0 +1,98 @@
+<!-- @dsCard group="iOS App" width=460 height=900 page subtitle="Estado vacío / onboarding: usuario sin rutinas ni historial" -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Hoy — cuenta nueva</title>
+
+<style>
+  html, body { height: 100%; margin: 0; background-color: var(--stage-bg); }
+  #root { min-height: 100%; display: grid; place-items: start center; padding: 28px; box-sizing: border-box; }
+  .stage { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<script src="../../ui_kits/ios_app/cargar-kit.js"></script>
+<script>
+cargarKit(["../../ui_kits/ios_app/data.js","../../ui_kits/ios_app/ios-frame.jsx","../../ui_kits/ios_app/theme-toggle.jsx","../../ui_kits/ios_app/HomeEmpty.jsx"]).then(function () {
+const {
+  TabBar
+} = window.FrenciaDesignSystem_377129;
+function App() {
+  const [tab, setTab] = React.useState('home');
+  const [theme, setTheme] = useTheme();
+  React.useEffect(() => {
+    const id = setInterval(() => {
+      window.lucide && lucide.createIcons();
+    }, 300);
+    return () => clearInterval(id);
+  }, []);
+  const noop = () => {};
+  return /*#__PURE__*/React.createElement("div", {
+    className: "stage"
+  }, /*#__PURE__*/React.createElement(IOSDevice, {
+    key: theme,
+    dark: theme === 'dark',
+    width: 402,
+    height: 812
+  }, /*#__PURE__*/React.createElement(window.FrenciaDesignSystem_377129.Fondo, { posicion: 'cumbre' }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'relative',
+      height: '100%',
+      zIndex: 1,
+      background: 'transparent'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'absolute',
+      inset: 0,
+      overflowY: 'auto'
+    }
+  }, /*#__PURE__*/React.createElement(HomeEmpty, {
+    onCreate: noop
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      bottom: 0,
+      zIndex: 40
+    }
+  }, /*#__PURE__*/React.createElement(TabBar, {
+    value: tab,
+    onChange: setTab,
+    items: [{
+      value: 'home',
+      label: 'Hoy',
+      icon: 'home'
+    }, {
+      value: 'hist',
+      label: 'Historial',
+      icon: 'calendar'
+    }, {
+      value: 'rutinas',
+      label: 'Rutinas',
+      icon: 'list'
+    }, {
+      value: 'perfil',
+      label: 'Perfil',
+      icon: 'user'
+    }],
+    fab: {
+      icon: 'plus',
+      label: 'Crear',
+      onClick: noop
+    }
+  })))), /*#__PURE__*/React.createElement(ThemeToggle, {
+    theme: theme,
+    onChange: setTheme
+  }));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(App, null));
+});
+</script>
+</body>
+</html>

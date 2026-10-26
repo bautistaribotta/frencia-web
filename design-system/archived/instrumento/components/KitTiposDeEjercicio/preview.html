@@ -1,0 +1,178 @@
+<!-- archivado (era @dsCard) group="iOS App" width=1440 height=4000 page subtitle="Catálogo, lista del día, configurar ×7, sesión, esfuerzo vs descanso, historial" -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Tipos de ejercicio</title>
+
+<style>
+html,body{margin:0}
+body{background-color:var(--stage-bg);color:var(--text-primary);font-family:var(--font-sans);padding:32px 40px 80px}
+a{color:var(--signal-text)}a:hover{color:var(--accent-hover)}
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:28px}
+.top h1{font-family:var(--font-display);font-weight:500;letter-spacing:-0.035em;font-size:44px;line-height:1;margin:6px 0 0;letter-spacing:var(--ls-display)}
+.sec{margin-top:40px}
+.sec h2{font:var(--fw-bold) 20px var(--font-sans);margin:0 0 4px}
+.sec p{margin:0 0 18px;font-size:14px;color:var(--text-secondary);max-width:760px;line-height:1.5}
+.row{display:flex;gap:28px;align-items:flex-start;overflow-x:auto;padding-bottom:12px}
+.ph{flex:none;display:flex;flex-direction:column;gap:10px}
+.ph__cap{font:var(--fw-semibold) 11px var(--font-sans);letter-spacing:var(--ls-wider);text-transform:uppercase;color:var(--text-secondary)}
+.ph__cap b{color:var(--text-primary)}
+.ph__dev{width:375px;height:812px;display:flex;flex-direction:column;border-radius:44px;background:var(--bg-app);border:1px solid var(--border-subtle);overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.18)}
+.ph__sb{flex:none}
+.ph__scroll{flex:1;min-height:0;overflow-y:auto;scrollbar-width:none}
+.ph__scroll::-webkit-scrollbar{display:none}
+.ph__sb{height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;font:var(--fw-semibold) 15px var(--font-sans);color:var(--text-primary)}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<script src="../../ui_kits/ios_app/cargar-kit.js"></script>
+<script>
+cargarKit(["../../ui_kits/ios_app/tipos.data.js","../../ui_kits/ios_app/log-fallback.js","../../ui_kits/ios_app/theme-toggle.jsx","../../ui_kits/ios_app/CatalogScreen.jsx","../../ui_kits/ios_app/SessionTypedScreen.jsx","../../ui_kits/ios_app/HistoryDetailScreen.jsx"]).then(function () {
+const D = window.FRENCIA_TIPOS;
+function Phone({
+  cap,
+  sub,
+  children
+}) {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "ph",
+    "data-screen-label": cap
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "ph__cap"
+  }, /*#__PURE__*/React.createElement("b", null, cap), sub ? ' · ' + sub : ''), /*#__PURE__*/React.createElement("div", {
+    className: "ph__dev"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ph__sb"
+  }, /*#__PURE__*/React.createElement("span", null, "9:41"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      display: 'inline-flex',
+      gap: 6
+    }
+  }, /*#__PURE__*/React.createElement("i", {
+    "data-lucide": "signal",
+    style: {
+      width: 16,
+      height: 16
+    }
+  }), /*#__PURE__*/React.createElement("i", {
+    "data-lucide": "battery-full",
+    style: {
+      width: 18,
+      height: 18
+    }
+  }))), /*#__PURE__*/React.createElement("div", {
+    className: "ph__scroll"
+  }, children)));
+}
+const CONFIGS = [['press', 'Fuerza', 'actual · peso + reps', 'edit'], ['plancha', 'Isométrico', 'solo tiempo', 'add'], ['sentIso', 'Isométrico', 'tiempo + peso', 'add'], ['cinta', 'Cardio', 'tiempo + distancia · 1 serie', 'add'], ['soga', 'Cardio', 'solo tiempo · 5 series', 'add'], ['granjero', 'Híbrido', 'peso + distancia', 'add'], ['colgado', 'Híbrido', 'peso + tiempo', 'add']];
+function Page() {
+  const {
+    ExerciseConfig
+  } = window.FrenciaDesignSystem_377129;
+  const [theme, setTheme] = useTheme();
+  React.useEffect(() => {
+    window.lucide && lucide.createIcons();
+  });
+  return /*#__PURE__*/React.createElement("div", {
+    key: theme
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "top"
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("span", {
+    className: "frencia-label"
+  }, "Frencia \xB7 iOS"), /*#__PURE__*/React.createElement("h1", null, "Tipos de ejercicio")), /*#__PURE__*/React.createElement(ThemeToggle, {
+    theme: theme,
+    onChange: setTheme
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "sec"
+  }, /*#__PURE__*/React.createElement("h2", null, "Cat\xE1logo"), /*#__PURE__*/React.createElement("p", null, "La app filtra por grupo muscular, un grupo a la vez y solo por el m\xFAsculo objetivo; tocar el chip activo vuelve a Todos. Tocar una fila la despliega con el nombre completo, los m\xFAsculos (el objetivo con punto), el equipamiento y el bot\xF3n A\xF1adir, que reci\xE9n ah\xED pasa a configurar. Una sola fila desplegada a la vez."), /*#__PURE__*/React.createElement("div", {
+    className: "row"
+  }, /*#__PURE__*/React.createElement(Phone, {
+    cap: "Buscador",
+    sub: "por m\xFAsculo"
+  }, /*#__PURE__*/React.createElement(CatalogScreen, {
+    filterBy: "musculo"
+  })), /*#__PURE__*/React.createElement(Phone, {
+    cap: "Buscador",
+    sub: "fila desplegada"
+  }, /*#__PURE__*/React.createElement(CatalogScreen, {
+    filterBy: "musculo",
+    initialOpen: "press"
+  }))), /*#__PURE__*/React.createElement("p", null, "Filtro por tipo, para cuando el cat\xE1logo tenga m\xE1s que fuerza. El tipo va con \xEDcono y nombre, sin color propio, y al lado los datos que registra el ejercicio. El filtro seleccionado cambia su \xEDcono por una marca y pasa a negrita, adem\xE1s del relleno de tinta."), /*#__PURE__*/React.createElement("div", {
+    className: "row"
+  }, /*#__PURE__*/React.createElement(Phone, {
+    cap: "Buscador",
+    sub: "por tipo"
+  }, /*#__PURE__*/React.createElement(CatalogScreen, null)), /*#__PURE__*/React.createElement(Phone, {
+    cap: "Buscador",
+    sub: "filtro isom\xE9trico"
+  }, /*#__PURE__*/React.createElement(CatalogScreen, {
+    initialFilter: "isometrico"
+  })))), /*#__PURE__*/React.createElement("div", {
+    className: "sec"
+  }, /*#__PURE__*/React.createElement("h2", null, "Lista del d\xEDa"), /*#__PURE__*/React.createElement("p", null, "Una l\xEDnea por ejercicio: volumen \xB7 intensidad \xB7 descanso. El descanso lleva \xEDcono de reloj para no confundirse con un tiempo de trabajo. Cardio de una sola serie no cuenta series ni muestra descanso."), /*#__PURE__*/React.createElement("div", {
+    className: "row"
+  }, /*#__PURE__*/React.createElement(Phone, {
+    cap: "D\xEDa 1",
+    sub: "siete tipos"
+  }, /*#__PURE__*/React.createElement(DayPlanScreen, null)))), /*#__PURE__*/React.createElement("div", {
+    className: "sec"
+  }, /*#__PURE__*/React.createElement("h2", null, "Configurar ejercicio"), /*#__PURE__*/React.createElement("p", null, "Segunda cara de ExercisePickerModal. Los campos salen de los datos del ejercicio; el peso nunca se planifica; el descanso desaparece en cardio de una sola serie (cinta) y vuelve si hay m\xE1s de una (soga)."), /*#__PURE__*/React.createElement("div", {
+    className: "row"
+  }, CONFIGS.map(([k, t, s, mode]) => /*#__PURE__*/React.createElement(Phone, {
+    key: k,
+    cap: t,
+    sub: s
+  }, /*#__PURE__*/React.createElement(ExerciseConfig, {
+    exercise: D.exercises[k],
+    plan: D.plans[k],
+    mode: mode,
+    prefs: D.prefs
+  }))))), /*#__PURE__*/React.createElement("div", {
+    className: "sec"
+  }, /*#__PURE__*/React.createElement("h2", null, "Sesi\xF3n"), /*#__PURE__*/React.createElement("p", null, "SerieComparativa arma sus columnas con los datos del ejercicio: plancha 2, cinta 3, granjero 2 (sin intensidad). La de 4 columnas est\xE1 en la card de componentes. En la fila Plan el peso siempre queda en \"\u2014\" porque el plan no lo dice. Las pantallas son interactivas: carg\xE1 valores y registr\xE1."), /*#__PURE__*/React.createElement("div", {
+    className: "row"
+  }, /*#__PURE__*/React.createElement(Phone, {
+    cap: "Plancha",
+    sub: "cron\xF3metro listo"
+  }, /*#__PURE__*/React.createElement(SessionTypedScreen, {
+    exKey: "plancha"
+  })), /*#__PURE__*/React.createElement(Phone, {
+    cap: "Plancha",
+    sub: "contando"
+  }, /*#__PURE__*/React.createElement(SessionTypedScreen, {
+    exKey: "plancha",
+    timerPhase: "running",
+    timerElapsed: 31
+  })), /*#__PURE__*/React.createElement(Phone, {
+    cap: "Cinta",
+    sub: "serie \xFAnica, sin descanso"
+  }, /*#__PURE__*/React.createElement(SessionTypedScreen, {
+    exKey: "cinta",
+    index: "7 / 7"
+  })), /*#__PURE__*/React.createElement(Phone, {
+    cap: "Paseo de granjero",
+    sub: "peso + distancia"
+  }, /*#__PURE__*/React.createElement(SessionTypedScreen, {
+    exKey: "granjero",
+    index: "4 / 7"
+  })), /*#__PURE__*/React.createElement(Phone, {
+    cap: "Esfuerzo vs descanso",
+    sub: "IsoTimer \xB7 RestRing"
+  }, /*#__PURE__*/React.createElement(TimerCompareScreen, null)))), /*#__PURE__*/React.createElement("div", {
+    className: "sec"
+  }, /*#__PURE__*/React.createElement("h2", null, "Historial"), /*#__PURE__*/React.createElement("p", null, "Cada ejercicio conserva sus propias columnas. El volumen en kg suma solo fuerza (peso \xD7 reps); ver casos abiertos en la gu\xEDa."), /*#__PURE__*/React.createElement("div", {
+    className: "row"
+  }, /*#__PURE__*/React.createElement(Phone, {
+    cap: "Detalle de sesi\xF3n",
+    sub: "tipos mezclados"
+  }, /*#__PURE__*/React.createElement(HistoryDetailScreen, null)))));
+}
+window.__frenciaLogReady.then(() => ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(Page, null)));
+});
+</script>
+</body>
+</html>

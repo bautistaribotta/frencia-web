@@ -1,0 +1,138 @@
+<!-- @dsCard group="Colors" width=1440 height=1040 page subtitle="Lume en los dos temas: un solo color para la acción y lo que está en curso, el esfuerzo en tinta, vidrio sobre luces fijas" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Frencia · Paleta</title>
+<style>
+html,body{margin:0}
+body{background:var(--stage-bg);font-family:var(--font-sans);padding:32px;display:flex;gap:24px;align-items:stretch;min-height:100vh;box-sizing:border-box;font-variant-numeric:tabular-nums}
+.pane{position:relative;overflow:hidden;flex:1;border-radius:var(--radius-3xl);padding:36px;box-sizing:border-box;display:flex;flex-direction:column;gap:28px;color:var(--text-primary);border:1px solid var(--glass-line);
+  background:
+    radial-gradient(48% 40% at 96% 0%,color-mix(in srgb,var(--glow-a) 34%,transparent),transparent 72%),
+    radial-gradient(70% 60% at 0% 78%,color-mix(in srgb,var(--glow-b) 80%,transparent),transparent 72%),
+    radial-gradient(40% 30% at 100% 100%,color-mix(in srgb,var(--glow-c) 18%,transparent),transparent 70%),
+    var(--bg-app)}
+.cap{font:var(--text-label);font-variation-settings:var(--vs-semi);letter-spacing:var(--ls-wider);text-transform:uppercase;color:var(--text-tertiary)}
+h2{margin:6px 0 0;font:var(--fw-medium) 34px/1.05 var(--font-sans);letter-spacing:-0.03em}
+.roles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.role{display:flex;flex-direction:column;gap:9px}
+.chip{height:92px;border-radius:var(--radius-lg);display:flex;align-items:flex-end;padding:12px;box-sizing:border-box;font:var(--fw-semibold) 13px/1 var(--font-sans)}
+.role b{font:var(--fw-semibold) 14px/1.2 var(--font-sans)}
+.role span{font:var(--fw-regular) 12.5px/1.45 var(--font-sans);color:var(--text-secondary)}
+.role code{font:var(--text-meta);color:var(--text-tertiary)}
+.vidrios{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.vid{height:76px;border-radius:var(--radius-lg);border:1px solid var(--glass-line);box-shadow:var(--shadow-glass);-webkit-backdrop-filter:var(--glass-filter);backdrop-filter:var(--glass-filter);display:flex;align-items:flex-end;padding:10px;box-sizing:border-box;font:var(--text-meta);color:var(--text-secondary)}
+.luces{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.luz{height:64px;border-radius:var(--radius-lg);border:1px solid var(--glass-line);display:flex;align-items:flex-end;padding:10px;box-sizing:border-box;font:var(--text-meta);color:var(--text-secondary)}
+.ladder{display:flex;border-radius:var(--radius-md);overflow:hidden;border:1px solid var(--glass-line)}
+.ladder i{flex:1;height:44px;display:block}
+.ladder-l{display:flex;justify-content:space-between;font:var(--text-meta);color:var(--text-tertiary)}
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:10px 24px;margin:0;padding:0;list-style:none}
+.rules li{font:var(--fw-regular) 13px/1.5 var(--font-sans);color:var(--text-secondary);padding-top:10px;border-top:1px solid var(--glass-line)}
+.rules b{color:var(--text-primary);font-weight:var(--fw-semibold)}
+.demo{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn{height:46px;padding:0 20px;border-radius:var(--radius-lg);display:inline-flex;align-items:center;gap:8px;font:var(--fw-semibold) 15px var(--font-sans)}
+.pill{height:24px;padding:0 9px;border-radius:var(--radius-pill);display:inline-flex;align-items:center;gap:5px;font:var(--fw-semibold) 10.5px var(--font-sans);font-variation-settings:var(--vs-semi);letter-spacing:var(--ls-wider);text-transform:uppercase;border:1px solid}
+.tick{display:flex;gap:3px;width:160px}
+.tick i{flex:1;height:3px;border-radius:2px;background:var(--data-track)}
+.ico{width:12px;height:12px}
+.col{display:flex;flex-direction:column;gap:8px}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><symbol id="flama" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></symbol></svg>
+
+<section class="pane" data-theme="dark">
+  <div><span class="cap">Tema oscuro · Lume oscuro</span><h2>Lume sobre grafito</h2></div>
+  <div class="roles">
+    <div class="role"><div class="chip" style="background:var(--accent);color:var(--text-on-accent);box-shadow:var(--halo-accent)">accent · signal</div><b>Lume</b><span>El único color. La acción principal y lo que está en curso, en foco o corriendo.</span><code>lume-500 #C9E25F</code></div>
+    <div class="role"><div class="chip" style="background:var(--intensity);color:var(--text-on-intensity)">intensity</div><b>Tinta</b><span>El esfuerzo no tiene color: RIR, RPE y PR van en tinta, semibold y con la llama.</span><code>graphite-100</code></div>
+    <div class="role"><div class="chip" style="background:var(--graphite-850);color:var(--text-secondary);border:1px solid var(--glass-line)">bg-app</div><b>Grafito</b><span>La base, casi negra. Nunca se ve plana: siempre hay luces detrás.</span><code>graphite-900 #08090A</code></div>
+    <div class="role"><div class="chip" style="background:var(--danger);color:var(--ivory-0)">danger</div><b>Carmín</b><span>Solo lo que borra o pone en riesgo la cuenta.</span><code>crimson-500</code></div>
+  </div>
+  <div class="col">
+    <span class="cap">Luces del fondo · fijas por pantalla</span>
+    <div class="luces">
+      <div class="luz" style="background:radial-gradient(circle at 82% 20%,var(--glow-a),transparent 70%)">glow-a · lume</div>
+      <div class="luz" style="background:radial-gradient(circle at 30% 30%,var(--glow-b),transparent 80%)">glow-b · bosque</div>
+      <div class="luz" style="background:radial-gradient(circle at 30% 30%,color-mix(in srgb,var(--glow-c) 60%,transparent),transparent 75%)">glow-c · acero tenue</div>
+    </div>
+  </div>
+  <div class="col">
+    <span class="cap">Vidrio · de lo hundido a lo denso</span>
+    <div class="vidrios">
+      <div class="vid" style="background:var(--surface-inset);box-shadow:none">inset</div>
+      <div class="vid" style="background:var(--surface-chip)">chip 8 %</div>
+      <div class="vid" style="background:var(--surface-card)">card ahumado 42 %</div>
+      <div class="vid" style="background:var(--surface-card-elevated)">elevated 55 %</div>
+      <div class="vid" style="background:var(--surface-raised);-webkit-backdrop-filter:var(--sheet-filter);backdrop-filter:var(--sheet-filter)">raised 82 %</div>
+    </div>
+  </div>
+  <div class="col">
+    <span class="cap">Texto</span>
+    <div class="ladder"><i style="background:var(--graphite-100)"></i><i style="background:var(--graphite-300)"></i><i style="background:var(--graphite-400)"></i><i style="background:var(--graphite-500)"></i></div>
+    <div class="ladder-l"><span>primary</span><span>secondary</span><span>tertiary · ≥4.5:1 fuera de la luz</span><span>disabled</span></div>
+  </div>
+  <div class="demo">
+    <span class="btn" style="background:var(--accent);color:var(--text-on-accent);box-shadow:var(--halo-accent)">Registrar serie</span>
+    <span class="btn" style="background:var(--surface-card);border:1px solid var(--glass-line);box-shadow:var(--shadow-glass)">Editar</span>
+    <span class="pill" style="color:var(--signal-text);border-color:var(--surface-signal-line);background:var(--surface-signal-soft)">En curso</span>
+    <span class="pill" style="color:var(--intensity-text);border-color:var(--surface-intensity-line);background:var(--surface-intensity-soft)"><svg class="ico"><use href="#flama"/></svg>RIR 2</span>
+    <span class="tick"><i style="background:var(--text-primary)"></i><i style="background:var(--text-primary)"></i><i style="background:var(--signal);box-shadow:var(--halo-signal)"></i><i></i><i></i></span>
+  </div>
+  <ul class="rules">
+    <li><b>Un solo color.</b> Si dos cosas están en lume y ninguna es la acción, una de las dos no está en curso.</li>
+    <li><b>El esfuerzo es tinta.</b> Se distingue por peso y por la llama, no por color.</li>
+    <li><b>Lo hecho es tinta.</b> Series hechas, pasos cumplidos: lo hecho ya no está en curso.</li>
+    <li><b>Lejos de la luz.</b> En oscuro, texto chico donde la luz no pase del 15 %; números grandes y el botón, hasta 30 %.</li>
+  </ul>
+</section>
+
+<section class="pane" data-theme="light">
+  <div><span class="cap">Tema claro · Lume claro</span><h2>Tinta sobre marfil</h2></div>
+  <div class="roles">
+    <div class="role"><div class="chip" style="background:var(--accent);color:var(--text-on-accent);box-shadow:var(--halo-accent)">accent</div><b>Tinta</b><span>Sobre marfil, el lume no sostiene contraste: la acción es tinta casi negra.</span><code>ivory-900 #141511</code></div>
+    <div class="role"><div class="chip" style="background:var(--signal);color:var(--text-on-signal)">signal</div><b>Oliva</b><span>El lume llevado a 5:1 sobre papel. Lo que está en curso o en foco.</span><code>lume-800 #4F6A0A</code></div>
+    <div class="role"><div class="chip" style="background:var(--ivory-100);color:var(--text-secondary);border:1px solid var(--glass-line)">bg-app</div><b>Marfil</b><span>La base. Las luces son lume pálido y blanco; nunca tapan texto.</span><code>ivory-100 #EEF0E6</code></div>
+    <div class="role"><div class="chip" style="background:var(--danger);color:var(--ivory-0)">danger</div><b>Carmín</b><span>Relleno solo al deslizar; si no, delineado.</span><code>crimson-600</code></div>
+  </div>
+  <div class="col">
+    <span class="cap">Luces del fondo · fijas por pantalla</span>
+    <div class="luces">
+      <div class="luz" style="background:radial-gradient(circle at 82% 20%,var(--glow-a),transparent 70%)">glow-a · lume pálido</div>
+      <div class="luz" style="background:radial-gradient(circle at 30% 30%,var(--glow-b),transparent 80%)">glow-b · blanco</div>
+      <div class="luz" style="background:radial-gradient(circle at 30% 30%,color-mix(in srgb,var(--glow-c) 60%,transparent),transparent 75%)">glow-c · acero tenue</div>
+    </div>
+  </div>
+  <div class="col">
+    <span class="cap">Vidrio · de lo hundido a lo denso</span>
+    <div class="vidrios">
+      <div class="vid" style="background:var(--surface-inset);box-shadow:none">inset</div>
+      <div class="vid" style="background:var(--surface-chip)">chip</div>
+      <div class="vid" style="background:var(--surface-card)">card 55 %</div>
+      <div class="vid" style="background:var(--surface-card-elevated)">elevated 78 %</div>
+      <div class="vid" style="background:var(--surface-raised);-webkit-backdrop-filter:var(--sheet-filter);backdrop-filter:var(--sheet-filter)">raised 86 %</div>
+    </div>
+  </div>
+  <div class="col">
+    <span class="cap">Texto</span>
+    <div class="ladder"><i style="background:var(--ivory-900)"></i><i style="background:var(--ivory-700)"></i><i style="background:var(--ivory-600)"></i><i style="background:var(--ivory-500)"></i></div>
+    <div class="ladder-l"><span>primary</span><span>secondary</span><span>tertiary · pasa en todo el fondo</span><span>disabled</span></div>
+  </div>
+  <div class="demo">
+    <span class="btn" style="background:var(--accent);color:var(--text-on-accent);box-shadow:var(--halo-accent)">Registrar serie</span>
+    <span class="btn" style="background:var(--surface-card);border:1px solid var(--glass-line);box-shadow:var(--shadow-glass)">Editar</span>
+    <span class="pill" style="color:var(--signal-text);border-color:var(--surface-signal-line);background:var(--surface-signal-soft)">En curso</span>
+    <span class="pill" style="color:var(--intensity-text);border-color:var(--surface-intensity-line);background:var(--surface-intensity-soft)"><svg class="ico"><use href="#flama"/></svg>RIR 2</span>
+    <span class="tick"><i style="background:var(--text-primary)"></i><i style="background:var(--text-primary)"></i><i style="background:var(--signal);box-shadow:var(--halo-signal)"></i><i></i><i></i></span>
+  </div>
+  <ul class="rules">
+    <li><b>Mismo rol, otro tono.</b> La acción pasa a tinta y lo en curso a oliva: el lume puro no se usa sobre marfil.</li>
+    <li><b>Vidrio más blanco.</b> Las tarjetas suben a 55 % de blanco; se separan por brillo, no por sombra.</li>
+    <li><b>Las luces no se mueven.</b> Salvo en el onboarding, cada pantalla tiene su posición fija.</li>
+    <li><b>Todo pasa.</b> En claro el texto cumple contraste en cualquier posición del fondo.</li>
+  </ul>
+</section>
+</body>
+</html>

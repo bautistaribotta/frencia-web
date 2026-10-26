@@ -1,0 +1,102 @@
+/* ============================================================
+   FRENCIA · Hoja de los componentes
+   Lo que tokens.json no declara: los roles de texto compuestos
+   (--text-*), el movimiento, la sombra que sigue formas recortadas
+   y los estilos base. Colores, espaciado, radios, sombras, escala
+   tipografica y las fuentes (fonts/) viven en tokens.json; tokens.css
+   lo genera la pagina.
+   ============================================================ */
+
+:root {
+  /* ---- Roles de texto (font shorthand) ----
+     Una sola familia, Instrument Sans, en tres anchos: condensado (78)
+     para los numeros grandes, semi (88) para rotulos y normal para el
+     resto. DM Mono solo en sellos tecnicos (--text-meta). */
+  --text-hero: var(--fw-medium) var(--fs-display-2xl)/var(--lh-tight) var(--font-display);
+  --text-display: var(--fw-medium) var(--fs-display-md)/1.08 var(--font-display);
+  --text-title: var(--fw-semibold) var(--fs-title-lg)/var(--lh-snug) var(--font-sans);
+  --text-subtitle: var(--fw-semibold) var(--fs-title-md)/var(--lh-heading) var(--font-sans);
+  --text-body: var(--fw-regular) var(--fs-body-lg)/var(--lh-body) var(--font-sans);
+  --text-body-sm: var(--fw-regular) var(--fs-body-md)/1.45 var(--font-sans);
+  --text-data: var(--fw-medium) 15px/1.2 var(--font-sans);
+  --text-label: var(--fw-semibold) var(--fs-label-md)/1.25 var(--font-sans);
+  --text-data-label: var(--text-label);
+  --text-meta: var(--fw-regular) var(--fs-label-md)/1.3 var(--font-mono);
+
+  /* Ancho de Instrument Sans como font-variation-settings */
+  --vs-condensed: "wdth" 78;  /* @kind other */
+  --vs-semi: "wdth" 88;       /* @kind other */
+  --vs-normal: "wdth" 100;    /* @kind other */
+
+  /* Sombra para formas recortadas (ticket con muescas): drop-shadow
+     sigue el contorno. Equivale a --shadow-lg. */
+  --drop-shadow-lg: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.55));  /* @kind other */
+
+  /* ---- Movimiento: preciso, sin rebote ---- */
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);      /* @kind other */
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);   /* @kind other */
+  --ease-spring: cubic-bezier(0.25, 1, 0.5, 1);    /* @kind other */
+  --dur-fast: 110ms;  /* @kind other */
+  --dur-base: 180ms;  /* @kind other */
+  --dur-slow: 280ms;  /* @kind other */
+  --press-scale: 0.985; /* @kind other */
+}
+
+:root[data-theme="light"], [data-theme="light"] {
+  --drop-shadow-lg: drop-shadow(0 1px 2px rgba(21, 20, 18, 0.06)) drop-shadow(0 10px 20px rgba(21, 20, 18, 0.10));  /* @kind other */
+}
+
+/* ---- Base ---- */
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg-app);
+  color: var(--text-primary);
+  font: var(--text-body);
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--signal);
+  color: var(--text-on-signal);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* Rotulo de datos: sans en mayusculas, tracking ancho */
+.frencia-label {
+  font: var(--text-label);
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+/* Numero de lectura: condensado, tabular */
+.frencia-num {
+  font-variation-settings: var(--vs-condensed);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--ls-display);
+}
+
+/* Sello tecnico en mono */
+.frencia-meta {
+  font: var(--text-meta);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 1ms !important; animation-duration: 1ms !important; }
+}

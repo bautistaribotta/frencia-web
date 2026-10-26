@@ -1,0 +1,52 @@
+{
+  "v": 3,
+  "assetGroups": {
+    "Brand": {
+      "name": "Brand",
+      "tile": "l",
+      "order": [],
+      "files": {}
+    },
+    "notes": {
+      "files": {},
+      "name": "notes",
+      "order": []
+    }
+  },
+  "blobs": {},
+  "createdOnFiles": {
+    "at": "2026-10-10T17:37:13.455Z",
+    "v": 1
+  },
+  "docs": {
+    "readme": "project/README.md",
+    "sections": [
+      "project/github.md",
+      "project/ui_kits/ios_app/README.md"
+    ]
+  },
+  "groups": [
+    "Brand",
+    "notes"
+  ],
+  "layout": "files",
+  "libraries": [
+    {
+      "name": "react",
+      "version": "18"
+    },
+    {
+      "name": "react-dom",
+      "version": "18"
+    }
+  ],
+  "namespace": "FrenciaDesignSystem_377129",
+  "sections": {},
+  "title": "Frencia",
+  "lastChange": {
+    "by": "Bautista Ribotta",
+    "at": "2026-10-26T17:00:00Z",
+    "via": "Claude (Cowork)",
+    "note": "Editar perfil (web): una sola columna con campos de texto comunes (nombre, apellido, fecha de nacimiento, altura y peso con su unidad) y sexo como selector"
+  }
+}
