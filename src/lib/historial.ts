@@ -1,7 +1,9 @@
 /* Historial: las sesiones terminadas, solo lectura. Las consultas son las de
    src/lib/history.ts y session-history.ts del repo mobile con lo que suma el
-   escritorio: la rutina de cada sesion, sus series y su tonelaje en la
-   tabla, el filtro por periodo y los totales del periodo arriba. */
+   escritorio: la rutina y la cantidad de series de cada sesion en la tabla,
+   y los totales de todo el historial arriba.
+   La lista no se filtra: la primera pagina trae los ultimos tres meses y
+   las siguientes, de a HISTORIAL_PAGINA hacia atras, hasta el principio. */
 
 import {
   COLUMNAS_TIPO,
@@ -14,13 +16,15 @@ import {
 import { supabase } from './supabase';
 import { esCursorValido, esUuid } from './validacion';
 
-export type Periodo = '30' | '90' | 'todo';
+/** Cuanto trae la primera pagina: los ultimos tres meses. */
+export const MESES_PRIMERA_PAGINA = 3;
+/** Tope de la primera pagina, por si alguien entrena varias veces por dia. */
+export const PRIMERA_PAGINA_MAX = 100;
 
-/** Desde cuando se cuenta el periodo, o null para todo el historial. */
-export function inicioPeriodo(periodo: Periodo, ahora = new Date()): string | null {
-  if (periodo === 'todo') return null;
+/** Desde cuando cuenta la primera pagina. */
+export function inicioPrimeraPagina(ahora = new Date()): string {
   const desde = new Date(ahora);
-  desde.setDate(desde.getDate() - Number(periodo));
+  desde.setMonth(desde.getMonth() - MESES_PRIMERA_PAGINA);
   return desde.toISOString();
 }
 
@@ -50,10 +54,13 @@ export interface SesionTerminada {
   startedAt: number;
   finishedAt: number;
   series: number;
-  tonelajeKg: number | null;
 }
 
 export const HISTORIAL_PAGINA = 20;
+
+// El menor UUID posible: un cursor en el corte de la primera pagina deja
+// afuera lo que termino justo en esa fecha, que ya entro en ella.
+const UUID_MINIMO = '00000000-0000-0000-0000-000000000000';
 
 export interface CursorHistorial {
   id: string;
@@ -69,35 +76,27 @@ export interface PaginaHistorial {
   proximaFecha: number | null;
 }
 
-/** Una pagina, sin OFFSET ni COUNT: el registro extra dice si quedan mas. */
-export async function cargarPaginaHistorial(
-  userId: string,
-  desde: string | null,
-  cursor: CursorHistorial | null,
-  signal?: AbortSignal,
-): Promise<PaginaHistorial> {
+const COLUMNAS_LISTA = 'id, started_at, finished_at, training_days(name, routines(name)), session_sets(count)';
+
+function consultaLista(userId: string, limite: number, signal?: AbortSignal) {
   const consulta = supabase
     .from('workout_sessions')
-    .select('id, started_at, finished_at, training_days(name, routines(name)), session_sets(weight_kg, reps)')
+    .select(COLUMNAS_LISTA)
     .eq('user_id', userId)
     .not('finished_at', 'is', null)
     .order('finished_at', { ascending: false })
     .order('id', { ascending: false })
-    .limit(HISTORIAL_PAGINA + 1);
-  if (desde) consulta.gte('finished_at', desde);
-  if (cursor) {
-    // Los valores se interpolan en sintaxis PostgREST; validar antes de usar.
-    if (!esCursorValido(cursor.id, cursor.finishedAt)) throw new Error('cursor invalido');
-    consulta
-      .lte('finished_at', cursor.finishedAt)
-      .or(`finished_at.lt.${cursor.finishedAt},and(finished_at.eq.${cursor.finishedAt},id.lt.${cursor.id})`);
-  }
+    .limit(limite + 1);
   if (signal) consulta.abortSignal(signal);
-  const { data, error } = await consulta;
-  if (error) throw error;
+  return consulta;
+}
 
-  const visibles = data.slice(0, HISTORIAL_PAGINA);
-  const extra = data[HISTORIAL_PAGINA];
+type FilaLista = NonNullable<Awaited<ReturnType<typeof consultaLista>>['data']>[number];
+
+/** Arma la pagina con el registro extra, que dice si quedan mas. */
+function aPagina(data: FilaLista[], limite: number): PaginaHistorial {
+  const visibles = data.slice(0, limite);
+  const extra = data[limite];
   const ultima = visibles[visibles.length - 1];
   return {
     sesiones: visibles.map((fila) => ({
@@ -106,12 +105,41 @@ export async function cargarPaginaHistorial(
       rutina: fila.training_days?.routines?.name ?? null,
       startedAt: Date.parse(fila.started_at),
       finishedAt: Date.parse(fila.finished_at as string),
-      series: fila.session_sets?.length ?? 0,
-      tonelajeKg: tonelajeKg(fila.session_sets ?? []),
+      series: fila.session_sets?.[0]?.count ?? 0,
     })),
     siguiente: extra && ultima ? { id: ultima.id, finishedAt: ultima.finished_at as string } : null,
     proximaFecha: extra ? Date.parse(extra.finished_at as string) : null,
   };
+}
+
+/** Una pagina, sin OFFSET ni COUNT: el registro extra dice si quedan mas.
+ *  Sin cursor es la primera: los ultimos tres meses (con tope). Si ahi no
+ *  hay nada, sigue con las anteriores para no mostrar un vacio que no es. */
+export async function cargarPaginaHistorial(
+  userId: string,
+  cursor: CursorHistorial | null,
+  signal?: AbortSignal,
+  ahora = new Date(),
+): Promise<PaginaHistorial> {
+  if (!cursor) {
+    const desde = inicioPrimeraPagina(ahora);
+    const { data, error } = await consultaLista(userId, PRIMERA_PAGINA_MAX, signal).gte('finished_at', desde);
+    if (error) throw error;
+    if (data.length === 0) return cargarPaginaHistorial(userId, { id: UUID_MINIMO, finishedAt: desde }, signal);
+    const pagina = aPagina(data, PRIMERA_PAGINA_MAX);
+    if (pagina.siguiente) return pagina;
+    // Entro todo el periodo: lo que sigue es lo anterior a esa fecha, si hay.
+    // El mes del corte puede tener mas sesiones, por eso no se da por completo.
+    return { ...pagina, siguiente: { id: UUID_MINIMO, finishedAt: desde }, proximaFecha: Date.parse(desde) };
+  }
+
+  // Los valores se interpolan en sintaxis PostgREST; validar antes de usar.
+  if (!esCursorValido(cursor.id, cursor.finishedAt)) throw new Error('cursor invalido');
+  const { data, error } = await consultaLista(userId, HISTORIAL_PAGINA, signal)
+    .lte('finished_at', cursor.finishedAt)
+    .or(`finished_at.lt.${cursor.finishedAt},and(finished_at.eq.${cursor.finishedAt},id.lt.${cursor.id})`);
+  if (error) throw error;
+  return aPagina(data, HISTORIAL_PAGINA);
 }
 
 export interface MesHistorial {
@@ -141,34 +169,30 @@ export function agruparPorMes(sesiones: SesionTerminada[], proximaFecha: number 
   return meses;
 }
 
-export interface TotalesPeriodo {
+export interface TotalesHistorial {
   sesiones: number;
   segundos: number;
-  tonelajeKg: number;
 }
 
 const TOTALES_PAGINA = 1000;
 
-/** Sesiones, tiempo y tonelaje del periodo. Pagina de a mil sesiones; las
- *  series van embebidas, que no cuentan para ese limite. */
-export async function cargarTotales(userId: string, desde: string | null): Promise<TotalesPeriodo> {
-  const totales: TotalesPeriodo = { sesiones: 0, segundos: 0, tonelajeKg: 0 };
+/** Sesiones y tiempo de todo el historial. Lee solo inicio y fin de cada
+ *  sesion, de a mil: sin series, cada pedido es liviano. */
+export async function cargarTotales(userId: string): Promise<TotalesHistorial> {
+  const totales: TotalesHistorial = { sesiones: 0, segundos: 0 };
   for (let pagina = 0; ; pagina += TOTALES_PAGINA) {
-    const consulta = supabase
+    const { data, error } = await supabase
       .from('workout_sessions')
-      .select('started_at, finished_at, session_sets(weight_kg, reps)')
+      .select('started_at, finished_at')
       .eq('user_id', userId)
       .not('finished_at', 'is', null)
       .order('finished_at', { ascending: false })
       .order('id', { ascending: false })
       .range(pagina, pagina + TOTALES_PAGINA - 1);
-    if (desde) consulta.gte('finished_at', desde);
-    const { data, error } = await consulta;
     if (error) throw error;
     for (const fila of data) {
       totales.sesiones += 1;
       totales.segundos += Math.max(0, (Date.parse(fila.finished_at as string) - Date.parse(fila.started_at)) / 1000);
-      totales.tonelajeKg += tonelajeKg(fila.session_sets ?? []) ?? 0;
     }
     if (data.length < TOTALES_PAGINA) return totales;
   }

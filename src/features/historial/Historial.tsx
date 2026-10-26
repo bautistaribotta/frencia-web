@@ -1,17 +1,17 @@
 /* Historial (/historial). Las sesiones se registran en el celular y se
-   revisan aca: los totales del periodo arriba y una tabla por mes, de la mas
-   nueva a la mas vieja (kit web, Web · 6). Se pagina sola al llegar al
-   final; el total de un mes aparece cuando ya no quedan paginas por traer.
+   revisan aca: sesiones y tiempo de todo el historial arriba y una tabla por
+   mes, de la mas nueva a la mas vieja (kit web, Web · 6). Sin filtro de
+   periodo: entra con los ultimos tres meses y, al llegar al final, trae de a
+   HISTORIAL_PAGINA mas viejas hasta el principio, como en la app. El total
+   de un mes aparece cuando ya no quedan paginas por traer.
    Toda la fila abre el detalle.
-   La racha se cuenta en entrenamientos seguidos segun la rutina en curso,
-   como en la app y en el inicio.
    Pendiente del diseño: el filtro por rutina (falta el selector) y el menu
    de cada fila (ticket y eliminar).
    Fondo: velada. */
 
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { ChevronRight, History, RotateCw } from 'lucide-react';
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router';
 
 import { useSesion } from '@/contexts/sesion';
@@ -21,24 +21,16 @@ import { Fondo } from '@/design/components/Fondo';
 import { Icono } from '@/design/components/Icono';
 import { Encabezado, Lista, Pagina } from '@/design/components/Pagina';
 import { Ruedita } from '@/design/components/Ruedita';
-import { Segmentado } from '@/design/components/Segmentado';
 import { Esqueleto, Tarjeta } from '@/design/components/varios';
 import texto from '@/design/texto.module.css';
-import { textoTonelaje } from '@/lib/estadisticas';
 import {
   agruparPorMes,
   cargarPaginaHistorial,
   cargarTotales,
-  inicioPeriodo,
   type MesHistorial,
-  type Periodo,
-  type TotalesPeriodo,
+  type TotalesHistorial,
 } from '@/lib/historial';
-import { cargarFechasEntrenadas, cargarRutinaActiva } from '@/lib/inicio';
 import { miles } from '@/lib/numeros';
-import { usePerfil } from '@/lib/perfil';
-import { mostrarPeso, type UnidadPeso } from '@/lib/peso';
-import { calcularRacha, fechaLocal } from '@/lib/streak';
 import { duracionSesion, indiceSemanaLunes, MESES_LARGO } from '@/lib/tiempo';
 import styles from './Historial.module.css';
 
@@ -54,24 +46,14 @@ function nombreMes(epochMs: number): string {
 export function Historial() {
   const { user } = useSesion();
   const userId = user?.id ?? '';
-  const [periodo, setPeriodo] = useState<Periodo>('90');
-  // El inicio del periodo se fija al elegirlo: si se recalculara en cada
-  // render cambiaria la clave de la consulta todo el tiempo.
-  const [desde, setDesde] = useState(() => inicioPeriodo('90'));
-  const unidadPeso = (usePerfil().data?.unidad_peso ?? 'kg') as UnidadPeso;
 
   const historial = useInfiniteQuery({
-    queryKey: ['historial', userId, periodo],
-    queryFn: ({ pageParam, signal }) => cargarPaginaHistorial(userId, desde, pageParam, signal),
-    initialPageParam: null as Parameters<typeof cargarPaginaHistorial>[2],
+    queryKey: ['historial', userId],
+    queryFn: ({ pageParam, signal }) => cargarPaginaHistorial(userId, pageParam, signal),
+    initialPageParam: null as Parameters<typeof cargarPaginaHistorial>[1],
     getNextPageParam: (ultima) => ultima.siguiente,
     enabled: !!userId,
   });
-
-  function cambiarPeriodo(nuevo: Periodo) {
-    setPeriodo(nuevo);
-    setDesde(inicioPeriodo(nuevo));
-  }
 
   const paginas = historial.data?.pages ?? [];
   const sesiones = paginas.flatMap((p) => p.sesiones);
@@ -82,12 +64,12 @@ export function Historial() {
   if (historial.isPending) contenido = <Cargando />;
   else if (historial.isError && sesiones.length === 0)
     contenido = <AvisoPie texto="No pudimos cargar tus entrenamientos." onReintentar={() => void historial.refetch()} />;
-  else if (sesiones.length === 0) contenido = <Vacio periodo={periodo} />;
+  else if (sesiones.length === 0 && !historial.hasNextPage) contenido = <Vacio />;
   else
     contenido = (
       <>
         {meses.map((mes) => (
-          <Mes key={mes.key} mes={mes} unidadPeso={unidadPeso} />
+          <Mes key={mes.key} mes={mes} />
         ))}
         {historial.hasNextPage ? (
           historial.isFetchNextPageError ? (
@@ -113,56 +95,26 @@ export function Historial() {
     <>
       <Fondo posicion="velada" />
       <Pagina>
-        <Encabezado
-          rotulo="Historial"
-          titulo="Lo que hiciste"
-          acciones={
-            <Segmentado
-              etiqueta="Período"
-              valor={periodo}
-              onChange={cambiarPeriodo}
-              opciones={[
-                { valor: '30', etiqueta: '30 días' },
-                { valor: '90', etiqueta: '3 meses' },
-                { valor: 'todo', etiqueta: 'Todo' },
-              ]}
-            />
-          }
-        />
-        <Totales userId={userId} periodo={periodo} desde={desde} unidadPeso={unidadPeso} />
+        <Encabezado rotulo="Historial" titulo="Lo que hiciste" />
+        <Totales userId={userId} />
         {contenido}
       </Pagina>
     </>
   );
 }
 
-/** Sesiones, tiempo y tonelaje del periodo, y la racha (que no depende del
- *  periodo). Las lecturas de la racha comparten cache con el inicio. */
-function Totales({ userId, periodo, desde, unidadPeso }: { userId: string; periodo: Periodo; desde: string | null; unidadPeso: UnidadPeso }) {
-  const totales = useQuery({ queryKey: ['historial-totales', userId, periodo], queryFn: () => cargarTotales(userId, desde), enabled: !!userId });
-  const rutina = useQuery({ queryKey: ['rutina-activa', userId], queryFn: () => cargarRutinaActiva(userId), enabled: !!userId });
-  const fechas = useQuery({ queryKey: ['fechas-entrenadas', userId], queryFn: () => cargarFechasEntrenadas(userId), enabled: !!userId });
-
-  const weekdays = rutina.data?.dias.flatMap((d) => d.weekdays) ?? [];
-  const racha = fechas.data && weekdays.length > 0 ? calcularRacha(weekdays, fechas.data, fechaLocal(new Date().getTime())).racha : rutina.data === null ? 0 : null;
-
+/** Sesiones y tiempo de todo el historial: no cambian al scrollear. */
+function Totales({ userId }: { userId: string }) {
+  const totales = useQuery({ queryKey: ['historial-totales', userId], queryFn: () => cargarTotales(userId), enabled: !!userId });
   return (
     <div className={styles.cuatro}>
       <Tarjeta>{valorTotal('Sesiones', totales.data, (t) => ({ valor: miles(t.sesiones) }))}</Tarjeta>
       <Tarjeta>{valorTotal('Tiempo total', totales.data, (t) => textoHoras(t.segundos))}</Tarjeta>
-      <Tarjeta>{valorTotal('Tonelaje', totales.data, (t) => textoTonelaje(t.tonelajeKg, unidadPeso))}</Tarjeta>
-      <Tarjeta>
-        {racha !== null ? (
-          <Metrica rotulo="Racha" valor={racha} unidad={racha === 1 ? 'entrenamiento' : 'entrenamientos'} />
-        ) : (
-          <Metrica rotulo="Racha" valor={<Esqueleto className={styles.esqValor} />} />
-        )}
-      </Tarjeta>
     </div>
   );
 }
 
-function valorTotal(rotulo: string, totales: TotalesPeriodo | undefined, formato: (t: TotalesPeriodo) => { valor: string; unidad?: string }) {
+function valorTotal(rotulo: string, totales: TotalesHistorial | undefined, formato: (t: TotalesHistorial) => { valor: string; unidad?: string }) {
   if (!totales) return <Metrica rotulo={rotulo} valor={<Esqueleto className={styles.esqValor} />} />;
   const { valor, unidad } = formato(totales);
   return <Metrica rotulo={rotulo} valor={valor} unidad={unidad} />;
@@ -174,7 +126,7 @@ function textoHoras(segundos: number): { valor: string; unidad: string } {
   return { valor: miles(Math.round(segundos / 3600)), unidad: 'h' };
 }
 
-function Mes({ mes, unidadPeso }: { mes: MesHistorial; unidadPeso: UnidadPeso }) {
+function Mes({ mes }: { mes: MesHistorial }) {
   const navegar = useNavigate();
   const n = mes.sesiones.length;
   return (
@@ -196,7 +148,6 @@ function Mes({ mes, unidadPeso }: { mes: MesHistorial; unidadPeso: UnidadPeso })
               <th>Rutina</th>
               <th className={tabla.num}>Duración</th>
               <th className={tabla.num}>Series</th>
-              <th className={tabla.num}>Tonelaje · {unidadPeso}</th>
               <th aria-label="Abrir" />
             </tr>
           </thead>
@@ -216,7 +167,6 @@ function Mes({ mes, unidadPeso }: { mes: MesHistorial; unidadPeso: UnidadPeso })
                   <td className={texto.secundario}>{s.rutina ?? '—'}</td>
                   <td className={tabla.num}>{duracionSesion(s.startedAt, s.finishedAt)}</td>
                   <td className={tabla.num}>{s.series}</td>
-                  <td className={tabla.num}>{s.tonelajeKg === null ? '—' : miles(mostrarPeso(s.tonelajeKg, unidadPeso))}</td>
                   <td className={tabla.acc}>
                     <Icono icono={ChevronRight} tamano={18} />
                   </td>
@@ -264,16 +214,13 @@ function AvisoPie({ texto: mensaje, onReintentar }: { texto: string; onReintenta
   );
 }
 
-function Vacio({ periodo }: { periodo: Periodo }) {
-  const todo = periodo === 'todo';
+function Vacio() {
   return (
     <div className={styles.vacio}>
       <Icono icono={History} tamano={28} className={texto.terciario} />
-      <span className={texto.subtitle}>{todo ? 'Todavía no hay sesiones' : 'No hay sesiones en este período'}</span>
+      <span className={texto.subtitle}>Todavía no hay sesiones</span>
       <span className={`${texto.bodySm} ${texto.secundario}`}>
-        {todo
-          ? 'Cuando termines tu primer entrenamiento en la app, va a aparecer acá con cada serie y el peso que levantaste.'
-          : 'Probá con un período más largo para ver entrenamientos anteriores.'}
+        Cuando termines tu primer entrenamiento en la app, va a aparecer acá con cada serie y el peso que levantaste.
       </span>
     </div>
   );

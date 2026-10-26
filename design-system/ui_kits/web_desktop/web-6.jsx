@@ -2,23 +2,23 @@
 
 const MESES = [
   ['Octubre', '9 sesiones', [
-    ['Jue 22', 'Push', 'Push Pull Legs', '58 min', '15', '6 390'],
-    ['Mié 21', 'Legs', 'Push Pull Legs', '1 h 12 min', '14', '8 120'],
-    ['Mar 20', 'Pull', 'Push Pull Legs', '49 min', '13', '5 040'],
-    ['Lun 19', 'Push', 'Push Pull Legs', '1 h 02 min', '15', '6 210'],
+    ['Jue 22', 'Push', 'Push Pull Legs', '58 min', '15'],
+    ['Mié 21', 'Legs', 'Push Pull Legs', '1 h 12 min', '14'],
+    ['Mar 20', 'Pull', 'Push Pull Legs', '49 min', '13'],
+    ['Lun 19', 'Push', 'Push Pull Legs', '1 h 02 min', '15'],
   ]],
   ['Septiembre', '14 sesiones', [
-    ['Mar 29', 'Pull', 'Push Pull Legs', '51 min', '13', '4 980'],
-    ['Lun 28', 'Push', 'Push Pull Legs', '55 min', '15', '6 050'],
+    ['Mar 29', 'Pull', 'Push Pull Legs', '51 min', '13'],
+    ['Lun 28', 'Push', 'Push Pull Legs', '55 min', '15'],
   ]],
 ];
 function Historial({ menu, error, filtro }) {
   return (
     <App activo="history" capa={menu === 'eliminar' ? <Modal chico titulo="Eliminar el entrenamiento del jueves 22" texto="Se borran sus 15 series. Tus mejores marcas se recalculan. No se puede deshacer." pie={<><Boton v="secondary" estado="foco">Cancelar</Boton><Boton v="danger" ico="trash-2">Eliminar</Boton></>} /> : null}>
       <Pagina>
-        <Encabezado rotulo="Historial" titulo="Lo que hiciste" acciones={<><Selector md ico="layers" valor={filtro ? 'Push Pull Legs' : 'Todas las rutinas'} /><Seg ops={[['30', '30 días'], ['90', '3 meses'], ['todo', 'Todo']]} sel="90" /></>} />
+        <Encabezado rotulo="Historial" titulo="Lo que hiciste" acciones={<Selector md ico="layers" valor={filtro ? 'Push Pull Legs' : 'Todas las rutinas'} />} />
         <div className="w-cuatro">
-          {[['Sesiones', '23', ''], ['Tiempo total', '21', 'h'], ['Tonelaje', '128.4', 't'], ['Racha', '12', 'entrenamientos']].map(([l, v, u]) => (
+          {[['Sesiones', '86', ''], ['Tiempo total', '79', 'h']].map(([l, v, u]) => (
             <div key={l} className="w-tarjeta w-metrica"><span className="t-label c-ter">{l}</span><span className="w-metrica__valor">{v}{u ? <small>{u}</small> : null}</span></div>
           ))}
         </div>
@@ -27,12 +27,12 @@ function Historial({ menu, error, filtro }) {
             <div className="row entre"><span className="t-subtitle">{m}</span>{error && mi === 1 ? null : <span className="t-label c-ter">{n}</span>}</div>
             <div className="w-lista w-lista--sin-recorte">
               <table className="w-tabla">
-                <thead><tr><th>Fecha</th><th>Día</th><th>Rutina</th><th className="num">Duración</th><th className="num">Series</th><th className="num">Tonelaje · kg</th><th></th></tr></thead>
-                <tbody>{filas.map(([f, d, r, dur, s, t], i) => {
+                <thead><tr><th>Fecha</th><th>Día</th><th>Rutina</th><th className="num">Duración</th><th className="num">Series</th><th></th></tr></thead>
+                <tbody>{filas.map(([f, d, r, dur, s], i) => {
                   const abierto = menu === 'menu' && mi === 0 && i === 0;
                   return (
                     <tr key={f} className={abierto || (mi === 0 && i === 1 && !menu) ? 'is-hover' : ''}>
-                      <td className="c-sec">{f}</td><td><span className="semi">{d}</span></td><td className="c-sec">{r}</td><td className="num">{dur}</td><td className="num">{s}</td><td className="num">{t}</td>
+                      <td className="c-sec">{f}</td><td><span className="semi">{d}</span></td><td className="c-sec">{r}</td><td className="num">{dur}</td><td className="num">{s}</td>
                       <td className="w-tabla__acc">
                         {abierto ? <BotonIco ico="ellipsis" t="sm" estado="foco" label="Más acciones" /> : <Ico n="chevron-right" s={18} c="c-ter" />}
                         {abierto ? <Menu className="w-menu--flota"><MenuItem ico="ticket" estado="hover">Ver ticket</MenuItem><MenuItem ico="download">Descargar ticket</MenuItem><MenuSep /><MenuItem ico="trash-2" dang kbd="Supr">Eliminar</MenuItem></Menu> : null}
@@ -121,7 +121,7 @@ function TicketGrande() {
 function AppWeb() {
   return (
     <Lienzo titulo="Historial" bajada="Las sesiones se registran en el celular y se revisan acá. La lista es una tabla agrupada por mes con totales arriba; el detalle pone las series en tablas y el ticket al costado. Fondo velada en lista y detalle (densas en datos); centro para el ticket solo.">
-      <Seccion titulo="Lista" nota="(main)/history — se pagina al llegar al final; el total del mes aparece cuando ya no quedan páginas por traer.">
+      <Seccion titulo="Lista" nota="(main)/history — sin filtro de período. Arriba, sesiones y tiempo total de todo el historial (no cambian al bajar); sin tonelaje ni racha. La lista entra con los últimos 3 meses y, al llegar al final, trae de a 20 sesiones más viejas hasta el principio; el total del mes aparece cuando ya no quedan páginas por traer.">
         <Mesa nombre="Lista con hover" nota="Toda la fila es el enlace; el chevron indica que abre el detalle." ruta="(main)/history" fondo="velada" url="frencia.app/historial"><Historial /></Mesa>
         <Mesa nombre="Menú de una fila" nota="Clic derecho o ⋯: ver o descargar el ticket y eliminar. En la app esto era deslizar." ruta="(main)/history" fondo="velada" url="frencia.app/historial"><Historial menu="menu" /></Mesa>
         <Mesa nombre="Error al cargar más" nota="Lo cargado queda; al pie, el aviso en vidrio con Reintentar. Sin carmín: es un error de lectura." ruta="(main)/history" fondo="velada" url="frencia.app/historial"><Historial error filtro /></Mesa>
