@@ -18,7 +18,7 @@ posición del fondo de luces debajo. El conmutador de arriba deja ver un solo te
 |---|---|
 | `Web - 1 Estructura.html` | Navegación lateral, riel en pantallas medianas, ancho mínimo, atajos |
 | `Web - 2 Componentes.html` | Todos los componentes con hover, foco, presionado, deshabilitado y carga; equivalentes de las piezas táctiles; reglas de iconos animados |
-| `Web - 3 Acceso y primer ingreso.html` | Login, registro, recuperar y nueva contraseña, términos y privacidad, setup del perfil |
+| `Web - 3 Acceso y primer ingreso.html` | Login, signup, recuperar y nueva contraseña, términos y privacidad, setup del perfil |
 | `Web - 4 Inicio y Rutinas.html` | Inicio, lista de rutinas, detalle, compartir, confirmaciones |
 | `Web - 5 Constructor de rutinas.html` | Catálogo + rutina, arrastre (levantar, hueco, inválido, quitar, teclado), panel de configuración, guardado |
 | `Web - 6 Historial.html` | Lista por mes, detalle de una sesión, ticket |
@@ -75,11 +75,11 @@ en un grabado de líneas como el de un billete: talla dulce que sigue la forma, 
 cruzado en las sombras y guilloché en las luces. Va enmarcada a la derecha del formulario
 con microtexto, número de serie y una cartela con la marca `FRENCIA.` (en lugar del lema).
 
-- El login lleva el billete a la izquierda y el formulario a la derecha; el registro, al revés.
+- El login lleva el billete a la izquierda y el formulario a la derecha; el signup, al revés.
 - La tarjeta del formulario, el texto legal y "¿No tenés cuenta?" / "¿Ya tenés cuenta?" van
   centrados en la columna del formulario.
-- Login y registro llevan Apple y Google debajo del botón principal, con el divisor "o
-  continuá con". En el registro crean la cuenta si no existe; el alta sigue por términos y
+- Login y signup llevan Apple y Google debajo del botón principal, con el divisor "o
+  continuá con". En el signup crean la cuenta si no existe; el alta sigue por términos y
   el setup del perfil, igual que con correo.
 - Arriba, en la esquina del lado del formulario, va el switch de tema (sol · interruptor ·
   luna; encendido = oscuro) en el lugar donde estaba la marca. Sin sesión la elección se

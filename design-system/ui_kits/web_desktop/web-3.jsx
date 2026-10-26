@@ -46,8 +46,28 @@ function Billete() {
 /* Switch de tema del acceso: sol, interruptor y luna. Encendido = oscuro.
    En la variante billete reemplaza a la marca arriba, del lado del formulario
    (la marca pasa a la cartela del billete). */
-function SwitchTema() {
+/* Propuestas para cambiar el tema en el acceso (forma):
+   - 'boton': un boton de icono en vidrio con el icono del tema actual (luna en
+     oscuro, sol en claro). Un clic alterna; el tooltip dice a que modo pasa.
+   - 'seg': segmentado chico de solo iconos, Sistema · Oscuro · Claro, el
+     mismo modelo que Configuracion (vuelve a seguir a la compu con Sistema).
+   Sin forma: el switch actual. */
+function SwitchTema({ forma, estado }) {
   const oscuro = React.useContext(TemaCtx) === 'dark';
+  if (forma === 'boton') {
+    return (
+      <div className="w-acceso__tema">
+        <BotonIco ico={oscuro ? 'moon' : 'sun'} v="surface" anima estado={estado} tip={oscuro ? 'Pasar a modo claro' : 'Pasar a modo oscuro'} tipLado="abajo" label={oscuro ? 'Pasar a modo claro' : 'Pasar a modo oscuro'} />
+      </div>
+    );
+  }
+  if (forma === 'seg') {
+    return (
+      <div className="w-acceso__tema">
+        <Seg ops={[['system', '', 'monitor'], ['dark', '', 'moon'], ['light', '', 'sun']]} sel={oscuro ? 'dark' : 'light'} estados={estado === 'hover' ? { system: 'hover' } : {}} />
+      </div>
+    );
+  }
   return (
     <div className="w-acceso__tema">
       <span className={oscuro ? 'c-ter' : 'c-pri'}><Ico n="sun" s={18} /></span>
@@ -57,16 +77,16 @@ function SwitchTema() {
   );
 }
 
-function Acceso({ children, lema = true, variante }) {
+function Acceso({ children, lema = true, variante, tema, temaEstado }) {
   if (variante === 'billete' || variante === 'billete-izq') {
-    // Registro: formulario a la izquierda y billete a la derecha.
+    // Signup: formulario a la izquierda y billete a la derecha.
     // Login ("al revés"): billete a la izquierda y formulario a la derecha.
     const izq = variante === 'billete-izq';
     const form = (
       <div className="w-acceso__izq">
-        <SwitchTema />
+        <SwitchTema forma={tema} estado={temaEstado} />
         <div className="w-acceso__form w-tarjeta">{children}</div>
-        <span className="t-bodysm c-ter">Al continuar, aceptás los <span className="c-acc semi">Términos y Condiciones</span> y la <span className="c-acc semi">Política de Privacidad</span>.</span>
+        <span className="t-bodysm c-ter">Al continuar, aceptás los <span className="c-acc semi">Términos y condiciones</span> y la <span className="c-acc semi">Política de privacidad</span>.</span>
       </div>
     );
     return (
@@ -80,7 +100,7 @@ function Acceso({ children, lema = true, variante }) {
       <div className="w-acceso__izq">
         <Marca />
         <div className="w-acceso__form w-tarjeta">{children}</div>
-        <span className="t-bodysm c-ter">Al continuar, aceptás los <span className="c-acc semi">Términos y Condiciones</span> y la <span className="c-acc semi">Política de Privacidad</span>.</span>
+        <span className="t-bodysm c-ter">Al continuar, aceptás los <span className="c-acc semi">Términos y condiciones</span> y la <span className="c-acc semi">Política de privacidad</span>.</span>
       </div>
       {lema ? (
         <div className="w-acceso__der">
@@ -92,23 +112,23 @@ function Acceso({ children, lema = true, variante }) {
   );
 }
 
-function Login({ email, pass, foco, error, enviando, variante }) {
+function Login({ email, pass, foco, error, enviando, variante, tema, temaEstado }) {
   const listo = email && pass;
   return (
-    <Acceso variante={variante}>
+    <Acceso variante={variante} tema={tema} temaEstado={temaEstado}>
       <div className="col g2"><span className="t-title">Entrá a tu cuenta</span><span className="t-bodysm c-sec">Seguí donde la dejaste.</span></div>
       <div className="col g4">
         <Campo flotante rotulo="Correo electrónico" ico="mail" valor={email} estado={foco === 'mail' ? 'foco' : enviando ? 'off' : undefined} />
         <Campo flotante rotulo="Contraseña" extra="¿La olvidaste?" ico="lock" valor={pass} estado={foco === 'pass' ? 'foco' : enviando ? 'off' : undefined} error={error} final={<BotonIco ico="eye" t="sm" label="Mostrar contraseña" />} />
       </div>
       <Boton t="lg" ancho icoDer={enviando ? undefined : 'arrow-right'} estado={enviando ? 'cargando' : listo ? (foco === 'pass' ? undefined : undefined) : 'off'}>{enviando ? 'Ingresando…' : 'Ingresar'}</Boton>
-      {foco === 'pass' ? <span className="row g2 t-bodysm c-ter"><Kbd>Enter</Kbd>para ingresar</span> : null}
+      {foco === 'pass' ? <span className="row centro g2 t-bodysm c-ter"><Kbd>Enter</Kbd>para ingresar</span> : null}
       <Sociales />
       <span className="t-bodysm c-sec w-acceso__pie">¿No tenés cuenta? <span className="c-acc semi">Creá una</span></span>
     </Acceso>
   );
 }
-function Registro({ caso, variante }) {
+function Signup({ caso, variante }) {
   return (
     <Acceso variante={variante}>
       <div className="col g2"><span className="t-title">Creá tu cuenta</span><span className="t-bodysm c-sec">Empezá a registrar cada serie desde hoy.</span></div>
@@ -171,7 +191,7 @@ function NuevaContrasena({ caso }) {
 
 /* Términos y privacidad: el gate antes de la app */
 function Consentimiento({ leidos = [] }) {
-  const docs = [['t', 'Términos y Condiciones'], ['p', 'Política de Privacidad']];
+  const docs = [['t', 'Términos y condiciones'], ['p', 'Política de privacidad']];
   const ambos = leidos.length === 2;
   return (
     <div className="w-centrada">
@@ -204,10 +224,10 @@ function DocumentoLegal() {
       <Consentimiento leidos={[]} />
       <div className="w-velo">
         <div className="w-modal w-modal--doc" role="dialog" aria-modal="true">
-          <div className="w-modal__cabeza"><div className="col g2 f1"><span className="t-title">Términos y Condiciones</span><span className="t-label c-ter">Última actualización · 30 de septiembre de 2026</span></div><BotonIco ico="x" label="Cerrar" /></div>
+          <div className="w-modal__cabeza"><div className="col g2 f1"><span className="t-title">Términos y condiciones</span><span className="t-label c-ter">Última actualización · 30 de septiembre de 2026</span></div><BotonIco ico="x" label="Cerrar" /></div>
           <div className="w-doc">
             <span className="t-subtitle">1. Aceptación</span>
-            <span className="t-body c-sec">Estos Términos y Condiciones regulan el uso de Frencia, en la app y en la web. Para usar Frencia tenés que aceptarlos de forma expresa, junto con la Política de Privacidad.</span>
+            <span className="t-body c-sec">Estos Términos y condiciones regulan el uso de Frencia, en la app y en la web. Para usar Frencia tenés que aceptarlos de forma expresa, junto con la Política de privacidad.</span>
             <span className="t-subtitle">3. Qué es Frencia</span>
             <span className="t-body c-sec">Frencia es una herramienta para registrar entrenamientos de fuerza, de cardio e isométricos. Te permite cargar y organizar tus rutinas, consultar tu historial, tu racha y tu progreso, y consultar un catálogo de ejercicios.</span>
             <span className="t-subtitle">4. Tu cuenta</span>
@@ -277,8 +297,8 @@ function AppWeb() {
   return (
     <Lienzo titulo="Acceso y primer ingreso" bajada="Sin sesión, la pantalla se parte: el formulario en vidrio a la izquierda y el lema grande sobre la luz a la derecha. Las luces derivan despacio en todo el onboarding (acceso, legales y setup), como en la app. Enter envía siempre el formulario.">
       <Seccion titulo="Iniciar sesión" nota="(auth)/login — fondo flanco: la luz entra por el borde derecho, detrás del lema; el texto chico queda en la columna oscura de la izquierda.">
-        <Mesa nombre="Login · vacío" nota="Ingresar queda deshabilitado hasta tener correo y contraseña." ruta="(auth)/login" fondo="flanco" animado url="frencia.app/login"><Login /></Mesa>
-        <Mesa nombre="Login · escribiendo" nota="El campo en foco toma el borde de lume con su halo. Debajo del botón se recuerda que Enter envía." ruta="(auth)/login" fondo="flanco" animado url="frencia.app/login"><Login email="bauti@correo.com" pass="••••••" foco="pass" /></Mesa>
+        <Mesa nombre="Login · vacío" nota="Ingresar queda deshabilitado hasta tener correo y contraseña. Términos y condiciones y Política de privacidad, abajo de la tarjeta, abren el documento en el modal de lectura sin salir del acceso." ruta="(auth)/login" fondo="flanco" animado url="frencia.app/login"><Login /></Mesa>
+        <Mesa nombre="Login · escribiendo" nota="El campo en foco toma el borde de lume con su halo. Debajo del botón, centrado, se recuerda que Enter envía." ruta="(auth)/login" fondo="flanco" animado url="frencia.app/login"><Login email="bauti@correo.com" pass="••••••" foco="pass" /></Mesa>
         <Mesa nombre="Login · credenciales inválidas" ruta="(auth)/login" fondo="flanco" animado url="frencia.app/login"><Login email="bauti@correo.com" pass="••••••••" error="Correo o contraseña incorrectos." /></Mesa>
         <Mesa nombre="Login · ingresando" nota="Los campos se bloquean y el botón muestra la ruedita sin cambiar de ancho." ruta="(auth)/login" fondo="flanco" animado url="frencia.app/login"><Login email="bauti@correo.com" pass="••••••••" enviando /></Mesa>
       </Seccion>
@@ -288,12 +308,17 @@ function AppWeb() {
       <Seccion titulo="Variante: billete grabado" nota="Propuesta. La foto pasa a un grabado de líneas como el de un billete (talla dulce con tramado cruzado en las sombras y guilloché en las luces) y va enmarcada a la derecha con microtexto, número de serie y una cartela con la marca FRENCIA. El switch de tema va arriba, del lado del formulario, donde antes estaba la marca. La tarjeta y los textos van centrados en su columna. En oscuro la línea es la luz (marfil sobre grafito); en claro, la sombra (tinta sobre marfil). Las placas pasan a lume como único color, igual que el tejado naranja de la referencia. Fondo cumbre: la luz queda detrás del billete y el formulario en la zona oscura.">
         <Mesa nombre="Login · billete a la izquierda" nota="Iniciar sesión espeja al registro: el billete pasa a la izquierda y el formulario a la derecha. Al ir de una pantalla a la otra, el billete y el formulario cruzan de lado con un fundido de 420 ms." ruta="(auth)/login · variante" fondo="cumbre" animado url="frencia.app/login"><Login email="bauti@correo.com" pass="••••••" foco="pass" variante="billete-izq" /></Mesa>
         <Mesa nombre="Login · billete, vacío" nota="Sin texto, cada rótulo está adentro de su campo." ruta="(auth)/login · variante" fondo="cumbre" animado url="frencia.app/login"><Login variante="billete-izq" /></Mesa>
-        <Mesa nombre="Registro · billete, vacío" nota="Al hacer clic en Nombre, el rótulo sube y aparece el cursor; los demás siguen con el rótulo adentro." ruta="(auth)/register · variante" fondo="cumbre" animado url="frencia.app/signup"><Registro caso="vacio" variante="billete" /></Mesa>
-        <Mesa nombre="Registro · billete a la derecha" nota="Crear cuenta: formulario a la izquierda y billete a la derecha. Debajo de Crear cuenta, Apple y Google, igual que en el login: si la cuenta no existe la crean, y después pasan por términos y el setup del perfil como el alta con correo." ruta="(auth)/register · variante" fondo="cumbre" animado url="frencia.app/signup"><Registro caso="distintas" variante="billete" /></Mesa>
+        <Mesa nombre="Signup · billete, vacío" nota="Al hacer clic en Nombre, el rótulo sube y aparece el cursor; los demás siguen con el rótulo adentro." ruta="/signup · variante" fondo="cumbre" animado url="frencia.app/signup"><Signup caso="vacio" variante="billete" /></Mesa>
+        <Mesa nombre="Signup · billete a la derecha" nota="Crear cuenta: formulario a la izquierda y billete a la derecha. Debajo de Crear cuenta, Apple y Google, igual que en el login: si la cuenta no existe la crean, y después pasan por términos y el setup del perfil como el alta con correo." ruta="/signup · variante" fondo="cumbre" animado url="frencia.app/signup"><Signup caso="distintas" variante="billete" /></Mesa>
       </Seccion>
-      <Seccion titulo="Registro" nota="(auth)/register — mismo esqueleto; nombre y apellido comparten fila.">
-        <Mesa nombre="Contraseñas distintas" ruta="(auth)/register" fondo="flanco" animado url="frencia.app/signup"><Registro caso="distintas" /></Mesa>
-        <Mesa nombre="Correo ya registrado" nota="Ofrece entrar o recuperar la contraseña en el mismo lugar." ruta="(auth)/register" fondo="flanco" animado url="frencia.app/signup"><Registro caso="tomado" /></Mesa>
+      <Seccion titulo="Cambiar el tema en el acceso (propuestas)" nota="Dos formas de reemplazar el switch de sol y luna, arriba del lado del formulario. Sin sesión la elección se guarda en el navegador; con sesión manda profiles.tema. Recomendada: A, el botón de icono, porque el acceso tiene una sola tarea y el cambio de tema es secundario; B suma Sistema para volver a seguir a la compu, igual que Configuración.">
+        <Mesa nombre="A · Botón de icono" nota="Un botón en vidrio con el icono del tema actual. Un clic alterna oscuro y claro y el icono anima al cambiar; el tooltip dice a qué modo pasa." ruta="(auth)/login · tema" fondo="cumbre" animado url="frencia.app/login"><Login variante="billete-izq" tema="boton" /></Mesa>
+        <Mesa nombre="A · Botón de icono, hover" nota="Con el puntero encima: el fondo sube a vidrio elevado y aparece el tooltip debajo." ruta="(auth)/login · tema" fondo="cumbre" animado url="frencia.app/login"><Login variante="billete-izq" tema="boton" temaEstado="hover" /></Mesa>
+        <Mesa nombre="B · Segmentado Sistema · Oscuro · Claro" nota="Tres opciones de solo icono, el mismo modelo que Configuración. Cada una lleva su nombre en el tooltip y en aria-label." ruta="(auth)/login · tema" fondo="cumbre" animado url="frencia.app/login"><Login variante="billete-izq" tema="seg" /></Mesa>
+      </Seccion>
+      <Seccion titulo="Signup" nota="/signup — mismo esqueleto; nombre y apellido comparten fila.">
+        <Mesa nombre="Contraseñas distintas" ruta="/signup" fondo="flanco" animado url="frencia.app/signup"><Signup caso="distintas" /></Mesa>
+        <Mesa nombre="Correo ya registrado" nota="Ofrece entrar o recuperar la contraseña en el mismo lugar." ruta="/signup" fondo="flanco" animado url="frencia.app/signup"><Signup caso="tomado" /></Mesa>
       </Seccion>
       <Seccion titulo="Recuperar y nueva contraseña" nota="(auth)/forgot-password y (auth)/reset-password — el enlace del correo abre la web en reset-password con el token de Supabase.">
         <Mesa nombre="Pedir el enlace" ruta="(auth)/forgot-password" fondo="flanco" animado url="frencia.app/recuperar"><Recuperar /></Mesa>

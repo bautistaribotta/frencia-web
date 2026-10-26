@@ -1,7 +1,7 @@
 # Copia del design system
 
 Copia de referencia del design system **Frencia 2.0 (Lume)** de Claude Design
-(https://claude.ai/artifact/UUp4wXWL7CrPVELCR42nEX), tomada el 25 de octubre de 2026 (version 55: Apple y Google tambien en el registro, que pasa a /signup).
+(https://claude.ai/artifact/UUp4wXWL7CrPVELCR42nEX), tomada el 25 de octubre de 2026 (version 58: legales del acceso en minuscula y en el modal de lectura, dos propuestas para cambiar el tema en el acceso y el registro como Signup).
 La fuente de verdad sigue siendo Claude Design: esta carpeta es un respaldo para
 consultar sin conexion y para ver que cambio entre una copia y la siguiente.
 

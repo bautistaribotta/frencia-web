@@ -194,6 +194,7 @@ section + section { margin-top: var(--space-11); }
   background: var(--surface-raised-opaco); border: 1px solid var(--glass-line); box-shadow: var(--shadow-md); font: var(--fw-medium) 12.5px/1 var(--font-sans); color: var(--text-primary); }
 .w-tooltip--der { left: calc(100% + 10px); top: 50%; transform: translateY(-50%); }
 .w-tooltip--arriba { bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); }
+.w-tooltip--abajo { top: calc(100% + 8px); right: 0; }
 .w-kbd { display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 6px; background: var(--surface-inset); border: 1px solid var(--border-default); border-bottom-width: 2px;
   font: var(--fw-medium) 11px/1 var(--font-mono); color: var(--text-secondary); }
 
