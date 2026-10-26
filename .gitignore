@@ -13,8 +13,10 @@ dist/
 # Cloudflare
 .wrangler/
 
-# Playwright: capturas y resultados de cada corrida
-capturas/
+# Playwright: capturas y resultados de cada corrida. La carpeta capturas/
+# queda en el repo (vacia) para que las capturas esten siempre ahi.
+capturas/*
+!capturas/.gitkeep
 e2e/resultados/
 playwright-report/
 

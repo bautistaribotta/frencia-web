@@ -35,8 +35,12 @@ export const PERFIL: Perfil = {
 };
 
 /** Entra con una sesion falsa y responde los pedidos a Supabase: el perfil
- *  con `perfil` (tras `demoraPerfil` ms) y cualquier otra tabla vacia. */
-export async function conSesion(page: Page, { perfil = PERFIL, demoraPerfil = 0 }: { perfil?: Perfil; demoraPerfil?: number } = {}) {
+ *  con `perfil` (tras `demoraPerfil` ms), cada tabla de `tablas` con lo que
+ *  traiga y cualquier otra, vacia. */
+export async function conSesion(
+  page: Page,
+  { perfil = PERFIL, demoraPerfil = 0, tablas = {} }: { perfil?: Perfil; demoraPerfil?: number; tablas?: Record<string, unknown> } = {},
+) {
   await page.addInitScript(
     ([clave, usuario]) => {
       const ahora = Math.floor(Date.now() / 1000);
@@ -60,7 +64,8 @@ export async function conSesion(page: Page, { perfil = PERFIL, demoraPerfil = 0 
       if (demoraPerfil) await new Promise((listo) => setTimeout(listo, demoraPerfil));
       return ruta.fulfill({ json: perfil });
     }
-    return ruta.fulfill({ json: [] });
+    const tabla = new URL(ruta.request().url()).pathname.split('/').pop() ?? '';
+    return ruta.fulfill({ json: tablas[tabla] ?? [] });
   });
   // Ni auth ni storage salen a la red.
   await page.route('**/auth/v1/**', (ruta) => ruta.fulfill({ json: {} }));
