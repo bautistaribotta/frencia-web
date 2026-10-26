@@ -26,14 +26,25 @@ revisar lo hecho.
 
 ## Design system
 
-- **Siempre**, antes de una tarea que modifique el front, revisar el design
-  system "Frencia 2.0" (Lume) en Claude Design. Es la fuente de verdad.
+- La fuente de verdad del diseño es el design system "Frencia 2.0" (Lume) de
+  Claude Design. `design-system/` tiene su copia local. **Siempre**, antes de
+  diseñar o modificar cualquier pantalla o componente, revisá:
+  - `design-system/ui_kits/web_desktop/README.md` (estructura, estados, reglas)
+  - `design-system/ui_kits/web_desktop/web.css` y `web-base.jsx` (componentes de referencia)
+  - la página del kit que corresponda (`Web - N ….html` y su `web-N.jsx`)
+  - `design-system/README.md` (marca: voz, color, vidrio, fondo de luces)
 - Si el codigo y el design system difieren, manda el design system; si el
   design system no cubre el caso, avisar antes de inventar.
-- Los tokens viven en `src/design/tokens/` como custom properties. Los dos
-  temas (oscuro y claro) comparten las mismas claves; el tema sobreescribe
-  colores, sombras y la ganancia de las luces del fondo.
-- No hardcodear colores en componentes: siempre `var(--token)`.
+- Usá los tokens: viven en `src/design/tokens/` como custom properties (copia
+  de `design-system/ui_kits/web_desktop/tokens.web.css`). No inventes colores,
+  radios, espaciados ni tipografías: si falta algo, proponelo como token nuevo.
+  Nada de colores hardcodeados en componentes: siempre `var(--token)`.
+- CSS Modules + custom properties (ver "Codigo y estilos": oklch y sin estilos
+  en linea).
+- Cada pantalla tiene que funcionar en tema oscuro y claro, con la posición del
+  fondo de luces que indica el README del kit. Los dos temas comparten las
+  mismas claves; el tema sobreescribe colores, sombras y la ganancia de las
+  luces del fondo.
 - Iconos animados (`@animateicons/react/lucide`): animan al aparecer y en el
   hover o foco del control. Excepcion: la cruz de cerrar (`X`) y cualquier
   control que cierre (modales, avisos, paneles, borrar una busqueda) van
@@ -47,6 +58,12 @@ revisar lo hecho.
   anima una vez cada vez que se muestra. Los iconos de los botones (Ingresar,
   Crear cuenta, etc.) siguen animando. Se resuelve en `Campo`, que envuelve la
   caja con `IconosQuietos` y le pasa el error al icono como `disparo`.
+- Al terminar un cambio visual, verificalo con Playwright:
+  1. Levantá el proyecto y abrí la ruta.
+  2. Sacá capturas a 1440×900 en oscuro y en claro (y a 390×844 si la pantalla es pública).
+  3. Comparalas con la pantalla equivalente del kit y corregí las diferencias
+     antes de dar el cambio por terminado.
+  4. Revisá también hover, foco de teclado y estados vacío, error y carga.
 
 ## Codigo y estilos
 
