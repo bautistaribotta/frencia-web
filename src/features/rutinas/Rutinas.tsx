@@ -1,4 +1,4 @@
-/* Rutinas (/rutinas). Lista los planes: la en curso arriba, con el filo de
+/* Rutinas (/rutinas). Lista los planes: la en curso arriba, con un borde fino de
    lume, y las anteriores en una tabla ordenable (kit web, Web · 4).
    Por ahora solo se mira: Nueva rutina y el menu de cada fila (poner en
    curso, editar, duplicar, compartir, eliminar) quedan a la vista pero

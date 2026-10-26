@@ -313,7 +313,7 @@ section + section { margin-top: var(--space-11); }
 .w-tarjeta { position: relative; padding: var(--pad-card); border-radius: var(--radius-xl);
   background: var(--surface-card); border: 1px solid var(--glass-line); box-shadow: var(--shadow-glass); -webkit-backdrop-filter: var(--glass-filter); backdrop-filter: var(--glass-filter); }
 .w-tarjeta--elevada { background: var(--surface-card-elevated); }
-.w-tarjeta--activa { background: var(--surface-card-elevated); border-color: var(--surface-signal-line); box-shadow: var(--shadow-glass), inset 3px 0 0 var(--signal); }
+.w-tarjeta--activa { background: var(--surface-card-elevated); border-color: var(--surface-signal-line); box-shadow: var(--shadow-glass); }
 .w-tarjeta--link { cursor: pointer; transition: background var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out); }
 .w-tarjeta--link:hover, .w-tarjeta--link.is-hover { background: var(--surface-card-elevated); border-color: var(--border-default); }
 .w-tarjeta--link.is-foco { outline: var(--foco-w) solid var(--focus-ring); outline-offset: var(--foco-offset); }

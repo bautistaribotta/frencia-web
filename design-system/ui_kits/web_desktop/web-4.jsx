@@ -205,7 +205,7 @@ function AppWeb() {
         <Mesa nombre="Cuenta nueva" ruta="(main)/home" url="frencia.app"><InicioVacio /></Mesa>
         <Mesa nombre="Primera carga" nota="Esqueletos con la forma del contenido; la navegación ya está lista." ruta="(main)/home · cargando" url="frencia.app"><InicioCargando /></Mesa>
       </Seccion>
-      <Seccion titulo="Rutinas" nota="(main)/routines — la en curso lleva el filo de lume; las anteriores son una tabla ordenable. Lo que en la app se hace deslizando, acá va en el menú ⋯ de cada fila.">
+      <Seccion titulo="Rutinas" nota="(main)/routines — la en curso lleva un borde fino de lume, parejo en todo el contorno; las anteriores son una tabla ordenable. Lo que en la app se hace deslizando, acá va en el menú ⋯ de cada fila.">
         <Mesa nombre="Lista con menú de una fila" nota="El menú se abre con clic, con el botón ⋯ o con clic derecho sobre la fila. Supr elimina la fila enfocada (pide confirmar)." ruta="(main)/routines" url="frencia.app/rutinas"><Rutinas menu /></Mesa>
         <Mesa nombre="Sin rutinas" ruta="(main)/routines" url="frencia.app/rutinas"><RutinasVacia /></Mesa>
       </Seccion>
