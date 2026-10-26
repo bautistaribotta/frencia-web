@@ -17,3 +17,16 @@ reconocible y la licencia no incluye una autorización de modelo; para una pieza
 
 Se usa en: `Web - 3 Acceso y primer ingreso.html` → "Variante: billete grabado"
 (login con el billete a la izquierda, registro con el billete a la derecha).
+
+## storyset-gym.svg
+
+Ilustración animada usada en las páginas de error (`Web - 9 Errores.html`).
+
+- **Ilustración:** "Gym", estilo Bro
+- **Autor:** Storyset (Freepik)
+- **Fuente:** https://storyset.com/illustration/gym/bro
+- **Licencia:** Licencia de Freepik / Storyset. Gratis para uso personal y comercial, se puede modificar, **con atribución obligatoria** en la versión gratuita. Con una suscripción premium (Freepik / Flaticon) la atribución deja de ser necesaria.
+- **Atribución que pide Storyset:** `<a href="https://storyset.com/sport">Sport illustrations by Storyset</a>`, visible en la página donde se usa. En las pantallas va debajo de la ilustración.
+- **Cambios hechos:** colores pasados a variables del tema (`--ilu-*`), filtros del editor quitados, grupos agregados para el loop (trote, plancha, nubes). La animación de entrada es la exportada por Storyset ("Animate it!", SVG + CSS).
+- **Descargada:** 26 de octubre de 2026.
+- **No permitido:** usarla como logo o marca, o redistribuirla suelta como recurso.

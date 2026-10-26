@@ -717,3 +717,39 @@ section + section { margin-top: var(--space-11); }
 .w-acceso--billete-izq .w-acceso__izq { align-items: center; }
 .w-acceso--billete-izq .w-acceso__izq > .t-bodysm { text-align: center; }
 .w-acceso__pie { text-align: center; }
+
+/* ============================================================
+   PANTALLAS: errores (404, 500, sin conexión)
+   Ilustración "Gym" de Storyset (licencia Freepik, con atribución).
+   Sus colores son variables: siguen al tema.
+   ============================================================ */
+.w-ilu { margin: 0; display: flex; flex-direction: column; align-items: center; gap: var(--space-2); width: 100%; max-width: 560px;
+  --ilu-tinta: var(--text-primary); --ilu-papel: var(--bg-app); --ilu-gris: var(--text-tertiary);
+  --ilu-oscuro: var(--text-secondary); --ilu-medio: var(--text-secondary); --ilu-acento: var(--lume-500); }
+[data-theme="dark"] .w-ilu { --ilu-acento: color-mix(in oklch, var(--lume-500) 42%, transparent); }
+[data-theme="light"] .w-ilu { --ilu-acento: var(--lume-300); --ilu-papel: var(--ivory-0); }
+.w-ilu__arte { width: 100%; aspect-ratio: 3 / 2; }
+.w-ilu__arte svg { display: block; width: 100%; height: 100%; }
+.w-ilu--chica { max-width: 340px; }
+.w-ilu__credito { font: var(--fw-regular) 11px/1 var(--font-mono); letter-spacing: 0.04em; }
+.w-ilu__credito a { color: var(--text-tertiary); text-decoration: none; }
+.w-ilu__credito a:hover { color: var(--text-secondary); text-decoration: underline; }
+/* Loop propio, después de la entrada de Storyset (1 s) */
+.ilu-404 .ilu-trote, .ilu-404 .ilu-flexion, .ilu-404 .ilu-nubes { transform-box: fill-box; }
+.ilu-404 .ilu-trote { animation: ilu-trote 0.42s ease-in-out 1.1s infinite alternate; }
+.ilu-404 .ilu-flexion { animation: ilu-flexion 1.6s ease-in-out 1.2s infinite alternate; }
+.ilu-404 .ilu-nubes { animation: ilu-nubes 9s ease-in-out 1s infinite alternate; }
+@keyframes ilu-trote { to { transform: translateY(-3px); } }
+@keyframes ilu-flexion { to { transform: translateY(4px); } }
+@keyframes ilu-nubes { to { transform: translateX(14px); } }
+@media (prefers-reduced-motion: reduce) { .ilu-404, .ilu-404 * { animation: none !important; } }
+.w-error { position: relative; z-index: 1; flex: 1; min-height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-6); padding: var(--space-8) var(--space-9) var(--space-10); text-align: center; }
+.w-error__textos { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); max-width: 560px; }
+.w-error__sello { font: var(--text-meta); letter-spacing: var(--ls-wide); text-transform: uppercase; color: var(--signal-text); padding: 6px 10px; border-radius: var(--radius-sm); border: 1px solid var(--surface-signal-line); background: var(--surface-signal-soft); }
+.w-error__titulo { font-size: 40px; }
+.w-error__acciones { display: flex; gap: var(--space-3); flex-wrap: wrap; justify-content: center; }
+.w-error--movil { justify-content: flex-start; padding: var(--space-6) var(--pad-screen) var(--space-9); gap: var(--space-5); }
+.w-error--movil .w-error__titulo { font-size: 30px; }
+.w-error--movil .w-error__acciones { flex-direction: column; align-self: stretch; }
+.w-error--movil .w-error__acciones .w-btn { width: 100%; }
+.w-main > .w-error { min-height: 100%; }
