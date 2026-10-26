@@ -1,7 +1,11 @@
 /* Perfil (/perfil). En la web el perfil de la app se separa en dos: Perfil
    muestra quien sos; tema, unidades y esfuerzo pasan a Configuracion (kit
    web, Web · 7). Lo acumulado (sesiones, tiempo, tonelaje) vive en el
-   Historial. Se llega desde el usuario al pie de la navegacion.
+   Historial: aca no van metricas. Se llega desde el usuario al pie de la
+   navegacion.
+   Una sola columna, del ancho de Editar perfil: encabezado con el avatar,
+   Editar perfil, los datos, Configuracion (repetida a proposito con la
+   navegacion) y Cerrar sesion al fondo, en su propia tarjeta.
    Tocar el avatar abre el modal de la foto (ModalFoto) y Editar perfil lleva
    a /perfil/editar (EditarPerfil).
    Fondo: cumbre. */
@@ -17,8 +21,8 @@ import { Avatar } from '@/design/components/Avatar';
 import { Boton } from '@/design/components/Boton';
 import { Fondo } from '@/design/components/Fondo';
 import { Icono } from '@/design/components/Icono';
-import { claseFila, Encabezado, Fila, Lista, Pagina } from '@/design/components/Pagina';
-import { Tarjeta } from '@/design/components/varios';
+import { claseFila, Fila, Lista, Pagina } from '@/design/components/Pagina';
+import { Esqueleto } from '@/design/components/varios';
 import texto from '@/design/texto.module.css';
 import { mostrarAltura, type UnidadAltura } from '@/lib/altura';
 import { fechaNacimientoAEdad } from '@/lib/edad';
@@ -50,6 +54,8 @@ export function Perfil() {
   const [cambiandoFoto, setCambiandoFoto] = useState(false);
 
   const p = perfil.data;
+  // Mientras llega el perfil, esqueletos con la forma del contenido.
+  const cargando = perfil.isPending;
   const unidadPeso = (p?.unidad_peso ?? 'kg') as UnidadPeso;
   const desde = p ? new Date(p.created_at) : null;
 
@@ -71,63 +77,72 @@ export function Perfil() {
     <>
       <Fondo posicion="cumbre" />
       <Pagina>
-        <Encabezado
-          rotulo="Perfil"
-          titulo={completo}
-          acciones={
-            <Boton variante="secondary" icono={Pencil} onClick={() => navegar('/perfil/editar')}>
-              Editar perfil
-            </Boton>
-          }
-        />
-        <div className={styles.dos}>
-          <div className={styles.columna}>
-            <Tarjeta className={styles.usuario}>
-              <button
-                type="button"
-                className={styles.avatarEditar}
-                aria-label="Cambiar foto de perfil"
-                title="Cambiar foto de perfil"
-                onClick={() => setCambiandoFoto(true)}
-              >
-                <Avatar semilla={semilla} foto={foto.data} lado={96} className={styles.avatar} />
-                <span className={styles.camara}>
-                  <Icono icono={Camera} tamano={14} />
-                </span>
-              </button>
-              <div className={styles.usuarioTextos}>
-                <span className={texto.subtitle}>{completo}</span>
-                <span className={`${texto.bodySm} ${texto.secundario}`}>{user?.email}</span>
-                {desde ? (
-                  <span className={`${texto.label} ${texto.terciario}`}>
-                    Miembro desde {MESES_LARGO[desde.getMonth()].toLowerCase()} de {desde.getFullYear()}
-                  </span>
-                ) : null}
-              </div>
-            </Tarjeta>
-            <Lista>
-              {datos.map(([rotulo, valor]) => (
-                <Fila key={rotulo}>
-                  <span className={`${texto.bodySm} ${texto.secundario} ${styles.crece}`}>{rotulo}</span>
-                  <span className={`${texto.data} ${valor ? texto.primario : texto.terciario}`}>{valor ?? 'Sin cargar'}</span>
-                </Fila>
-              ))}
-            </Lista>
-          </div>
+        <div className={styles.columna}>
+          <header className={styles.encabezado}>
+            <button
+              type="button"
+              className={styles.avatarEditar}
+              aria-label="Cambiar foto de perfil"
+              title="Cambiar foto de perfil"
+              onClick={() => setCambiandoFoto(true)}
+            >
+              <Avatar semilla={semilla} foto={foto.data} lado={96} className={styles.avatar} />
+              <span className={styles.camara}>
+                <Icono icono={Camera} tamano={14} />
+              </span>
+            </button>
+            <div className={styles.textos}>
+              {cargando ? (
+                <>
+                  <Esqueleto className={styles.esqNombre} />
+                  <Esqueleto className={styles.esqLinea} />
+                  <Esqueleto className={styles.esqRotulo} />
+                </>
+              ) : (
+                <>
+                  <h1 className={`${texto.display} ${styles.nombre}`}>{completo}</h1>
+                  <span className={`${texto.bodySm} ${texto.secundario}`}>{user?.email}</span>
+                  {desde ? (
+                    <span className={`${texto.label} ${texto.terciario}`}>
+                      Miembro desde {MESES_LARGO[desde.getMonth()].toLowerCase()} de {desde.getFullYear()}
+                    </span>
+                  ) : null}
+                </>
+              )}
+            </div>
+          </header>
 
-          <div className={styles.columna}>
-            <Lista>
-              <Link to="/configuracion" className={claseFila(true)}>
-                <Icono icono={Settings} tamano={20} className={texto.secundario} />
-                <span className={`${texto.bodySm} ${texto.semi} ${styles.crece}`}>Configuración</span>
-                <Icono icono={ChevronRight} tamano={18} className={texto.terciario} />
-              </Link>
-              <button type="button" className={claseFila(true)} onClick={() => void cerrarSesion()}>
-                <Icono icono={LogOut} tamano={20} className={texto.peligro} />
-                <span className={`${texto.bodySm} ${texto.semi} ${texto.peligro} ${styles.crece}`}>Cerrar sesión</span>
-              </button>
-            </Lista>
-          </div>
+          <Boton variante="secondary" tamano="lg" ancho icono={Pencil} onClick={() => navegar('/perfil/editar')}>
+            Editar perfil
+          </Boton>
+
+          <Lista>
+            {datos.map(([rotulo, valor]) => (
+              <Fila key={rotulo}>
+                <span className={`${texto.bodySm} ${texto.secundario} ${styles.crece}`}>{rotulo}</span>
+                {cargando ? (
+                  <Esqueleto className={styles.esqValor} />
+                ) : (
+                  <span className={`${texto.data} ${valor ? texto.primario : texto.terciario}`}>{valor ?? 'Sin cargar'}</span>
+                )}
+              </Fila>
+            ))}
+          </Lista>
+
+          <Lista>
+            <Link to="/configuracion" className={claseFila(true)}>
+              <Icono icono={Settings} tamano={20} className={texto.secundario} />
+              <span className={`${texto.bodySm} ${texto.semi} ${styles.crece}`}>Configuración</span>
+              <Icono icono={ChevronRight} tamano={18} className={texto.terciario} />
+            </Link>
+          </Lista>
+
+          <Lista className={styles.salir}>
+            <button type="button" className={claseFila(true)} onClick={() => void cerrarSesion()}>
+              <Icono icono={LogOut} tamano={20} className={texto.peligro} />
+              <span className={`${texto.bodySm} ${texto.semi} ${texto.peligro} ${styles.crece}`}>Cerrar sesión</span>
+            </button>
+          </Lista>
         </div>
       </Pagina>
       <ModalFoto abierto={cambiandoFoto} onCerrar={() => setCambiandoFoto(false)} />

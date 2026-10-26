@@ -1,13 +1,23 @@
-/* Perfil (kit web, Web · 7): .w-dos y la tarjeta del usuario. */
+/* Perfil (kit web, Web · 7): una sola columna del ancho de Editar perfil
+   (.w-perfil-form), con el encabezado del usuario arriba. */
 
-.dos { display: grid; grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr); gap: var(--space-8); align-items: start; }
-.columna { display: flex; flex-direction: column; gap: var(--space-5); min-width: 0; }
+.columna { width: 100%; max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; gap: var(--space-6); }
 
-.usuario { display: flex; align-items: center; gap: var(--space-6); }
-.usuarioTextos { display: flex; flex-direction: column; gap: var(--space-2); flex: 1; min-width: 0; }
+.encabezado { display: flex; align-items: center; gap: var(--space-6); }
+.textos { display: flex; flex-direction: column; gap: var(--space-2); flex: 1; min-width: 0; }
+.nombre { margin: 0; overflow-wrap: anywhere; }
 
 .crece { flex: 1; min-width: 0; }
 
+/* Cerrar sesion queda al fondo, separado de Configuracion. */
+.salir { margin-top: var(--space-4); }
+
+/* Esqueletos con la forma del encabezado y de los valores (kit web,
+   .w-esq-titulo, .k-esq--linea, .w-esq-corto y .w-esq-valor). */
+.esqNombre { width: 320px; max-width: 100%; height: 34px; }
+.esqLinea { width: 55%; }
+.esqRotulo { width: 160px; }
+.esqValor { width: 96px; height: 16px; }
 
 /* El avatar es el boton para cambiar la foto, con la camara en un circulo
    de accent abajo a la derecha (kit web, .w-avatar-editar). */

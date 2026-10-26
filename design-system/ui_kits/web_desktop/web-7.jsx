@@ -1,23 +1,33 @@
 // Frencia Web · 7 Perfil, editar perfil y configuración.
 
-function Perfil({ capa, toast }) {
+/* Perfil (web): una sola columna del ancho de Editar perfil (.w-perfil-form).
+   Arriba el usuario (avatar, nombre, correo y fecha de alta), Editar perfil a
+   lo ancho, los datos, Configuración (repetida a propósito con la navegación)
+   y Cerrar sesión al fondo, en su propia lista. Sin métricas: lo acumulado
+   vive en el Historial. Edad sale de fecha_nacimiento; altura y peso, en la
+   unidad de Configuración (en la base, cm y kg). */
+function Perfil({ capa, toast, caso }) {
+  const cargando = caso === 'cargando';
+  const imperial = caso === 'imperial';
+  const datos = [['Sexo', 'Masculino'], ['Edad', '25 años · 14/03/2001'], ['Altura', imperial ? '5\' 10"' : '178 cm'], ['Peso', imperial ? '159.8 lb' : '72.5 kg']];
   return (
     <App activo="profile" capa={<>{capa}{toast ? <Toasts>{toast}</Toasts> : null}</>}>
       <Pagina>
-        <Encabezado rotulo="Perfil" titulo="Bautista Ribotta" acciones={<Boton v="secondary" ico="pencil" anima>Editar perfil</Boton>} />
-        <div className="w-dos">
-          <div className="col g6">
-            <div className="w-tarjeta row g6">
-              <button className="w-avatar-editar" aria-label="Cambiar foto de perfil"><Avatar s={96} /><span className="w-avatar-editar__badge"><Ico n="camera" s={14} /></span></button>
-              <div className="col g2 f1"><span className="t-subtitle">Bautista Ribotta</span><span className="t-bodysm c-sec">bauti@correo.com</span><span className="t-label c-ter">Miembro desde junio de 2026</span></div>
-            </div>
-            <div className="w-lista">
-              {[['Sexo', 'Masculino'], ['Edad', '25 años · 14/03/2001'], ['Altura', '178 cm'], ['Peso', '72.5 kg']].map(([l, v]) => <div key={l} className="w-fila"><span className="t-bodysm c-sec f1">{l}</span><span className="t-data">{v}</span></div>)}
-            </div>
+        <div className="w-perfil-form">
+          <header className="row g6">
+            <button className="w-avatar-editar" aria-label="Cambiar foto de perfil"><Avatar s={96} /><span className="w-avatar-editar__badge"><Ico n="camera" s={14} /></span></button>
+            {cargando ? (
+              <div className="col g3 f1"><span className="w-esqueleto w-esq-titulo"></span><span className="w-esqueleto k-esq k-esq--linea"></span><span className="w-esqueleto k-esq w-esq-corto"></span></div>
+            ) : (
+              <div className="col g2 f1"><span className="t-display">Bautista Ribotta</span><span className="t-bodysm c-sec">bauti@correo.com</span><span className="t-label c-ter">Miembro desde junio de 2026</span></div>
+            )}
+          </header>
+          <Boton v="secondary" t="lg" ancho ico="pencil" anima>Editar perfil</Boton>
+          <div className="w-lista">
+            {datos.map(([l, v]) => <div key={l} className="w-fila"><span className="t-bodysm c-sec f1">{l}</span>{cargando ? <span className="w-esqueleto w-esq-valor"></span> : <span className="t-data">{v}</span>}</div>)}
           </div>
-          <div className="col g5">
-            <div className="w-lista"><div className="w-fila w-fila--link"><Ico n="settings" s={20} c="c-sec" /><span className="t-bodysm semi f1">Configuración</span><Ico n="chevron-right" s={18} c="c-ter" /></div><div className="w-fila w-fila--link"><Ico n="log-out" s={20} c="c-dang" /><span className="t-bodysm semi c-dang f1">Cerrar sesión</span></div></div>
-          </div>
+          <div className="w-lista"><div className="w-fila w-fila--link"><Ico n="settings" s={20} c="c-sec" /><span className="t-bodysm semi f1">Configuración</span><Ico n="chevron-right" s={18} c="c-ter" /></div></div>
+          <div className="w-lista w-perfil-salir"><div className="w-fila w-fila--link"><Ico n="log-out" s={20} c="c-dang" /><span className="t-bodysm semi c-dang f1">Cerrar sesión</span></div></div>
         </div>
       </Pagina>
     </App>
@@ -109,8 +119,10 @@ function Configuracion({ capa, tema = 'system' }) {
 function AppWeb() {
   return (
     <Lienzo titulo="Perfil y configuración" bajada="En la web el perfil se separa en dos: Perfil muestra quién sos (lo acumulado vive en el Historial); Configuración junta tema, unidades y medidores, legales y la cuenta. Todo se guarda en profiles y se aplica en vivo en la web y en la app. Fondo cumbre en todas.">
-      <Seccion titulo="Perfil" nota="(main)/profile — se llega desde el usuario al pie de la navegación.">
+      <Seccion titulo="Perfil" nota="(main)/profile — se llega desde el usuario al pie de la navegación. Una sola columna de 560 px, como Editar perfil: el usuario arriba, Editar perfil a lo ancho en vidrio, los datos, Configuración y Cerrar sesión al fondo, en su propia lista. El espacio vacío no se rellena con métricas.">
         <Mesa nombre="Perfil" ruta="(main)/profile" url="frencia.app/perfil"><Perfil /></Mesa>
+        <Mesa nombre="Cargando" nota="Mientras llega el perfil, esqueletos con la forma del encabezado y de los valores. Los rótulos de los datos ya se ven." ruta="(main)/profile" url="frencia.app/perfil"><Perfil caso="cargando" /></Mesa>
+        <Mesa nombre="En pies y libras" nota="Altura y peso en la unidad de Configuración; en la base siempre son cm y kg." ruta="(main)/profile" url="frencia.app/perfil"><Perfil caso="imperial" /></Mesa>
         <Mesa nombre="Foto de perfil" nota="La hoja de la app pasa a un modal con zona para soltar una imagen. Cada acción se guarda en el momento y la vista previa la refleja; Listo solo cierra." ruta="(main)/profile · modal" url="frencia.app/perfil"><Perfil capa={<ModalFoto />} /></Mesa>
         <Mesa nombre="Foto de perfil · con foto" nota="Con foto cargada suma Quitar foto, como la hoja de la app: vuelve al avatar generado." ruta="(main)/profile · modal" url="frencia.app/perfil"><Perfil capa={<ModalFoto conFoto />} /></Mesa>
       </Seccion>
