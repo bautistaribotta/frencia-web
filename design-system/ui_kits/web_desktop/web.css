@@ -755,7 +755,11 @@ section + section { margin-top: var(--space-11); }
 .w-main > .w-error { min-height: 100%; }
 
 /* Editar perfil (web): una sola columna */
-.w-perfil-form { width: 100%; max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; gap: var(--space-6); }
+/* Centrada en la ventana y no en el espacio a la derecha de la navegación:
+   se corre la mitad de la navegación a la izquierda (en la app, con un tope
+   para no meterse debajo de ella en ventanas angostas). */
+.w-perfil-form { position: relative; left: calc(var(--nav-w) / -2); width: 100%; max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; gap: var(--space-6); }
+.w-app--rail .w-perfil-form { left: calc(var(--nav-w-rail) / -2); }
 .w-perfil-form > .w-migas { margin-left: calc(var(--space-4) * -1); }
 /* Perfil: la misma columna, con Cerrar sesión separado al fondo. */
 .w-perfil-salir { margin-top: var(--space-4); }

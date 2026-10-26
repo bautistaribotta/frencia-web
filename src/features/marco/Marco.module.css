@@ -7,10 +7,13 @@
   min-height: 100dvh;
   display: grid;
   grid-template-columns: var(--nav-w) minmax(0, 1fr);
+  /* Ancho que ocupa la navegacion: lo usan las columnas que se centran en la
+     ventana y no en el espacio que queda a la derecha (Perfil). */
+  --nav-actual: var(--nav-w);
 }
 
 .principal { min-width: 0; }
 
 @media (max-width: 1279px) {
-  .marco { grid-template-columns: var(--nav-w-rail) minmax(0, 1fr); }
+  .marco { grid-template-columns: var(--nav-w-rail) minmax(0, 1fr); --nav-actual: var(--nav-w-rail); }
 }

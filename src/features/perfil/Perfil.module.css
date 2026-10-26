@@ -1,7 +1,19 @@
 /* Perfil (kit web, Web · 7): una sola columna del ancho de Editar perfil
    (.w-perfil-form), con el encabezado del usuario arriba. */
 
-.columna { width: 100%; max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; gap: var(--space-6); }
+/* Centrada en la ventana y no en el espacio a la derecha de la navegacion:
+   se corre a la izquierda la mitad de la navegacion, salvo que no haya lugar
+   (nunca se mete debajo de ella). Igual que Editar perfil. */
+.columna {
+  position: relative;
+  left: calc(-1 * clamp(0px, (100vw - var(--nav-actual, 0px) - 2 * var(--pad-pagina) - 560px) / 2, var(--nav-actual, 0px) / 2));
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
 
 .encabezado { display: flex; align-items: center; gap: var(--space-6); }
 .textos { display: flex; flex-direction: column; gap: var(--space-2); flex: 1; min-width: 0; }
