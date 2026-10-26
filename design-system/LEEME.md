@@ -1,7 +1,7 @@
 # Copia del design system
 
 Copia de referencia del design system **Frencia 2.0 (Lume)** de Claude Design
-(https://claude.ai/artifact/UUp4wXWL7CrPVELCR42nEX), tomada el 26 de octubre de 2026 (version con `Web - 9 Errores`: 404, error inesperado y sin conexion con la ilustracion de Storyset).
+(https://claude.ai/artifact/UUp4wXWL7CrPVELCR42nEX), tomada el 26 de octubre de 2026 (version con `Web - 9 Errores` y Editar perfil en una sola columna con campos de texto).
 La fuente de verdad sigue siendo Claude Design: esta carpeta es un respaldo para
 consultar sin conexion y para ver que cambio entre una copia y la siguiente.
 

@@ -33,24 +33,38 @@ function ModalFoto({ conFoto }) {
   );
 }
 
-function EditarPerfil({ sucio, error }) {
+/* Editar perfil (web): una sola columna, como en el teléfono, pero con campos
+   de texto comunes en lugar de rueda, regla y arco. Mismos campos flotantes
+   que el acceso. Se guarda en profiles: name, surname, sexo, fecha_nacimiento,
+   altura (cm) y peso (kg); la unidad que se ve sale de Configuración. */
+function EditarPerfil({ caso }) {
+  const sucio = caso === 'editando' || caso === 'error';
+  const imperial = caso === 'imperial';
+  const sufijo = (t) => <span className="w-campo__sufijo">{t}</span>;
   return (
     <App activo="profile">
       <Pagina>
-        <div className="w-migas"><Boton v="ghost" t="sm" ico="chevron-left">Perfil</Boton></div>
-        <Encabezado titulo="Editar perfil" sub="Ningún dato es obligatorio. Las unidades se cambian en Configuración." acciones={<><Boton v="ghost">Cancelar</Boton><Boton ico="check" estado={sucio ? undefined : 'off'}>Guardar</Boton></>} />
-        <div className="w-form-perfil">
-          <div className="w-tarjeta col g6">
-            <span className="t-label c-ter">Datos</span>
-            <div className="row g4"><Campo className="f1" rotulo="Nombre" ico="user" valor="Bautista" /><Campo className="f1" rotulo="Apellido" valor="Ribotta" /></div>
+        <div className="w-perfil-form">
+          <div className="w-migas"><Boton v="ghost" t="sm" ico="chevron-left">Perfil</Boton></div>
+          <div className="col g2"><span className="t-display">Editar perfil</span><span className="t-bodysm c-sec">Ningún dato es obligatorio. Las unidades se cambian en Configuración.</span></div>
+          <div className="w-tarjeta col g5">
+            <Campo flotante rotulo="Nombre" ico="user" valor="Bautista" />
+            <Campo flotante rotulo="Apellido" ico="user" valor="Ribotta" />
             <div className="col g3"><span className="t-label c-ter">Sexo</span><Seg ancho ops={[['m', 'Masculino'], ['f', 'Femenino'], ['o', 'Otro']]} sel="m" /></div>
-            <div className="col g3"><span className="t-label c-ter">Fecha de nacimiento</span><Fecha d="14" m="03" a="2001" /></div>
+            <Campo flotante rotulo="Fecha de nacimiento" ico="calendar" valor="14/03/2001" ayuda="Tenés 25 años. Se escribe como día/mes/año." />
+            {imperial ? (
+              <div className="row g3 items-inicio">
+                <Campo flotante className="f1" rotulo="Altura · pies" ico="ruler" valor="5" final={sufijo('ft')} />
+                <Campo flotante className="f1" rotulo="Pulgadas" valor="10" final={sufijo('in')} />
+              </div>
+            ) : (
+              <Campo flotante rotulo="Altura" ico="ruler" valor={caso === 'editando' ? '17' : '178'} estado={caso === 'editando' ? 'foco' : undefined} final={sufijo('cm')} ayuda={caso === 'editando' ? 'Entre 100 y 250 cm.' : undefined} />
+            )}
+            <Campo flotante rotulo="Peso" ico="weight" valor={caso === 'error' ? '725' : imperial ? '160' : '72.5'} final={sufijo(imperial ? 'lb' : 'kg')} error={caso === 'error' ? 'El peso tiene que estar entre 30 y 300 kg.' : undefined} />
           </div>
-          <div className="w-tarjeta col g7">
-            <span className="t-label c-ter">Medidas</span>
-            <div className="col g3"><span className="t-label c-ter">Altura</span><Regla valor={178} unidad="cm" n={30} /></div>
-            <div className="col g3"><span className="t-label c-ter">Peso</span><Arco valor={sucio ? 74.5 : 72.5} estado={sucio ? 'foco' : undefined} /></div>
-            {error ? <span className="w-aviso"><Ico n="circle-alert" s={16} />El peso tiene que estar entre 30 y 300 kg.</span> : null}
+          <div className="col g3">
+            <Boton t="lg" ancho ico="check" estado={caso === 'editando' ? undefined : 'off'}>Guardar</Boton>
+            <Boton v="ghost" t="lg" ancho>Cancelar</Boton>
           </div>
         </div>
       </Pagina>
@@ -100,9 +114,11 @@ function AppWeb() {
         <Mesa nombre="Foto de perfil" nota="La hoja de la app pasa a un modal con zona para soltar una imagen. Cada acción se guarda en el momento y la vista previa la refleja; Listo solo cierra." ruta="(main)/profile · modal" url="frencia.app/perfil"><Perfil capa={<ModalFoto />} /></Mesa>
         <Mesa nombre="Foto de perfil · con foto" nota="Con foto cargada suma Quitar foto, como la hoja de la app: vuelve al avatar generado." ruta="(main)/profile · modal" url="frencia.app/perfil"><Perfil capa={<ModalFoto conFoto />} /></Mesa>
       </Seccion>
-      <Seccion titulo="Editar perfil" nota="edit-profile — la rueda de la app pasa a fecha, regla y arco en la misma página; nada se abre aparte.">
+      <Seccion titulo="Editar perfil" nota="edit-profile — una sola columna, como en el teléfono, con campos de texto comunes: nombre, apellido, fecha de nacimiento, altura y peso se escriben; sexo queda como selector de tres opciones. La unidad (cm o ft, kg o lb) sale de Configuración y va como sufijo adentro del campo. Guardar abajo, a lo ancho.">
         <Mesa nombre="Sin cambios" nota="Guardar se habilita cuando algo cambió." ruta="edit-profile" url="frencia.app/perfil/editar"><EditarPerfil /></Mesa>
-        <Mesa nombre="Con cambios y error de rango" nota="El aviso va en tinta, con icono; Guardar no confirma un valor fuera de rango." ruta="edit-profile" url="frencia.app/perfil/editar"><EditarPerfil sucio error /></Mesa>
+        <Mesa nombre="Escribiendo la altura" nota="Solo números; el rango se muestra debajo mientras el campo tiene foco." ruta="edit-profile" url="frencia.app/perfil/editar"><EditarPerfil caso="editando" /></Mesa>
+        <Mesa nombre="Valor fuera de rango" nota="El error va debajo del campo en el carmín de texto y Guardar no deja confirmar." ruta="edit-profile" url="frencia.app/perfil/editar"><EditarPerfil caso="error" /></Mesa>
+        <Mesa nombre="En pies y libras" nota="Con altura en ft, el campo se parte en pies y pulgadas en la misma fila. Siempre se guarda en cm y kg." ruta="edit-profile" url="frencia.app/perfil/editar"><EditarPerfil caso="imperial" /></Mesa>
         <Mesa nombre="Guardado" ruta="(main)/profile · toast" url="frencia.app/perfil"><Perfil toast={<Toast texto="Perfil actualizado" confirma />} /></Mesa>
       </Seccion>
       <Seccion titulo="Configuración" nota="settings — Sistema es el valor por defecto (profiles.tema = 'sistema'): la web sigue a prefers-color-scheme. Las tres unidades y el medidor de esfuerzo van en una sola lista, con los selectores del mismo ancho. Términos y privacidad abren el documento en el modal de lectura de Web · 3.">
