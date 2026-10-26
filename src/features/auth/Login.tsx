@@ -60,17 +60,18 @@ export function Login() {
     <Acceso billete="izquierda" titulo="Entrá a tu cuenta" bajada="Seguí donde la dejaste." onSubmit={ingresar}>
       <div className={styles.campos}>
         <Campo
+          flotante
           rotulo="Correo electrónico"
           icono={Mail}
           type="email"
           autoComplete="email"
-          placeholder="nombre@correo.com"
           value={email}
           onChange={(e) => { setEmail(e.target.value); setError(null); }}
           disabled={enviando}
           autoFocus
         />
         <Campo
+          flotante
           rotulo="Contraseña"
           extra={
             <Link to="/recuperar" className={styles.enlace}>
@@ -80,7 +81,6 @@ export function Login() {
           icono={Lock}
           type={mostrar ? 'text' : 'password'}
           autoComplete="current-password"
-          placeholder="Tu contraseña"
           value={contrasena}
           onChange={(e) => { setContrasena(e.target.value); setError(null); }}
           disabled={enviando}

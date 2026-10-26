@@ -59,3 +59,48 @@
 .ayuda { font: var(--text-body-sm); color: var(--text-tertiary); }
 
 .mensajeError { display: flex; align-items: center; gap: var(--space-2); font: var(--text-body-sm); color: var(--danger-text); }
+
+/* Flotante (.w-campo--flotante): caja de 60 px y el rotulo adentro. Sube con
+   el foco o cuando hay texto (el input lleva placeholder=" ", asi que
+   :placeholder-shown dice si esta vacio); tambien con el autocompletado del
+   navegador, que puede llenar el campo sin que el texto este disponible. */
+.flotante .caja { height: 60px; }
+.cuerpo { position: relative; flex: 1; min-width: 0; align-self: stretch; display: flex; align-items: center; }
+.flota {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  pointer-events: none;
+  font: var(--fw-regular) 16px/22px var(--font-sans);
+  color: var(--text-tertiary);
+  transform: translateY(-50%);
+  transform-origin: left center;
+  transition: transform var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out);
+}
+.flotante .valor { transition: padding var(--dur-base) var(--ease-out); }
+.flotante .valor::placeholder { color: transparent; }
+
+.cuerpo:focus-within .flota,
+.cuerpo:has(.valor:not(:placeholder-shown)) .flota,
+.cuerpo:has(.valor:autofill) .flota { transform: translateY(calc(-50% - 13px)) scale(0.75); color: var(--text-secondary); }
+.flotante .valor:focus,
+.flotante .valor:not(:placeholder-shown),
+.flotante .valor:autofill { padding-top: 18px; }
+
+.cuerpo:focus-within .flota { color: var(--signal-text); }
+.error .flota,
+.error .cuerpo:focus-within .flota { color: var(--danger-text); }
+.off .flota { color: var(--text-disabled); }
+
+/* Debajo de la caja: la ayuda o el error a la izquierda, el extra a la derecha. */
+.pie { display: flex; justify-content: space-between; align-items: center; gap: var(--space-4); min-height: 20px; }
+.extra { margin-left: auto; white-space: nowrap; font: var(--fw-semibold) 13px/1 var(--font-sans); color: var(--signal-text); }
+
+@media (prefers-reduced-motion: reduce) {
+  .flota,
+  .flotante .valor { transition: none; }
+}

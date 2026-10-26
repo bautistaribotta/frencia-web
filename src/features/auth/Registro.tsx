@@ -47,6 +47,7 @@ export function Registro() {
       <div className={styles.campos}>
         <div className={styles.fila}>
           <Campo
+            flotante
             rotulo="Nombre"
             icono={User}
             autoComplete="given-name"
@@ -55,6 +56,7 @@ export function Registro() {
             autoFocus
           />
           <Campo
+            flotante
             rotulo="Apellido"
             icono={User}
             autoComplete="family-name"
@@ -63,15 +65,16 @@ export function Registro() {
           />
         </div>
         <Campo
+          flotante
           rotulo="Correo electrónico"
           icono={Mail}
           type="email"
           autoComplete="email"
-          placeholder="nombre@correo.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <Campo
+          flotante
           rotulo="Contraseña"
           icono={Lock}
           type="password"
@@ -81,6 +84,7 @@ export function Registro() {
           onChange={(e) => setContrasena(e.target.value)}
         />
         <Campo
+          flotante
           rotulo="Repetí la contraseña"
           icono={Lock}
           type="password"
