@@ -1,7 +1,7 @@
 # Copia del design system
 
 Copia de referencia del design system **Frencia 2.0 (Lume)** de Claude Design
-(https://claude.ai/artifact/UUp4wXWL7CrPVELCR42nEX), tomada el 25 de octubre de 2026 (version 52: la x de cerrar siempre quieta y el pie del modal de la foto a lo ancho, con Listo a la izquierda).
+(https://claude.ai/artifact/UUp4wXWL7CrPVELCR42nEX), tomada el 25 de octubre de 2026 (version 53: campos con etiqueta flotante en el acceso).
 La fuente de verdad sigue siendo Claude Design: esta carpeta es un respaldo para
 consultar sin conexion y para ver que cambio entre una copia y la siguiente.
 

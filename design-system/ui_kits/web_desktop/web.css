@@ -675,16 +675,44 @@ section + section { margin-top: var(--space-11); }
 .w-billete__serie span { padding: 6px 9px; border-radius: var(--radius-sm); background: color-mix(in oklch, var(--bg-app) 78%, transparent); }
 .w-billete__cartela { position: absolute; left: 34px; bottom: 34px; display: flex; flex-direction: column; gap: var(--space-4); padding: var(--space-6) var(--space-7);
   border-radius: var(--radius-lg); background: var(--surface-raised); border: 1px solid var(--glass-line); box-shadow: var(--shadow-lg); -webkit-backdrop-filter: var(--sheet-filter); backdrop-filter: var(--sheet-filter); }
-.w-billete__cartela .w-marca { font-size: 54px; }
+.w-billete__lema { font: var(--fw-medium) 54px/0.92 var(--font-display); font-variation-settings: var(--vs-condensed); letter-spacing: -0.04em; color: var(--text-primary); }
 .w-billete__sello { font: var(--text-meta); letter-spacing: var(--ls-wide); color: var(--signal-text); }
 .w-billete__credito { position: absolute; right: 34px; bottom: 30px; font: var(--fw-regular) 10px/1 var(--font-mono); letter-spacing: 0.06em; color: var(--text-primary); padding: 5px 8px; border-radius: var(--radius-sm); background: color-mix(in oklch, var(--bg-app) 78%, transparent); }
 .w-acceso--billete-izq { grid-template-columns: 1fr minmax(520px, 44%); }
 .w-acceso--billete-izq .w-billete { margin: var(--space-6) 0 var(--space-6) var(--space-6); }
-/* Billete: la tarjeta y el texto legal van centrados en su columna; el switch
-   de tema ocupa la esquina de arriba del lado del formulario. */
-.w-acceso--billete .w-acceso__izq { align-items: center; }
-.w-acceso--billete .w-acceso__izq > .t-bodysm { width: 100%; text-align: center; }
+.w-acceso--billete-izq .w-acceso__izq > .w-marca { left: auto; right: var(--space-11); }
+.w-acceso--billete-izq .w-acceso__izq { align-items: flex-end; }
+.w-acceso--billete-izq .w-acceso__izq > .t-bodysm { text-align: right; }
+
+/* ============================================================
+   CAMPO CON ETIQUETA FLOTANTE (FloatingField)
+   Vacío: el rótulo ocupa el lugar del texto. Foco o valor: sube al borde
+   de arriba, al 75 %, y el texto baja. En el producto:
+   .campo:focus-within .flota, .campo:has(input:not(:placeholder-shown)) .flota
+   (el input lleva placeholder=" " para que :placeholder-shown funcione).
+   ============================================================ */
+.w-campo--flotante .w-campo__caja { height: 60px; }
+.w-campo__cuerpo { position: relative; flex: 1; min-width: 0; align-self: stretch; display: flex; align-items: center; }
+.w-campo__flota { position: absolute; left: 0; top: 50%; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; pointer-events: none;
+  font: var(--fw-regular) 16px/22px var(--font-sans); color: var(--text-tertiary);
+  transform: translateY(-50%); transform-origin: left center;
+  transition: transform var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out); }
+.w-campo--flotante .w-campo__valor { padding-top: 0; transition: padding var(--dur-base) var(--ease-out); }
+.w-campo--flotante.is-arriba .w-campo__flota { transform: translateY(calc(-50% - 13px)) scale(0.75); color: var(--text-secondary); }
+.w-campo--flotante.is-arriba .w-campo__valor { padding-top: 18px; }
+.w-campo--flotante.is-foco .w-campo__flota { color: var(--signal-text); }
+.w-campo--flotante.is-error .w-campo__flota { color: var(--danger-text); }
+.w-campo--flotante.is-off .w-campo__flota { color: var(--text-disabled); }
+.w-campo__pie { display: flex; justify-content: space-between; align-items: center; gap: var(--space-4); min-height: 20px; }
+.w-campo__extra { font: var(--fw-semibold) 13px/1 var(--font-sans); color: var(--signal-text); white-space: nowrap; margin-left: auto; }
+@media (prefers-reduced-motion: reduce) { .w-campo__flota, .w-campo--flotante .w-campo__valor { transition: none; } }
+.w-flot-grilla { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-7) var(--space-6); }
+
+/* Acceso billete: switch de tema arriba del lado del formulario; tarjeta y
+   textos centrados en su columna (estilos que faltaban en la versión publicada). */
+.w-acceso__tema { position: absolute; top: var(--space-8); display: inline-flex; align-items: center; gap: var(--space-3); }
+.w-acceso--billete .w-acceso__izq { position: relative; align-items: center; }
+.w-acceso--billete .w-acceso__izq > .t-bodysm { text-align: center; max-width: 460px; }
+.w-acceso--billete-izq .w-acceso__izq { align-items: center; }
+.w-acceso--billete-izq .w-acceso__izq > .t-bodysm { text-align: center; }
 .w-acceso__pie { text-align: center; }
-.w-acceso__tema { position: absolute; top: var(--space-8); left: var(--space-11); display: inline-flex; align-items: center; gap: var(--space-3); }
-.w-acceso__tema .w-ico { display: inline-flex; }
-.w-acceso--billete-izq .w-acceso__tema { left: auto; right: var(--space-11); }

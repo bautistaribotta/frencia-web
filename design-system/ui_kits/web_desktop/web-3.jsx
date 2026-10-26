@@ -98,8 +98,8 @@ function Login({ email, pass, foco, error, enviando, variante }) {
     <Acceso variante={variante}>
       <div className="col g2"><span className="t-title">Entrá a tu cuenta</span><span className="t-bodysm c-sec">Seguí donde la dejaste.</span></div>
       <div className="col g4">
-        <Campo rotulo="Correo electrónico" ico="mail" ph="nombre@correo.com" valor={email} estado={foco === 'mail' ? 'foco' : enviando ? 'off' : undefined} />
-        <Campo rotulo="Contraseña" extra={<span className="c-acc">¿La olvidaste?</span>} ico="lock" ph="Tu contraseña" valor={pass} estado={foco === 'pass' ? 'foco' : enviando ? 'off' : undefined} error={error} final={<BotonIco ico="eye" t="sm" label="Mostrar contraseña" />} />
+        <Campo flotante rotulo="Correo electrónico" ico="mail" valor={email} estado={foco === 'mail' ? 'foco' : enviando ? 'off' : undefined} />
+        <Campo flotante rotulo="Contraseña" extra="¿La olvidaste?" ico="lock" valor={pass} estado={foco === 'pass' ? 'foco' : enviando ? 'off' : undefined} error={error} final={<BotonIco ico="eye" t="sm" label="Mostrar contraseña" />} />
       </div>
       <Boton t="lg" ancho icoDer={enviando ? undefined : 'arrow-right'} estado={enviando ? 'cargando' : listo ? (foco === 'pass' ? undefined : undefined) : 'off'}>{enviando ? 'Ingresando…' : 'Ingresar'}</Boton>
       {foco === 'pass' ? <span className="row g2 t-bodysm c-ter"><Kbd>Enter</Kbd>para ingresar</span> : null}
@@ -113,13 +113,13 @@ function Registro({ caso, variante }) {
     <Acceso variante={variante}>
       <div className="col g2"><span className="t-title">Creá tu cuenta</span><span className="t-bodysm c-sec">Empezá a registrar cada serie desde hoy.</span></div>
       <div className="col g4">
-        <div className="row g3"><Campo className="f1" rotulo="Nombre" ico="user" valor="Bautista" /><Campo className="f1" rotulo="Apellido" ico="user" valor="Ribotta" /></div>
-        <Campo rotulo="Correo electrónico" ico="mail" valor="bauti@correo.com" error={caso === 'tomado' ? 'Este correo ya tiene una cuenta.' : null} />
-        <Campo rotulo="Contraseña" ico="lock" valor="••••••••" ayuda="6 caracteres o más." />
-        <Campo rotulo="Repetí la contraseña" ico="lock" valor={caso === 'distintas' ? '•••••••' : '••••••••'} estado={caso === 'distintas' ? 'foco' : undefined} error={caso === 'distintas' ? 'Las contraseñas no coinciden.' : null} />
+        <div className="row g3"><Campo flotante className="f1" rotulo="Nombre" ico="user" valor={caso === 'vacio' ? '' : 'Bautista'} estado={caso === 'vacio' ? 'foco' : undefined} /><Campo flotante className="f1" rotulo="Apellido" ico="user" valor={caso === 'vacio' ? '' : 'Ribotta'} /></div>
+        <Campo flotante rotulo="Correo electrónico" ico="mail" valor={caso === 'vacio' ? '' : 'bauti@correo.com'} error={caso === 'tomado' ? 'Este correo ya tiene una cuenta.' : null} />
+        <Campo flotante rotulo="Contraseña" ico="lock" valor={caso === 'vacio' ? '' : '••••••••'} ayuda="6 caracteres o más." />
+        <Campo flotante rotulo="Repetí la contraseña" ico="lock" valor={caso === 'vacio' ? '' : caso === 'distintas' ? '•••••••' : '••••••••'} estado={caso === 'distintas' ? 'foco' : undefined} error={caso === 'distintas' ? 'Las contraseñas no coinciden.' : null} />
       </div>
       {caso === 'tomado' ? <span className="t-bodysm c-sec">¿Es tuya? <span className="c-acc semi">Entrá</span> o <span className="c-acc semi">recuperá la contraseña</span>.</span> : null}
-      <Boton t="lg" ancho icoDer="arrow-right" estado={caso === 'distintas' ? 'off' : undefined}>Crear cuenta</Boton>
+      <Boton t="lg" ancho icoDer="arrow-right" estado={caso === 'distintas' || caso === 'vacio' ? 'off' : undefined}>Crear cuenta</Boton>
       <span className="t-bodysm c-sec w-acceso__pie">¿Ya tenés cuenta? <span className="c-acc semi">Iniciá sesión</span></span>
     </Acceso>
   );
@@ -137,7 +137,7 @@ function Recuperar({ enviado }) {
       ) : (
         <>
           <div className="col g3"><span className="t-title">Recuperá tu contraseña</span><span className="t-bodysm c-sec">Escribí tu correo y te mandamos un enlace para elegir una nueva.</span></div>
-          <Campo rotulo="Correo electrónico" ico="mail" valor="bauti@correo.com" estado="foco" />
+          <Campo flotante rotulo="Correo electrónico" ico="mail" valor="bauti@correo.com" estado="foco" />
           <Boton t="lg" ancho icoDer="arrow-right">Enviar enlace</Boton>
         </>
       )}
@@ -159,8 +159,8 @@ function NuevaContrasena({ caso }) {
     <Acceso>
       <div className="col g2"><span className="t-title">Elegí una contraseña nueva</span><span className="t-bodysm c-sec">Para bauti@correo.com</span></div>
       <div className="col g4">
-        <Campo rotulo="Contraseña nueva" ico="lock" valor="••••••••" final={<BotonIco ico="eye" t="sm" label="Mostrar contraseña" />} />
-        <Campo rotulo="Repetila" ico="lock" valor="••••••••" estado={caso === 'guardando' ? 'off' : 'foco'} />
+        <Campo flotante rotulo="Contraseña nueva" ico="lock" valor="••••••••" final={<BotonIco ico="eye" t="sm" label="Mostrar contraseña" />} />
+        <Campo flotante rotulo="Repetila" ico="lock" valor="••••••••" estado={caso === 'guardando' ? 'off' : 'foco'} />
       </div>
       <div className="col g2">{req.map(([t, ok]) => <span key={t} className={`row g2 t-bodysm ${ok ? 'c-pri' : 'c-ter'}`}><Ico n={ok ? 'check' : 'circle'} s={16} c={ok ? 'c-acc' : ''} />{t}</span>)}</div>
       <Boton t="lg" ancho ico={caso === 'guardando' ? undefined : 'check'} estado={caso === 'guardando' ? 'cargando' : undefined}>{caso === 'guardando' ? 'Guardando…' : 'Guardar y entrar'}</Boton>
@@ -254,6 +254,24 @@ function Setup({ paso, unidad }) {
   );
 }
 
+function EstadosFlotante() {
+  const est_ = [
+    ['Vacío', <Campo flotante rotulo="Correo electrónico" ico="mail" />],
+    ['Hover', <Campo flotante rotulo="Correo electrónico" ico="mail" estado="hover" />],
+    ['Foco, vacío', <Campo flotante rotulo="Correo electrónico" ico="mail" estado="foco" />],
+    ['Foco, escribiendo', <Campo flotante rotulo="Correo electrónico" ico="mail" valor="bauti@corr" estado="foco" />],
+    ['Con valor', <Campo flotante rotulo="Correo electrónico" ico="mail" valor="bauti@correo.com" />],
+    ['Error', <Campo flotante rotulo="Correo electrónico" ico="mail" valor="bauti@correo" error="Revisá el correo." />],
+    ['Con enlace', <Campo flotante rotulo="Contraseña" ico="lock" extra="¿La olvidaste?" final={<BotonIco ico="eye" t="sm" label="Mostrar contraseña" />} />],
+    ['Deshabilitado', <Campo flotante rotulo="Correo electrónico" ico="mail" valor="bauti@correo.com" estado="off" />],
+  ];
+  return (
+    <div className="k-ficha">
+      <div className="w-flot-grilla">{est_.map(([t, c]) => <div key={t} className="col g3"><span className="k-estados__cab">{t}</span>{c}</div>)}</div>
+    </div>
+  );
+}
+
 function AppWeb() {
   return (
     <Lienzo titulo="Acceso y primer ingreso" bajada="Sin sesión, la pantalla se parte: el formulario en vidrio a la izquierda y el lema grande sobre la luz a la derecha. Las luces derivan despacio en todo el onboarding (acceso, legales y setup), como en la app. Enter envía siempre el formulario.">
@@ -263,8 +281,13 @@ function AppWeb() {
         <Mesa nombre="Login · credenciales inválidas" ruta="(auth)/login" fondo="flanco" animado url="frencia.app/login"><Login email="bauti@correo.com" pass="••••••••" error="Correo o contraseña incorrectos." /></Mesa>
         <Mesa nombre="Login · ingresando" nota="Los campos se bloquean y el botón muestra la ruedita sin cambiar de ancho." ruta="(auth)/login" fondo="flanco" animado url="frencia.app/login"><Login email="bauti@correo.com" pass="••••••••" enviando /></Mesa>
       </Seccion>
+      <Seccion titulo="Campos con etiqueta flotante" nota="Los campos del acceso no llevan placeholder: el rótulo va adentro mientras el campo está vacío y, al hacer clic o al tener texto, sube al borde de arriba de la caja (al 75 %, 180 ms ease-out) y deja lugar para escribir. En foco el rótulo toma el color de señal; con error, el carmín de texto. ¿La olvidaste? baja a la línea de debajo del campo.">
+        <Mesa nombre="Estados del campo" alto={420} ruta="ui/FloatingField" fondo="cumbre" url="frencia.app/login"><EstadosFlotante /></Mesa>
+      </Seccion>
       <Seccion titulo="Variante: billete grabado" nota="Propuesta. La foto pasa a un grabado de líneas como el de un billete (talla dulce con tramado cruzado en las sombras y guilloché en las luces) y va enmarcada a la derecha con microtexto, número de serie y una cartela con la marca FRENCIA. El switch de tema va arriba, del lado del formulario, donde antes estaba la marca. La tarjeta y los textos van centrados en su columna. En oscuro la línea es la luz (marfil sobre grafito); en claro, la sombra (tinta sobre marfil). Las placas pasan a lume como único color, igual que el tejado naranja de la referencia. Fondo cumbre: la luz queda detrás del billete y el formulario en la zona oscura.">
         <Mesa nombre="Login · billete a la izquierda" nota="Iniciar sesión espeja al registro: el billete pasa a la izquierda y el formulario a la derecha. Al ir de una pantalla a la otra, el billete y el formulario cruzan de lado con un fundido de 420 ms." ruta="(auth)/login · variante" fondo="cumbre" animado url="frencia.app/login"><Login email="bauti@correo.com" pass="••••••" foco="pass" variante="billete-izq" /></Mesa>
+        <Mesa nombre="Login · billete, vacío" nota="Sin texto, cada rótulo está adentro de su campo." ruta="(auth)/login · variante" fondo="cumbre" animado url="frencia.app/login"><Login variante="billete-izq" /></Mesa>
+        <Mesa nombre="Registro · billete, vacío" nota="Al hacer clic en Nombre, el rótulo sube y aparece el cursor; los demás siguen con el rótulo adentro." ruta="(auth)/register · variante" fondo="cumbre" animado url="frencia.app/registro"><Registro caso="vacio" variante="billete" /></Mesa>
         <Mesa nombre="Registro · billete a la derecha" nota="Crear cuenta: formulario a la izquierda y billete a la derecha." ruta="(auth)/register · variante" fondo="cumbre" animado url="frencia.app/registro"><Registro caso="distintas" variante="billete" /></Mesa>
       </Seccion>
       <Seccion titulo="Registro" nota="(auth)/register — mismo esqueleto; nombre y apellido comparten fila.">

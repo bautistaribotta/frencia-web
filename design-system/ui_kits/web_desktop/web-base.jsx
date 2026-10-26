@@ -176,7 +176,36 @@ function BotonIco({ ico, v = 'ghost', t = 'md', estado, tip, tipLado = 'arriba',
   );
 }
 function Kbd({ children }) { return <kbd className="w-kbd">{children}</kbd>; }
-function Campo({ rotulo, extra, ico, valor, ph, estado, ayuda, error, final, md, cursor, className = '' }) {
+/* Campo con etiqueta flotante (flotante): vacío y sin foco, el rótulo va
+   adentro, en el lugar del texto; con foco o con valor sube al borde de
+   arriba de la caja y deja lugar para escribir. Sin placeholder: el rótulo
+   es la única indicación. El enlace extra (¿La olvidaste?) baja a la línea
+   de ayuda. En el producto es un <label> real; sube con :focus-within o
+   :has(input:not(:placeholder-shown)). */
+function CampoFlotante({ rotulo, extra, ico, valor, estado, ayuda, error, final, className = '' }) {
+  const foco = estado === 'foco';
+  const arriba = foco || !!valor;
+  return (
+    <label className={`w-campo w-campo--flotante${arriba ? ' is-arriba' : ''}${est(estado)}${error ? ' is-error' : ''} ${className}`}>
+      <span className="w-campo__caja">
+        {ico ? <Ico n={ico} s={20} /> : null}
+        <span className="w-campo__cuerpo">
+          <span className="w-campo__flota">{rotulo}</span>
+          <span className="w-campo__valor">{valor}{foco ? <span className="w-cursor"></span> : null}</span>
+        </span>
+        {final || null}
+      </span>
+      {error || ayuda || extra ? (
+        <span className="w-campo__pie">
+          {error ? <span className="w-campo__error"><Ico n="circle-alert" s={16} />{error}</span> : ayuda ? <span className="w-campo__ayuda">{ayuda}</span> : <span></span>}
+          {extra ? <span className="w-campo__extra">{extra}</span> : null}
+        </span>
+      ) : null}
+    </label>
+  );
+}
+function Campo({ rotulo, extra, ico, valor, ph, estado, ayuda, error, final, md, cursor, flotante, className = '' }) {
+  if (flotante) return <CampoFlotante rotulo={rotulo} extra={extra} ico={ico} valor={valor} estado={estado} ayuda={ayuda} error={error} final={final} className={className} />;
   return (
     <label className={`w-campo${md ? ' w-campo--md' : ''}${est(estado)}${error ? ' is-error' : ''} ${className}`}>
       {rotulo ? <span className="w-campo__rotulo"><span className="t-label c-ter">{rotulo}</span>{extra ? <span className="t-label c-ter">{extra}</span> : null}</span> : null}
@@ -486,7 +515,7 @@ function Ticket() {
 }
 
 Object.assign(window, {
-  VistaCtx, TemaCtx, Ico, Lienzo, Seccion, Fondo, POS_WEB, Mesa, Ventana, Marca, Avatar, Ruedita, Boton, BotonIco, Kbd, Campo, Selector,
+  CampoFlotante, VistaCtx, TemaCtx, Ico, Lienzo, Seccion, Fondo, POS_WEB, Mesa, Ventana, Marca, Avatar, Ruedita, Boton, BotonIco, Kbd, Campo, Selector,
   Menu, MenuItem, MenuSep, Seg, Switch, Check, Opcion, Badge, Chip, Semana, Res, Escala, Toast, Toasts, Modal, Panel, Numero, Regla, Arco,
   AyudaTeclado, Fecha, Nav, App, Pagina, Encabezado, TIPO_ICO, TIPO_TXT, CATALOGO, RUTINA, Ticket, Barras, est,
 });
