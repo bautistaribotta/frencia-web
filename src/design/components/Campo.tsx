@@ -4,6 +4,8 @@
      vacio el rotulo va adentro, en el lugar del texto, y con foco o con valor
      sube al borde de arriba al 75 %. El extra ("¿La olvidaste?") baja a la
      linea de debajo, junto a la ayuda o el error.
+   El sufijo es la unidad dentro de la caja ("cm", "kg"); en el flotante
+   aparece recien cuando el rotulo sube, para no pisarlo.
    Los iconos de la caja van quietos (tambien el del boton final); el icono
    del campo anima solo cuando aparece un error. */
 
@@ -21,6 +23,8 @@ interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, 'className'>
   icono?: LucideIcon;
   /** Al final de la caja: un boton de icono como mostrar la contraseña. */
   final?: ReactNode;
+  /** Unidad pegada al valor, dentro de la caja: "cm", "kg". */
+  sufijo?: string;
   ayuda?: string;
   error?: string | null;
   /** Rotulo flotante dentro de la caja, sin placeholder. */
@@ -28,7 +32,7 @@ interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, 'className'>
   className?: string;
 }
 
-export function Campo({ rotulo, extra, icono, final, ayuda, error, flotante = false, disabled, className = '', id, ...input }: Props) {
+export function Campo({ rotulo, extra, icono, final, sufijo, ayuda, error, flotante = false, disabled, className = '', id, ...input }: Props) {
   const idPropio = useId();
   const idCampo = id ?? idPropio;
   const idNota = `${idCampo}-nota`;
@@ -71,6 +75,7 @@ export function Campo({ rotulo, extra, icono, final, ayuda, error, flotante = fa
                 {rotulo}
               </label>
             </div>
+            {sufijo ? <span className={styles.sufijo}>{sufijo}</span> : null}
             {final}
           </IconosQuietos>
         </div>
@@ -96,6 +101,7 @@ export function Campo({ rotulo, extra, icono, final, ayuda, error, flotante = fa
         <IconosQuietos>
           {icono ? <Icono icono={icono} tamano={20} disparo={error} /> : null}
           {campo}
+          {sufijo ? <span className={styles.sufijo}>{sufijo}</span> : null}
           {final}
         </IconosQuietos>
       </div>

@@ -96,6 +96,12 @@
 .error .cuerpo:focus-within .flota { color: var(--danger-text); }
 .off .flota { color: var(--text-disabled); }
 
+/* La unidad dentro de la caja (.w-campo__sufijo). En el flotante va a la
+   altura del valor y se esconde mientras el rotulo esta adentro. */
+.sufijo { flex: none; font: var(--fw-medium) 15px/22px var(--font-sans); color: var(--text-primary); }
+.flotante .sufijo { align-self: flex-end; padding-bottom: 12px; }
+.flotante .caja:not(:focus-within):not(:has(.valor:not(:placeholder-shown))) .sufijo { visibility: hidden; }
+
 /* Debajo de la caja: la ayuda o el error a la izquierda, el extra a la derecha. */
 .pie { display: flex; justify-content: space-between; align-items: center; gap: var(--space-4); min-height: 20px; }
 .extra { margin-left: auto; white-space: nowrap; font: var(--fw-semibold) 13px/1 var(--font-sans); color: var(--signal-text); }

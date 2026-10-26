@@ -2,8 +2,8 @@
    muestra quien sos; tema, unidades y esfuerzo pasan a Configuracion (kit
    web, Web · 7). Lo acumulado (sesiones, tiempo, tonelaje) vive en el
    Historial. Se llega desde el usuario al pie de la navegacion.
-   Tocar el avatar abre el modal de la foto (ModalFoto).
-   Pendiente del diseño: Editar perfil.
+   Tocar el avatar abre el modal de la foto (ModalFoto) y Editar perfil lleva
+   a /perfil/editar (EditarPerfil).
    Fondo: cumbre. */
 
 import { useQueryClient } from '@tanstack/react-query';

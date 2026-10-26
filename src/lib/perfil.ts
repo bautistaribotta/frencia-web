@@ -78,6 +78,28 @@ export function useParchePerfil() {
   );
 }
 
+/** Lo que se cambia en Editar perfil, ya en las unidades de la base (cm, kg). */
+export type DatosPersonales = Pick<Perfil, 'name' | 'surname' | 'sexo' | 'fecha_nacimiento' | 'altura' | 'peso'>;
+
+/** Guarda los datos de Editar perfil y, si la base los acepta, los deja en la
+ *  cache para que Perfil los muestre sin volver a pedirlos. */
+export function useGuardarDatosPersonales() {
+  const { user } = useSesion();
+  const cliente = useQueryClient();
+  return useMutation({
+    mutationFn: async (datos: DatosPersonales) => {
+      // Con select se confirma que se escribio: un update que no encuentra la
+      // fila no da error.
+      const { data, error } = await supabase.from('profiles').update(datos).eq('id', user!.id).select('id').maybeSingle();
+      if (error) throw error;
+      if (!data) throw new Error('No se encontró el perfil.');
+    },
+    onSuccess: (_resultado, datos) => {
+      cliente.setQueryData<Perfil | null>(clave(user?.id), (anterior) => (anterior ? { ...anterior, ...datos } : anterior));
+    },
+  });
+}
+
 /** Guarda preferencias con actualizacion optimista: si la base las rechaza,
  *  vuelve a lo anterior y el error queda en la mutacion. */
 export function useGuardarPreferencias() {

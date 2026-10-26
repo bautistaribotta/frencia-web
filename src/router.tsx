@@ -1,12 +1,12 @@
 /* Frencia · Rutas de la web.
    - /login y /signup: solo sin sesion (SoloInvitado).
-   - /, /rutinas, /historial, /perfil y /configuracion, con sus detalles:
-     dentro del marco con la navegacion lateral (ConSesion).
+   - /, /rutinas, /historial, /perfil y /configuracion, con sus detalles y
+     editar perfil: dentro del marco con la navegacion lateral (ConSesion).
    - * : la 404, afuera de las puertas (con sesion, dentro del marco).
    Si una pagina falla, ErrorRuta muestra el 500 o el sin conexion: dentro de
    la app en el lugar de la pagina, con la navegacion; afuera, en la raiz.
    Las demas rutas del kit (recuperar, nueva contraseña, bienvenida,
-   constructor, ticket, editar perfil y /r/:codigo) y las fases de legal y
+   constructor, ticket y /r/:codigo) y las fases de legal y
    setup se suman en las etapas siguientes. */
 
 import { createBrowserRouter, Navigate } from 'react-router';
@@ -21,6 +21,7 @@ import { Historial } from '@/features/historial/Historial';
 import { Inicio } from '@/features/inicio/Inicio';
 import { Marco } from '@/features/marco/Marco';
 import { ConSesion, SoloInvitado } from '@/features/marco/Puertas';
+import { EditarPerfil } from '@/features/perfil/EditarPerfil';
 import { Perfil } from '@/features/perfil/Perfil';
 import { DetalleRutina } from '@/features/rutinas/DetalleRutina';
 import { Rutinas } from '@/features/rutinas/Rutinas';
@@ -53,6 +54,7 @@ export const router = createBrowserRouter([
                   { path: '/historial', element: <Historial /> },
                   { path: '/historial/:id', element: <DetalleSesion /> },
                   { path: '/perfil', element: <Perfil /> },
+                  { path: '/perfil/editar', element: <EditarPerfil /> },
                   { path: '/configuracion', element: <Configuracion /> },
                 ],
               },
