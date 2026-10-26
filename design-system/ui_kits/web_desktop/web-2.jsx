@@ -212,9 +212,10 @@ function AppWeb() {
     ['Toast arriba', 'Toast abajo a la derecha, apilado, con acción opcional', 'Toast'],
   ];
   const anim = [
-    ['Hover y foco del control', 'plus (Nueva rutina), share (Compartir), pencil (Editar), search (Buscar), settings, rotate-ccw (Reintentar), copy', 'Una vez por entrada del puntero o del foco; no en bucle.'],
+    ['Al aparecer', 'Todos los animados, navegación lateral incluida', 'Una vez, al entrar a la vista (150 ms después de montarse).'],
+    ['Hover y foco del control', 'Los mismos', 'Una vez por entrada del puntero o del foco al control que lo contiene; no en bucle.'],
     ['Al confirmar una acción', 'check (Guardado, Agregado), copy → check (Link copiado), trash-2 (Quitado, en el toast)', 'Una vez, en el icono del toast o del botón que confirmó.'],
-    ['Siempre quietos', 'Navegación lateral, chevrons, iconos de tipo de ejercicio, flame, iconos dentro de campos, agarre', 'Son señalización: moverlos distrae.'],
+    ['Siempre quieta', 'x: cerrar modales, avisos y paneles, borrar una búsqueda', 'Cerrar no gira. El botón conserva su hover: fondo iluminado y recuadro.'],
     ['Reducir movimiento', 'Todos', 'Con prefers-reduced-motion se usa lucide-react estático.'],
   ];
   return (
@@ -238,7 +239,7 @@ function AppWeb() {
           <FondoPagina capa={<Modal chico titulo="Eliminar Push Pull Legs" texto="Se borra la rutina con sus 3 días y los ejercicios de cada uno. Tu historial de sesiones no se toca. No se puede deshacer." pie={<><Boton v="secondary" estado="foco">Cancelar</Boton><Boton v="danger" ico="trash-2">Eliminar</Boton></>} />} />
         </Mesa>
       </Seccion>
-      <Seccion titulo="Iconos animados" nota="Lucide con trazo 1.75. Los que existen en @animateicons/react/lucide se usan en su versión animada solo en estos casos; el resto, lucide-react estático.">
+      <Seccion titulo="Iconos animados" nota="Lucide con trazo 1.75. Los que existen en @animateicons/react/lucide se usan en su versión animada, salvo la x de cerrar; el resto, lucide-react estático.">
         <div className="k-doc">
           <table className="k-tabla"><thead><tr><th>Cuándo</th><th>Iconos</th><th>Regla</th></tr></thead>
             <tbody>{anim.map(([a, b, c]) => <tr key={a}><td>{a}</td><td>{b}</td><td>{c}</td></tr>)}</tbody></table>

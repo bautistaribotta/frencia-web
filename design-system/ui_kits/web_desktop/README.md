@@ -188,6 +188,7 @@ usa en su versión animada (con el trazo llevado a 1.75); si no existe, `lucide-
 | Al aparecer | todos los animados, navegación lateral incluida | Una vez, al entrar a la vista (150 ms después de montarse) |
 | Hover y foco del control | los mismos | Una vez por entrada del puntero o del foco de teclado al control que lo contiene (botón, enlace, fila); si no hay control, el hover del propio icono. Nunca en bucle |
 | Al confirmar | check (guardado, agregado), copy → check, trash-2 (en el aviso de quitado) | Una vez, en el botón o el aviso que confirma |
+| Siempre quieta | x: cerrar modales, avisos y paneles, borrar una búsqueda | Ni al aparecer ni en hover: cerrar no gira. El botón conserva su hover (fondo iluminado y recuadro) |
 | Reducir movimiento | todos | Versión estática |
 
 Verificar en el paquete el nombre y la forma de disparar cada animación (hover o controlada);

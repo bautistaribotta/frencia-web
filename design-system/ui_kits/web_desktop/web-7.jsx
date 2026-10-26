@@ -28,7 +28,7 @@ function ModalFoto({ conFoto }) {
     <Modal chico titulo="Foto de perfil" texto="Sin foto, Frencia dibuja un avatar con los colores de la app.">
       <div className="row centro"><Avatar s={128} /></div>
       <div className="w-soltar"><Ico n="image-up" s={22} c="c-sec" /><span className="t-bodysm c-pri">Arrastrá una imagen o <span className="c-acc semi">elegila</span></span><span className="t-label c-ter">JPG o PNG · hasta 5 MB</span></div>
-      <div className="w-modal__pie">{conFoto ? <Boton v="ghost" ico="x">Quitar foto</Boton> : null}<Boton v="ghost" ico="repeat" anima>Generar otro avatar</Boton><Boton>Listo</Boton></div>
+      <div className="w-modal__pie w-modal__pie--ancho"><Boton>Listo</Boton><Boton v="secondary" ico="repeat" anima>Generar otro avatar</Boton>{conFoto ? <Boton v="ghost" ico="x" className="w-entero">Quitar foto</Boton> : null}</div>
     </Modal>
   );
 }
