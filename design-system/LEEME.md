@@ -1,14 +1,17 @@
-# Copia del design system
+# Design system
 
-Copia completa del design system **Frencia 2.0 (Lume)** de Claude Design
-(https://claude.ai/artifact/UUp4wXWL7CrPVELCR42nEX), tomada el 26 de octubre de 2026 (version con `Web - 9 Errores` y Editar perfil en una sola columna con campos de texto).
-Es todo lo que el artifact guarda en `project/`, con la misma estructura de carpetas;
-lo unico que queda afuera es el visor propio del tipo de artifact (`artifact-type/`,
-`index.html` y su `SKILL.md`), que no es parte del diseño.
-La fuente de verdad sigue siendo Claude Design: esta carpeta es un respaldo para
-consultar sin conexion y para ver que cambio entre una copia y la siguiente.
+El design system **Frencia 2.0 (Lume)**. Esta carpeta es su **fuente de verdad**: el
+diseño se sigue y se cambia desde aca.
 
-**No se edita a mano** y la app no la importa. Lo que usa el codigo vive en `src/design/`:
+Nacio en Claude Design (https://claude.ai/artifact/UUp4wXWL7CrPVELCR42nEX) y se trajo
+completo el 26 de octubre de 2026 (version con `Web - 9 Errores` y Editar perfil en una
+sola columna con campos de texto): todo lo que el artifact guardaba en `project/`, con la
+misma estructura de carpetas. Quedo afuera el visor propio del tipo de artifact
+(`artifact-type/`, `index.html` y su `SKILL.md`), que no es parte del diseño. Desde
+entonces el artifact no se sincroniza: si algo difiere, manda esta carpeta.
+
+La app no importa esta carpeta. Lo que usa el codigo vive en `src/design/`, y cuando
+cambia algo de aca hay que llevarlo alla:
 
 | Aca | En el codigo |
 |---|---|
@@ -35,5 +38,3 @@ Que hay:
 
 Las paginas del kit (`*.html`) se abren con un servidor estatico desde esta carpeta,
 porque cargan `styles.css` y `components/bundle.js` por ruta relativa.
-
-Para actualizarla, se vuelve a bajar del artifact y se reemplaza la carpeta entera.

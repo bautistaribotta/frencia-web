@@ -26,17 +26,25 @@ revisar lo hecho.
 
 ## Design system
 
-- La fuente de verdad del diseño es el design system "Frencia 2.0" (Lume) de
-  Claude Design. `design-system/` tiene su copia local. **Siempre**, antes de
-  diseñar o modificar cualquier pantalla o componente, revisá:
+- La fuente de verdad del diseño es `design-system/`, en este repo: el design
+  system "Frencia 2.0" (Lume), que nacio en Claude Design y ahora se mantiene
+  aca. El artifact de Claude Design quedo como antecedente y ya no se
+  sincroniza. **Siempre**, antes de diseñar o modificar cualquier pantalla o
+  componente, revisá:
   - `design-system/ui_kits/web_desktop/README.md` (estructura, estados, reglas)
   - `design-system/ui_kits/web_desktop/web.css` y `web-base.jsx` (componentes de referencia)
   - la página del kit que corresponda (`Web - N ….html` y su `web-N.jsx`)
   - `design-system/README.md` (marca: voz, color, vidrio, fondo de luces)
 - Si el codigo y el design system difieren, manda el design system; si el
   design system no cubre el caso, avisar antes de inventar.
+- Un cambio de diseño se hace primero en `design-system/` (README del kit,
+  `web.css`, la pagina `Web - N` y su `web-N.jsx`, tokens) y despues en el
+  codigo, en el mismo commit o en uno anterior. Si se suma una pagina o una
+  regla nueva, se documenta en el README que corresponda.
 - Usá los tokens: viven en `src/design/tokens/` como custom properties (copia
-  de `design-system/ui_kits/web_desktop/tokens.web.css`). No inventes colores,
+  de `design-system/ui_kits/web_desktop/tokens.web.css`, que solo cambia la
+  ruta de las fuentes). Un token nuevo o cambiado se edita en los dos archivos
+  a la vez. No inventes colores,
   radios, espaciados ni tipografías: si falta algo, proponelo como token nuevo.
   Nada de colores hardcodeados en componentes: siempre `var(--token)`.
 - CSS Modules + custom properties (ver "Codigo y estilos": oklch y sin estilos

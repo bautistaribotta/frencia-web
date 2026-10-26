@@ -6,8 +6,8 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default defineConfig([
-  // database.types.ts lo genera la CLI de Supabase; design-system/ es una
-  // copia de referencia del design system, no codigo de la app.
+  // database.types.ts lo genera la CLI de Supabase; design-system/ es el
+  // design system (paginas del kit y su bundle), no codigo de la app.
   globalIgnores(['dist', 'src/lib/database.types.ts', 'design-system']),
   {
     files: ['**/*.{ts,tsx}'],
