@@ -404,7 +404,7 @@ function Nav({ activo, rail, hover }) {
         {rail ? null : <BotonIco ico="panel-left-close" t="sm" label="Colapsar navegación" />}
       </div>
       {rail ? <BotonIco ico="plus" v="surface" label="Nueva rutina" estado={hover === 'crear' ? 'hover' : undefined} tip="Nueva rutina  N" tipLado="der" />
-        : <Boton v="secondary" ico="plus" ancho anima>Nueva rutina</Boton>}
+        : <Boton v="secondary" ico="plus" ancho>Nueva rutina</Boton>}
       <div className="w-nav__grupo">
         {NAV.map((it) => (
           <a key={it.v} className={`w-nav__item${activo === it.v ? ' is-activo' : ''}${hover === it.v ? ' is-hover' : ''}`} aria-current={activo === it.v ? 'page' : undefined}>

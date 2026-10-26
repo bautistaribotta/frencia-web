@@ -64,7 +64,7 @@ function InicioVacio() {
           <span className="t-label c-ter">Tu primera rutina</span>
           <span className="t-display w-hero__titulo">Traé la rutina que ya usás.</span>
           <span className="t-body c-sec w-hero__texto">Todavía no tenés rutinas. Cargala acá con el teclado y el catálogo a mano; después la entrenás desde el celular.</span>
-          <Boton t="lg" ico="plus" anima>Crear primera rutina</Boton>
+          <Boton t="lg" ico="plus">Crear primera rutina</Boton>
         </div>
         <div className="w-tres">{pasos.map(([n, t, s, on]) => <div key={n} className={`w-tarjeta col g3${on ? '' : ' w-tarjeta--punteada'}`}><span className={`w-paso-n${on ? ' is-on' : ''}`}>{n}</span><span className="t-bodysm semi">{t}</span><span className="t-bodysm c-sec">{s}</span></div>)}</div>
       </Pagina>
@@ -89,7 +89,7 @@ function Rutinas({ menu }) {
   return (
     <App activo="routines">
       <Pagina>
-        <Encabezado rotulo="Rutinas" titulo="Tus rutinas" sub="Una en curso; al poner otra en curso, la actual pasa a Anteriores con su historial." acciones={<Boton ico="plus" anima>Nueva rutina</Boton>} />
+        <Encabezado rotulo="Rutinas" titulo="Tus rutinas" sub="Una en curso; al poner otra en curso, la actual pasa a Anteriores con su historial." acciones={<Boton ico="plus">Nueva rutina</Boton>} />
         <div className="w-tarjeta w-tarjeta--activa w-tarjeta--link row g7">
           <div className="col g3 f1"><span className="t-label c-acc">En curso · desde 29 JUL 2026</span><span className="t-title">Push Pull Legs</span><span className="t-bodysm c-sec">3 días · 18 ejercicios · 24 sesiones</span></div>
           <div className="row g5">{RUTINA.dias.map((d) => <div key={d.n} className="col g2"><span className="t-label c-ter">{d.n}</span><Semana on={d.sem} /></div>)}</div>
@@ -134,7 +134,7 @@ function RutinasVacia() {
           <Ico n="layers" s={28} c="c-ter" />
           <span className="t-subtitle">Todavía no tenés rutinas</span>
           <span className="t-bodysm c-sec">Cuando crees una va a aparecer acá, junto con las que archives más adelante.</span>
-          <div className="row g3"><Boton ico="plus" anima>Crear rutina</Boton><span className="row g2 t-bodysm c-ter">o apretá <Kbd>N</Kbd></span></div>
+          <div className="row g3"><Boton ico="plus">Crear rutina</Boton><span className="row g2 t-bodysm c-ter">o apretá <Kbd>N</Kbd></span></div>
         </div>
       </Pagina>
     </App>

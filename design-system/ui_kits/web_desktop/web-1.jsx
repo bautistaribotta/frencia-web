@@ -8,7 +8,7 @@ function CuerpoRutinas({ compacto }) {
   ];
   return (
     <Pagina>
-      <Encabezado rotulo="Rutinas" titulo="Tus rutinas" sub="Una en curso; las demás quedan archivadas con su historial." acciones={<Boton ico="plus" anima>Nueva rutina</Boton>} />
+      <Encabezado rotulo="Rutinas" titulo="Tus rutinas" sub="Una en curso; las demás quedan archivadas con su historial." acciones={<Boton ico="plus">Nueva rutina</Boton>} />
       <div className="w-tarjeta w-tarjeta--activa w-tarjeta--link row g6">
         <div className="col g3 f1"><span className="t-label c-acc">En curso · 3 días · desde 29 JUL 2026</span><span className="t-title">Push Pull Legs</span></div>
         {compacto ? null : <Semana on={[0, 1, 2, 3, 4, 5]} />}

@@ -59,6 +59,9 @@ revisar lo hecho.
   **siempre estaticos**, sin giro ni animacion. El boton que los contiene
   conserva su hover (fondo iluminado y recuadro). Se resuelve dejando el icono
   fuera del mapa `ANIMADOS` de `src/design/components/Icono.tsx`.
+- El icono de mas (`Plus`), el de Nueva rutina, Crear rutina o Agregar, va
+  **siempre estatico**, en cualquier boton: no anima al aparecer ni con hover
+  o foco. Tambien queda fuera del mapa `ANIMADOS`.
 - Los iconos dentro de un input (el icono del campo y los botones de la caja,
   como mostrar la contraseña) van **siempre quietos**: no animan al aparecer
   ni con hover o foco. La unica excepcion es el icono del campo cuando aparece
