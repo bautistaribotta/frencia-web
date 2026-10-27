@@ -88,7 +88,6 @@
   mask-image: linear-gradient(90deg, var(--text-primary) calc(100% - 40px), transparent);
 }
 /* Con el panel abierto, lo ultimo del tablero se puede traer a la vista. */
-.conPanel { padding-right: calc(var(--panel-w) + var(--space-6)); }
 
 .pista { flex: none; width: 300px; display: flex; flex-direction: column; gap: var(--space-3); }
 

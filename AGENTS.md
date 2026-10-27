@@ -62,6 +62,23 @@ revisar lo hecho.
 - El icono de mas (`Plus`), el de Nueva rutina, Crear rutina o Agregar, va
   **siempre estatico**, en cualquier boton: no anima al aparecer ni con hover
   o foco. Tambien queda fuera del mapa `ANIMADOS`.
+- La mancuerna (`Dumbbell`), el icono de fuerza en cada ejercicio, en los
+  chips y en las insignias, va **siempre estatica**: no anima al aparecer ni
+  con hover o foco. Tambien queda fuera del mapa `ANIMADOS`.
+- Orden de los botones en los modales y confirmaciones:
+  - Si la accion **no es critica** (no borra nada de forma permanente), el
+    boton importante va a la **izquierda**, el secundario a su derecha y el
+    terciario a la derecha del todo. Ejemplo, «Tenés cambios sin guardar»:
+    Guardar y salir · Descartar · Seguir editando.
+  - Si la accion **borra algo de forma permanente** (eliminar la cuenta, un
+    entrenamiento), el boton que confirma va **siempre a la derecha**, y
+    Cancelar a su izquierda con el foco inicial.
+- Configurar un ejercicio del constructor es un **modal centrado**, no un
+  panel lateral (slide over). Se abre al hacer clic en una tarjeta y cada vez
+  que se agrega un ejercicio a un dia (con + o arrastrando del catalogo). En
+  el pie, solo dos botones: Guardar a la izquierda y Quitar ejercicio a la
+  derecha. Sin Siguiente. Los cambios se aplican al tocar Guardar; cerrar con
+  la cruz o Esc los descarta.
 - Los iconos dentro de un input (el icono del campo y los botones de la caja,
   como mostrar la contraseña) van **siempre quietos**: no animan al aparecer
   ni con hover o foco. La unica excepcion es el icono del campo cuando aparece

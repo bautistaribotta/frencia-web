@@ -7,7 +7,8 @@
    libreria ya lo respeta. Los que no tienen version animada van estaticos.
    La cruz (X) va siempre estatica aunque tenga version animada: cerrar no
    gira. El boton que la contiene conserva su hover (fondo y recuadro).
-   El mas (Plus), el de Nueva rutina o Agregar, tambien va siempre estatico.
+   El mas (Plus), el de Nueva rutina o Agregar, tambien va siempre estatico,
+   igual que la mancuerna (Dumbbell) de fuerza en cada ejercicio.
    Dentro de la caja de un campo (input) los iconos van quietos: ni al
    aparecer ni con hover o foco, tampoco el boton de mostrar la contraseña.
    Solo animan cuando se los dispara a proposito con `disparo`, como el
@@ -23,7 +24,6 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   CircleAlertIcon,
-  DumbbellIcon,
   EllipsisIcon,
   EyeIcon,
   EyeOffIcon,
@@ -67,7 +67,6 @@ import {
   ChevronLeft,
   ChevronRight,
   CircleAlert,
-  Dumbbell,
   Ellipsis,
   Eye,
   EyeOff,
@@ -125,7 +124,6 @@ const ANIMADOS = new Map<LucideIcon, IconoAnimable>([
   [ChevronLeft, ChevronLeftIcon],
   [ChevronRight, ChevronRightIcon],
   [CircleAlert, CircleAlertIcon],
-  [Dumbbell, DumbbellIcon],
   [Ellipsis, EllipsisIcon],
   [Eye, EyeIcon],
   [EyeOff, EyeOffIcon],

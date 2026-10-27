@@ -1,24 +1,26 @@
-/* Panel de configuracion de un ejercicio (kit web, Web · 5, .w-panel): se
-   abre con clic o Enter en una tarjeta y no es modal, asi que se puede
-   seguir arrastrando y elegir otra tarjeta con el abierto. Los campos salen
-   de lo que registra el ejercicio y de las reglas de la base:
+/* Configuracion de un ejercicio (kit web, Web · 5): un modal centrado que se
+   abre con clic o Enter en una tarjeta y cada vez que se agrega un ejercicio
+   a un dia. El foco arranca en el primer campo. En el pie, Guardar a la
+   izquierda y Quitar ejercicio a la derecha. Los campos salen de lo que
+   registra el ejercicio y de las reglas de la base:
    - Fuerza e hibrido: series, reps (si las registra), intensidad
      obligatoria (RIR con al fallo, o RPE) y descanso. Sin peso.
    - Isometrico: series, tiempo por serie, peso objetivo opcional (si lo
      registra), RPE opcional y descanso.
    - Cardio: una sola serie continua sin descanso; tiempo, distancia
      opcional y RPE opcional.
-   Los cambios van al borrador en vivo; se guardan con Guardar arriba. */
+   Los cambios quedan en el modal hasta Guardar, que los pasa al borrador de
+   la rutina y cierra; la cruz o Esc cierran sin aplicarlos. */
 
-import { ArrowDown, Dumbbell, Footprints, HeartPulse, Info, Timer, Trash2, X } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { Check, Dumbbell, Footprints, HeartPulse, Timer, Trash2 } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Boton } from '@/design/components/Boton';
-import { BotonIcono } from '@/design/components/BotonIcono';
 import { Interruptor } from '@/design/components/Interruptor';
+import { Modal } from '@/design/components/Modal';
 import { Numero } from '@/design/components/Numero';
 import { Segmentado } from '@/design/components/Segmentado';
-import { Casilla, Insignia, Kbd } from '@/design/components/varios';
+import { Casilla, Insignia } from '@/design/components/varios';
 import texto from '@/design/texto.module.css';
 import {
   DESCANSO_MAXIMO,
@@ -51,24 +53,31 @@ interface Props {
   /** "Pecho · Barra", si el catalogo ya llego. */
   detalle: string | null;
   unidades: Unidades;
-  /** Abierto con el teclado: el foco pasa al primer campo. */
-  enfocar: boolean;
   despachar: (a: Accion) => void;
   onCerrar: () => void;
   onQuitar: () => void;
-  onSiguiente: (() => void) | null;
 }
 
-export function PanelEjercicio({ ejercicio: e, rotulo, detalle, unidades, enfocar, despachar, onCerrar, onQuitar, onSiguiente }: Props) {
+export function PanelEjercicio({ ejercicio, rotulo, detalle, unidades, despachar, onCerrar, onQuitar }: Props) {
   const cuerpo = useRef<HTMLDivElement>(null);
-  const cambiar = (cambios: Partial<EjercicioPlan>) => despachar({ tipo: 'configurar', uid: e.uid, cambios });
+  // Lo que se cambio en el modal, todavia sin pasar al borrador.
+  const [cambios, setCambios] = useState<Partial<EjercicioPlan>>({});
+  const e: EjercicioBorrador = { ...ejercicio, ...cambios };
+  const cambiar = (c: Partial<EjercicioPlan>) => setCambios((actual) => ({ ...actual, ...c }));
+  const guardar = () => {
+    if (Object.keys(cambios).length > 0) despachar({ tipo: 'configurar', uid: e.uid, cambios });
+    onCerrar();
+  };
   const tipo = TIPO[e.kind];
   const unica = esSerieUnica(e.kind);
   const rpeOpcional = unica || e.kind === 'isometrico';
 
+  // Corre despues de que el modal se abre (su efecto va primero).
   useEffect(() => {
-    if (enfocar) cuerpo.current?.querySelector<HTMLElement>('input, button')?.focus();
-  }, [enfocar, e.uid]);
+    // El input y no los botones de - y + que lo rodean.
+    const caja = cuerpo.current;
+    (caja?.querySelector<HTMLElement>('input') ?? caja?.querySelector<HTMLElement>('button'))?.focus();
+  }, [e.uid]);
 
   const series = <Numero rotulo="Series" valor={e.sets} onChange={(v) => cambiar({ sets: v ?? 1 })} min={1} max={20} />;
 
@@ -106,17 +115,26 @@ export function PanelEjercicio({ ejercicio: e, rotulo, detalle, unidades, enfoca
   );
 
   return (
-    <aside className={styles.panel} aria-label={`Configurar ${e.name}`}>
-      <div className={styles.cabeza}>
-        <div className={styles.titulos}>
-          <span className={`${texto.label} ${texto.terciario}`}>{rotulo}</span>
-          <h2 className={`${texto.subtitle} ${styles.titulo}`}>{e.name}</h2>
-          <div className={styles.filaDetalle}>
-            <Insignia icono={tipo.icono}>{tipo.etiqueta}</Insignia>
-            {detalle ? <span className={`${texto.label} ${texto.terciario}`}>{detalle}</span> : null}
-          </div>
-        </div>
-        <BotonIcono icono={X} etiqueta="Cerrar panel" onClick={onCerrar} />
+    <Modal
+      abierto
+      titulo={e.name}
+      texto={rotulo}
+      onCerrar={onCerrar}
+      pie={
+        <>
+          <Boton icono={Check} onClick={guardar}>
+            Guardar
+          </Boton>
+          <span className={styles.crece} />
+          <Boton variante="danger" icono={Trash2} onClick={onQuitar}>
+            Quitar ejercicio
+          </Boton>
+        </>
+      }
+    >
+      <div className={styles.filaDetalle}>
+        <Insignia icono={tipo.icono}>{tipo.etiqueta}</Insignia>
+        {detalle ? <span className={`${texto.label} ${texto.terciario}`}>{detalle}</span> : null}
       </div>
 
       <div ref={cuerpo} className={styles.cuerpo}>
@@ -192,33 +210,8 @@ export function PanelEjercicio({ ejercicio: e, rotulo, detalle, unidades, enfoca
         )}
 
         {descanso}
-
-        {e.kind === 'fuerza' ? (
-          <div className={styles.nota}>
-            <span className={`${texto.bodySm} ${texto.semi} ${texto.primario} ${styles.filaDetalle}`}>
-              <Info size={16} strokeWidth={1.75} aria-hidden="true" />
-              Sin peso en el plan
-            </span>
-            <span className={`${texto.bodySm} ${texto.secundario}`}>En fuerza el peso no se prescribe: se carga en cada serie al entrenar, con la última marca como referencia.</span>
-          </div>
-        ) : null}
-
-        <span className={`${texto.bodySm} ${texto.terciario} ${styles.atajos}`}>
-          <Kbd>↑</Kbd>
-          <Kbd>↓</Kbd> cambian el valor <span className={styles.punto}>·</span> <Kbd>Esc</Kbd> cierra el panel
-        </span>
       </div>
-
-      <div className={styles.pie}>
-        <Boton variante="danger" tamano="sm" icono={Trash2} onClick={onQuitar}>
-          Quitar del día
-        </Boton>
-        <span className={styles.crece} />
-        <Boton variante="secondary" tamano="sm" iconoDer={ArrowDown} disabled={!onSiguiente} onClick={() => onSiguiente?.()}>
-          Siguiente
-        </Boton>
-      </div>
-    </aside>
+    </Modal>
   );
 }
 

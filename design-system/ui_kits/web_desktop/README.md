@@ -20,7 +20,7 @@ posición del fondo de luces debajo. El conmutador de arriba deja ver un solo te
 | `Web - 2 Componentes.html` | Todos los componentes con hover, foco, presionado, deshabilitado y carga; equivalentes de las piezas táctiles; reglas de iconos animados |
 | `Web - 3 Acceso y primer ingreso.html` | Login, signup, recuperar y nueva contraseña, términos y privacidad, setup del perfil |
 | `Web - 4 Inicio y Rutinas.html` | Inicio, lista de rutinas, detalle, compartir, confirmaciones |
-| `Web - 5 Constructor de rutinas.html` | Catálogo + rutina, arrastre (levantar, hueco, inválido, quitar, teclado), panel de configuración, guardado |
+| `Web - 5 Constructor de rutinas.html` | Catálogo + rutina, arrastre (levantar, hueco, inválido, quitar, teclado), modal de configuración, guardado |
 | `Web - 6 Historial.html` | Lista por mes, detalle de una sesión, ticket |
 | `Web - 7 Perfil y configuración.html` | Perfil, foto, editar perfil, configuración, eliminar cuenta |
 | `Web - 8 Rutina compartida.html` | `/r/:codigo` en escritorio y en el celular |
@@ -104,11 +104,12 @@ con microtexto, número de serie y una cartela con la marca `FRENCIA.` (en lugar
 
 Anatomía: barra superior (volver, nombre editable, estado de guardado, Guardar) · catálogo
 de 340 px (búsqueda, chips por tipo, selector de grupo muscular) · tablero con un día por
-columna (300 px, desplazamiento horizontal con borde fundido) · panel lateral de 400 px.
+columna (300 px, desplazamiento horizontal con borde fundido) · modal centrado para configurar
+un ejercicio.
 
 ### dnd-kit
 
-- Las tarjetas de un día se arrastran solo desde su agarre (`setActivatorNodeRef`); el resto de la tarjeta es el botón que abre el panel.
+- Las tarjetas de un día se arrastran solo desde su agarre (`setActivatorNodeRef`); el resto de la tarjeta es el botón que abre el modal de configuración.
 - `DndContext` con `PointerSensor` (`activationConstraint: { distance: 4 }`, para no
   confundir clic con arrastre) y `KeyboardSensor` con `sortableKeyboardCoordinates`.
 - Cada día es un `SortableContext` (`verticalListSortingStrategy`); los días entre sí, un
@@ -122,7 +123,7 @@ columna (300 px, desplazamiento horizontal con borde fundido) · panel lateral d
 
 | Estado | Cómo se ve |
 |---|---|
-| Reposo / hover | En el catálogo, al hover aparece el agarre y el `+` (agrega al día elegido). En un día, la tarjeta tiene dos partes: el agarre de la derecha (seis puntos, cursor `grab`) es lo único que arrastra; el resto abre el panel, con cursor de mano, y al hover se vela (`scrim` con desenfoque que tapa el contenido) con el lápiz y «Editar» al centro. Sobre el agarre no hay velo. Mientras se arrastra no aparece |
+| Reposo / hover | En el catálogo, al hover aparece el agarre y el `+` (agrega al día elegido). En un día, la tarjeta tiene dos partes: el agarre de la derecha (seis puntos, cursor `grab`) es lo único que arrastra; el resto abre el modal de configuración, con cursor de mano, y al hover se vela (`scrim` con desenfoque que tapa el contenido) con el lápiz y «Editar» al centro. Sobre el agarre no hay velo. Mientras se arrastra no aparece |
 | Levantado | Copia en vidrio denso (`surface-raised` + `blur-sheet`), borde y halo de `signal`, `scale(1.02)`, sin rotar, `shadow-lg` |
 | Dónde cae | Hueco punteado de 1,5 px en `signal` sobre `surface-signal-soft`, del alto de una tarjeta y en el orden real; las tarjetas se corren con 180 ms `ease-out` |
 | Día destino | Borde `signal` + anillo + `halo-signal`; los otros días bajan la saturación |
@@ -132,10 +133,19 @@ columna (300 px, desplazamiento horizontal con borde fundido) · panel lateral d
 | Teclado | Espacio levanta, flechas mueven (← → cambian de día), Espacio suelta, Esc cancela; aviso abajo y `aria-live` |
 | Recién agregado | Borde `signal` hasta el próximo clic |
 
-### Panel de configuración
+### Modal de configuración
 
-Clic (o Enter) en una tarjeta abre el panel; no es modal. Los campos salen de lo que
-registra el ejercicio (`exercises.tracks_*`) y escriben en `training_day_exercises`:
+Configurar un ejercicio es un modal centrado (`Modal`, 560 px), no un panel lateral. Se
+abre con clic (o Enter) en una tarjeta y **cada vez que se agrega un ejercicio a un día**
+(con `+` o arrastrándolo del catálogo), para cargar series, repeticiones, intensidad y
+descanso. Título: el ejercicio; bajada: «Push · ejercicio 1 de 4»; arriba de los campos,
+la insignia del tipo y el detalle del catálogo. El foco arranca en el primer campo. Pie:
+solo Guardar a la izquierda y Quitar ejercicio (carmín) a la derecha del todo; no hay
+Siguiente ni se pasa de un ejercicio a otro desde el modal. Guardar aplica los cambios al
+borrador de la rutina y cierra; la cruz o Esc cierran sin aplicarlos (un ejercicio recién
+agregado queda con sus valores por defecto). Sin notas de ayuda ni atajos de teclado en el
+cuerpo. Los campos salen de lo que registra el ejercicio
+(`exercises.tracks_*`) y escriben en `training_day_exercises`:
 
 | Tipo | Campos |
 |---|---|
@@ -146,7 +156,7 @@ registra el ejercicio (`exercises.tracks_*`) y escriben en `training_day_exercis
 Las intensidades siguen las reglas de la base (trigger `validar_plan_de_ejercicio`):
 RIR no aplica a sostener una posición ni a correr, así que isométricos y cardio solo
 ofrecen RPE (opcional); fuerza e híbrido llevan intensidad siempre. El cardio se
-planifica como una serie continua sin descanso, por eso su panel no tiene series ni
+planifica como una serie continua sin descanso, por eso su modal no tiene series ni
 descanso (las mesas de `web-5.jsx` con RIR y series en isométrico y cardio quedaron
 como antecedente).
 | Híbrido | Los campos que marque `tracks_*` (p. ej. peso + distancia) |
@@ -164,9 +174,9 @@ tinta con `circle-alert`, sin bloquear.
 - Estado en la barra: Guardado · Cambios sin guardar (punto en tinta y cantidad) ·
   Guardando… · Guardado recién (check animado) · No se guardó (+ Reintentar en el aviso).
 - Rutina nueva con otra en curso: al guardar, modal «¿La ponés en curso?» con Ponerla
-  en curso (foco inicial) y Guardarla sin activar. Sin rutina en curso, queda activa.
+  en curso (izquierda, foco inicial) y Guardarla sin activar. Sin rutina en curso, queda activa.
 - Salir con cambios: `useBlocker` de React Router + `beforeunload`. Modal con Guardar y salir
-  (foco inicial), Descartar y Seguir editando.
+  (izquierda, foco inicial), Descartar y Seguir editando (derecha del todo).
 
 ## Equivalentes de las piezas táctiles
 
@@ -175,7 +185,15 @@ tinta con `circle-alert`, sin bloquear.
 | Hoja de acciones | Menú contextual (botón ⋯ o clic derecho) | `Menu` |
 | Hoja con una decisión | Modal de 440–560 px | `Modal` |
 | Hoja con un formulario largo | Panel lateral de 400 px, no modal | `Panel` |
-| Alerta | Modal chico; foco en Cancelar si es destructivo | `Modal` |
+| Alerta | Modal chico (dos acciones); foco en Cancelar si es destructivo. Con tres acciones en el pie, modal mediano: en el chico no entran | `Modal` |
+
+Orden de los botones en el pie de un modal:
+
+- **Acción no crítica** (no borra nada de forma permanente): la importante a la izquierda,
+  la secundaria a su derecha y la terciaria a la derecha del todo. «Tenés cambios sin
+  guardar»: Guardar y salir · Descartar · Seguir editando.
+- **Borrado permanente** (eliminar la cuenta, un entrenamiento): el botón que confirma va
+  siempre a la derecha, con Cancelar a su izquierda y el foco inicial.
 | Rueda de edad | Fecha de nacimiento en tres segmentos (la cuenta guarda `fecha_nacimiento`) | `DateField` |
 | Regla de altura | Lectura editable + regla arrastrable; flechas ±1, Shift ±10, rueda del mouse | `RulerSlider` |
 | Regla curva de peso | La misma lectura sobre la banda en arco; flechas ±0,5, Shift ±5 | `ArcSlider` |
@@ -208,6 +226,7 @@ usa en su versión animada (con el trazo llevado a 1.75); si no existe, `lucide-
 | Al confirmar | check (guardado, agregado), copy → check, trash-2 (en el aviso de quitado) | Una vez, en el botón o el aviso que confirma |
 | Siempre quieta | x: cerrar modales, avisos y paneles, borrar una búsqueda | Ni al aparecer ni en hover: cerrar no gira. El botón conserva su hover (fondo iluminado y recuadro) |
 | Siempre quieto | plus: Nueva rutina, Crear rutina, Agregar, Sumar | Ni al aparecer ni en hover. El botón conserva su hover |
+| Siempre quieta | dumbbell: el tipo fuerza en cada ejercicio, chips e insignias | Ni al aparecer ni en hover |
 | Reducir movimiento | todos | Versión estática |
 
 Verificar en el paquete el nombre y la forma de disparar cada animación (hover o controlada);

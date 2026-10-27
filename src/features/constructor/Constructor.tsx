@@ -1,7 +1,7 @@
 /* Constructor de rutinas (/rutinas/nueva y /rutinas/:id/editar; kit web,
    Web · 5). Pantalla completa, sin la navegacion lateral: barra arriba,
-   catalogo a la izquierda, un dia por columna y el panel de configuracion a
-   la derecha. Fondo: velada.
+   catalogo a la izquierda y un dia por columna. Cada ejercicio se configura
+   en un modal centrado. Fondo: velada.
 
    Arrastrar y soltar con dnd-kit:
    - El catalogo es un origen de copia (useDraggable). Mientras se arrastra,
@@ -224,7 +224,7 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
   const ultimoSobre = useRef<DragOverEvent['over']>(null);
   const [conTeclado, setConTeclado] = useState(false);
   const fotoInicio = useRef<Foto>(foto);
-  // El clic que cierra un arrastre no abre el panel.
+  // El clic que cierra un arrastre no abre la configuracion.
   const soltadoEl = useRef(0);
   const mostrado = vista ?? borrador;
   const vistaRef = useRef(mostrado);
@@ -256,7 +256,7 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
     return () => document.removeEventListener('pointerdown', limpiar);
   }, [nuevo]);
 
-  // Si se va la tarjeta del panel, el panel se cierra.
+  // Si se va la tarjeta que se configura, el modal se cierra.
   const enPanel = seleccion ? ubicar(borrador, seleccion.uid) : null;
 
   // Salir con cambios: el modal propio dentro de la app y el del navegador al
@@ -294,6 +294,8 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
       const ejercicio = ejercicioNuevo(e, medidor);
       despachar({ tipo: 'agregarEjercicio', dia: diaElegido.uid, ejercicio });
       setNuevo(ejercicio.uid);
+      // Lo recien agregado abre su configuracion para cargarle los datos.
+      setSeleccion({ uid: ejercicio.uid, teclado: false });
       avisar(`${e.name} agregado a ${diaElegido.name || 'el día'}`, 'info', { etiqueta: 'Deshacer', alHacer: () => restaurar(antes) });
     },
     [foto, medidor, despachar, diaElegido, avisar, restaurar],
@@ -552,6 +554,7 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
       despachar({ tipo: 'restaurar', borrador: resultado });
       setNuevo(ejercicio.uid);
       setElegido(pos.dia.uid);
+      setSeleccion({ uid: ejercicio.uid, teclado: false });
       avisar(`${ejercicio.name} agregado a ${pos.dia.name || 'el día'}`, 'info', { etiqueta: 'Deshacer', alHacer: () => restaurar(antes) });
       return;
     }
@@ -616,18 +619,16 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
     const { dia, indice } = enPanel;
     const ejercicio = dia.ejercicios[indice];
     const cat = porId.get(ejercicio.exerciseId);
-    const siguiente = dia.ejercicios[indice + 1] ?? borrador.dias.slice(borrador.dias.indexOf(dia) + 1).find((d) => d.ejercicios.length > 0)?.ejercicios[0];
     panel = (
       <PanelEjercicio
+        key={ejercicio.uid}
         ejercicio={ejercicio}
         rotulo={`${dia.name || 'Día'} · ejercicio ${indice + 1} de ${dia.ejercicios.length}`}
         detalle={cat ? detalleCatalogo(cat) || null : null}
         unidades={unidades}
-        enfocar={seleccion.teclado}
         despachar={despachar}
         onCerrar={() => setSeleccion(null)}
         onQuitar={() => quitarEjercicio(ejercicio.uid)}
-        onSiguiente={siguiente ? () => setSeleccion({ uid: siguiente.uid, teclado: seleccion.teclado }) : null}
       />
     );
   }
@@ -684,7 +685,7 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
                 busquedaRef={busqueda}
               />
             )}
-            <div className={`${styles.tablero} ${panel ? styles.conPanel : ''}`} data-arrastrando={arrastre ? '' : undefined}>
+            <div className={styles.tablero} data-arrastrando={arrastre ? '' : undefined}>
               <ContextoDias dias={mostrado.dias}>
                 {mostrado.dias.map((d, i) => (
                   <Dia
@@ -713,7 +714,7 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
                   <span className={`${texto.label} ${texto.acento}`}>Cómo se arma</span>
                   <span className={`${texto.bodySm} ${texto.primario}`}>Arrastrá ejercicios del catálogo a un día, o elegí un día y tocá + en el ejercicio.</span>
                   <span className={`${texto.bodySm} ${texto.secundario}`}>
-                    Cada ejercicio se configura en el panel que se abre al hacer clic. Guardar se habilita con un nombre y al menos un ejercicio.
+                    Cada ejercicio se configura en el modal que se abre al agregarlo o al hacer clic. Guardar se habilita con un nombre y al menos un ejercicio.
                   </span>
                 </Tarjeta>
               ) : null}
@@ -758,14 +759,21 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
 
       <Modal
         abierto={bloqueo.state === 'blocked' && !preguntaActivar}
-        chico
         titulo="Tenés cambios sin guardar"
         texto={`Si salís ahora, se pierden ${textoCambios} que hiciste en ${borrador.name.trim() || 'la rutina nueva'}.`}
         onCerrar={() => bloqueo.reset?.()}
         pie={
           <>
-            <Boton variante="ghost" onClick={() => bloqueo.reset?.()}>
-              Seguir editando
+            <Boton
+              icono={Check}
+              data-foco-inicial
+              cargando={estadoGuardado === 'guardando'}
+              onClick={() => {
+                alGuardarSalir.current = () => bloqueo.proceed?.();
+                void guardar();
+              }}
+            >
+              Guardar y salir
             </Boton>
             <Boton
               variante="danger"
@@ -777,16 +785,8 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
             >
               Descartar
             </Boton>
-            <Boton
-              icono={Check}
-              data-foco-inicial
-              cargando={estadoGuardado === 'guardando'}
-              onClick={() => {
-                alGuardarSalir.current = () => bloqueo.proceed?.();
-                void guardar();
-              }}
-            >
-              Guardar y salir
+            <Boton variante="ghost" onClick={() => bloqueo.reset?.()}>
+              Seguir editando
             </Boton>
           </>
         }
@@ -805,15 +805,6 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
         pie={
           <>
             <Boton
-              variante="ghost"
-              onClick={() => {
-                setPreguntaActivar(false);
-                void guardar(false);
-              }}
-            >
-              Guardarla sin activar
-            </Boton>
-            <Boton
               icono={Check}
               data-foco-inicial
               onClick={() => {
@@ -822,6 +813,15 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
               }}
             >
               Ponerla en curso
+            </Boton>
+            <Boton
+              variante="ghost"
+              onClick={() => {
+                setPreguntaActivar(false);
+                void guardar(false);
+              }}
+            >
+              Guardarla sin activar
             </Boton>
           </>
         }
@@ -836,7 +836,7 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
             [['Espacio'], 'Sobre el agarre, levantar o soltar el ejercicio'],
             [['←', '→'], 'Con una tarjeta levantada, cambiarla de día'],
             [['Enter'], 'Configurar la tarjeta enfocada'],
-            [['Esc'], 'Cancelar el arrastre o cerrar el panel'],
+            [['Esc'], 'Cancelar el arrastre o cerrar el modal'],
             [['?'], 'Ver estos atajos'],
           ].map(([teclas, que]) => (
             <div key={que as string} className={styles.atajo}>

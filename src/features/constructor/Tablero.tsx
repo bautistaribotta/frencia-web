@@ -2,7 +2,7 @@
    columna, con su nombre, los dias de la semana y sus ejercicios. Los dias
    se reordenan arrastrando el agarre de la cabecera; los ejercicios, solo
    desde el agarre de la derecha (los seis puntos). El resto de la tarjeta
-   abre su panel: al hover se vela y muestra Editar. Con teclado, Espacio
+   abre su configuracion: al hover se vela y muestra Editar. Con teclado, Espacio
    sobre el agarre la levanta. */
 
 import { useSortable, SortableContext, horizontalListSortingStrategy, verticalListSortingStrategy } from '@dnd-kit/sortable';
@@ -77,7 +77,6 @@ export const Dia = memo(function Dia({
     attributes: { roleDescription: 'día arrastrable' },
   });
   const clases = [styles.dia, estado === 'destino' ? styles.destino : '', estado === 'atenuado' ? styles.atenuado : '', isDragging ? styles.diaLevantado : ''].join(' ');
-  const n = dia.ejercicios.filter((e) => e.uid !== UID_ARRASTRE).length;
 
   return (
     <section
@@ -89,38 +88,16 @@ export const Dia = memo(function Dia({
       onPointerDown={() => onElegir(dia.uid)}
       onFocus={() => onElegir(dia.uid)}
     >
-      <div className={styles.cabeza}>
-        <div className={styles.cabezaFila}>
-          <button ref={setActivatorNodeRef} type="button" className={styles.agarreDia} aria-label={`Mover ${dia.name}`} {...attributes} {...listeners}>
-            <Icono icono={GripVertical} tamano={16} />
-          </button>
-          <input
-            className={`${texto.subtitle} ${styles.nombreDia}`}
-            value={dia.name}
-            placeholder={`Día ${indice + 1}`}
-            aria-label="Nombre del día"
-            maxLength={40}
-            onChange={(evento) => despachar({ tipo: 'nombreDia', dia: dia.uid, valor: evento.target.value })}
-          />
-          <span className={`${texto.label} ${texto.terciario}`} aria-label={`${n} ejercicios`}>
-            {n}
-          </span>
-          <Menu
-            etiqueta={`Acciones de ${dia.name || `Día ${indice + 1}`}`}
-            opciones={[
-              { etiqueta: 'Mover a la izquierda', icono: ArrowLeft, disabled: indice === 0, alElegir: () => despachar({ tipo: 'moverDia', dia: dia.uid, indice: indice - 1 }) },
-              { etiqueta: 'Mover a la derecha', icono: ArrowRight, disabled: indice === total - 1, alElegir: () => despachar({ tipo: 'moverDia', dia: dia.uid, indice: indice + 1 }) },
-              { etiqueta: 'Duplicar día', icono: Copy, disabled: total >= MAX_DIAS, alElegir: () => despachar({ tipo: 'duplicarDia', dia: dia.uid }) },
-              { etiqueta: 'Eliminar día', icono: Trash2, peligro: true, disabled: total <= 1, alElegir: () => onQuitarDia(dia) },
-            ]}
-          />
-        </div>
-        <SemanaEditable
-          etiqueta={`Días de la semana de ${dia.name || `Día ${indice + 1}`}`}
-          marcados={dia.weekdays}
-          onAlternar={(weekday) => despachar({ tipo: 'semana', dia: dia.uid, weekday })}
-        />
-      </div>
+      <CabezaDia
+        dia={dia}
+        indice={indice}
+        total={total}
+        agarreRef={setActivatorNodeRef}
+        attributes={attributes}
+        listeners={listeners}
+        despachar={despachar}
+        onQuitarDia={onQuitarDia}
+      />
 
       <SortableContext items={dia.ejercicios.map((e) => `ej:${e.uid}`)} strategy={verticalListSortingStrategy}>
         <ol className={styles.lista}>
@@ -149,10 +126,70 @@ export const Dia = memo(function Dia({
         </ol>
       </SortableContext>
 
-      <Boton variante="ghost" tamano="sm" icono={Plus} className={styles.agregar} onClick={() => onAgregarEjercicio(dia.uid)}>
-        Agregar ejercicio
-      </Boton>
+      <AgregarEjercicio dia={dia.uid} onAgregar={onAgregarEjercicio} />
     </section>
+  );
+});
+
+type Ordenable = ReturnType<typeof useSortable>;
+
+interface PropsCabeza {
+  dia: DiaBorrador;
+  indice: number;
+  total: number;
+  agarreRef: Ordenable['setActivatorNodeRef'];
+  attributes: Ordenable['attributes'];
+  listeners: Ordenable['listeners'];
+  despachar: (a: Accion) => void;
+  onQuitarDia: (dia: DiaBorrador) => void;
+}
+
+/** La cabecera de un dia, aparte y con memo: useSortable vuelve a dibujar el
+ *  dia en cada movimiento del puntero, y la cabecera no cambia mientras se
+ *  arrastra. */
+const CabezaDia = memo(function CabezaDia({ dia, indice, total, agarreRef, attributes, listeners, despachar, onQuitarDia }: PropsCabeza) {
+  const n = dia.ejercicios.filter((e) => e.uid !== UID_ARRASTRE).length;
+  return (
+    <div className={styles.cabeza}>
+      <div className={styles.cabezaFila}>
+        <button ref={agarreRef} type="button" className={styles.agarreDia} aria-label={`Mover ${dia.name}`} {...attributes} {...listeners}>
+          <Icono icono={GripVertical} tamano={16} />
+        </button>
+        <input
+          className={`${texto.subtitle} ${styles.nombreDia}`}
+          value={dia.name}
+          placeholder={`Día ${indice + 1}`}
+          aria-label="Nombre del día"
+          maxLength={40}
+          onChange={(evento) => despachar({ tipo: 'nombreDia', dia: dia.uid, valor: evento.target.value })}
+        />
+        <span className={`${texto.label} ${texto.terciario}`} aria-label={`${n} ejercicios`}>
+          {n}
+        </span>
+        <Menu
+          etiqueta={`Acciones de ${dia.name || `Día ${indice + 1}`}`}
+          opciones={[
+            { etiqueta: 'Mover a la izquierda', icono: ArrowLeft, disabled: indice === 0, alElegir: () => despachar({ tipo: 'moverDia', dia: dia.uid, indice: indice - 1 }) },
+            { etiqueta: 'Mover a la derecha', icono: ArrowRight, disabled: indice === total - 1, alElegir: () => despachar({ tipo: 'moverDia', dia: dia.uid, indice: indice + 1 }) },
+            { etiqueta: 'Duplicar día', icono: Copy, disabled: total >= MAX_DIAS, alElegir: () => despachar({ tipo: 'duplicarDia', dia: dia.uid }) },
+            { etiqueta: 'Eliminar día', icono: Trash2, peligro: true, disabled: total <= 1, alElegir: () => onQuitarDia(dia) },
+          ]}
+        />
+      </div>
+      <SemanaEditable
+        etiqueta={`Días de la semana de ${dia.name || `Día ${indice + 1}`}`}
+        marcados={dia.weekdays}
+        onAlternar={(weekday) => despachar({ tipo: 'semana', dia: dia.uid, weekday })}
+      />
+    </div>
+  );
+});
+
+const AgregarEjercicio = memo(function AgregarEjercicio({ dia, onAgregar }: { dia: string; onAgregar: (dia: string) => void }) {
+  return (
+    <Boton variante="ghost" tamano="sm" icono={Plus} className={styles.agregar} onClick={() => onAgregar(dia)}>
+      Agregar ejercicio
+    </Boton>
   );
 });
 
@@ -185,7 +222,7 @@ const TarjetaOrdenable = memo(function TarjetaOrdenable({ ejercicio, numero, dia
     transition: { duration: 180, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' },
   });
 
-  // Dos controles: la tarjeta abre el panel (clic, Enter o Espacio) y solo el
+  // Dos controles: la tarjeta abre la configuracion (clic, Enter o Espacio) y solo el
   // agarre de la derecha arrastra (con teclado, Espacio la levanta).
   return (
     <div
@@ -201,7 +238,7 @@ const TarjetaOrdenable = memo(function TarjetaOrdenable({ ejercicio, numero, dia
         aria-current={seleccionada || undefined}
         onClick={(evento: MouseEvent) => {
           evento.stopPropagation();
-          // Sin detalle de clic, lo activo el teclado: el foco pasa al panel.
+          // Sin detalle de clic, lo activo el teclado.
           if (evento.detail === 0) onAbrirTeclado(ejercicio.uid);
           else onAbrir(ejercicio.uid);
         }}
@@ -216,7 +253,9 @@ const TarjetaOrdenable = memo(function TarjetaOrdenable({ ejercicio, numero, dia
   );
 });
 
-function ContenidoTarjeta({ ejercicio, numero, unidades }: { ejercicio: EjercicioBorrador; numero: number; unidades: Unidades }) {
+// Con memo, como el resto de lo que va adentro de algo ordenable: useSortable
+// vuelve a dibujar la tarjeta en cada movimiento del puntero.
+const ContenidoTarjeta = memo(function ContenidoTarjeta({ ejercicio, numero, unidades }: { ejercicio: EjercicioBorrador; numero: number; unidades: Unidades }) {
   return (
     <>
       <span className={styles.numero}>{String(numero).padStart(2, '0')}</span>
@@ -227,18 +266,18 @@ function ContenidoTarjeta({ ejercicio, numero, unidades }: { ejercicio: Ejercici
       </span>
     </>
   );
-}
+});
 
 /** Lo que muestra el hover de una tarjeta de un dia, fuera del agarre: un
- *  velo que tapa el contenido y, al centro, Editar. El clic abre su panel. */
-function VeloEditar() {
+ *  velo que tapa el contenido y, al centro, Editar. El clic abre su configuracion. */
+const VeloEditar = memo(function VeloEditar() {
   return (
     <span className={styles.editar} aria-hidden="true">
       <Icono icono={Pencil} tamano={16} />
       Editar
     </span>
   );
-}
+});
 
 /** La copia de la tarjeta que sigue al puntero (DragOverlay). */
 export function TarjetaLevantada({ ejercicio, numero, unidades, estado }: { ejercicio: EjercicioBorrador; numero: number; unidades: Unidades; estado: 'ok' | 'invalida' | 'quitar' }) {

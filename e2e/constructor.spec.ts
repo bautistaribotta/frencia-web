@@ -95,7 +95,7 @@ for (const [tema, nombre] of [
     await page.screenshot({ path: `capturas/constructor-nueva-${nombre}.png` });
   });
 
-  test(`editando en ${nombre}, con el panel abierto`, async ({ page }) => {
+  test(`editando en ${nombre}, con el modal de configurar abierto`, async ({ page }) => {
     await page.emulateMedia({ colorScheme: tema, reducedMotion: 'reduce' });
     await conDatos(page);
     await page.goto(`/rutinas/${RUTINA.id}/editar`);
@@ -113,7 +113,17 @@ for (const [tema, nombre] of [
     await primera.hover();
     await page.screenshot({ path: `capturas/constructor-hover-${nombre}.png` });
     await primera.click();
-    await expect(page.getByRole('complementary', { name: 'Configurar Press de banca con barra' })).toBeVisible();
+    const modal = page.getByRole('dialog', { name: 'Press de banca con barra' });
+    await expect(modal).toBeVisible();
+    // Sin la nota de fuerza ni los atajos; el foco arranca en el primer campo.
+    await expect(modal.getByText('Sin peso en el plan')).toHaveCount(0);
+    await expect(modal.getByText('cambian el valor')).toHaveCount(0);
+    await expect(modal.getByRole('spinbutton', { name: 'Series' })).toBeFocused();
+    // Solo Guardar a la izquierda y Quitar ejercicio a la derecha; sin Siguiente.
+    await expect(modal.getByRole('button', { name: 'Siguiente' })).toHaveCount(0);
+    const guardar = (await modal.getByRole('button', { name: 'Guardar', exact: true }).boundingBox())!;
+    const quitar = (await modal.getByRole('button', { name: 'Quitar ejercicio' }).boundingBox())!;
+    expect(guardar.x).toBeLessThan(quitar.x);
     await page.screenshot({ path: `capturas/constructor-editar-${nombre}.png` });
   });
 }
@@ -133,23 +143,33 @@ test('nueva: del catalogo a un dia, configurar y guardar en curso', async ({ pag
   await page.mouse.up();
   await expect(tarjetas(dia1)).toHaveCount(1);
   await expect(page.getByText('Sentadilla con barra agregado a Día 1')).toBeVisible();
+  // Al soltarlo se abre su configuracion, con el foco en el primer campo.
+  const sentadilla = page.getByRole('dialog', { name: 'Sentadilla con barra' });
+  await expect(sentadilla.getByRole('spinbutton', { name: 'Series' })).toBeFocused();
+  await page.screenshot({ path: 'capturas/constructor-agregado.png' });
+  await sentadilla.getByRole('spinbutton', { name: 'Repeticiones' }).fill('5');
+  await sentadilla.getByRole('spinbutton', { name: 'Repeticiones' }).press('Enter');
+  await sentadilla.getByRole('spinbutton', { name: 'Series' }).press('ArrowUp');
+  await sentadilla.getByText('Al fallo').click();
+  // Hasta Guardar, la tarjeta no cambia.
+  await expect(tarjetas(dia1).first()).not.toContainText('4×5');
+  await sentadilla.getByRole('button', { name: 'Guardar', exact: true }).click();
+  await expect(sentadilla).toHaveCount(0);
+  await expect(tarjetas(dia1).first()).toContainText('4×5');
+  await expect(tarjetas(dia1).first()).toContainText('Al fallo');
   // El catalogo no pierde el ejercicio: es una copia.
   await expect(page.getByLabel('Catálogo de ejercicios').getByText('Sentadilla con barra')).toBeVisible();
 
-  // Con + va al dia elegido; el plan se configura en el panel.
+  // Con + va al dia elegido y tambien abre su configuracion.
   await page.getByLabel('Catálogo de ejercicios').getByText('Plancha').hover();
   await page.getByRole('button', { name: 'Agregar Plancha a Día 1' }).click();
   await expect(tarjetas(dia1)).toHaveCount(2);
-  await tarjetas(dia1).first().click();
-  const panel = page.getByRole('complementary', { name: 'Configurar Sentadilla con barra' });
-  await panel.getByRole('spinbutton', { name: 'Repeticiones' }).fill('5');
-  await panel.getByRole('spinbutton', { name: 'Repeticiones' }).press('Enter');
-  await panel.getByRole('spinbutton', { name: 'Series' }).press('ArrowUp');
-  await panel.getByText('Al fallo').click();
-  await expect(tarjetas(dia1).first()).toContainText('4×5');
-  await expect(tarjetas(dia1).first()).toContainText('Al fallo');
+  const plancha = page.getByRole('dialog', { name: 'Plancha' });
+  await expect(plancha).toBeVisible();
+  // Esc cierra sin aplicar: la plancha queda con sus 3 series por defecto.
+  await plancha.getByRole('spinbutton', { name: 'Series' }).press('ArrowUp');
   await page.keyboard.press('Escape');
-  await expect(panel).toHaveCount(0);
+  await expect(plancha).toHaveCount(0);
 
   await page.getByRole('button', { name: 'martes', exact: true }).click();
   await expect(page.getByText(/Cambios sin guardar · \d/)).toBeVisible();
@@ -181,6 +201,7 @@ test('nueva con una rutina en curso: pregunta si la reemplaza', async ({ page })
   await page.getByRole('textbox', { name: 'Nombre de la rutina' }).fill('Otra');
   await page.getByLabel('Catálogo de ejercicios').getByText('Remo con barra').hover();
   await page.getByRole('button', { name: 'Agregar Remo con barra a Día 1' }).click();
+  await page.getByRole('dialog', { name: 'Remo con barra' }).getByRole('button', { name: 'Cerrar' }).click();
   await page.getByRole('button', { name: 'Guardar', exact: true }).click();
   const modal = page.getByRole('dialog', { name: '¿La ponés en curso?' });
   await expect(modal.getByRole('button', { name: 'Ponerla en curso' })).toBeFocused();
@@ -210,9 +231,11 @@ test('editar: mover entre dias, reordenar con teclado, quitar y deshacer', async
   await agarre(tarjetas(pull).nth(1)).focus();
   await page.keyboard.press('Space');
   await expect(page.getByText('levantado · 2 de 2 en Pull')).toBeVisible();
-  await page.keyboard.press('ArrowUp');
   // Entre tecla y tecla una persona tarda mas que esto; sin pausa, con la
-  // maquina cargada, Espacio puede llegar antes de que dnd-kit procese la flecha.
+  // maquina cargada, la flecha puede llegar antes de que el sensor de dnd-kit
+  // escuche, y Espacio antes de que procese la flecha.
+  await page.waitForTimeout(150);
+  await page.keyboard.press('ArrowUp');
   await page.waitForTimeout(150);
   await page.keyboard.press('Space');
   await expect(tarjetas(pull)).toHaveText([/Press inclinado/, /Remo con barra/]);
@@ -283,6 +306,17 @@ test('salir con cambios pide confirmar; el borrador sobrevive a recargar', async
   await page.getByRole('button', { name: 'Volver a la rutina' }).click();
   const modal = page.getByRole('dialog', { name: 'Tenés cambios sin guardar' });
   await expect(modal.getByRole('button', { name: 'Guardar y salir' })).toBeFocused();
+  // Guardar y salir a la izquierda, Descartar en el medio y Seguir editando a
+  // la derecha del todo.
+  const xs = await Promise.all(['Guardar y salir', 'Descartar', 'Seguir editando'].map(async (n) => (await modal.getByRole('button', { name: n }).boundingBox())!.x));
+  expect(xs).toEqual([...xs].sort((a, b) => a - b));
+  // Los tres botones del pie entran en el modal, sin salirse por la izquierda.
+  const caja = (await modal.boundingBox())!;
+  for (const boton of await modal.getByRole('button').all()) {
+    const b = (await boton.boundingBox())!;
+    expect(b.x).toBeGreaterThanOrEqual(caja.x);
+    expect(b.x + b.width).toBeLessThanOrEqual(caja.x + caja.width);
+  }
   await page.screenshot({ path: 'capturas/constructor-salir.png' });
   await modal.getByRole('button', { name: 'Seguir editando' }).click();
   await expect(page).toHaveURL(/editar$/);

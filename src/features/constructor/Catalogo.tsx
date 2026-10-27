@@ -155,9 +155,28 @@ const ItemCatalogo = memo(function ItemCatalogo({
   return (
     // Solo el puntero arrastra desde el catalogo; con teclado se agrega con +.
     <div ref={setNodeRef} onPointerDown={listeners?.onPointerDown as PointerEventHandler<HTMLDivElement> | undefined} className={`${styles.item} ${isDragging ? styles.arrastrado : ''}`}>
+      <CuerpoItem ejercicio={ejercicio} diaElegido={diaElegido} onAgregar={onAgregar} />
+    </div>
+  );
+});
+
+// Aparte y con memo: useDraggable vuelve a dibujar cada item cada vez que
+// cambia lo que esta debajo de lo arrastrado, y con cientos de items (cada uno
+// con su icono animado) el arrastre se traba.
+const CuerpoItem = memo(function CuerpoItem({
+  ejercicio,
+  diaElegido,
+  onAgregar,
+}: {
+  ejercicio: EjercicioCatalogo;
+  diaElegido: string;
+  onAgregar: (e: EjercicioCatalogo) => void;
+}) {
+  return (
+    <>
       <FilaCatalogo ejercicio={ejercicio} />
       <BotonIcono icono={Plus} tamano="sm" etiqueta={`Agregar ${ejercicio.name} a ${diaElegido}`} className={styles.mas} onClick={() => onAgregar(ejercicio)} />
-    </div>
+    </>
   );
 });
 

@@ -23,4 +23,5 @@
 .textos { display: flex; flex-direction: column; gap: var(--space-3); flex: 1; min-width: 0; }
 .titulo,
 .bajada { margin: 0; }
-.pie { display: flex; justify-content: flex-end; gap: var(--space-3); }
+/* Si no entran, los botones bajan de linea en vez de salirse del modal. */
+.pie { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--space-3); }
