@@ -1,4 +1,4 @@
-/* Marco comun de login y registro: el fondo de luces (cumbre, anima, como
+/* Marco comun del acceso (login, registro, recuperar y nueva contraseña): el fondo de luces (cumbre, anima, como
    todo el onboarding), el boton de tema arriba del lado del formulario, el
    formulario en vidrio y el billete, que lleva la marca. Los terminos y la
    politica de privacidad se leen en el modal de lectura, sin salir de la
@@ -19,12 +19,14 @@ interface Props {
   /** Login lleva el billete a la izquierda; el registro, a la derecha. */
   billete: 'izquierda' | 'derecha';
   titulo: string;
-  bajada: string;
-  onSubmit: (evento: FormEvent<HTMLFormElement>) => void;
+  bajada: ReactNode;
+  /** Lo que va arriba del titulo: volver al login, el sello con el icono. */
+  cabeza?: ReactNode;
+  onSubmit?: (evento: FormEvent<HTMLFormElement>) => void;
   children: ReactNode;
 }
 
-export function Acceso({ billete, titulo, bajada, onSubmit, children }: Props) {
+export function Acceso({ billete, titulo, bajada, cabeza, onSubmit = (evento) => evento.preventDefault(), children }: Props) {
   const izquierda = billete === 'izquierda';
   const [documento, setDocumento] = useState<Documento | null>(null);
 
@@ -33,6 +35,7 @@ export function Acceso({ billete, titulo, bajada, onSubmit, children }: Props) {
       <BotonTema className={styles.tema} />
       <Tarjeta className={styles.tarjeta}>
         <form className={styles.formulario} onSubmit={onSubmit} noValidate>
+          {cabeza}
           <div className={styles.encabezado}>
             <h1 className={texto.title}>{titulo}</h1>
             <span className={`${texto.bodySm} ${texto.secundario}`}>{bajada}</span>

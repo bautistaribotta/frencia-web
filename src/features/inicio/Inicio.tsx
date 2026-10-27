@@ -13,7 +13,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { ArrowRight, Check, Flame, Plus, RotateCw, Smartphone } from 'lucide-react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 
 import { Boton } from '@/design/components/Boton';
 import { Fondo } from '@/design/components/Fondo';
@@ -249,6 +249,7 @@ const PASOS = [
 ];
 
 function Vacio() {
+  const navegar = useNavigate();
   return (
     <>
       <Tarjeta className={styles.hero}>
@@ -257,8 +258,7 @@ function Vacio() {
         <span className={`${texto.body} ${texto.secundario} ${styles.heroTexto}`}>
           Todavía no tenés rutinas. Cargala acá con el teclado y el catálogo a mano; después la entrenás desde el celular.
         </span>
-        {/* El constructor todavia no existe: queda a la vista, desactivado. */}
-        <Boton tamano="lg" icono={Plus} disabled title="Muy pronto">
+        <Boton tamano="lg" icono={Plus} title="Crear primera rutina (N)" onClick={() => navegar('/rutinas/nueva')}>
           Crear primera rutina
         </Boton>
       </Tarjeta>

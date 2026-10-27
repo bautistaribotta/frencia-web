@@ -147,7 +147,7 @@ function Signup({ caso, variante }) {
 }
 function Recuperar({ enviado }) {
   return (
-    <Acceso>
+    <Acceso variante="billete-izq">
       <Boton v="ghost" t="sm" ico="arrow-left" className="w-alinear-izq">Volver a iniciar sesión</Boton>
       <span className="w-sello-ico"><Ico n={enviado ? 'mail-check' : 'key-round'} s={26} confirma={enviado} /></span>
       {enviado ? (
@@ -168,20 +168,20 @@ function Recuperar({ enviado }) {
 function NuevaContrasena({ caso }) {
   if (caso === 'vencido') {
     return (
-      <Acceso>
+      <Acceso variante="billete-izq">
         <span className="w-sello-ico"><Ico n="link-2-off" s={26} /></span>
         <div className="col g3"><span className="t-title">El enlace venció</span><span className="t-bodysm c-sec">Los enlaces para cambiar la contraseña duran una hora y sirven una sola vez. Pedí uno nuevo.</span></div>
         <Boton t="lg" ancho icoDer="arrow-right">Pedir otro enlace</Boton>
       </Acceso>
     );
   }
-  const req = [['6 caracteres o más', true], ['Distinta de la anterior', caso !== 'debil']];
+  const req = [['6 caracteres o más', true], ['Las dos coinciden', caso !== 'distintas']];
   return (
-    <Acceso>
+    <Acceso variante="billete-izq">
       <div className="col g2"><span className="t-title">Elegí una contraseña nueva</span><span className="t-bodysm c-sec">Para bauti@correo.com</span></div>
       <div className="col g4">
         <Campo flotante rotulo="Contraseña nueva" ico="lock" valor="••••••••" final={<BotonIco ico="eye" t="sm" label="Mostrar contraseña" />} />
-        <Campo flotante rotulo="Repetila" ico="lock" valor="••••••••" estado={caso === 'guardando' ? 'off' : 'foco'} />
+        <Campo flotante rotulo="Repetila" ico="lock" valor="••••••••" estado={caso === 'guardando' ? 'off' : 'foco'} error={caso === 'igual' ? 'Tiene que ser distinta de la que tenías.' : undefined} />
       </div>
       <div className="col g2">{req.map(([t, ok]) => <span key={t} className={`row g2 t-bodysm ${ok ? 'c-pri' : 'c-ter'}`}><Ico n={ok ? 'check' : 'circle'} s={16} c={ok ? 'c-acc' : ''} />{t}</span>)}</div>
       <Boton t="lg" ancho ico={caso === 'guardando' ? undefined : 'check'} estado={caso === 'guardando' ? 'cargando' : undefined}>{caso === 'guardando' ? 'Guardando…' : 'Guardar y entrar'}</Boton>
@@ -320,12 +320,13 @@ function AppWeb() {
         <Mesa nombre="Contraseñas distintas" ruta="/signup" fondo="flanco" animado url="frencia.app/signup"><Signup caso="distintas" /></Mesa>
         <Mesa nombre="Correo ya registrado" nota="Ofrece entrar o recuperar la contraseña en el mismo lugar." ruta="/signup" fondo="flanco" animado url="frencia.app/signup"><Signup caso="tomado" /></Mesa>
       </Seccion>
-      <Seccion titulo="Recuperar y nueva contraseña" nota="(auth)/forgot-password y (auth)/reset-password — el enlace del correo abre la web en reset-password con el token de Supabase.">
+      <Seccion titulo="Recuperar y nueva contraseña" nota="(auth)/forgot-password y (auth)/reset-password — el enlace del correo abre la web en /nueva-contrasena con el código de Supabase. Mismo marco que el login: el billete a la izquierda y la tarjeta a la derecha, así no cambia de lugar al ir y volver.">
         <Mesa nombre="Pedir el enlace" ruta="(auth)/forgot-password" fondo="flanco" animado url="frencia.app/recuperar"><Recuperar /></Mesa>
         <Mesa nombre="Enlace enviado" nota="El icono del sello se anima una vez al confirmar. Reenviar espera un minuto." ruta="(auth)/forgot-password" fondo="flanco" animado url="frencia.app/recuperar"><Recuperar enviado /></Mesa>
-        <Mesa nombre="Nueva contraseña" nota="Los requisitos se tachan en vivo, en tinta y con check." ruta="(auth)/reset-password" fondo="flanco" animado url="frencia.app/nueva-contrasena"><NuevaContrasena /></Mesa>
+        <Mesa nombre="Nueva contraseña" nota="Los requisitos se tachan en vivo, en tinta y con check: largo y que las dos coincidan. Que sea distinta de la anterior solo lo sabe el servidor: si la rechaza, el error va en el campo." ruta="(auth)/reset-password" fondo="flanco" animado url="frencia.app/nueva-contrasena"><NuevaContrasena /></Mesa>
         <Mesa nombre="Nueva contraseña · guardando" ruta="(auth)/reset-password" fondo="flanco" animado url="frencia.app/nueva-contrasena"><NuevaContrasena caso="guardando" /></Mesa>
-        <Mesa nombre="Enlace vencido" ruta="(auth)/reset-password" fondo="flanco" animado url="frencia.app/nueva-contrasena"><NuevaContrasena caso="vencido" /></Mesa>
+        <Mesa nombre="Nueva contraseña · igual a la anterior" ruta="(auth)/reset-password" fondo="flanco" animado url="frencia.app/nueva-contrasena"><NuevaContrasena caso="igual" /></Mesa>
+        <Mesa nombre="Enlace vencido" nota="También si el enlace se abre en otro navegador que el que lo pidió: el código solo se canjea donde se pidió." ruta="(auth)/reset-password" fondo="flanco" animado url="frencia.app/nueva-contrasena"><NuevaContrasena caso="vencido" /></Mesa>
       </Seccion>
       <Seccion titulo="Términos y privacidad" nota="legal-consent — tarjeta centrada; fondo cumbre (la luz arriba a la derecha queda lejos del texto chico). El documento se abre en un modal de lectura y se marca al llegar al final.">
         <Mesa nombre="Ninguno leído" nota="La próxima fila a leer se adelanta con el hover." ruta="legal-consent" fondo="cumbre" animado url="frencia.app/bienvenida"><Consentimiento /></Mesa>

@@ -7,13 +7,16 @@
    - * : la 404, afuera de las puertas (con sesion, dentro del marco).
    Si una pagina falla, ErrorRuta muestra el 500 o el sin conexion: dentro de
    la app en el lugar de la pagina, con la navegacion; afuera, en la raiz.
-   Las demas rutas del kit (recuperar, nueva contraseña, bienvenida,
-   ticket y /r/:codigo) y las fases de legal y
-   setup se suman en las etapas siguientes. */
+   - /recuperar: con las de invitado. /nueva-contrasena, afuera de las
+     puertas: el enlace del correo llega con una sesion de recuperacion.
+   Las demas rutas del kit (bienvenida, ticket y /r/:codigo) y las fases de
+   legal y setup se suman en las etapas siguientes. */
 
 import { createBrowserRouter, Navigate } from 'react-router';
 
 import { Login } from '@/features/auth/Login';
+import { NuevaContrasena } from '@/features/auth/NuevaContrasena';
+import { Recuperar } from '@/features/auth/Recuperar';
 import { Signup } from '@/features/auth/Signup';
 import { Configuracion } from '@/features/configuracion/Configuracion';
 import { Constructor } from '@/features/constructor/Constructor';
@@ -38,6 +41,7 @@ export const router = createBrowserRouter([
         children: [
           { path: '/login', element: <Login /> },
           { path: '/signup', element: <Signup /> },
+          { path: '/recuperar', element: <Recuperar /> },
           // La direccion vieja del registro, por si quedo guardada en el navegador.
           { path: '/registro', element: <Navigate to="/signup" replace /> },
         ],
@@ -67,6 +71,7 @@ export const router = createBrowserRouter([
           },
         ],
       },
+      { path: '/nueva-contrasena', element: <NuevaContrasena /> },
       { path: '*', element: <NoEncontrada /> },
     ],
   },

@@ -89,3 +89,18 @@
   .tema,
   .billeteIzq .tema { left: auto; right: var(--space-6); top: var(--space-6); }
 }
+/* Recuperar y nueva contraseña (.w-alinear-izq, .w-sello-ico). */
+.volver { align-self: flex-start; margin-left: calc(var(--space-4) * -1); }
+.sello {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-inset);
+  border: 1px solid var(--glass-line);
+  color: var(--text-primary);
+}
+.requisitos { display: flex; flex-direction: column; gap: var(--space-2); margin: 0; padding: 0; list-style: none; }
+.requisito { display: flex; align-items: center; gap: var(--space-2); }

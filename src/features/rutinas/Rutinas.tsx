@@ -2,13 +2,14 @@
    lume, y las anteriores en una tabla de la mas nueva a la mas vieja (kit web,
    Web · 4). Nueva rutina vive solo en la navegacion. Al lado de Anteriores, la
    cuenta contra el limite de rutinas.
+   Sin rutinas, el vacio ofrece Crear rutina (o N).
    El menu de cada fila (boton ⋯ o clic derecho): Poner en curso, Editar,
    Duplicar y Compartir (desactivados por ahora) y Eliminar, tambien con Supr
    sobre la fila. Toda la fila abre el detalle.
    Fondo: cumbre. */
 
 import { useQuery } from '@tanstack/react-query';
-import { ChevronRight, Copy, Layers, Pencil, Play, RotateCw, Share, Trash2 } from 'lucide-react';
+import { ChevronRight, Copy, Layers, Pencil, Play, Plus, RotateCw, Share, Trash2 } from 'lucide-react';
 import { useState, type KeyboardEvent, type MouseEvent } from 'react';
 import { Link, useNavigate } from 'react-router';
 
@@ -19,7 +20,7 @@ import { Fondo } from '@/design/components/Fondo';
 import { Icono } from '@/design/components/Icono';
 import { Menu } from '@/design/components/Menu';
 import { Encabezado, Lista, Pagina } from '@/design/components/Pagina';
-import { Esqueleto, Tarjeta, TiraSemana } from '@/design/components/varios';
+import { Esqueleto, Kbd, Tarjeta, TiraSemana } from '@/design/components/varios';
 import texto from '@/design/texto.module.css';
 import { cargarRutinas, cuentaRutina, fechaCorta, MAXIMO_RUTINAS, totalRutinas, type RutinaResumen } from '@/lib/rutinas';
 import { EliminarRutina, usePonerEnCurso } from './acciones';
@@ -161,6 +162,7 @@ function Anteriores({ rutinas, total }: { rutinas: RutinaResumen[]; total: numbe
 }
 
 function Vacia() {
+  const navegar = useNavigate();
   return (
     <div className={styles.vacia}>
       <Icono icono={Layers} tamano={28} className={texto.terciario} />
@@ -168,6 +170,14 @@ function Vacia() {
       <span className={`${texto.bodySm} ${texto.secundario}`}>
         Cuando crees una va a aparecer acá, junto con las que archives más adelante.
       </span>
+      <div className={styles.vaciaAcciones}>
+        <Boton icono={Plus} onClick={() => navegar('/rutinas/nueva')}>
+          Crear rutina
+        </Boton>
+        <span className={`${texto.bodySm} ${texto.terciario} ${styles.vaciaAtajo}`}>
+          o apretá <Kbd>N</Kbd>
+        </span>
+      </div>
     </div>
   );
 }

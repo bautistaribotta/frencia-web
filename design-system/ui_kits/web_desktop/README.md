@@ -275,6 +275,22 @@ solo del kit y se reemplazan por las pseudoclases.
 - El límite de 5 rutinas todavía no está en la base: hoy lo cuida la web. La regla en
   la base va en una migración del repo de la app móvil.
 
+## Recuperar la contraseña
+
+- «¿La olvidaste?» del login lleva a `/recuperar` con el correo ya escrito, si había uno.
+  Mismo marco que el login (billete a la izquierda). Enviar enlace pide a Supabase el
+  correo de recuperación con vuelta a `/nueva-contrasena`. Siempre confirma «Revisá tu
+  correo», exista o no la cuenta: no se revela qué correos están registrados. Reenviar
+  espera un minuto.
+- `/nueva-contrasena` canjea el código del enlace y pide la contraseña dos veces. Los
+  requisitos (6 caracteres o más · las dos coinciden) se marcan en vivo; si el servidor
+  dice que es igual a la anterior, el error va en el campo. Guardar y entrar lleva al
+  inicio con el aviso «Contraseña actualizada».
+- Sin código válido (vencido, ya usado o abierto en otro navegador) muestra «El enlace
+  venció» con Pedir otro enlace.
+- La dirección de vuelta (`https://frencia.fit/nueva-contrasena` y la de desarrollo) tiene
+  que estar en las Redirect URLs de Supabase Auth; si no, el correo vuelve a la Site URL.
+
 ## Rutinas
 
 - Título «Todas las rutinas», con la bajada «Una en curso, al poner otra en curso, la

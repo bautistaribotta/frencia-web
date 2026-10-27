@@ -74,7 +74,7 @@ export function Login() {
           flotante
           rotulo="Contraseña"
           extra={
-            <Link to="/recuperar" className={styles.enlace}>
+            <Link to="/recuperar" state={{ email: email.trim() }} className={styles.enlace} viewTransition>
               ¿La olvidaste?
             </Link>
           }
