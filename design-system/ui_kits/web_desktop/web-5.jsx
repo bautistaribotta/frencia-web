@@ -52,6 +52,7 @@ function TarjetaEj({ e, i, estado }) {
       <span className="w-tipo w-tipo--sm"><Ico n={TIPO_ICO[e.k]} s={16} /></span>
       <div className="col g1 f1"><span className="t-bodysm semi c-pri una-linea">{e.n}</span><Res vol={e.vol} int={e.int} desc={e.desc} /></div>
       <span className="w-agarre"><Ico n="grip-vertical" s={16} /></span>
+      <span className="w-ej__editar" aria-hidden="true"><Ico n="pencil" s={16} />Editar</span>
     </div>
   );
 }
@@ -224,7 +225,7 @@ function AppWeb() {
     <Lienzo titulo="Constructor de rutinas" bajada="Pantalla completa, sin la navegación lateral: a la izquierda el catálogo, a la derecha la rutina con un día por columna. Los ejercicios se arrastran del catálogo a un día, entre días y dentro de un día; cada uno se configura en un panel lateral que no tapa el catálogo. Fondo velada en todos los estados: es la pantalla más densa en datos.">
       <Seccion titulo="Armar" nota="create-routine / edit-routine — el mismo constructor sirve para crear y para editar.">
         <Mesa nombre="Rutina nueva" nota="El nombre arranca en foco. Un solo día vacío con la consigna, y una pista en vidrio que desaparece con el primer ejercicio." ruta="create-routine" fondo="velada" url="frencia.app/rutinas/nueva"><Constructor caso="vacia" /></Mesa>
-        <Mesa nombre="Editando · hover" nota="Al pasar el mouse por un ejercicio del catálogo aparece el agarre y el + (agrega al día elegido; su tooltip dice cuál). En los días, el agarre de la tarjeta se aclara." ruta="edit-routine" fondo="velada" url={u}><Constructor caso="hover" /></Mesa>
+        <Mesa nombre="Editando · hover" nota="Al pasar el mouse por un ejercicio del catálogo aparece el agarre y el + (agrega al día elegido; su tooltip dice cuál). En los días, la tarjeta se vela entera y queda solo Editar al centro: el clic abre su panel." ruta="edit-routine" fondo="velada" url={u}><Constructor caso="hover" /></Mesa>
         <Mesa nombre="Buscar y filtrar" nota="/ enfoca la búsqueda desde cualquier lugar. Busca en el nombre en español y en inglés (exercises.name_en). Los chips filtran por tipo; el selector, por grupo muscular." ruta="edit-routine" fondo="velada" url={u}><Constructor caso="busqueda" /></Mesa>
       </Seccion>
       <Seccion titulo="Arrastrar y soltar" nota="Lo que se levanta es una copia en vidrio denso con borde de lume que sigue al puntero (DragOverlay), un 2 % más grande y sin rotar. Dónde cae se marca con un hueco punteado en lume del alto de una tarjeta, en el orden real. El día que recibe se enciende; los demás bajan un poco.">

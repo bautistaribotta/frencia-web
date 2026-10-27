@@ -121,7 +121,7 @@ columna (300 px, desplazamiento horizontal con borde fundido) · panel lateral d
 
 | Estado | Cómo se ve |
 |---|---|
-| Reposo / hover | Al hover aparece el agarre; en el catálogo, además, el `+` (agrega al día elegido) |
+| Reposo / hover | En el catálogo, al hover aparece el agarre y el `+` (agrega al día elegido). En un día, la tarjeta se vela: `scrim` con desenfoque que tapa todo el contenido y, al centro, el lápiz con «Editar» (también con el foco de teclado). Mientras se arrastra no aparece |
 | Levantado | Copia en vidrio denso (`surface-raised` + `blur-sheet`), borde y halo de `signal`, `scale(1.02)`, sin rotar, `shadow-lg` |
 | Dónde cae | Hueco punteado de 1,5 px en `signal` sobre `surface-signal-soft`, del alto de una tarjeta y en el orden real; las tarjetas se corren con 180 ms `ease-out` |
 | Día destino | Borde `signal` + anillo + `halo-signal`; los otros días bajan la saturación |

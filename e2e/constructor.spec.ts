@@ -97,7 +97,13 @@ for (const [tema, nombre] of [
     await conDatos(page);
     await page.goto(`/rutinas/${RUTINA.id}/editar`);
     await expect(tarjetas(dia(page, 'Push'))).toHaveCount(2);
-    await tarjetas(dia(page, 'Push')).first().click();
+    // Al hover la tarjeta se vela y queda solo Editar.
+    const primera = tarjetas(dia(page, 'Push')).first();
+    await expect(primera.getByText('Editar')).toHaveCSS('opacity', '0');
+    await primera.hover();
+    await expect(primera.getByText('Editar')).toHaveCSS('opacity', '1');
+    await page.screenshot({ path: `capturas/constructor-hover-${nombre}.png` });
+    await primera.click();
     await expect(page.getByRole('complementary', { name: 'Configurar Press de banca con barra' })).toBeVisible();
     await page.screenshot({ path: `capturas/constructor-editar-${nombre}.png` });
   });
@@ -196,9 +202,6 @@ test('editar: mover entre dias, reordenar con teclado, quitar y deshacer', async
   await page.keyboard.press('Space');
   await expect(page.getByText('levantado · 2 de 2 en Pull')).toBeVisible();
   await page.keyboard.press('ArrowUp');
-  // Una persona tarda mas que esto entre tecla y tecla; sin la pausa, el
-  // sensor suelta antes de que dnd-kit registre el nuevo lugar.
-  await page.waitForTimeout(200);
   await page.keyboard.press('Space');
   await expect(tarjetas(pull)).toHaveText([/Press inclinado/, /Remo con barra/]);
 

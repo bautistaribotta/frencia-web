@@ -125,6 +125,31 @@
 }
 .hueco > * { visibility: hidden; }
 
+/* Hover: la tarjeta se vela entera (scrim con desenfoque) y queda solo
+   Editar al centro. No ataja el puntero: debajo sigue la tarjeta, que se
+   arrastra o se abre con el clic. Mientras se arrastra no aparece. */
+.editar {
+  position: absolute;
+  inset: -1px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border-radius: inherit;
+  pointer-events: none;
+  background: var(--scrim);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  font: var(--fw-semibold) 13.5px/1 var(--font-sans);
+  color: var(--text-primary);
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+.tarjeta:hover .editar,
+.tarjeta:focus-visible .editar { opacity: 1; }
+[data-arrastrando] .editar { display: none; }
+
 /* Donde estaba la tarjeta que se lleva a otro dia, hasta soltarla. */
 .origen { display: block; height: 58px; border-radius: var(--radius-md); background: var(--surface-inset); border: 1px dashed var(--border-default); }
 

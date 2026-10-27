@@ -219,6 +219,9 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
   const [sobre, setSobre] = useState<Sobre>('nada');
   // Los datos de la tarjeta o el dia bajo lo que se arrastra.
   const [sobreDatos, setSobreDatos] = useState<DatosSobre | null>(null);
+  // Lo ultimo que aviso onDragOver. Con teclado, si se suelta enseguida de
+  // mover, el over que trae onDragEnd puede ser todavia el anterior.
+  const ultimoSobre = useRef<DragOverEvent['over']>(null);
   const [conTeclado, setConTeclado] = useState(false);
   const fotoInicio = useRef<Foto>(foto);
   // El clic que cierra un arrastre no abre el panel.
@@ -445,6 +448,7 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
   function alEmpezar({ active, activatorEvent }: DragStartEvent) {
     const datos = active.data.current;
     fotoInicio.current = foto;
+    ultimoSobre.current = null;
     setConTeclado(activatorEvent instanceof KeyboardEvent);
     setSobre('nada');
     if (datos?.tipo === 'cat') {
@@ -466,6 +470,7 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
     if (!datos || datos.tipo === 'dia') return;
     const movido: string = datos.tipo === 'cat' ? UID_ARRASTRE : datos.uid;
     const destino = over?.data.current;
+    ultimoSobre.current = over;
     setSobreDatos((destino as DatosSobre | undefined) ?? null);
 
     if (!over || !destino) {
@@ -509,7 +514,9 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
     });
   }
 
-  function alSoltar({ active, over }: DragEndEvent) {
+  function alSoltar({ active, over: overEvento }: DragEndEvent) {
+    const over = overEvento && overEvento.id === active.id && ultimoSobre.current ? ultimoSobre.current : overEvento;
+    ultimoSobre.current = null;
     const datos = active.data.current;
     const actual = arrastre;
     const final = vista;
@@ -677,7 +684,7 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
                 busquedaRef={busqueda}
               />
             )}
-            <div className={`${styles.tablero} ${panel ? styles.conPanel : ''}`}>
+            <div className={`${styles.tablero} ${panel ? styles.conPanel : ''}`} data-arrastrando={arrastre ? '' : undefined}>
               <ContextoDias dias={mostrado.dias}>
                 {mostrado.dias.map((d, i) => (
                   <Dia

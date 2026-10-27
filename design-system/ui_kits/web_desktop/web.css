@@ -473,6 +473,12 @@ section + section { margin-top: var(--space-11); }
 .w-hueco { height: 58px; border-radius: var(--radius-md); border: 1.5px dashed var(--signal); background: var(--surface-signal-soft); }
 .w-ej.is-origen { background: var(--surface-inset); border: 1px dashed var(--border-default); }
 .w-ej.is-origen > * { visibility: hidden; }
+/* Hover de una tarjeta de un día: se vela entera y queda solo Editar al centro */
+.w-ej__editar { position: absolute; inset: -1px; z-index: 1; display: flex; align-items: center; justify-content: center; gap: var(--space-2); border-radius: inherit; pointer-events: none;
+  background: var(--scrim); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); font: var(--fw-semibold) 13.5px/1 var(--font-sans); color: var(--text-primary);
+  opacity: 0; transition: opacity var(--dur-fast) var(--ease-out); }
+.w-ej:hover .w-ej__editar, .w-ej.is-hover .w-ej__editar, .w-ej:focus-visible .w-ej__editar { opacity: 1; }
+.w-ej.is-levantada .w-ej__editar, .w-ej.is-levantada-fija .w-ej__editar { display: none; }
 .w-sello-arrastre { position: absolute; z-index: calc(var(--z-arrastre) + 1); display: inline-flex; align-items: center; gap: var(--space-2); height: 26px; padding: 0 var(--space-3); border-radius: var(--radius-pill);
   background: var(--surface-raised-opaco); border: 1px solid var(--glass-line); box-shadow: var(--shadow-md); font: var(--fw-semibold) 12px/1 var(--font-sans); color: var(--text-primary); white-space: nowrap; }
 .w-sello-arrastre--dang { color: var(--danger-text); border-color: var(--danger); }

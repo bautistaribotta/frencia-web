@@ -6,7 +6,7 @@
 
 import { useSortable, SortableContext, horizontalListSortingStrategy, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { ArrowLeft, ArrowRight, Copy, GripVertical, MousePointer2, Plus, Trash2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Copy, GripVertical, MousePointer2, Pencil, Plus, Trash2 } from 'lucide-react';
 import { memo, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react';
 
 import { Boton } from '@/design/components/Boton';
@@ -211,6 +211,7 @@ const TarjetaOrdenable = memo(function TarjetaOrdenable({ ejercicio, numero, dia
       className={`${styles.tarjeta} ${hueco ? styles.hueco : ''} ${seleccionada ? styles.seleccionada : ''} ${nueva ? styles.nueva : ''}`}
     >
       <ContenidoTarjeta ejercicio={ejercicio} numero={numero} unidades={unidades} />
+      <VeloEditar />
     </div>
   );
 });
@@ -228,6 +229,17 @@ function ContenidoTarjeta({ ejercicio, numero, unidades }: { ejercicio: Ejercici
         <Icono icono={GripVertical} tamano={16} />
       </span>
     </>
+  );
+}
+
+/** Lo que muestra el hover de una tarjeta de un dia: un velo que la tapa
+ *  entera y, al centro, Editar. El clic abre su panel. */
+function VeloEditar() {
+  return (
+    <span className={styles.editar} aria-hidden="true">
+      <Icono icono={Pencil} tamano={16} />
+      Editar
+    </span>
   );
 }
 
