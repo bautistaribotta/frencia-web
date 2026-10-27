@@ -1,5 +1,6 @@
 import type { LucideIcon } from 'lucide-react';
-import type { HTMLAttributes, ReactNode } from 'react';
+import { Check } from 'lucide-react';
+import type { ButtonHTMLAttributes, HTMLAttributes, ReactNode } from 'react';
 
 import texto from '../texto.module.css';
 import { Icono } from './Icono';
@@ -66,6 +67,57 @@ export function TiraSemana({ marcados }: { marcados: number[] }) {
         </span>
       ))}
     </div>
+  );
+}
+
+const SEMANA_NOMBRES = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'];
+
+/** La tira de siete dias para elegir (kit web, .w-semana--edit): cada dia es
+ *  un boton que se prende en accent. */
+export function SemanaEditable({ marcados, onAlternar, etiqueta }: { marcados: number[]; onAlternar: (dia: number) => void; etiqueta: string }) {
+  return (
+    <div className={`${styles.semana} ${styles.semanaEditable}`} role="group" aria-label={etiqueta}>
+      {SEMANA.map((d, i) => (
+        <button
+          key={d}
+          type="button"
+          aria-pressed={marcados.includes(i)}
+          aria-label={SEMANA_NOMBRES[i]}
+          className={marcados.includes(i) ? styles.semanaOn : ''}
+          onClick={() => onAlternar(i)}
+        >
+          {d}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+interface PropsChip extends ButtonHTMLAttributes<HTMLButtonElement> {
+  elegido: boolean;
+  icono?: LucideIcon;
+}
+
+/** Filtro en pildora (kit web, .w-chip); elegido va en accent. */
+export function Chip({ elegido, icono, className = '', children, type = 'button', ...resto }: PropsChip) {
+  return (
+    <button {...resto} type={type} aria-pressed={elegido} className={`${styles.chip} ${elegido ? styles.chipElegido : ''} ${className}`}>
+      {icono ? <Icono icono={icono} tamano={14} /> : null}
+      {children}
+    </button>
+  );
+}
+
+/** Casilla de verificacion (kit web, .w-check) con su texto al lado. */
+export function Casilla({ marcada, onChange, children }: { marcada: boolean; onChange: (marcada: boolean) => void; children: ReactNode }) {
+  return (
+    <label className={styles.casilla}>
+      <input type="checkbox" checked={marcada} onChange={(evento) => onChange(evento.target.checked)} className={styles.casillaNativa} />
+      <span className={styles.casillaCaja} aria-hidden="true">
+        {marcada ? <Check size={14} strokeWidth={2.25} /> : null}
+      </span>
+      {children}
+    </label>
   );
 }
 

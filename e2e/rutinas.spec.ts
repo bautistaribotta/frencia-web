@@ -43,10 +43,10 @@ for (const [tema, nombre] of [
     for (const boton of await page.getByRole('button', { name: 'Nueva rutina', exact: true }).all()) {
       await boton.hover();
       await expect(boton).toHaveCSS('cursor', 'pointer');
-      await boton.focus();
-      await page.keyboard.press('Enter');
-      await expect(page).toHaveURL(/rutinas$/);
     }
     await page.screenshot({ path: `capturas/rutinas-${nombre}.png` });
+    await page.getByRole('main').getByRole('button', { name: 'Nueva rutina', exact: true }).focus();
+    await page.keyboard.press('Enter');
+    await expect(page).toHaveURL(/rutinas\/nueva$/);
   });
 }

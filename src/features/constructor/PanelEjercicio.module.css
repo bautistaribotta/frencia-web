@@ -1,0 +1,45 @@
+/* Panel de configuracion (kit web, .w-panel): 400 px a la derecha del
+   tablero, en vidrio denso, sin tapar el catalogo. */
+
+.panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: var(--panel-w);
+  z-index: var(--z-panel);
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-raised);
+  border-left: 1px solid var(--glass-line);
+  box-shadow: var(--shadow-sheet);
+  -webkit-backdrop-filter: var(--sheet-filter);
+  backdrop-filter: var(--sheet-filter);
+}
+
+.cabeza { flex: none; display: flex; align-items: flex-start; gap: var(--space-4); padding: var(--space-6) var(--space-6) var(--space-5); border-bottom: 1px solid var(--divider); }
+.titulos { display: flex; flex-direction: column; gap: var(--space-2); flex: 1; min-width: 0; }
+.titulo { margin: 0; overflow-wrap: anywhere; }
+.filaDetalle { display: flex; align-items: center; gap: var(--space-3); }
+
+.cuerpo { flex: 1; min-height: 0; overflow: auto; padding: var(--space-6); display: flex; flex-direction: column; gap: var(--space-7); }
+.grilla { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-5); }
+.grupo { display: flex; flex-direction: column; gap: var(--space-3); }
+.filaEntre { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
+.filaIntensidad { display: flex; align-items: center; gap: var(--space-4); }
+.crece { flex: 1; min-width: 0; }
+
+.nota {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--pad-card);
+  border-radius: var(--radius-xl);
+  background: var(--surface-card);
+  border: 1px dashed var(--border-strong);
+}
+
+.atajos { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-2); }
+.punto { color: var(--text-disabled); }
+
+.pie { flex: none; display: flex; gap: var(--space-3); padding: var(--space-5) var(--space-6); border-top: 1px solid var(--divider); }

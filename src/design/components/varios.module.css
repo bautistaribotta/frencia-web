@@ -82,3 +82,59 @@
 }
 @keyframes brillo { from { background-position: 100% 0; } to { background-position: -100% 0; } }
 @media (prefers-reduced-motion: reduce) { .esqueleto { animation: none; } }
+
+/* Tira editable (kit web, .w-semana--edit). */
+.semanaEditable button {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--glass-line);
+  background: var(--surface-inset);
+  cursor: pointer;
+  font: var(--fw-semibold) 11px/1 var(--font-sans);
+  color: var(--text-tertiary);
+}
+.semanaEditable button:hover { color: var(--text-primary); border-color: var(--border-strong); }
+.semanaEditable button:focus-visible { outline: var(--foco-w) solid var(--focus-ring); outline-offset: var(--foco-offset); }
+.semanaEditable .semanaOn { background: var(--accent); color: var(--text-on-accent); border-color: var(--accent); }
+.semanaEditable .semanaOn:hover { color: var(--text-on-accent); border-color: var(--accent); }
+
+/* Filtro en pildora (kit web, .w-chip). */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 32px;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  white-space: nowrap;
+  background: var(--surface-card);
+  border: 1px solid var(--glass-line);
+  font: var(--fw-medium) 13.5px/1 var(--font-sans);
+  color: var(--text-secondary);
+  transition: background var(--dur-fast) var(--ease-out);
+}
+.chip:hover { background: var(--surface-card-elevated); color: var(--text-primary); }
+.chip:focus-visible { outline: var(--foco-w) solid var(--focus-ring); outline-offset: var(--foco-offset); }
+.chipElegido,
+.chipElegido:hover { background: var(--accent); border-color: var(--accent); color: var(--text-on-accent); }
+
+/* Casilla (kit web, .w-check): la nativa queda invisible pero enfocable. */
+.casilla { position: relative; display: inline-flex; align-items: center; gap: var(--space-3); cursor: pointer; font: var(--text-body-sm); color: var(--text-secondary); white-space: nowrap; }
+.casillaNativa { position: absolute; opacity: 0; width: 20px; height: 20px; margin: 0; cursor: pointer; }
+.casillaCaja {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 1.5px solid var(--border-strong);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-on-accent);
+}
+.casilla:hover .casillaCaja { border-color: var(--text-primary); }
+.casillaNativa:checked + .casillaCaja { background: var(--accent); border-color: var(--accent); }
+.casillaNativa:focus-visible + .casillaCaja { outline: var(--foco-w) solid var(--focus-ring); outline-offset: var(--foco-offset); }

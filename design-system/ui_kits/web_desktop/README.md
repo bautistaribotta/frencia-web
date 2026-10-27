@@ -41,9 +41,8 @@ página), `tools/tokens_web.py` (regenera los tokens desde `tokens.json`).
 - La barra de pestañas se vuelve navegación lateral en vidrio denso (`surface-raised` +
   `blur-sheet`): Inicio, Rutinas, Historial; Configuración y el usuario (→ Perfil) al pie.
 - **Nueva rutina** reemplaza al botón central de la barra. Va con relleno `signal` y texto `text-on-signal`: lima en oscuro, oliva en claro.
-  Mientras el constructor no esté disponible conserva el color, `aria-disabled` y el
-  título «Nueva rutina: muy pronto», sin navegar al activarlo. Tanto en la barra lateral como en el encabezado de Rutinas,
-  el cursor es de mano (`pointer`), nunca de bloqueo.
+  Abre el constructor (`/rutinas/nueva`), también con `N`. Tanto en la barra lateral como en el encabezado de Rutinas,
+  el cursor es de mano (`pointer`).
 - La pestaña activa: icono en lume y marca de 3 px pegada al borde, como en la app.
 - Se colapsa a riel con `[` o con el botón de la cabecera (preferencia en `localStorage`).
 - El **constructor** es pantalla completa, sin navegación lateral: es una tarea de foco.
@@ -140,8 +139,15 @@ registra el ejercicio (`exercises.tracks_*`) y escriben en `training_day_exercis
 | Tipo | Campos |
 |---|---|
 | Fuerza | Series, reps, intensidad (RIR con "al fallo" = `-1`, o RPE 1–10), descanso. **Sin peso**: el plan no lo prescribe |
-| Isométrico | Series, tiempo por serie, **peso objetivo opcional** (`weight_kg`, solo si registra peso), intensidad, descanso |
-| Cardio | Tiempo, distancia, series, intensidad o **Sin intensidad** (`intensity_kind = null`, solo cardio), descanso opcional |
+| Isométrico | Series, tiempo por serie (obligatorio), **peso objetivo opcional** (`weight_kg`, solo si registra peso), **RPE o Sin intensidad**, descanso |
+| Cardio | Tiempo (obligatorio) y distancia opcional, **RPE o Sin intensidad**. Una sola serie continua y **sin descanso** |
+
+Las intensidades siguen las reglas de la base (trigger `validar_plan_de_ejercicio`):
+RIR no aplica a sostener una posición ni a correr, así que isométricos y cardio solo
+ofrecen RPE (opcional); fuerza e híbrido llevan intensidad siempre. El cardio se
+planifica como una serie continua sin descanso, por eso su panel no tiene series ni
+descanso (las mesas de `web-5.jsx` con RIR y series en isométrico y cardio quedaron
+como antecedente).
 | Híbrido | Los campos que marque `tracks_*` (p. ej. peso + distancia) |
 
 Descanso apagado = `rest_seconds = null` (sin temporizador). Las incoherencias se avisan en
@@ -152,10 +158,12 @@ tinta con `circle-alert`, sin bloquear.
 - Los cambios van a un **borrador** (estado local + `localStorage`
   `frencia:borrador:<routineId>`), que sobrevive a recargar.
 - Guardar / `Ctrl S` escribe `routines`, `training_days` (con `position`),
-  `training_day_weekdays` y `training_day_exercises` (con `position`). Recomendado: una
-  función RPC que lo haga en una transacción, para no dejar una rutina a medias.
+  `training_day_weekdays` y `training_day_exercises` (con `position`) con la RPC
+  `guardar_rutina_completa`, en una transacción, para no dejar una rutina a medias.
 - Estado en la barra: Guardado · Cambios sin guardar (punto en tinta y cantidad) ·
   Guardando… · Guardado recién (check animado) · No se guardó (+ Reintentar en el aviso).
+- Rutina nueva con otra en curso: al guardar, modal «¿La ponés en curso?» con Ponerla
+  en curso (foco inicial) y Guardarla sin activar. Sin rutina en curso, queda activa.
 - Salir con cambios: `useBlocker` de React Router + `beforeunload`. Modal con Guardar y salir
   (foco inicial), Descartar y Seguir editando.
 

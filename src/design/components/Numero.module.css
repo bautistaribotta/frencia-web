@@ -1,0 +1,54 @@
+/* Numero con pasos (kit web, .w-numero). */
+
+.numero { display: flex; flex-direction: column; gap: var(--space-3); min-width: 0; }
+
+.rotulo { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-3); }
+
+.fila {
+  display: grid;
+  grid-template-columns: 40px 1fr 40px;
+  align-items: center;
+  justify-items: center;
+  gap: var(--space-2);
+  height: var(--control-h-md);
+  padding: 0 var(--space-1);
+  border-radius: var(--radius-md);
+  background: var(--surface-card);
+  border: 1px solid var(--glass-line);
+  box-shadow: var(--shadow-glass);
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+.fila:hover { border-color: var(--border-default); }
+.fila:focus-within {
+  border-color: var(--signal);
+  box-shadow: var(--shadow-glass), 0 0 0 1px var(--signal), var(--halo-signal);
+  background: var(--surface-card-elevated);
+}
+.fila button { width: 34px; height: 34px; }
+
+.centro { display: flex; align-items: baseline; justify-content: center; min-width: 0; width: 100%; }
+
+.valor {
+  /* Del ancho de lo escrito, para que la unidad quede pegada al numero. */
+  field-sizing: content;
+  min-width: 1ch;
+  max-width: 100%;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  text-align: center;
+  font: var(--fw-medium) 18px/1 var(--font-sans);
+  font-variation-settings: var(--vs-condensed);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+.valor::placeholder { color: var(--text-tertiary); opacity: 1; }
+
+.unidad { flex: none; margin-left: 3px; font: var(--fw-medium) 13px/1 var(--font-sans); color: var(--text-tertiary); }
+
+.off .fila { background: var(--surface-chip); border-color: transparent; box-shadow: none; }
+.off .valor { color: var(--text-disabled); cursor: not-allowed; }

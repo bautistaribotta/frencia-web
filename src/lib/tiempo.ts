@@ -56,3 +56,22 @@ export function duracionSesion(startedAt: number, finishedAt: number): string {
   const resto = minutos % 60;
   return resto === 0 ? `${horas} h` : `${horas} h ${resto} min`;
 }
+
+/** Lee un reloj escrito ("1:30", "30:00", "1:05:00") a segundos. Un numero
+ *  suelto se toma en `suelto`: segundos para una serie corta, minutos para
+ *  un cardio. null si no se entiende. */
+export function segundosDeReloj(texto: string, suelto: 'segundos' | 'minutos' = 'segundos'): number | null {
+  const t = texto.trim().replace(',', '.');
+  if (!t) return null;
+  if (!t.includes(':')) {
+    const n = Number(t);
+    if (Number.isNaN(n) || n < 0) return null;
+    return Math.round(suelto === 'minutos' ? n * 60 : n);
+  }
+  const partes = t.split(':');
+  if (partes.length > 3 || partes.some((p) => !/^\d+$/.test(p))) return null;
+  const [s = 0, m = 0, h = 0] = partes.map(Number).reverse();
+  if (partes.length > 1 && s >= 60) return null;
+  if (partes.length > 2 && m >= 60) return null;
+  return h * 3600 + m * 60 + s;
+}

@@ -1,0 +1,180 @@
+/* Constructor de rutinas (kit web, .w-builder): pantalla completa, sin la
+   navegacion lateral. Barra arriba; abajo el catalogo (340 px, 296 entre
+   1024 y 1279) y el tablero, que se desplaza de costado con el borde
+   fundido. El panel va por encima del tablero, a la derecha. */
+
+.pantalla {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: var(--barra-h) minmax(0, 1fr);
+}
+
+/* --- Barra --- */
+
+.barra {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  padding: 0 var(--space-6);
+  background: var(--surface-raised);
+  border-bottom: 1px solid var(--glass-line);
+  -webkit-backdrop-filter: var(--sheet-filter);
+  backdrop-filter: var(--sheet-filter);
+  position: relative;
+  z-index: calc(var(--z-panel) + 1);
+}
+
+/* El nombre: la linea grande, el unico campo sin vidrio (.w-linea). */
+.nombre {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 300px;
+  max-width: 420px;
+  flex: 0 1 420px;
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--border-default);
+  cursor: text;
+}
+.nombre:hover { border-bottom-color: var(--border-strong); }
+.nombre:focus-within { border-bottom-color: var(--signal); box-shadow: 0 1px 0 var(--signal); }
+.nombreCampo {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font: var(--fw-semibold) 20px/1.2 var(--font-sans);
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+}
+.nombreCampo::placeholder { color: var(--text-tertiary); opacity: 1; }
+
+.estado { display: inline-flex; align-items: center; gap: var(--space-2); font: var(--fw-medium) 13px/1 var(--font-sans); color: var(--text-tertiary); white-space: nowrap; }
+.estadoError { display: inline-flex; align-items: center; gap: var(--space-2); color: var(--danger-text); }
+.punto { width: 7px; height: 7px; border-radius: 50%; background: var(--text-primary); }
+
+.crece { flex: 1; min-width: 0; }
+
+/* Guardar sin cambios o sin lo minimo: se ve apagado pero sigue
+   respondiendo, para explicar que falta. */
+.guardarOff,
+.guardarOff:hover { background: var(--surface-chip); color: var(--text-disabled); border-color: transparent; box-shadow: none; cursor: not-allowed; }
+
+.atajoGuardar { display: inline-flex; gap: var(--space-1); margin-left: calc(var(--space-2) * -1); }
+
+/* --- Cuerpo --- */
+
+.cuerpo {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--catalogo-w) minmax(0, 1fr);
+  min-height: 0;
+}
+.sinCatalogo { grid-template-columns: minmax(0, 1fr); }
+
+.tablero {
+  position: relative;
+  overflow: auto;
+  min-height: 0;
+  padding: var(--space-6);
+  display: flex;
+  gap: var(--space-5);
+  align-items: flex-start;
+  -webkit-mask-image: linear-gradient(90deg, var(--text-primary) calc(100% - 40px), transparent);
+  mask-image: linear-gradient(90deg, var(--text-primary) calc(100% - 40px), transparent);
+}
+/* Con el panel abierto, lo ultimo del tablero se puede traer a la vista. */
+.conPanel { padding-right: calc(var(--panel-w) + var(--space-6)); }
+
+.pista { flex: none; width: 300px; display: flex; flex-direction: column; gap: var(--space-3); }
+
+/* --- Arrastre --- */
+
+.flota,
+.flotaCatalogo { position: relative; }
+.flota { width: calc(var(--columna-dia-w) - 2 * var(--space-4)); }
+.flotaCatalogo { width: 300px; }
+
+/* Sello debajo del puntero: adonde va a caer y en que posicion. */
+.sello {
+  position: absolute;
+  top: calc(100% + var(--space-3));
+  left: var(--space-7);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 26px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--surface-raised-opaco);
+  border: 1px solid var(--glass-line);
+  box-shadow: var(--shadow-md);
+  font: var(--fw-semibold) 12px/1 var(--font-sans);
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+.sello > :first-child { color: var(--signal); }
+.selloTinta > :first-child { color: var(--text-secondary); }
+
+/* Aviso del arrastre con teclado (.w-anuncio). */
+.anuncio {
+  position: absolute;
+  left: 50%;
+  bottom: var(--space-6);
+  transform: translateX(-50%);
+  z-index: var(--z-toast);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+  border: 1px solid var(--glass-line);
+  box-shadow: var(--shadow-lg);
+  -webkit-backdrop-filter: var(--sheet-filter);
+  backdrop-filter: var(--sheet-filter);
+  white-space: nowrap;
+}
+.teclas { display: inline-flex; align-items: center; gap: var(--space-1); }
+
+/* --- Modales --- */
+
+.atajos { display: flex; flex-direction: column; gap: var(--space-3); margin: 0; }
+.atajo { display: grid; grid-template-columns: 120px 1fr; align-items: center; gap: var(--space-4); }
+.atajo dd { margin: 0; }
+
+/* --- Carga y avisos --- */
+
+.avisoPantalla {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--space-8);
+  text-align: center;
+}
+
+.esqNombre { width: 320px; height: 22px; }
+.esqCatalogo { border-right: 1px solid var(--glass-line); background: var(--surface-card); }
+.esqDia { flex: none; width: var(--columna-dia-w); display: flex; flex-direction: column; gap: var(--space-4); }
+.esqTitulo { width: 50%; height: 18px; }
+.esqTarjeta { height: 58px; border-radius: var(--radius-md); }
+
+@media (max-width: 1279px) {
+  .cuerpo { grid-template-columns: 296px minmax(0, 1fr); }
+  .sinCatalogo { grid-template-columns: minmax(0, 1fr); }
+  .tablero {
+    -webkit-mask-image: linear-gradient(90deg, var(--text-primary) calc(100% - 48px), transparent);
+    mask-image: linear-gradient(90deg, var(--text-primary) calc(100% - 48px), transparent);
+  }
+  .nombre { min-width: 200px; }
+  .atajoGuardar { display: none; }
+}

@@ -110,3 +110,6 @@
   .flota,
   .flotante .valor { transition: none; }
 }
+
+/* Caja mas baja (kit web, .w-campo--md). */
+.md .caja { height: var(--control-h-md); border-radius: var(--radius-md); padding: 0 var(--space-4); }

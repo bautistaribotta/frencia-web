@@ -64,8 +64,13 @@ export interface EjercicioPlan {
   restSeconds: number | null;
 }
 
+/** Un ejercicio del plan con el id del catalogo, para poder editarlo. */
+export interface EjercicioDelDia extends EjercicioPlan {
+  exerciseId: string;
+}
+
 export interface DiaDetalle extends DiaRutina {
-  plan: EjercicioPlan[];
+  plan: EjercicioDelDia[];
 }
 
 export interface RutinaDetalle extends Omit<RutinaResumen, 'dias'> {
@@ -128,7 +133,7 @@ export async function cargarRutinas(userId: string): Promise<ListaRutinas> {
   };
 }
 
-const COLUMNAS_DETALLE = `id, name, archived_at, created_at, training_days(id, name, position, training_day_weekdays(weekday), workout_sessions(count), training_day_exercises(position, sets, reps, duration_seconds, distance_m, weight_kg, intensity_kind, intensity_value, rest_seconds, exercises(name, ${COLUMNAS_TIPO})))`;
+const COLUMNAS_DETALLE = `id, name, archived_at, created_at, training_days(id, name, position, training_day_weekdays(weekday), workout_sessions(count), training_day_exercises(position, exercise_id, sets, reps, duration_seconds, distance_m, weight_kg, intensity_kind, intensity_value, rest_seconds, exercises(name, ${COLUMNAS_TIPO})))`;
 
 function consultaDetalle() {
   return supabase.from('routines').select(COLUMNAS_DETALLE);
@@ -137,9 +142,10 @@ function consultaDetalle() {
 type FilaDetalle = QueryData<ReturnType<typeof consultaDetalle>>[number];
 type FilaPlan = NonNullable<FilaDetalle['training_days']>[number]['training_day_exercises'][number];
 
-function aPlan(fila: FilaPlan): EjercicioPlan {
+function aPlan(fila: FilaPlan): EjercicioDelDia {
   const { kind, tracks } = tipoDeFila(fila.exercises);
   return {
+    exerciseId: fila.exercise_id,
     name: fila.exercises?.name ?? 'Ejercicio',
     kind,
     tracks,
@@ -207,4 +213,42 @@ export function resumenEjercicio(
     intensidad: ex.intensityKind === null || ex.intensityValue === null ? null : textoIntensidad(ex.intensityKind, ex.intensityValue),
     descanso: !conSeries || ex.restSeconds === null ? null : reloj(ex.restSeconds),
   };
+}
+
+export interface DiaParaGuardar {
+  id: string | null;
+  name: string;
+  weekdays: number[];
+  exercises: Record<string, unknown>[];
+}
+
+// guardar_rutina_completa todavia no esta en database.types.ts: se genera con
+// npm run gen:types despues de aplicar la migracion. Hasta entonces la llamada
+// va con su firma escrita a mano.
+type RpcGuardarRutina = (
+  fn: 'guardar_rutina_completa',
+  args: { p_routine_id: string | null; p_name: string; p_dias: DiaParaGuardar[]; p_activar: boolean },
+) => PromiseLike<{ data: string | null; error: unknown }>;
+
+/**
+ * Crea (`routineId` null) o reemplaza una rutina entera: nombre, dias, sus
+ * dias de la semana y sus ejercicios, en una sola transaccion. Con `activar`
+ * la nueva pasa a ser la rutina en curso. Devuelve el id; tira si falla.
+ * Ver la migracion guardar_rutina_completa del repo mobile.
+ */
+export async function guardarRutinaCompleta(
+  routineId: string | null,
+  name: string,
+  dias: DiaParaGuardar[],
+  activar: boolean,
+): Promise<string> {
+  const rpc = supabase.rpc.bind(supabase) as unknown as RpcGuardarRutina;
+  const { data, error } = await rpc('guardar_rutina_completa', {
+    p_routine_id: routineId,
+    p_name: name.trim(),
+    p_dias: dias,
+    p_activar: activar,
+  });
+  if (error || !data) throw error ?? new Error('La rutina no se guardó');
+  return data;
 }

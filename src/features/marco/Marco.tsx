@@ -4,20 +4,15 @@
    pone cada pagina, porque cada ruta tiene su posicion (ver la tabla del
    kit web). */
 
-import { useEffect, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { Outlet } from 'react-router';
 
-import { aplicarPreferencia, preferenciaDePerfil } from '@/design/tema';
-import { usePerfil } from '@/lib/perfil';
+import { useTemaDeCuenta } from '@/lib/perfil';
 import styles from './Marco.module.css';
 import { Navegacion } from './Navegacion';
 
 export function Marco({ children }: { children?: ReactNode }) {
-  // Con sesion manda el tema de la cuenta (profiles.tema), igual que en la app.
-  const tema = usePerfil().data?.tema;
-  useEffect(() => {
-    if (tema) aplicarPreferencia(preferenciaDePerfil(tema));
-  }, [tema]);
+  useTemaDeCuenta();
 
   return (
     <div className={styles.marco}>

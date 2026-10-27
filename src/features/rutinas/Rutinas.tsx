@@ -1,8 +1,8 @@
 /* Rutinas (/rutinas). Lista los planes: la en curso arriba, con un borde fino de
    lume, y las anteriores en una tabla ordenable (kit web, Web · 4).
-   Por ahora solo se mira: Nueva rutina y el menu de cada fila (poner en
-   curso, editar, duplicar, compartir, eliminar) quedan a la vista pero
-   desactivados hasta que llegue el constructor. Toda la fila abre el detalle.
+   Nueva rutina abre el constructor. El menu de cada fila (poner en curso,
+   editar, duplicar, compartir, eliminar) queda a la vista pero desactivado
+   por ahora. Toda la fila abre el detalle.
    Fondo: cumbre. */
 
 import { useQuery } from '@tanstack/react-query';
@@ -25,10 +25,9 @@ import styles from './Rutinas.module.css';
 
 type Orden = 'recientes' | 'az';
 
-const PRONTO = 'Muy pronto';
-
 export function Rutinas() {
   const { user } = useSesion();
+  const navegar = useNavigate();
   const userId = user?.id ?? '';
   const rutinas = useQuery({ queryKey: ['rutinas', userId], queryFn: () => cargarRutinas(userId), enabled: !!userId });
 
@@ -61,7 +60,7 @@ export function Rutinas() {
           titulo="Tus rutinas"
           bajada="Una en curso; al poner otra en curso, la actual pasa a Anteriores con su historial."
           acciones={
-            <Boton icono={Plus} aria-disabled className={styles.nueva} title={PRONTO}>
+            <Boton icono={Plus} className={styles.nueva} title="Nueva rutina (N)" onClick={() => navegar('/rutinas/nueva')}>
               Nueva rutina
             </Boton>
           }

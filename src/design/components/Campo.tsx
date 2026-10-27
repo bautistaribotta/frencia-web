@@ -29,15 +29,17 @@ interface Props extends Omit<InputHTMLAttributes<HTMLInputElement>, 'className'>
   error?: string | null;
   /** Rotulo flotante dentro de la caja, sin placeholder. */
   flotante?: boolean;
+  /** Caja mas baja (kit web, .w-campo--md), para barras y paneles. */
+  md?: boolean;
   className?: string;
 }
 
-export function Campo({ rotulo, extra, icono, final, sufijo, ayuda, error, flotante = false, disabled, className = '', id, ...input }: Props) {
+export function Campo({ rotulo, extra, icono, final, sufijo, ayuda, error, flotante = false, md = false, disabled, className = '', id, ...input }: Props) {
   const idPropio = useId();
   const idCampo = id ?? idPropio;
   const idNota = `${idCampo}-nota`;
   const nota = error || ayuda;
-  const clases = [styles.campo, flotante ? styles.flotante : '', error ? styles.error : '', disabled ? styles.off : '', className].join(' ');
+  const clases = [styles.campo, md ? styles.md : '', flotante ? styles.flotante : '', error ? styles.error : '', disabled ? styles.off : '', className].join(' ');
 
   const campo = (
     <input
@@ -99,7 +101,7 @@ export function Campo({ rotulo, extra, icono, final, sufijo, ayuda, error, flota
       </span>
       <div className={styles.caja}>
         <IconosQuietos>
-          {icono ? <Icono icono={icono} tamano={20} disparo={error} /> : null}
+          {icono ? <Icono icono={icono} tamano={md ? 18 : 20} disparo={error} /> : null}
           {campo}
           {sufijo ? <span className={styles.sufijo}>{sufijo}</span> : null}
           {final}

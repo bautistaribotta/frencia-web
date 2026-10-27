@@ -2,11 +2,13 @@
    - /login y /signup: solo sin sesion (SoloInvitado).
    - /, /rutinas, /historial, /perfil y /configuracion, con sus detalles y
      editar perfil: dentro del marco con la navegacion lateral (ConSesion).
+   - /rutinas/nueva y /rutinas/:id/editar: el constructor, con sesion pero
+     a pantalla completa, sin la navegacion lateral.
    - * : la 404, afuera de las puertas (con sesion, dentro del marco).
    Si una pagina falla, ErrorRuta muestra el 500 o el sin conexion: dentro de
    la app en el lugar de la pagina, con la navegacion; afuera, en la raiz.
    Las demas rutas del kit (recuperar, nueva contraseña, bienvenida,
-   constructor, ticket y /r/:codigo) y las fases de legal y
+   ticket y /r/:codigo) y las fases de legal y
    setup se suman en las etapas siguientes. */
 
 import { createBrowserRouter, Navigate } from 'react-router';
@@ -14,6 +16,7 @@ import { createBrowserRouter, Navigate } from 'react-router';
 import { Login } from '@/features/auth/Login';
 import { Signup } from '@/features/auth/Signup';
 import { Configuracion } from '@/features/configuracion/Configuracion';
+import { Constructor } from '@/features/constructor/Constructor';
 import { ErrorRuta } from '@/features/errores/ErrorRuta';
 import { NoEncontrada } from '@/features/errores/NoEncontrada';
 import { DetalleSesion } from '@/features/historial/DetalleSesion';
@@ -42,6 +45,8 @@ export const router = createBrowserRouter([
       {
         element: <ConSesion />,
         children: [
+          { path: '/rutinas/nueva', element: <Constructor /> },
+          { path: '/rutinas/:id/editar', element: <Constructor /> },
           {
             element: <Marco />,
             children: [

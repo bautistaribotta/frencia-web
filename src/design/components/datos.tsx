@@ -51,11 +51,12 @@ export function Resumen({ volumen, intensidad, descanso }: { volumen: string; in
 const ICONO_TIPO = { fuerza: Dumbbell, isometrico: Timer, cardio: HeartPulse, hibrido: Footprints };
 const NOMBRE_TIPO = { fuerza: 'Fuerza', isometrico: 'Isométrico', cardio: 'Cardio', hibrido: 'Híbrido' };
 
-/** El tipo de ejercicio en un cuadrado de vidrio hundido, sin color propio. */
-export function Tipo({ tipo }: { tipo: TipoEjercicio }) {
+/** El tipo de ejercicio en un cuadrado de vidrio hundido, sin color propio.
+ *  Grande en el catalogo del constructor (.w-tipo); chico en las tarjetas. */
+export function Tipo({ tipo, grande = false }: { tipo: TipoEjercicio; grande?: boolean }) {
   return (
-    <span className={styles.tipo} title={NOMBRE_TIPO[tipo]}>
-      <Icono icono={ICONO_TIPO[tipo]} tamano={16} />
+    <span className={`${styles.tipo} ${grande ? styles.tipoGrande : ''}`} title={NOMBRE_TIPO[tipo]}>
+      <Icono icono={ICONO_TIPO[tipo]} tamano={grande ? 18 : 16} />
     </span>
   );
 }

@@ -1,0 +1,161 @@
+/* Catalogo del constructor (kit web, .w-catalogo, .w-cat-item y
+   .w-zona-quitar). */
+
+.catalogo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-right: 1px solid var(--glass-line);
+  background: var(--surface-card);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+}
+
+.cabeza { flex: none; display: flex; flex-direction: column; gap: var(--space-4); padding: var(--space-6) var(--space-5) var(--space-4); }
+.fila { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
+.chips { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+
+/* Busqueda y selector: la caja mediana del campo (.w-campo--md). */
+.busqueda,
+.selector {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  height: var(--control-h-md);
+  padding: 0 var(--space-2) 0 var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--surface-card);
+  border: 1px solid var(--glass-line);
+  box-shadow: var(--shadow-glass);
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+.busqueda { cursor: text; }
+.busqueda:hover,
+.selector:hover { border-color: var(--border-default); background: var(--surface-card-elevated); }
+.busqueda:focus-within,
+.selector:focus-within {
+  background: var(--surface-card-elevated);
+  border-color: var(--signal);
+  box-shadow: var(--shadow-glass), 0 0 0 1px var(--signal), var(--halo-signal);
+}
+.busqueda:focus-within .lupa { color: var(--signal); }
+.lupa { flex: none; color: var(--text-tertiary); }
+.busqueda kbd { margin-right: var(--space-2); }
+
+.campo {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font: var(--fw-regular) 15px/22px var(--font-sans);
+  color: var(--text-primary);
+}
+.campo::placeholder { color: var(--text-tertiary); opacity: 1; }
+.campo::-webkit-search-cancel-button { display: none; }
+
+.selector { padding-right: var(--space-4); cursor: pointer; }
+.select {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  appearance: none;
+  cursor: pointer;
+  font: var(--fw-regular) 15px/22px var(--font-sans);
+  color: var(--text-primary);
+}
+.select option { background: var(--surface-raised-opaco); color: var(--text-primary); }
+.flechas { flex: none; color: var(--text-tertiary); pointer-events: none; }
+
+.lista {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: var(--space-2) var(--space-4) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  -webkit-mask-image: linear-gradient(180deg, transparent, var(--text-primary) 16px, var(--text-primary) calc(100% - 24px), transparent);
+  mask-image: linear-gradient(180deg, transparent, var(--text-primary) 16px, var(--text-primary) calc(100% - 24px), transparent);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-3) var(--space-3) var(--space-2);
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: grab;
+  touch-action: none;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+.item:hover { background: var(--surface-card-elevated); border-color: var(--glass-line); }
+
+.agarre { display: inline-flex; color: var(--text-disabled); opacity: 0; transition: opacity var(--dur-fast) var(--ease-out); }
+.item:hover .agarre,
+.item:focus-within .agarre { opacity: 1; color: var(--text-tertiary); }
+
+/* El + aparece con el hover (o el foco de teclado). */
+.mas { opacity: 0; }
+.item:hover .mas,
+.mas:focus-visible { opacity: 1; }
+
+/* Lo levantado sigue en la lista: queda su lugar hundido y punteado. */
+.arrastrado { background: var(--surface-inset); border: 1px dashed var(--border-default); }
+.arrastrado > * { visibility: hidden; }
+
+.textos { display: flex; flex-direction: column; gap: var(--space-1); flex: 1; min-width: 0; }
+.unaLinea { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* La copia que se levanta: vidrio denso, borde y halo de lume, 2 % mas
+   grande y sin rotar. */
+.levantado {
+  cursor: grabbing;
+  background: var(--surface-raised);
+  border-color: var(--signal);
+  box-shadow: var(--shadow-lg), 0 0 0 1px var(--signal);
+  transform: scale(1.02);
+  -webkit-backdrop-filter: var(--sheet-filter);
+  backdrop-filter: var(--sheet-filter);
+}
+.levantado .agarre { opacity: 1; color: var(--text-secondary); }
+.invalido { border-color: var(--border-strong); box-shadow: var(--shadow-lg); cursor: no-drop; }
+
+.vacio { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-4); padding: var(--space-4) var(--space-3); }
+
+.esqItem { display: flex; align-items: center; gap: var(--space-4); padding: var(--space-3) var(--space-3) var(--space-3) var(--space-7); }
+.esqTipo { flex: none; width: 34px; height: 34px; }
+.esqNombre { width: 70%; }
+.esqDetalle { width: 40%; height: 10px; }
+
+/* Arrastrando una tarjeta de un dia sobre el catalogo: la unica zona en
+   carmin. */
+.zonaQuitar {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--space-8);
+  text-align: center;
+  background: color-mix(in oklch, var(--danger) 10%, var(--surface-raised-opaco));
+  border: 1.5px dashed var(--danger);
+  color: var(--danger-text);
+}

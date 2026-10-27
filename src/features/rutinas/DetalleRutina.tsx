@@ -1,8 +1,8 @@
 /* Detalle de una rutina (/rutinas/:id). Los dias en columnas, con cada
    ejercicio, su tipo y su resumen: volumen · intensidad en tinta · descanso
    (kit web, Web · 4).
-   Por ahora solo se mira: Compartir, Editar rutina (o Poner en curso, si esta
-   archivada) y el menu quedan a la vista pero desactivados.
+   Editar rutina abre el constructor. Compartir, Poner en curso (si esta
+   archivada) y el menu quedan a la vista pero desactivados por ahora.
    Fondo: cumbre. */
 
 import { useQuery } from '@tanstack/react-query';
@@ -59,6 +59,7 @@ export function DetalleRutina() {
 }
 
 function Contenido({ rutina }: { rutina: RutinaDetalle }) {
+  const navegar = useNavigate();
   const fecha = rutina.archivadaEl ? `archivada el ${fechaCorta(rutina.archivadaEl)}` : `creada el ${fechaCorta(rutina.creadaEl)}`;
   return (
     <>
@@ -75,7 +76,7 @@ function Contenido({ rutina }: { rutina: RutinaDetalle }) {
             Compartir
           </Boton>
           {rutina.activa ? (
-            <Boton icono={Pencil} disabled title={PRONTO}>
+            <Boton icono={Pencil} onClick={() => navegar(`/rutinas/${rutina.id}/editar`)}>
               Editar rutina
             </Boton>
           ) : (

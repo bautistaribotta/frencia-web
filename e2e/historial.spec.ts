@@ -109,13 +109,6 @@ for (const tema of ['dark', 'light'] as const) {
     await conSesion(page);
     await conSesiones(page);
     await page.goto('/historial');
-    const nueva = page.getByRole('button', { name: 'Nueva rutina', exact: true });
-    await expect(nueva).toHaveAttribute('aria-disabled', 'true');
-    await nueva.focus();
-    await page.keyboard.press('Enter');
-    await expect(page).toHaveURL(/historial$/);
-    await nueva.hover();
-    await page.screenshot({ path: `capturas/nueva-rutina-${tema}.png` });
     const borrar = page.getByRole('button', { name: /^Eliminar Push del/ }).first();
     await borrar.hover();
     await borrar.click();

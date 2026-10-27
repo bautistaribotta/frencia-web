@@ -2,7 +2,7 @@
 
 import { assert, test } from 'vitest';
 
-import { duracionCompacta, duracionSesion, fechaLarga, fechaSesion, indiceSemanaLunes, reloj } from './tiempo';
+import { duracionCompacta, duracionSesion, fechaLarga, fechaSesion, indiceSemanaLunes, reloj, segundosDeReloj } from './tiempo';
 
 test('el reloj va en m:ss por debajo de una hora, sin cero inicial', () => {
   assert.strictEqual(reloj(45), '0:45');
@@ -50,4 +50,15 @@ test('fechaLarga y fechaSesion formatean manualmente en espanol sin Intl', () =>
   const d = new Date(2026, 9, 21, 15, 0, 0); // Miércoles 21 oct 2026
   assert.strictEqual(fechaLarga(d), '21 de octubre de 2026');
   assert.strictEqual(fechaSesion(d.getTime()), 'miércoles, 21 de octubre de 2026');
+});
+
+test('segundosDeReloj: relojes y numeros sueltos', () => {
+  assert.equal(segundosDeReloj('1:30'), 90);
+  assert.equal(segundosDeReloj('30:00'), 1800);
+  assert.equal(segundosDeReloj('1:05:00'), 3900);
+  assert.equal(segundosDeReloj('45'), 45);
+  assert.equal(segundosDeReloj('30', 'minutos'), 1800);
+  assert.equal(segundosDeReloj('1:75'), null);
+  assert.equal(segundosDeReloj('abc'), null);
+  assert.equal(segundosDeReloj(''), null);
 });

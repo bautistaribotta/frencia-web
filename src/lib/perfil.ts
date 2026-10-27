@@ -4,9 +4,10 @@
    el acto y se revierten si la base no los acepta, como en la app. */
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import { useSesion } from '@/contexts/sesion';
+import { aplicarPreferencia, preferenciaDePerfil } from '@/design/tema';
 import type { Tables, TablesUpdate } from './database.types';
 import { supabase } from './supabase';
 
@@ -57,6 +58,15 @@ export function usePerfil() {
 
 /** Nombre para mostrar, nombre completo y semilla del avatar. Sin nombre
  *  cargado, "Atleta", como en la app. */
+/** Con sesion manda el tema de la cuenta (profiles.tema), igual que en la
+ *  app. Lo usan el marco y las pantallas completas, como el constructor. */
+export function useTemaDeCuenta() {
+  const tema = usePerfil().data?.tema;
+  useEffect(() => {
+    if (tema) aplicarPreferencia(preferenciaDePerfil(tema));
+  }, [tema]);
+}
+
 export function useNombre(): { nombre: string; completo: string; semilla: string } {
   const { data } = usePerfil();
   const nombre = data?.name?.trim() || 'Atleta';

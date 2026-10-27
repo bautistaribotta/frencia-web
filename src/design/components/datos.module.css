@@ -40,6 +40,7 @@
   border: 1px solid var(--glass-line);
   color: var(--text-secondary);
 }
+.tipoGrande { width: 34px; height: 34px; }
 
 .serieN {
   display: inline-flex;
