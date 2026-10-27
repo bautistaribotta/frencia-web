@@ -1,33 +1,32 @@
 /* Rutinas (/rutinas). Lista los planes: la en curso arriba, con un borde fino de
-   lume, y las anteriores en una tabla ordenable (kit web, Web · 4).
-   Nueva rutina abre el constructor. El menu de cada fila (poner en curso,
-   editar, duplicar, compartir, eliminar) queda a la vista pero desactivado
-   por ahora. Toda la fila abre el detalle.
+   lume, y las anteriores en una tabla de la mas nueva a la mas vieja (kit web,
+   Web · 4). Nueva rutina vive solo en la navegacion. Al lado de Anteriores, la
+   cuenta contra el limite de rutinas.
+   El menu de cada fila (boton ⋯ o clic derecho): Poner en curso, Editar,
+   Duplicar y Compartir (desactivados por ahora) y Eliminar, tambien con Supr
+   sobre la fila. Toda la fila abre el detalle.
    Fondo: cumbre. */
 
 import { useQuery } from '@tanstack/react-query';
-import { ChevronRight, Ellipsis, Layers, Plus, RotateCw } from 'lucide-react';
-import { useState } from 'react';
+import { ChevronRight, Copy, Layers, Pencil, Play, RotateCw, Share, Trash2 } from 'lucide-react';
+import { useState, type KeyboardEvent, type MouseEvent } from 'react';
 import { Link, useNavigate } from 'react-router';
 
 import { useSesion } from '@/contexts/sesion';
 import { Boton } from '@/design/components/Boton';
-import { BotonIcono } from '@/design/components/BotonIcono';
 import { tabla } from '@/design/components/datos';
 import { Fondo } from '@/design/components/Fondo';
 import { Icono } from '@/design/components/Icono';
+import { Menu } from '@/design/components/Menu';
 import { Encabezado, Lista, Pagina } from '@/design/components/Pagina';
-import { Segmentado } from '@/design/components/Segmentado';
 import { Esqueleto, Tarjeta, TiraSemana } from '@/design/components/varios';
 import texto from '@/design/texto.module.css';
-import { cargarRutinas, cuentaRutina, fechaCorta, type RutinaResumen } from '@/lib/rutinas';
+import { cargarRutinas, cuentaRutina, fechaCorta, MAXIMO_RUTINAS, totalRutinas, type RutinaResumen } from '@/lib/rutinas';
+import { EliminarRutina, usePonerEnCurso } from './acciones';
 import styles from './Rutinas.module.css';
-
-type Orden = 'recientes' | 'az';
 
 export function Rutinas() {
   const { user } = useSesion();
-  const navegar = useNavigate();
   const userId = user?.id ?? '';
   const rutinas = useQuery({ queryKey: ['rutinas', userId], queryFn: () => cargarRutinas(userId), enabled: !!userId });
 
@@ -47,7 +46,7 @@ export function Rutinas() {
     contenido = (
       <>
         {rutinas.data.activa ? <EnCurso rutina={rutinas.data.activa} /> : null}
-        {rutinas.data.anteriores.length > 0 ? <Anteriores rutinas={rutinas.data.anteriores} /> : null}
+        {rutinas.data.anteriores.length > 0 ? <Anteriores rutinas={rutinas.data.anteriores} total={totalRutinas(rutinas.data)} /> : null}
       </>
     );
 
@@ -57,13 +56,8 @@ export function Rutinas() {
       <Pagina>
         <Encabezado
           rotulo="Rutinas"
-          titulo="Tus rutinas"
-          bajada="Una en curso; al poner otra en curso, la actual pasa a Anteriores con su historial."
-          acciones={
-            <Boton icono={Plus} className={styles.nueva} title="Nueva rutina (N)" onClick={() => navegar('/rutinas/nueva')}>
-              Nueva rutina
-            </Boton>
-          }
+          titulo="Todas las rutinas"
+          bajada="Una en curso, al poner otra en curso, la actual se archiva."
         />
         {contenido}
       </Pagina>
@@ -76,14 +70,18 @@ function EnCurso({ rutina }: { rutina: RutinaResumen }) {
     <Link to={`/rutinas/${rutina.id}`} className={styles.activa}>
       <div className={styles.activaTextos}>
         <span className={`${texto.label} ${texto.acento}`}>En curso · desde {fechaCorta(rutina.creadaEl)}</span>
-        <span className={texto.title}>{rutina.name}</span>
+        <span className={`${texto.title} ${styles.activaNombre}`}>{rutina.name}</span>
         <span className={`${texto.bodySm} ${texto.secundario}`}>{cuentaRutina(rutina)}</span>
       </div>
+      {/* Una fila por dia: crece hacia abajo, sin romperse con 4 o mas. */}
       <div className={styles.activaDias}>
         {rutina.dias.map((d) => (
           <div key={d.id} className={styles.activaDia}>
-            <span className={`${texto.label} ${texto.terciario} ${styles.unaLinea}`}>{d.name}</span>
+            <span className={`${texto.bodySm} ${styles.semi} ${styles.unaLinea}`}>{d.name}</span>
             <TiraSemana marcados={d.weekdays} />
+            <span className={`${texto.label} ${texto.terciario} ${styles.activaCuenta}`}>
+              {d.ejercicios} {d.ejercicios === 1 ? 'ejercicio' : 'ejercicios'}
+            </span>
           </div>
         ))}
       </div>
@@ -92,39 +90,44 @@ function EnCurso({ rutina }: { rutina: RutinaResumen }) {
   );
 }
 
-function Anteriores({ rutinas }: { rutinas: RutinaResumen[] }) {
+function Anteriores({ rutinas, total }: { rutinas: RutinaResumen[]; total: number }) {
   const navegar = useNavigate();
-  const [orden, setOrden] = useState<Orden>('recientes');
-  const ordenadas = orden === 'az' ? rutinas.slice().sort((a, b) => a.name.localeCompare(b.name, 'es')) : rutinas;
+  const ponerEnCurso = usePonerEnCurso();
+  const [aEliminar, setAEliminar] = useState<RutinaResumen | null>(null);
+
+  // Clic derecho sobre la fila: abre su menu ⋯.
+  const abrirMenu = (evento: MouseEvent<HTMLTableRowElement>) => {
+    evento.preventDefault();
+    evento.currentTarget.querySelector<HTMLButtonElement>('[aria-haspopup="menu"]')?.click();
+  };
+  const alTeclear = (r: RutinaResumen) => (evento: KeyboardEvent<HTMLTableRowElement>) => {
+    if (evento.key !== 'Delete') return;
+    evento.preventDefault();
+    setAEliminar(r);
+  };
 
   return (
     <section className={styles.anteriores}>
       <div className={styles.fila}>
         <span className={`${texto.label} ${texto.terciario}`}>Anteriores · {rutinas.length}</span>
-        <Segmentado
-          etiqueta="Ordenar las anteriores"
-          valor={orden}
-          onChange={setOrden}
-          opciones={[
-            { valor: 'recientes', etiqueta: 'Recientes' },
-            { valor: 'az', etiqueta: 'A–Z' },
-          ]}
-        />
+        <span className={`${texto.label} ${texto.terciario}`}>
+          {total} de {MAXIMO_RUTINAS} rutinas
+        </span>
       </div>
-      <Lista>
+      <Lista sinRecorte>
         <table className={tabla.tabla}>
           <thead>
             <tr>
               <th>Rutina</th>
               <th>Días</th>
-              <th>Archivada</th>
+              <th>Fecha de creación</th>
               <th className={tabla.num}>Sesiones</th>
               <th aria-label="Acciones" />
             </tr>
           </thead>
           <tbody>
-            {ordenadas.map((r) => (
-              <tr key={r.id} className={tabla.filaEnlace} onClick={() => navegar(`/rutinas/${r.id}`)}>
+            {rutinas.map((r) => (
+              <tr key={r.id} className={tabla.filaEnlace} onClick={() => navegar(`/rutinas/${r.id}`)} onContextMenu={abrirMenu} onKeyDown={alTeclear(r)}>
                 <td>
                   <Link to={`/rutinas/${r.id}`} className={tabla.enlace} onClick={(e) => e.stopPropagation()}>
                     {r.name}
@@ -133,15 +136,18 @@ function Anteriores({ rutinas }: { rutinas: RutinaResumen[] }) {
                 <td className={texto.secundario}>
                   {r.dias.length} {r.dias.length === 1 ? 'día' : 'días'} · {r.ejercicios} {r.ejercicios === 1 ? 'ejercicio' : 'ejercicios'}
                 </td>
-                <td className={texto.secundario}>{r.archivadaEl ? `Archivada el ${fechaCorta(r.archivadaEl)}` : null}</td>
+                <td className={texto.secundario}>{fechaCorta(r.creadaEl)}</td>
                 <td className={tabla.num}>{r.sesiones}</td>
-                <td className={tabla.acc}>
-                  <BotonIcono
-                    icono={Ellipsis}
-                    tamano="sm"
-                    etiqueta={`Más acciones de ${r.name}: muy pronto`}
-                    disabled
-                    onClick={(e) => e.stopPropagation()}
+                <td className={tabla.acc} onClick={(e) => e.stopPropagation()}>
+                  <Menu
+                    etiqueta={`Más acciones de ${r.name}`}
+                    opciones={[
+                      { etiqueta: 'Poner en curso', icono: Play, alElegir: () => void ponerEnCurso(r) },
+                      { etiqueta: 'Editar', icono: Pencil, alElegir: () => navegar(`/rutinas/${r.id}/editar`) },
+                      { etiqueta: 'Duplicar', icono: Copy, alElegir: () => {}, disabled: true },
+                      { etiqueta: 'Compartir', icono: Share, alElegir: () => {}, disabled: true },
+                      { etiqueta: 'Eliminar', icono: Trash2, alElegir: () => setAEliminar(r), peligro: true, separada: true, atajo: 'Supr' },
+                    ]}
                   />
                 </td>
               </tr>
@@ -149,6 +155,7 @@ function Anteriores({ rutinas }: { rutinas: RutinaResumen[] }) {
           </tbody>
         </table>
       </Lista>
+      <EliminarRutina rutina={aEliminar} onCerrar={() => setAEliminar(null)} />
     </section>
   );
 }

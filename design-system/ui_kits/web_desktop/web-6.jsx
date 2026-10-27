@@ -16,7 +16,7 @@ function Historial({ menu, error, filtro }) {
   return (
     <App activo="history" capa={menu === 'eliminar' ? <Modal chico titulo="Eliminar el entrenamiento del jueves 22" texto="Se borran sus 15 series. Tus mejores marcas se recalculan. No se puede deshacer." pie={<><Boton v="secondary" estado="foco">Cancelar</Boton><Boton v="danger" ico="trash-2">Eliminar</Boton></>} /> : null}>
       <Pagina>
-        <Encabezado rotulo="Historial" titulo="Lo que hiciste" acciones={<Selector md ico="layers" valor={filtro ? 'Push Pull Legs' : 'Todas las rutinas'} />} />
+        <Encabezado rotulo="Historial" titulo="Listado de los días entrenados" acciones={<Selector md ico="layers" valor={filtro ? 'Push Pull Legs' : 'Todas las rutinas'} />} />
         <div className="w-cuatro">
           {[['Sesiones', '86', ''], ['Tiempo total', '79', 'h']].map(([l, v, u]) => (
             <div key={l} className="w-tarjeta w-metrica"><span className="t-label c-ter">{l}</span><span className="w-metrica__valor">{v}{u ? <small>{u}</small> : null}</span></div>
@@ -53,7 +53,7 @@ function HistorialVacio() {
   return (
     <App activo="history">
       <Pagina>
-        <Encabezado rotulo="Historial" titulo="Lo que hiciste" />
+        <Encabezado rotulo="Historial" titulo="Listado de los días entrenados" />
         <div className="w-tarjeta w-tarjeta--punteada col g5 centro w-vacio">
           <Ico n="history" s={28} c="c-ter" />
           <span className="t-subtitle">Todavía no hay sesiones</span>

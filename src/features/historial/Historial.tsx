@@ -95,7 +95,7 @@ export function Historial() {
     <>
       <Fondo posicion="velada" />
       <Pagina>
-        <Encabezado rotulo="Historial" titulo="Lo que hiciste" />
+        <Encabezado rotulo="Historial" titulo="Listado de los días entrenados" />
         <Totales userId={userId} />
         {contenido}
       </Pagina>

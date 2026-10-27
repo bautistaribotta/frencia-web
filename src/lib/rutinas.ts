@@ -1,9 +1,9 @@
-/* Rutinas del usuario: el listado y el detalle de una, solo lectura.
+/* Rutinas del usuario: el listado, el detalle de una y las acciones de la
+   lista (poner en curso, eliminar, el limite por cuenta).
    Las consultas son las de src/lib/rutinas.ts del repo mobile con dos sumas
    propias del escritorio: la cuenta de sesiones de cada rutina (por sus dias)
    y, en el detalle, los ejercicios de cada dia con su resumen.
-   Las anteriores se traen todas de una vez: son pocas y asi el orden A-Z
-   ordena la lista entera y no solo lo cargado. */
+   Las anteriores se traen todas de una vez: son pocas (hasta cinco rutinas). */
 
 import type { QueryData } from '@supabase/supabase-js';
 
@@ -251,4 +251,26 @@ export async function guardarRutinaCompleta(
   });
   if (error || !data) throw error ?? new Error('La rutina no se guardó');
   return data;
+}
+
+/** Rutinas por cuenta gratuita, contando la en curso y las archivadas. La
+ *  base todavia no lo fuerza: lo cuida la web. */
+export const MAXIMO_RUTINAS = 5;
+
+export function totalRutinas(lista: ListaRutinas): number {
+  return (lista.activa ? 1 : 0) + lista.anteriores.length;
+}
+
+/** Pone en curso la rutina y archiva la que estaba (activar_rutina). */
+export async function activarRutina(routineId: string): Promise<void> {
+  const { error } = await supabase.rpc('activar_rutina', { p_routine_id: routineId });
+  if (error) throw error;
+}
+
+/** Borra la rutina con sus dias y ejercicios. Las sesiones quedan en el
+ *  historial, sin dia. */
+export async function eliminarRutina(routineId: string): Promise<void> {
+  const { error, count } = await supabase.from('routines').delete({ count: 'exact' }).eq('id', routineId);
+  if (error) throw error;
+  if (count === 0) throw new Error('La rutina no existe o no es tuya');
 }

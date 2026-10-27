@@ -35,8 +35,10 @@ export function Encabezado({
   );
 }
 
-export function Lista({ children, className = '' }: { children: ReactNode; className?: string }) {
-  return <div className={`${styles.lista} ${className}`}>{children}</div>;
+/** Con `sinRecorte` no recorta lo que sale de la caja, como el menu ⋯ de
+ *  una fila (.w-lista--sin-recorte). */
+export function Lista({ children, className = '', sinRecorte = false }: { children: ReactNode; className?: string; sinRecorte?: boolean }) {
+  return <div className={`${styles.lista} ${sinRecorte ? styles.sinRecorte : ''} ${className}`}>{children}</div>;
 }
 
 /** Fila de una lista. Con `enlace`, toma el hover y el foco de las filas que

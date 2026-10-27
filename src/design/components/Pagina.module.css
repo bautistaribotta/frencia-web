@@ -26,6 +26,13 @@
   -webkit-backdrop-filter: var(--glass-filter);
   backdrop-filter: var(--glass-filter);
 }
+.sinRecorte { overflow: visible; }
+/* Sin recorte, las celdas de las esquinas redondean su propio fondo (el
+   encabezado y la fila con hover). */
+.sinRecorte thead tr:first-child > :first-child { border-top-left-radius: calc(var(--radius-xl) - 1px); }
+.sinRecorte thead tr:first-child > :last-child { border-top-right-radius: calc(var(--radius-xl) - 1px); }
+.sinRecorte tbody tr:last-child > :first-child { border-bottom-left-radius: calc(var(--radius-xl) - 1px); }
+.sinRecorte tbody tr:last-child > :last-child { border-bottom-right-radius: calc(var(--radius-xl) - 1px); }
 
 .fila {
   display: flex;

@@ -69,7 +69,7 @@ import type { Medidor } from '@/lib/ejercicios';
 import type { UnidadDistancia } from '@/lib/distancia';
 import { usePerfil, useTemaDeCuenta } from '@/lib/perfil';
 import type { UnidadPeso } from '@/lib/peso';
-import { cargarRutina, cargarRutinas, guardarRutinaCompleta, type RutinaDetalle } from '@/lib/rutinas';
+import { cargarRutina, cargarRutinas, guardarRutinaCompleta, MAXIMO_RUTINAS, totalRutinas, type RutinaDetalle } from '@/lib/rutinas';
 import { Catalogo, ItemLevantado } from './Catalogo';
 import styles from './Constructor.module.css';
 import { PanelEjercicio } from './PanelEjercicio';
@@ -138,7 +138,7 @@ function indiceAlSoltar(pos: { dia: DiaBorrador; indice: number }, sobre: DatosS
   return indice < 0 ? pos.indice : indice;
 }
 
-type EstadoGuardado = 'reposo' | 'guardando' | 'recien' | 'error';
+type EstadoGuardado = 'reposo' | 'guardando' | 'error';
 
 const MENSAJE_PROBLEMA: Record<Problema, string> = {
   nombre: 'Poné un nombre a la rutina para guardarla.',
@@ -196,8 +196,8 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
   const catalogo = useCatalogo();
   const porId = useMemo(() => new Map((catalogo.data ?? []).map((e) => [e.id, e])), [catalogo.data]);
 
-  const [base, setBase] = useState<Borrador>(() => (rutina ? borradorDeRutina(rutina) : borradorNuevo()));
-  const { borrador, cambios, foto, despachar, restaurar, reiniciar, recuperado } = useBorrador(routineId, base);
+  const [base] = useState<Borrador>(() => (rutina ? borradorDeRutina(rutina) : borradorNuevo()));
+  const { borrador, cambios, foto, despachar, restaurar, recuperado } = useBorrador(routineId, base);
 
   const [elegido, setElegido] = useState<string>(() => borrador.dias[0].uid);
   const diaElegido = borrador.dias.find((d) => d.uid === elegido) ?? borrador.dias[0];
@@ -206,7 +206,7 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
   const [oculto, setOculto] = useState(leerOculto);
   const [atajos, setAtajos] = useState(false);
   const [preguntaActivar, setPreguntaActivar] = useState(false);
-  const [estadoGuardado, setEstadoGuardado] = useState<EstadoGuardado>(() => ((ubicacion.state as { recien?: boolean } | null)?.recien ? 'recien' : 'reposo'));
+  const [estadoGuardado, setEstadoGuardado] = useState<EstadoGuardado>('reposo');
   const busqueda = useRef<HTMLInputElement>(null);
   const nombre = useRef<HTMLInputElement>(null);
   // Salir sin preguntar: despues de guardar o descartar a proposito.
@@ -240,13 +240,6 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
     recuperoAvisado.current = true;
     avisar('Recuperamos los cambios que no habías guardado.', 'info', { etiqueta: 'Descartar', alHacer: () => restaurar({ borrador: base, cambios: 0 }) });
   }, [recuperado, avisar, restaurar, base]);
-
-  // "Guardado recien" dura un momento.
-  useEffect(() => {
-    if (estadoGuardado !== 'recien') return;
-    const t = window.setTimeout(() => setEstadoGuardado('reposo'), 3000);
-    return () => window.clearTimeout(t);
-  }, [estadoGuardado]);
 
   // Lo recien agregado lleva el borde de lume hasta el proximo clic.
   useEffect(() => {
@@ -354,8 +347,14 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
       return;
     }
     if (routineId === null && activar === undefined) {
-      // Si ya hay una en curso, se pregunta si la nueva la reemplaza.
       const lista = await cliente.fetchQuery({ queryKey: ['rutinas', userId], queryFn: () => cargarRutinas(userId) }).catch(() => null);
+      // Con el limite lleno (por ejemplo, desde otra pestaña) no se crea.
+      if (lista && totalRutinas(lista) >= MAXIMO_RUTINAS) {
+        avisar(`Llegaste a ${MAXIMO_RUTINAS} rutinas. Eliminá una para crear otra.`, 'error');
+        alGuardarSalir.current = null;
+        return;
+      }
+      // Si ya hay una en curso, se pregunta si la nueva la reemplaza.
       if (lista?.activa) {
         setPreguntaActivar(true);
         return;
@@ -368,28 +367,18 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
       borrarBorradorGuardado(routineId);
       await Promise.all(['rutinas', 'rutina', 'rutina-activa'].map((clave) => cliente.invalidateQueries({ queryKey: [clave] })));
       avisar('Rutina guardada');
+      permitirSalida.current = true;
       const salir = alGuardarSalir.current;
       alGuardarSalir.current = null;
       if (salir) {
-        permitirSalida.current = true;
         salir();
         return;
       }
-      if (routineId === null) {
-        permitirSalida.current = true;
-        navegar(`/rutinas/${id}/editar`, { replace: true, state: { recien: true } });
-        return;
-      }
-      // Lo guardado pasa a ser la base, con los ids de los dias nuevos.
-      const fresca = await cliente.fetchQuery({ queryKey: ['rutina', id], queryFn: () => cargarRutina(id) }).catch(() => null);
-      if (fresca) {
-        const b = borradorDeRutina(fresca);
-        setBase(b);
-        reiniciar(b);
-        setSeleccion(null);
-        setElegido(b.dias[0].uid);
-      }
-      setEstadoGuardado('recien');
+      // Guardar sale del constructor: vuelve a la pantalla de la que se llego
+      // (el detalle, Rutinas, Inicio). Si se entro directo por la URL, no hay
+      // a donde volver dentro de la app y va al detalle de la rutina.
+      if (ubicacion.key !== 'default') navegar(-1);
+      else navegar(`/rutinas/${id}`, { replace: true });
     } catch {
       setEstadoGuardado('error');
       alGuardarSalir.current = null;
@@ -902,13 +891,6 @@ function Barra({ nombre, nombreRef, nueva, cambios, estado, puedeGuardar, motivo
       <>
         <span className={styles.punto} />
         Cambios sin guardar · {cambios}
-      </>
-    );
-  else if (estado === 'recien')
-    estadoTexto = (
-      <>
-        <Icono icono={Check} tamano={16} className={texto.acento} disparo={estado} />
-        Guardado recién
       </>
     );
   else if (nueva) estadoTexto = <>Rutina nueva · sin guardar</>;

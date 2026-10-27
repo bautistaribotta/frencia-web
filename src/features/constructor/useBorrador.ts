@@ -97,12 +97,6 @@ export function useBorrador(routineId: string | null, base: Borrador) {
     setFoto(f);
   }, []);
 
-  /** Lo guardado pasa a ser la nueva base. */
-  const reiniciar = useCallback((b: Borrador) => {
-    ultimaClave.current = null;
-    setFoto({ borrador: b, cambios: 0 });
-  }, []);
-
   // Copia local de lo que no se guardo.
   useEffect(() => {
     try {
@@ -113,5 +107,5 @@ export function useBorrador(routineId: string | null, base: Borrador) {
     }
   }, [foto, firmaBase, routineId]);
 
-  return { ...foto, foto, despachar, restaurar, reiniciar, recuperado: inicial.recuperado };
+  return { ...foto, foto, despachar, restaurar, recuperado: inicial.recuperado };
 }

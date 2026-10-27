@@ -6,9 +6,11 @@
 .fila { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); }
 
 /* La en curso: vidrio elevado con un borde fino de lume parejo en todo el
-   contorno. */
+   contorno (.w-activa). El nombre en una columna de ancho fijo y los dias en
+   lista vertical. */
 .activa {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 280px) minmax(0, 1fr) auto;
   align-items: center;
   gap: var(--space-7);
   padding: var(--pad-card);
@@ -24,9 +26,19 @@
 }
 .activa:hover { border-color: var(--signal); }
 .activa:focus-visible { outline: var(--foco-w) solid var(--focus-ring); outline-offset: var(--foco-offset); }
-.activaTextos { display: flex; flex-direction: column; gap: var(--space-3); flex: 1; min-width: 0; }
-.activaDias { display: flex; gap: var(--space-5); flex-wrap: wrap; justify-content: flex-end; }
-.activaDia { display: flex; flex-direction: column; gap: var(--space-2); max-width: 206px; }
+.activaTextos { display: flex; flex-direction: column; gap: var(--space-3); min-width: 0; }
+.activaNombre { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.activaDias { display: flex; flex-direction: column; min-width: 0; }
+.activaDia {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto 96px;
+  gap: var(--space-5);
+  align-items: center;
+  padding: var(--space-3) 0;
+}
+.activaDia + .activaDia { border-top: 1px solid var(--divider); }
+.activaCuenta { text-align: right; }
+.semi { font-weight: var(--fw-semibold); }
 
 .anteriores { display: flex; flex-direction: column; gap: var(--space-4); }
 
@@ -50,6 +62,3 @@
 .esqTitulo { width: 40%; height: 22px; }
 .esqLinea { width: 55%; }
 .esqRotulo { width: 25%; }
-
-.nueva { cursor: pointer; background: var(--signal); color: var(--text-on-signal); box-shadow: var(--halo-signal); }
-.nueva:hover, .nueva:active { background: var(--signal-press); }

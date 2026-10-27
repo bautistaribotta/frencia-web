@@ -191,8 +191,35 @@ test('nueva: del catalogo a un dia, configurar y guardar en curso', async ({ pag
       },
     ],
   });
-  await expect(page).toHaveURL(new RegExp(`/rutinas/${RUTINA.id}/editar$`));
+  // Se entro directo por la URL: no hay a donde volver, va al detalle.
+  await expect(page).toHaveURL(new RegExp(`/rutinas/${RUTINA.id}$`));
   await expect(page.getByText('Rutina guardada')).toBeVisible();
+});
+
+test('guardar vuelve a la pantalla de la que se llegó', async ({ page }) => {
+  const guardados = await conDatos(page);
+  // Inicio → Ver rutina → Editar rutina → Guardar: vuelve al detalle.
+  await page.goto('/');
+  await page.getByRole('link', { name: 'Ver rutina' }).click();
+  await page.getByRole('button', { name: 'Editar rutina' }).click();
+  await page.getByRole('textbox', { name: 'Nombre de la rutina' }).fill('Push Pull 2');
+  await page.getByRole('button', { name: 'Guardar', exact: true }).click();
+  await expect(page).toHaveURL(new RegExp(`/rutinas/${RUTINA.id}$`));
+  await expect(page.getByText('Rutina guardada')).toBeVisible();
+  expect(guardados).toHaveLength(1);
+
+  // Rutinas → Nueva rutina → Guardar: vuelve a Rutinas.
+  await page.goto('/rutinas');
+  await page.getByRole('navigation', { name: 'Principal' }).getByRole('button', { name: 'Nueva rutina' }).click();
+  await page.getByRole('textbox', { name: 'Nombre de la rutina' }).fill('Otra');
+  await page.getByLabel('Catálogo de ejercicios').getByText('Remo con barra').hover();
+  await page.getByRole('button', { name: 'Agregar Remo con barra a Día 1' }).click();
+  await page.getByRole('dialog', { name: 'Remo con barra' }).getByRole('button', { name: 'Guardar' }).click();
+  await page.keyboard.press('Control+s');
+  await page.getByRole('dialog', { name: '¿La ponés en curso?' }).getByRole('button', { name: 'Guardarla sin activar' }).click();
+  await expect(page).toHaveURL(/\/rutinas$/);
+  await expect(page.getByText('Rutina guardada')).toBeVisible();
+  expect(guardados).toHaveLength(2);
 });
 
 test('nueva con una rutina en curso: pregunta si la reemplaza', async ({ page }) => {
@@ -338,10 +365,10 @@ test('error al guardar: los cambios quedan y se puede reintentar', async ({ page
   await expect.poll(() => guardados.length).toBe(2);
 });
 
-test('nueva rutina desde la navegacion y desde Rutinas', async ({ page }) => {
+test('nueva rutina desde la navegacion y con N', async ({ page }) => {
   await conDatos(page);
   await page.goto('/rutinas');
-  await page.getByRole('main').getByRole('button', { name: 'Nueva rutina' }).click();
+  await page.getByRole('navigation', { name: 'Principal' }).getByRole('button', { name: 'Nueva rutina' }).click();
   await expect(page).toHaveURL(/rutinas\/nueva$/);
   await page.goto('/');
   await expect(page.getByRole('navigation', { name: 'Principal' })).toBeVisible();

@@ -42,3 +42,7 @@
 
 .peligro,
 .peligro > :first-child { color: var(--danger-text); }
+
+.etiqueta { flex: 1; }
+
+.separador { height: 1px; margin: var(--space-2) var(--space-3); background: var(--divider); }

@@ -84,22 +84,24 @@ function InicioCargando() {
 }
 
 /* ---------- Rutinas ---------- */
-const ANTERIORES = [['Fuerza 4 días', '4 días · 22 ejercicios', 'Archivada el 12 MAY 2026', '38'], ['Full body', '3 días · 15 ejercicios', 'Archivada el 2 FEB 2026', '21'], ['Torso / pierna', '4 días · 20 ejercicios', 'Archivada el 8 NOV 2025', '44']];
-function Rutinas({ menu }) {
+const ANTERIORES = [['Fuerza 4 días', '4 días · 22 ejercicios', '3 FEB 2026', '38'], ['Full body', '3 días · 15 ejercicios', '14 OCT 2025', '21'], ['Torso / pierna', '4 días · 20 ejercicios', '2 JUN 2025', '44']];
+function Rutinas({ menu, capa }) {
   return (
-    <App activo="routines">
+    <App activo="routines" capa={capa}>
       <Pagina>
-        <Encabezado rotulo="Rutinas" titulo="Tus rutinas" sub="Una en curso; al poner otra en curso, la actual pasa a Anteriores con su historial." acciones={<Boton ico="plus" className="w-nueva-rutina">Nueva rutina</Boton>} />
-        <div className="w-tarjeta w-tarjeta--activa w-tarjeta--link row g7">
-          <div className="col g3 f1"><span className="t-label c-acc">En curso · desde 29 JUL 2026</span><span className="t-title">Push Pull Legs</span><span className="t-bodysm c-sec">3 días · 18 ejercicios · 24 sesiones</span></div>
-          <div className="row g5">{RUTINA.dias.map((d) => <div key={d.n} className="col g2"><span className="t-label c-ter">{d.n}</span><Semana on={d.sem} /></div>)}</div>
+        <Encabezado rotulo="Rutinas" titulo="Todas las rutinas" sub="Una en curso, al poner otra en curso, la actual se archiva." />
+        <div className="w-tarjeta w-tarjeta--activa w-tarjeta--link w-activa">
+          <div className="col g3"><span className="t-label c-acc">En curso · desde 29 JUL 2026</span><span className="t-title">Push Pull Legs</span><span className="t-bodysm c-sec">3 días · 18 ejercicios · 24 sesiones</span></div>
+          <div className="w-activa__dias">{RUTINA.dias.map((d) => (
+            <div key={d.n} className="w-activa__dia"><span className="t-bodysm semi una-linea">{d.n}</span><Semana on={d.sem} /><span className="t-label c-ter w-activa__cuenta">{d.ej.length} ejercicios</span></div>
+          ))}</div>
           <Ico n="chevron-right" s={20} c="c-ter" />
         </div>
         <div className="col g4">
-          <div className="row entre"><span className="t-label c-ter">Anteriores · 3</span><Seg ops={[['rec', 'Recientes'], ['az', 'A–Z']]} sel="rec" /></div>
+          <div className="row entre"><span className="t-label c-ter">Anteriores · 3</span><span className="t-label c-ter">4 de 5 rutinas</span></div>
           <div className="w-lista w-lista--sin-recorte">
             <table className="w-tabla">
-              <thead><tr><th>Rutina</th><th>Días</th><th>Archivada</th><th className="num">Sesiones</th><th></th></tr></thead>
+              <thead><tr><th>Rutina</th><th>Días</th><th>Fecha de creación</th><th className="num">Sesiones</th><th></th></tr></thead>
               <tbody>{ANTERIORES.map(([n, d, a, s], i) => (
                 <tr key={n} className={menu && i === 0 ? 'is-hover' : ''}>
                   <td><span className="semi">{n}</span></td><td className="c-sec">{d}</td><td className="c-sec">{a}</td><td className="num">{s}</td>
@@ -109,8 +111,8 @@ function Rutinas({ menu }) {
                       <Menu className="w-menu--flota">
                         <MenuItem ico="play" estado="hover">Poner en curso</MenuItem>
                         <MenuItem ico="pencil">Editar</MenuItem>
-                        <MenuItem ico="copy">Duplicar</MenuItem>
-                        <MenuItem ico="share">Compartir</MenuItem>
+                        <MenuItem ico="copy" estado="off">Duplicar</MenuItem>
+                        <MenuItem ico="share" estado="off">Compartir</MenuItem>
                         <MenuSep />
                         <MenuItem ico="trash-2" dang kbd="Supr">Eliminar</MenuItem>
                       </Menu>
@@ -129,7 +131,7 @@ function RutinasVacia() {
   return (
     <App activo="routines">
       <Pagina>
-        <Encabezado rotulo="Rutinas" titulo="Tus rutinas" />
+        <Encabezado rotulo="Rutinas" titulo="Todas las rutinas" />
         <div className="w-tarjeta w-tarjeta--punteada col g5 centro w-vacio">
           <Ico n="layers" s={28} c="c-ter" />
           <span className="t-subtitle">Todavía no tenés rutinas</span>
@@ -155,7 +157,7 @@ function Detalle({ archivada, capa }) {
           </div>
           <div className="row g3">
             <Boton v="secondary" ico="share" anima>Compartir</Boton>
-            {archivada ? <Boton ico="play">Poner en curso</Boton> : <Boton ico="pencil" anima>Editar rutina</Boton>}
+            {archivada ? <><Boton v="secondary" ico="pencil" anima>Editar rutina</Boton><Boton ico="play">Poner en curso</Boton></> : <Boton ico="pencil" anima>Editar rutina</Boton>}
             <BotonIco ico="ellipsis" v="surface" label="Más acciones" />
           </div>
         </div>
@@ -205,13 +207,15 @@ function AppWeb() {
         <Mesa nombre="Cuenta nueva" ruta="(main)/home" url="frencia.app"><InicioVacio /></Mesa>
         <Mesa nombre="Primera carga" nota="Esqueletos con la forma del contenido; la navegación ya está lista." ruta="(main)/home · cargando" url="frencia.app"><InicioCargando /></Mesa>
       </Seccion>
-      <Seccion titulo="Rutinas" nota="(main)/routines — la en curso lleva un borde fino de lume, parejo en todo el contorno; las anteriores son una tabla ordenable. Lo que en la app se hace deslizando, acá va en el menú ⋯ de cada fila.">
-        <Mesa nombre="Lista con menú de una fila" nota="El menú se abre con clic, con el botón ⋯ o con clic derecho sobre la fila. Supr elimina la fila enfocada (pide confirmar)." ruta="(main)/routines" url="frencia.app/rutinas"><Rutinas menu /></Mesa>
+      <Seccion titulo="Rutinas" nota="(main)/routines — la en curso lleva un borde fino de lume, parejo en todo el contorno; a la izquierda su nombre (ancho fijo, hasta dos renglones) y a la derecha sus días en una lista vertical: nombre, días de la semana y cantidad de ejercicios, una fila por día, sin romperse con 4 o más. Las anteriores son una tabla, de la más nueva a la más vieja, sin orden a elegir. Sin botón Nueva rutina en el encabezado: ya está siempre en la navegación. Lo que en la app se hace deslizando, acá va en el menú ⋯ de cada fila. Cada cuenta gratuita tiene hasta 5 rutinas, contando la en curso y las archivadas.">
+        <Mesa nombre="Lista con menú de una fila" nota="El menú se abre con el botón ⋯ o con clic derecho sobre la fila. Poner en curso archiva la actual y avisa con Deshacer. Editar abre el constructor, también en una archivada (sigue archivada). Duplicar y Compartir quedan desactivados hasta tenerlos. Supr elimina la fila enfocada (pide confirmar)." ruta="(main)/routines" url="frencia.app/rutinas"><Rutinas menu /></Mesa>
+        <Mesa nombre="Confirmar eliminación desde la lista" nota="Lo que borra va a la derecha; el foco arranca en Cancelar." ruta="(main)/routines · alerta" url="frencia.app/rutinas"><Rutinas capa={<Modal chico titulo="Eliminar Fuerza 4 días" texto="Se borra la rutina con sus 4 días y los ejercicios de cada uno. Tu historial de sesiones no se toca. No se puede deshacer." pie={<><Boton v="secondary" estado="foco">Cancelar</Boton><Boton v="danger" ico="trash-2">Eliminar</Boton></>} />} /></Mesa>
+        <Mesa nombre="Límite de rutinas" nota="Con 5 rutinas, Nueva rutina (en la navegación o con N) abre este aviso en lugar del constructor." ruta="(main)/routines · alerta" url="frencia.app/rutinas"><Rutinas capa={<Modal chico titulo="Llegaste a 5 rutinas" texto="Por ahora podés tener hasta 5, contando la en curso y las archivadas. Eliminá una para crear otra." pie={<Boton estado="foco">Entendido</Boton>} />} /></Mesa>
         <Mesa nombre="Sin rutinas" ruta="(main)/routines" url="frencia.app/rutinas"><RutinasVacia /></Mesa>
       </Seccion>
       <Seccion titulo="Detalle de una rutina" nota="routine — los días en columnas, con cada ejercicio y su resumen (volumen · intensidad en tinta · descanso). Editar rutina abre el constructor.">
         <Mesa nombre="Rutina en curso" ruta="routine" url="frencia.app/rutinas/push-pull-legs"><Detalle /></Mesa>
-        <Mesa nombre="Rutina archivada" nota="La acción principal pasa a Poner en curso." ruta="routine" url="frencia.app/rutinas/fuerza-4-dias"><Detalle archivada /></Mesa>
+        <Mesa nombre="Rutina archivada" nota="La acción principal pasa a Poner en curso; Editar rutina queda al lado, en secundario, y la edita sin sacarla de archivadas." ruta="routine" url="frencia.app/rutinas/fuerza-4-dias"><Detalle archivada /></Mesa>
         <Mesa nombre="Compartir · qué se comparte" nota="La hoja de la app pasa a un modal con las mismas dos opciones." ruta="routine · ShareModal" url="frencia.app/rutinas/push-pull-legs"><Detalle capa={<ModalCompartir />} /></Mesa>
         <Mesa nombre="Compartir · link listo" nota="En escritorio la acción principal es Copiar link (al copiar, el icono pasa a check y aparece el aviso); WhatsApp abre WhatsApp Web con el mensaje armado." ruta="routine · ShareModal" url="frencia.app/rutinas/push-pull-legs"><Detalle capa={<ModalCompartir paso={2} />} /></Mesa>
         <Mesa nombre="Confirmar eliminación" nota="El foco arranca en Cancelar: Enter no borra por accidente." ruta="routine · alerta" url="frencia.app/rutinas/push-pull-legs"><Detalle capa={<Modal chico titulo="Eliminar Push Pull Legs" texto="Se borra la rutina con sus 3 días y los ejercicios de cada uno. Tu historial de sesiones no se toca. No se puede deshacer." pie={<><Boton v="secondary" estado="foco">Cancelar</Boton><Boton v="danger" ico="trash-2">Eliminar</Boton></>} />} /></Mesa>

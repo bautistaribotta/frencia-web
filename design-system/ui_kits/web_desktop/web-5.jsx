@@ -85,7 +85,7 @@ const lista = (ej, mods = {}) => {
 };
 
 function Barra({ nombre = 'Push Pull Legs', guardado = 'guardado', nombreFoco }) {
-  const txt = { guardado: <><Ico n="circle-check" s={16} />Guardado</>, recien: <><Ico n="check" s={16} confirma c="c-acc" />Guardado recién</>, sucio: <><span className="w-punto"></span>Cambios sin guardar · 2</>, guardando: <><Ruedita />Guardando…</>, error: <><Ico n="cloud-off" s={16} c="c-dang" /><span className="c-dang">No se guardó</span></>, nueva: <>Rutina nueva · sin guardar</> }[guardado];
+  const txt = { guardado: <><Ico n="circle-check" s={16} />Guardado</>, sucio: <><span className="w-punto"></span>Cambios sin guardar · 2</>, guardando: <><Ruedita />Guardando…</>, error: <><Ico n="cloud-off" s={16} c="c-dang" /><span className="c-dang">No se guardó</span></>, nueva: <>Rutina nueva · sin guardar</> }[guardado];
   const puede = guardado === 'sucio' || guardado === 'error';
   return (
     <div className="w-builder__barra">
@@ -145,7 +145,7 @@ function Constructor({ caso, capa, panel, rail }) {
     if (caso === 'sucio') toast = <Toast texto="Fondos en paralelas agregado a Pull" tipo="info" accion="Deshacer" />;
     if (caso === 'error') toast = <Toast texto="No pudimos guardar. Tus cambios siguen acá." tipo="error" accion="Reintentar" />;
   }
-  if (caso === 'guardado') { guardado = 'recien'; toast = <Toast texto="Rutina guardada" confirma />; }
+  if (caso === 'guardado') { guardado = 'guardando'; toast = <Toast texto="Rutina guardada" confirma />; }
   if (caso === 'vacia') {
     guardado = 'nueva'; nombre = ''; nombreFoco = true;
     dias = [{ d: { n: 'Día 1', sem: [], ej: [] }, items: [], estado: null }];
@@ -246,7 +246,7 @@ function AppWeb() {
       <Seccion titulo="Guardar" nota="Los cambios viven en un borrador local hasta Guardar (o Ctrl + S). El borrador sobrevive a recargar la pestaña. Salir con cambios pide confirmar.">
         <Mesa nombre="Cambios sin guardar" nota="El estado de arriba cuenta los cambios, con un punto en tinta. Lo recién agregado se marca con el borde de lume hasta el próximo clic." ruta="edit-routine" fondo="velada" url={u}><Constructor caso="sucio" /></Mesa>
         <Mesa nombre="Guardando" ruta="edit-routine" fondo="velada" url={u}><Constructor caso="guardando" /></Mesa>
-        <Mesa nombre="Guardado" nota="El check se anima una vez en el estado y en el aviso." ruta="edit-routine" fondo="velada" url={u}><Constructor caso="guardado" /></Mesa>
+        <Mesa nombre="Guardado" nota="Al terminar de guardar se vuelve a la pantalla de la que se llegó (o al detalle, si se entró por la URL); el aviso «Rutina guardada» sigue ahí con su check animado una vez." ruta="edit-routine" fondo="velada" url={u}><Constructor caso="guardado" /></Mesa>
         <Mesa nombre="Error al guardar" nota="Nada se pierde: el borrador sigue y Reintentar está en el aviso y en Guardar." ruta="edit-routine" fondo="velada" url={u}><Constructor caso="error" /></Mesa>
         <Mesa nombre="Salir con cambios" nota="Guardar y salir es la acción principal: va a la izquierda y arranca con el foco. Descartar en el medio y Seguir editando a la derecha del todo." ruta="edit-routine · alerta" fondo="velada" url={u}><Constructor caso="sucio" capa={<ModalSalir />} /></Mesa>
       </Seccion>

@@ -41,8 +41,8 @@ página), `tools/tokens_web.py` (regenera los tokens desde `tokens.json`).
 - La barra de pestañas se vuelve navegación lateral en vidrio denso (`surface-raised` +
   `blur-sheet`): Inicio, Rutinas, Historial; Configuración y el usuario (→ Perfil) al pie.
 - **Nueva rutina** reemplaza al botón central de la barra. Va con relleno `signal` y texto `text-on-signal`: lima en oscuro, oliva en claro.
-  Abre el constructor (`/rutinas/nueva`), también con `N`. Tanto en la barra lateral como en el encabezado de Rutinas,
-  el cursor es de mano (`pointer`).
+  Abre el constructor (`/rutinas/nueva`), también con `N`, con el cursor de mano (`pointer`). Vive solo en la barra
+  lateral: el encabezado de Rutinas no lo repite. Con 5 rutinas abre el aviso de límite (ver «Rutinas»).
 - La pestaña activa: icono en lume y marca de 3 px pegada al borde, como en la app.
 - Se colapsa a riel con `[` o con el botón de la cabecera (preferencia en `localStorage`).
 - El **constructor** es pantalla completa, sin navegación lateral: es una tarea de foco.
@@ -172,7 +172,13 @@ tinta con `circle-alert`, sin bloquear.
   `training_day_weekdays` y `training_day_exercises` (con `position`) con la RPC
   `guardar_rutina_completa`, en una transacción, para no dejar una rutina a medias.
 - Estado en la barra: Guardado · Cambios sin guardar (punto en tinta y cantidad) ·
-  Guardando… · Guardado recién (check animado) · No se guardó (+ Reintentar en el aviso).
+  Guardando… · No se guardó (+ Reintentar en el aviso).
+- **Al guardar se sale del constructor** (Guardar, `Ctrl S` o la opción Ponerla en curso /
+  Guardarla sin activar): vuelve a la pantalla de la que se llegó, con el aviso «Rutina
+  guardada» (check animado) ya ahí. Por ejemplo, Inicio → Ver rutina → Editar rutina →
+  Guardar vuelve al detalle de esa rutina; Rutinas → Nueva rutina → Guardar vuelve a
+  Rutinas, con la nueva en la lista. Si se entró directo por la URL, va al detalle de la
+  rutina guardada. Si falla, se queda en el constructor con los cambios.
 - Rutina nueva con otra en curso: al guardar, modal «¿La ponés en curso?» con Ponerla
   en curso (izquierda, foco inicial) y Guardarla sin activar. Sin rutina en curso, queda activa.
 - Salir con cambios: `useBlocker` de React Router + `beforeunload`. Modal con Guardar y salir
@@ -266,6 +272,35 @@ solo del kit y se reemplazan por las pseudoclases.
 - Peso en el plan: solo `weight_kg` en isométricos que registran peso.
 - Sin intensidad: solo cardio. RIR `-1` = al fallo.
 - Reducir transparencia no está en `profiles`: se guarda en el navegador.
+- El límite de 5 rutinas todavía no está en la base: hoy lo cuida la web. La regla en
+  la base va en una migración del repo de la app móvil.
+
+## Rutinas
+
+- Título «Todas las rutinas», con la bajada «Una en curso, al poner otra en curso, la
+  actual se archiva.» Sin botón Nueva rutina: ya está siempre en la navegación.
+- La en curso arriba, en una tarjeta con borde de lume: a la izquierda el nombre (ancho
+  fijo, hasta dos renglones) y su cuenta; a la derecha los días en una **lista vertical**,
+  una fila por día con su nombre, la tira de la semana y la cantidad de ejercicios. Crece
+  hacia abajo, así no se rompe con 4 o más días.
+- Las anteriores en una tabla de la más nueva a la más vieja, sin
+  orden a elegir (son pocas). A la derecha del rótulo «Anteriores · N», la cuenta
+  contra el límite: «4 de 5 rutinas».
+- Columnas: Rutina, Días, Fecha de creación (`27 OCT 2026`), Sesiones y el menú ⋯.
+- **Límite:** cada cuenta gratuita tiene hasta 5 rutinas, contando la en curso y las
+  archivadas. Con 5, Nueva rutina abre el modal chico «Llegaste a 5 rutinas» con un
+  solo botón, Entendido, en lugar del constructor. Si igual se llega a guardar una
+  sexta (por ejemplo, desde otra pestaña), el guardado avisa el error y no la crea.
+- **Menú ⋯ de una fila** (también con clic derecho sobre la fila):
+  - Poner en curso: archiva la actual y avisa «X está en curso» con Deshacer, que
+    vuelve a poner en curso la anterior.
+  - Editar: abre el constructor. Una archivada se edita y sigue archivada.
+  - Duplicar y Compartir: desactivados hasta tenerlos.
+  - Eliminar (carmín, `Supr` sobre la fila enfocada): pide confirmar en el modal
+    chico; Cancelar a la izquierda con el foco inicial y Eliminar a la derecha. Se
+    borra la rutina con sus días y ejercicios; las sesiones del historial quedan.
+- **Detalle de una archivada:** Compartir · Editar rutina (secundario) · Poner en
+  curso (principal) · ⋯.
 
 ## Eliminar una sesión
 

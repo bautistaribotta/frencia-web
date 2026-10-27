@@ -1,13 +1,14 @@
 /* Detalle de una rutina (/rutinas/:id). Los dias en columnas, con cada
    ejercicio, su tipo y su resumen: volumen · intensidad en tinta · descanso
    (kit web, Web · 4).
-   Editar rutina abre el constructor. Compartir, Poner en curso (si esta
-   archivada) y el menu quedan a la vista pero desactivados por ahora.
+   Editar rutina abre el constructor, tambien en una archivada (que sigue
+   archivada); en esa, la accion principal es Poner en curso. Compartir y el
+   menu quedan a la vista pero desactivados por ahora.
    Fondo: cumbre. */
 
 import { useQuery } from '@tanstack/react-query';
 import { ChevronLeft, Ellipsis, Pencil, Play, RotateCw, Share } from 'lucide-react';
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
 import { Boton } from '@/design/components/Boton';
@@ -21,6 +22,7 @@ import type { UnidadDistancia } from '@/lib/distancia';
 import { usePerfil } from '@/lib/perfil';
 import type { UnidadPeso } from '@/lib/peso';
 import { cargarRutina, cuentaRutina, fechaCorta, resumenEjercicio, type DiaDetalle, type RutinaDetalle } from '@/lib/rutinas';
+import { usePonerEnCurso } from './acciones';
 import styles from './DetalleRutina.module.css';
 
 const PRONTO = 'Muy pronto';
@@ -60,6 +62,13 @@ export function DetalleRutina() {
 
 function Contenido({ rutina }: { rutina: RutinaDetalle }) {
   const navegar = useNavigate();
+  const ponerEnCurso = usePonerEnCurso();
+  const [activando, setActivando] = useState(false);
+  async function activar() {
+    setActivando(true);
+    await ponerEnCurso(rutina);
+    setActivando(false);
+  }
   const fecha = rutina.archivadaEl ? `archivada el ${fechaCorta(rutina.archivadaEl)}` : `creada el ${fechaCorta(rutina.creadaEl)}`;
   return (
     <>
@@ -80,9 +89,14 @@ function Contenido({ rutina }: { rutina: RutinaDetalle }) {
               Editar rutina
             </Boton>
           ) : (
-            <Boton icono={Play} disabled title={PRONTO}>
-              Poner en curso
-            </Boton>
+            <>
+              <Boton variante="secondary" icono={Pencil} onClick={() => navegar(`/rutinas/${rutina.id}/editar`)}>
+                Editar rutina
+              </Boton>
+              <Boton icono={Play} cargando={activando} onClick={() => void activar()}>
+                Poner en curso
+              </Boton>
+            </>
           )}
           <BotonIcono icono={Ellipsis} variante="surface" etiqueta="Más acciones: muy pronto" disabled />
         </div>

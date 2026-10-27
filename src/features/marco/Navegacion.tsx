@@ -3,7 +3,8 @@
    barra), despues Inicio, Rutinas e Historial; al pie el recordatorio de que
    se entrena desde el celular, Configuracion y el usuario, que lleva al
    Perfil. Entre 1024 y 1279 px se vuelve riel de iconos (ver el CSS).
-   Atajos: G I, G R y G H para navegar; N para una rutina nueva. */
+   Atajos: G I, G R y G H para navegar; N para una rutina nueva. Con el
+   limite de rutinas alcanzado, Nueva rutina y N abren el aviso. */
 
 import { History, House, Layers, Plus, Settings, Smartphone, type LucideIcon } from 'lucide-react';
 import { useEffect } from 'react';
@@ -14,6 +15,7 @@ import { Icono } from '@/design/components/Icono';
 import { Avatar } from '@/design/components/Avatar';
 import { Kbd, Marca } from '@/design/components/varios';
 import texto from '@/design/texto.module.css';
+import { useNuevaRutina } from '@/features/rutinas/acciones';
 import { useFotoPerfil, useNombre, usePerfil } from '@/lib/perfil';
 import styles from './Navegacion.module.css';
 
@@ -30,15 +32,13 @@ const ITEMS: Item[] = [
   { ruta: '/historial', etiqueta: 'Historial', icono: History, tecla: 'H' },
 ];
 
-const NUEVA_RUTINA = '/rutinas/nueva';
-
 function claseItem({ isActive }: { isActive: boolean }) {
   return `${styles.item} ${isActive ? styles.activo : ''}`;
 }
 
 /** G seguido de una letra dentro del segundo navega; N abre una rutina
  *  nueva. Se ignoran mientras se escribe en un campo. */
-function useAtajos() {
+function useAtajos(nuevaRutina: () => void) {
   const navegar = useNavigate();
   useEffect(() => {
     let esperandoG = 0;
@@ -57,18 +57,18 @@ function useAtajos() {
         return;
       }
       if (tecla === 'G') esperandoG = Date.now();
-      else if (tecla === 'N') navegar(NUEVA_RUTINA);
+      else if (tecla === 'N') nuevaRutina();
     }
     window.addEventListener('keydown', alTeclear);
     return () => window.removeEventListener('keydown', alTeclear);
-  }, [navegar]);
+  }, [navegar, nuevaRutina]);
 }
 
 export function Navegacion() {
-  const navegar = useNavigate();
   const { completo, semilla } = useNombre();
   const foto = useFotoPerfil(usePerfil().data?.avatar_path);
-  useAtajos();
+  const nueva = useNuevaRutina();
+  useAtajos(nueva.abrir);
 
   return (
     <nav className={styles.nav} aria-label="Principal">
@@ -85,10 +85,11 @@ export function Navegacion() {
         ancho
         className={styles.nueva}
         title="Nueva rutina (N)"
-        onClick={() => navegar(NUEVA_RUTINA)}
+        onClick={nueva.abrir}
       >
         <span className={styles.texto}>Nueva rutina</span>
       </Boton>
+      {nueva.modal}
 
       <div className={styles.grupo}>
         {ITEMS.map((item) => (

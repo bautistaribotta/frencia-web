@@ -1,12 +1,15 @@
 /* Menu de acciones (kit web, .w-menu): reemplaza a la hoja de acciones de la
    app. Se abre con el boton ⋯; las flechas recorren las opciones, Enter
-   elige y Esc o un clic afuera lo cierran y devuelven el foco al boton. */
+   elige y Esc o un clic afuera lo cierran y devuelven el foco al boton.
+   Una opcion puede llevar una linea arriba (separada) y su atajo a la
+   derecha (como Supr en Eliminar). */
 
 import { Ellipsis, type LucideIcon } from 'lucide-react';
-import { useEffect, useId, useRef, useState, type KeyboardEvent } from 'react';
+import { Fragment, useEffect, useId, useRef, useState, type KeyboardEvent } from 'react';
 
 import { BotonIcono } from './BotonIcono';
 import { Icono } from './Icono';
+import { Kbd } from './varios';
 import styles from './Menu.module.css';
 
 export interface OpcionMenu {
@@ -15,6 +18,9 @@ export interface OpcionMenu {
   alElegir: () => void;
   peligro?: boolean;
   disabled?: boolean;
+  /** Linea divisoria arriba de la opcion. */
+  separada?: boolean;
+  atajo?: string;
 }
 
 interface Props {
@@ -73,20 +79,23 @@ export function Menu({ etiqueta, opciones, className = '' }: Props) {
       {abierto ? (
         <div id={id} role="menu" aria-label={etiqueta} className={styles.menu}>
           {opciones.map((o) => (
-            <button
-              key={o.etiqueta}
-              type="button"
-              role="menuitem"
-              disabled={o.disabled}
-              className={`${styles.item} ${o.peligro ? styles.peligro : ''}`}
-              onClick={() => {
-                cerrar(true);
-                o.alElegir();
-              }}
-            >
-              <Icono icono={o.icono} tamano={18} />
-              <span>{o.etiqueta}</span>
-            </button>
+            <Fragment key={o.etiqueta}>
+              {o.separada ? <div role="separator" className={styles.separador} /> : null}
+              <button
+                type="button"
+                role="menuitem"
+                disabled={o.disabled}
+                className={`${styles.item} ${o.peligro ? styles.peligro : ''}`}
+                onClick={() => {
+                  cerrar(true);
+                  o.alElegir();
+                }}
+              >
+                <Icono icono={o.icono} tamano={18} />
+                <span className={styles.etiqueta}>{o.etiqueta}</span>
+                {o.atajo ? <Kbd>{o.atajo}</Kbd> : null}
+              </button>
+            </Fragment>
           ))}
         </div>
       ) : null}
