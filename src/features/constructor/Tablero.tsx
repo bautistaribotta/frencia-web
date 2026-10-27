@@ -1,13 +1,14 @@
 /* Tablero del constructor (kit web, Web · 5, .w-tablero): un dia por
    columna, con su nombre, los dias de la semana y sus ejercicios. Los dias
-   se reordenan arrastrando el agarre de la cabecera; los ejercicios, la
-   tarjeta entera. Clic o Enter en una tarjeta abre su panel; Espacio la
-   levanta para moverla con el teclado. */
+   se reordenan arrastrando el agarre de la cabecera; los ejercicios, solo
+   desde el agarre de la derecha (los seis puntos). El resto de la tarjeta
+   abre su panel: al hover se vela y muestra Editar. Con teclado, Espacio
+   sobre el agarre la levanta. */
 
 import { useSortable, SortableContext, horizontalListSortingStrategy, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { ArrowLeft, ArrowRight, Copy, GripVertical, MousePointer2, Pencil, Plus, Trash2 } from 'lucide-react';
-import { memo, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react';
+import { memo, type MouseEvent, type ReactNode } from 'react';
 
 import { Boton } from '@/design/components/Boton';
 import { Resumen, Tipo } from '@/design/components/datos';
@@ -177,41 +178,40 @@ interface PropsTarjeta {
 }
 
 const TarjetaOrdenable = memo(function TarjetaOrdenable({ ejercicio, numero, dia, hueco, seleccionada, nueva, unidades, onAbrir, onAbrirTeclado }: PropsTarjeta) {
-  const { setNodeRef, attributes, listeners, transform, transition } = useSortable({
+  const { setNodeRef, setActivatorNodeRef, attributes, listeners, transform, transition } = useSortable({
     id: `ej:${ejercicio.uid}`,
     data: { tipo: 'ej', uid: ejercicio.uid, dia },
     attributes: { roleDescription: 'ejercicio arrastrable' },
     transition: { duration: 180, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' },
   });
 
-  // Enter abre el panel; Espacio (el del sensor de teclado) la levanta.
-  function alTeclear(evento: KeyboardEvent<HTMLDivElement>) {
-    if (evento.key === 'Enter') {
-      evento.preventDefault();
-      onAbrirTeclado(ejercicio.uid);
-      return;
-    }
-    listeners?.onKeyDown?.(evento);
-  }
-
+  // Dos controles: la tarjeta abre el panel (clic, Enter o Espacio) y solo el
+  // agarre de la derecha arrastra (con teclado, Espacio la levanta).
   return (
     <div
       ref={setNodeRef}
       // El transform del arrastre se conoce recien al mover.
       style={{ transform: CSS.Translate.toString(transform), transition }}
-      {...attributes}
-      {...listeners}
-      onKeyDown={alTeclear}
-      onClick={(evento: MouseEvent) => {
-        evento.stopPropagation();
-        onAbrir(ejercicio.uid);
-      }}
-      aria-label={`${ejercicio.name}, ${numero}º`}
-      aria-current={seleccionada || undefined}
       className={`${styles.tarjeta} ${hueco ? styles.hueco : ''} ${seleccionada ? styles.seleccionada : ''} ${nueva ? styles.nueva : ''}`}
     >
-      <ContenidoTarjeta ejercicio={ejercicio} numero={numero} unidades={unidades} />
-      <VeloEditar />
+      <button
+        type="button"
+        className={styles.abrir}
+        aria-label={`Editar ${ejercicio.name}, ${numero}º`}
+        aria-current={seleccionada || undefined}
+        onClick={(evento: MouseEvent) => {
+          evento.stopPropagation();
+          // Sin detalle de clic, lo activo el teclado: el foco pasa al panel.
+          if (evento.detail === 0) onAbrirTeclado(ejercicio.uid);
+          else onAbrir(ejercicio.uid);
+        }}
+      >
+        <ContenidoTarjeta ejercicio={ejercicio} numero={numero} unidades={unidades} />
+        <VeloEditar />
+      </button>
+      <button ref={setActivatorNodeRef} type="button" className={styles.agarre} {...attributes} {...listeners} aria-label={`Mover ${ejercicio.name}`}>
+        <Icono icono={GripVertical} tamano={16} />
+      </button>
     </div>
   );
 });
@@ -221,19 +221,16 @@ function ContenidoTarjeta({ ejercicio, numero, unidades }: { ejercicio: Ejercici
     <>
       <span className={styles.numero}>{String(numero).padStart(2, '0')}</span>
       <Tipo tipo={ejercicio.kind} />
-      <div className={styles.textos}>
+      <span className={styles.textos}>
         <span className={`${texto.bodySm} ${texto.semi} ${texto.primario} ${styles.unaLinea}`}>{ejercicio.name}</span>
         <Resumen {...resumenEjercicio(ejercicio, unidades.peso, unidades.distancia)} />
-      </div>
-      <span className={styles.agarre} aria-hidden="true">
-        <Icono icono={GripVertical} tamano={16} />
       </span>
     </>
   );
 }
 
-/** Lo que muestra el hover de una tarjeta de un dia: un velo que la tapa
- *  entera y, al centro, Editar. El clic abre su panel. */
+/** Lo que muestra el hover de una tarjeta de un dia, fuera del agarre: un
+ *  velo que tapa el contenido y, al centro, Editar. El clic abre su panel. */
 function VeloEditar() {
   return (
     <span className={styles.editar} aria-hidden="true">
@@ -247,7 +244,12 @@ function VeloEditar() {
 export function TarjetaLevantada({ ejercicio, numero, unidades, estado }: { ejercicio: EjercicioBorrador; numero: number; unidades: Unidades; estado: 'ok' | 'invalida' | 'quitar' }) {
   return (
     <div className={`${styles.tarjeta} ${styles.levantada} ${estado === 'invalida' ? styles.invalida : ''} ${estado === 'quitar' ? styles.quitar : ''}`}>
-      <ContenidoTarjeta ejercicio={ejercicio} numero={numero} unidades={unidades} />
+      <span className={styles.abrir}>
+        <ContenidoTarjeta ejercicio={ejercicio} numero={numero} unidades={unidades} />
+      </span>
+      <span className={styles.agarre} aria-hidden="true">
+        <Icono icono={GripVertical} tamano={16} />
+      </span>
     </div>
   );
 }

@@ -108,6 +108,7 @@ columna (300 px, desplazamiento horizontal con borde fundido) · panel lateral d
 
 ### dnd-kit
 
+- Las tarjetas de un día se arrastran solo desde su agarre (`setActivatorNodeRef`); el resto de la tarjeta es el botón que abre el panel.
 - `DndContext` con `PointerSensor` (`activationConstraint: { distance: 4 }`, para no
   confundir clic con arrastre) y `KeyboardSensor` con `sortableKeyboardCoordinates`.
 - Cada día es un `SortableContext` (`verticalListSortingStrategy`); los días entre sí, un
@@ -121,7 +122,7 @@ columna (300 px, desplazamiento horizontal con borde fundido) · panel lateral d
 
 | Estado | Cómo se ve |
 |---|---|
-| Reposo / hover | En el catálogo, al hover aparece el agarre y el `+` (agrega al día elegido). En un día, la tarjeta se vela: `scrim` con desenfoque que tapa todo el contenido y, al centro, el lápiz con «Editar» (también con el foco de teclado). Mientras se arrastra no aparece |
+| Reposo / hover | En el catálogo, al hover aparece el agarre y el `+` (agrega al día elegido). En un día, la tarjeta tiene dos partes: el agarre de la derecha (seis puntos, cursor `grab`) es lo único que arrastra; el resto abre el panel, con cursor de mano, y al hover se vela (`scrim` con desenfoque que tapa el contenido) con el lápiz y «Editar» al centro. Sobre el agarre no hay velo. Mientras se arrastra no aparece |
 | Levantado | Copia en vidrio denso (`surface-raised` + `blur-sheet`), borde y halo de `signal`, `scale(1.02)`, sin rotar, `shadow-lg` |
 | Dónde cae | Hueco punteado de 1,5 px en `signal` sobre `surface-signal-soft`, del alto de una tarjeta y en el orden real; las tarjetas se corren con 180 ms `ease-out` |
 | Día destino | Borde `signal` + anillo + `halo-signal`; los otros días bajan la saturación |

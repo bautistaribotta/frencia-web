@@ -661,7 +661,7 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
           accessibility={{
             announcements: anuncios,
             screenReaderInstructions: {
-              draggable: 'Espacio levanta la tarjeta. Las flechas la mueven; izquierda y derecha la llevan a otro día. Espacio la suelta y Escape cancela. Enter abre su configuración.',
+              draggable: 'Espacio levanta el ejercicio. Las flechas lo mueven; izquierda y derecha lo llevan a otro día. Espacio lo suelta y Escape cancela.',
             },
           }}
           onDragStart={alEmpezar}
@@ -833,7 +833,7 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
             [['Ctrl', 'S'], 'Guardar'],
             [['/'], 'Buscar en el catálogo'],
             [['['], 'Mostrar u ocultar el catálogo'],
-            [['Espacio'], 'Levantar o soltar la tarjeta enfocada'],
+            [['Espacio'], 'Sobre el agarre, levantar o soltar el ejercicio'],
             [['←', '→'], 'Con una tarjeta levantada, cambiarla de día'],
             [['Enter'], 'Configurar la tarjeta enfocada'],
             [['Esc'], 'Cancelar el arrastre o cerrar el panel'],

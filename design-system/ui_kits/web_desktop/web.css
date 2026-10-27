@@ -474,10 +474,13 @@ section + section { margin-top: var(--space-11); }
 .w-ej.is-origen { background: var(--surface-inset); border: 1px dashed var(--border-default); }
 .w-ej.is-origen > * { visibility: hidden; }
 /* Hover de una tarjeta de un día: se vela entera y queda solo Editar al centro */
-.w-ej__editar { position: absolute; inset: -1px; z-index: 1; display: flex; align-items: center; justify-content: center; gap: var(--space-2); border-radius: inherit; pointer-events: none;
+.w-ej { cursor: pointer; } .w-ej .w-agarre { cursor: grab; padding: 4px; margin: -4px; border-radius: var(--radius-sm); }
+.w-ej .w-agarre:hover { color: var(--text-primary); background: var(--surface-chip); }
+.w-ej__editar { position: absolute; inset: -1px 36px -1px -1px; z-index: 1; display: flex; align-items: center; justify-content: center; gap: var(--space-2); border-radius: inherit; pointer-events: none;
   background: var(--scrim); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); font: var(--fw-semibold) 13.5px/1 var(--font-sans); color: var(--text-primary);
   opacity: 0; transition: opacity var(--dur-fast) var(--ease-out); }
 .w-ej:hover .w-ej__editar, .w-ej.is-hover .w-ej__editar, .w-ej:focus-visible .w-ej__editar { opacity: 1; }
+.w-ej:has(.w-agarre:hover) .w-ej__editar { opacity: 0; }
 .w-ej.is-levantada .w-ej__editar, .w-ej.is-levantada-fija .w-ej__editar { display: none; }
 .w-sello-arrastre { position: absolute; z-index: calc(var(--z-arrastre) + 1); display: inline-flex; align-items: center; gap: var(--space-2); height: 26px; padding: 0 var(--space-3); border-radius: var(--radius-pill);
   background: var(--surface-raised-opaco); border: 1px solid var(--glass-line); box-shadow: var(--shadow-md); font: var(--fw-semibold) 12px/1 var(--font-sans); color: var(--text-primary); white-space: nowrap; }

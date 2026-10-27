@@ -83,15 +83,13 @@
   text-align: center;
 }
 
+/* La tarjeta tiene dos partes: lo que abre el panel (todo menos el agarre,
+   con cursor de mano) y el agarre de la derecha, lo unico que arrastra. */
 .tarjeta {
   position: relative;
   display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-4) var(--space-3) var(--space-4) var(--space-2);
+  align-items: stretch;
   border-radius: var(--radius-md);
-  cursor: grab;
-  touch-action: none;
   background: var(--surface-card-elevated);
   border: 1px solid var(--glass-line);
   transition:
@@ -99,18 +97,54 @@
     background var(--dur-fast) var(--ease-out);
 }
 .tarjeta:hover { border-color: var(--border-default); }
-.tarjeta:hover .agarre { color: var(--text-secondary); }
-.tarjeta:focus-visible { outline: var(--foco-w) solid var(--focus-ring); outline-offset: var(--foco-offset); }
 .seleccionada { border-color: var(--accent); box-shadow: inset 0 0 0 0.5px var(--accent); }
 .seleccionada:hover { border-color: var(--accent); }
 /* Recien agregado: borde de lume hasta el proximo clic. */
 .nueva,
 .nueva:hover { border-color: var(--signal); box-shadow: 0 0 0 1px var(--signal), var(--halo-signal); }
 
+.abrir {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-2) var(--space-4) var(--space-2);
+  border: 0;
+  border-radius: calc(var(--radius-md) - 1px) 0 0 calc(var(--radius-md) - 1px);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+}
+.abrir:focus-visible { outline: var(--foco-w) solid var(--focus-ring); outline-offset: var(--foco-offset); }
+
 .numero { width: 20px; flex: none; text-align: right; font: var(--fw-semibold) 12px/1 var(--font-sans); color: var(--text-tertiary); font-variant-numeric: tabular-nums; }
 .textos { display: flex; flex-direction: column; gap: var(--space-2); flex: 1; min-width: 0; }
 .unaLinea { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.agarre { display: inline-flex; flex: none; color: var(--text-disabled); }
+
+.agarre {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 0 calc(var(--radius-md) - 1px) calc(var(--radius-md) - 1px) 0;
+  background: transparent;
+  color: var(--text-disabled);
+  cursor: grab;
+  touch-action: none;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out);
+}
+.tarjeta:hover .agarre { color: var(--text-tertiary); }
+.agarre:hover { color: var(--text-primary); background: var(--surface-chip); }
+.agarre:focus-visible { outline: var(--foco-w) solid var(--focus-ring); outline-offset: -2px; color: var(--text-primary); }
 
 /* Donde cae: hueco punteado en lume del alto de una tarjeta, en el orden
    real. Es la tarjeta levantada (o el lugar de lo que entra del catalogo). */
@@ -123,14 +157,16 @@
   border: 1.5px dashed var(--signal);
   box-shadow: none;
 }
-.hueco > * { visibility: hidden; }
+/* Opacidad y no visibility: con teclado el agarre levantado tiene el foco, y
+   si se oculta lo pierde y el sensor deja de recibir las flechas. */
+.hueco > * { opacity: 0; }
 
-/* Hover: la tarjeta se vela entera (scrim con desenfoque) y queda solo
-   Editar al centro. No ataja el puntero: debajo sigue la tarjeta, que se
-   arrastra o se abre con el clic. Mientras se arrastra no aparece. */
+/* Hover fuera del agarre: el contenido se vela (scrim con desenfoque) y
+   queda solo Editar al centro. El agarre queda a la vista; sobre el no hay
+   velo. Mientras se arrastra no aparece. */
 .editar {
   position: absolute;
-  inset: -1px;
+  inset: 0;
   z-index: 1;
   display: flex;
   align-items: center;
@@ -146,8 +182,8 @@
   opacity: 0;
   transition: opacity var(--dur-fast) var(--ease-out);
 }
-.tarjeta:hover .editar,
-.tarjeta:focus-visible .editar { opacity: 1; }
+.abrir:hover .editar,
+.abrir:focus-visible .editar { opacity: 1; }
 [data-arrastrando] .editar { display: none; }
 
 /* Donde estaba la tarjeta que se lleva a otro dia, hasta soltarla. */

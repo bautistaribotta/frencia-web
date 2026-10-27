@@ -1,5 +1,6 @@
 /* Constructor de rutinas (/rutinas/nueva y /rutinas/:id/editar): capturas a
-   1440×900 en oscuro y claro, arrastrar del catalogo, reordenar con teclado,
+   1440×900 en oscuro y claro, arrastrar del catalogo y desde el agarre,
+   reordenar con teclado,
    quitar, configurar, guardar y salir con cambios. */
 
 import { expect, test, type Locator, type Page } from '@playwright/test';
@@ -75,7 +76,9 @@ async function arrastrar(page: Page, desde: Locator, hasta: Locator, { abajo = f
 }
 
 const dia = (page: Page, nombre: string) => page.getByRole('region', { name: nombre, exact: true });
-const tarjetas = (zona: Locator) => zona.locator('ol > li [aria-roledescription="ejercicio arrastrable"]');
+const tarjetas = (zona: Locator) => zona.locator('ol > li:has([aria-roledescription="ejercicio arrastrable"])');
+/** Los seis puntos de la derecha: lo unico que arrastra una tarjeta. */
+const agarre = (tarjeta: Locator) => tarjeta.getByRole('button', { name: /^Mover / });
 
 for (const [tema, nombre] of [
   ['dark', 'oscuro'],
@@ -102,6 +105,12 @@ for (const [tema, nombre] of [
     await expect(primera.getByText('Editar')).toHaveCSS('opacity', '0');
     await primera.hover();
     await expect(primera.getByText('Editar')).toHaveCSS('opacity', '1');
+    await expect(primera.getByRole('button', { name: /^Editar / })).toHaveCSS('cursor', 'pointer');
+    // Sobre el agarre no hay velo: el cursor es el de arrastrar.
+    await agarre(primera).hover();
+    await expect(primera.getByText('Editar')).toHaveCSS('opacity', '0');
+    await expect(agarre(primera)).toHaveCSS('cursor', 'grab');
+    await primera.hover();
     await page.screenshot({ path: `capturas/constructor-hover-${nombre}.png` });
     await primera.click();
     await expect(page.getByRole('complementary', { name: 'Configurar Press de banca con barra' })).toBeVisible();
@@ -190,7 +199,7 @@ test('editar: mover entre dias, reordenar con teclado, quitar y deshacer', async
   await expect(page.getByText('Guardado', { exact: true })).toBeVisible();
 
   // Del Push al Pull, abajo del remo.
-  await arrastrar(page, tarjetas(push).nth(1), pull.getByRole('button', { name: 'Agregar ejercicio' }));
+  await arrastrar(page, agarre(tarjetas(push).nth(1)), pull.getByRole('button', { name: 'Agregar ejercicio' }));
   await expect(page.getByText('Mover a Pull · 2º')).toBeVisible();
   await page.screenshot({ path: 'capturas/constructor-entre-dias.png' });
   await page.mouse.up();
@@ -198,15 +207,18 @@ test('editar: mover entre dias, reordenar con teclado, quitar y deshacer', async
   await expect(tarjetas(pull)).toHaveText([/Remo con barra/, /Press inclinado/]);
 
   // Con teclado: Espacio levanta, flecha arriba, Espacio suelta.
-  await tarjetas(pull).nth(1).focus();
+  await agarre(tarjetas(pull).nth(1)).focus();
   await page.keyboard.press('Space');
   await expect(page.getByText('levantado · 2 de 2 en Pull')).toBeVisible();
   await page.keyboard.press('ArrowUp');
+  // Entre tecla y tecla una persona tarda mas que esto; sin pausa, con la
+  // maquina cargada, Espacio puede llegar antes de que dnd-kit procese la flecha.
+  await page.waitForTimeout(150);
   await page.keyboard.press('Space');
   await expect(tarjetas(pull)).toHaveText([/Press inclinado/, /Remo con barra/]);
 
   // Al catalogo para quitar, con Deshacer en el aviso.
-  await arrastrar(page, tarjetas(pull).first(), page.getByRole('searchbox', { name: 'Buscar ejercicio' }));
+  await arrastrar(page, agarre(tarjetas(pull).first()), page.getByRole('searchbox', { name: 'Buscar ejercicio' }));
   await expect(page.getByText('Soltá para quitar de Pull')).toBeVisible();
   await page.screenshot({ path: 'capturas/constructor-quitar.png' });
   await page.mouse.up();
@@ -215,7 +227,7 @@ test('editar: mover entre dias, reordenar con teclado, quitar y deshacer', async
   await expect(tarjetas(pull)).toHaveCount(2);
 
   // Fuera de los dias no se suelta: vuelve a su lugar.
-  await arrastrar(page, tarjetas(push).first(), page.getByRole('button', { name: 'Agregar día' }), { abajo: true });
+  await arrastrar(page, agarre(tarjetas(push).first()), page.getByRole('button', { name: 'Agregar día' }), { abajo: true });
   await page.mouse.move(1400, 880, { steps: 6 });
   await expect(page.getByText('Soltá dentro de un día')).toBeVisible();
   await page.mouse.up();
