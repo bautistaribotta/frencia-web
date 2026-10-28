@@ -118,6 +118,22 @@ revisar lo hecho.
 - El agente **nunca** ejecuta `supabase db push` ni cambia la configuracion del
   proyecto de Supabase: esa decision es del programador.
 
+## Terminos y Condiciones y Politica de Privacidad
+
+- Los textos legales son los mismos en la web y en la app movil, y la
+  aceptacion es por cuenta: aceptar en una plataforma vale para la otra.
+- **Siempre** que se modifiquen los Terminos y Condiciones y/o la Politica de
+  Privacidad, el cambio se hace en **los dos repositorios**: aca
+  (`src/lib/terminos.ts`, `src/lib/privacidad.ts` y, si cambian los datos del
+  titular, `src/lib/legal.ts`) y en el repo de la app movil (los mismos
+  archivos en `src/lib/`). Los dos tienen que quedar identicos, con la misma
+  vigencia y la misma version (`TERMINOS_VERSION` / `PRIVACIDAD_VERSION`).
+- Un cambio de fondo sube la version, y subir la version vuelve a pedir la
+  aceptacion a todos en las dos plataformas. Una correccion de forma (una
+  errata) no cambia la version, pero igual se copia en los dos repos.
+- Si el agente solo tiene acceso a uno de los dos repos, hace el cambio en ese
+  y avisa que falta replicarlo en el otro, con el texto exacto a copiar.
+
 ## Commits y pull requests
 
 - **Nunca** usar emojis en los commits.
