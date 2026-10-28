@@ -1,0 +1,79 @@
+/* Selector (kit web, .w-select con la caja mediana .w-campo--md y la lista
+   .w-menu). La lista toma el ancho de la caja y, si es larga, se desplaza
+   adentro con una altura maxima. Va en el vidrio opaco: se abre sobre la
+   lista del catalogo, que ya esta en vidrio, y el desenfoque anidado no
+   alcanza a tapar el texto de abajo. */
+
+.ancla { position: relative; display: flex; min-width: 0; }
+
+.caja {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  height: var(--control-h-md);
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--surface-card);
+  border: 1px solid var(--glass-line);
+  box-shadow: var(--shadow-glass);
+  cursor: pointer;
+  text-align: left;
+  font: var(--fw-regular) 15px/22px var(--font-sans);
+  color: var(--text-primary);
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+.caja:hover { border-color: var(--border-default); background: var(--surface-card-elevated); }
+.caja:focus-visible,
+.abierto {
+  outline: 0;
+  background: var(--surface-card-elevated);
+  border-color: var(--signal);
+  box-shadow: var(--shadow-glass), 0 0 0 1px var(--signal), var(--halo-signal);
+}
+
+.icono { flex: none; color: var(--text-tertiary); }
+.caja:focus-visible .icono,
+.abierto .icono { color: var(--signal); }
+.valor { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.flechas { flex: none; color: var(--text-tertiary); }
+
+.lista {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: var(--z-tooltip);
+  display: flex;
+  flex-direction: column;
+  max-height: min(360px, 60vh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-default) transparent;
+  padding: var(--space-2);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised-opaco);
+  border: 1px solid var(--glass-line);
+  box-shadow: var(--shadow-lg);
+}
+
+.opcion {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  height: 38px;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font: var(--fw-medium) 14px/1 var(--font-sans);
+  color: var(--text-primary);
+}
+.activa { background: var(--surface-chip); }
+.etiqueta { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.check { flex: none; color: var(--signal); }

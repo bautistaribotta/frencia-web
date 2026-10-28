@@ -95,6 +95,16 @@ for (const [tema, nombre] of [
     await page.screenshot({ path: `capturas/constructor-nueva-${nombre}.png` });
   });
 
+  test(`selector de grupo muscular abierto en ${nombre}`, async ({ page }) => {
+    await page.emulateMedia({ colorScheme: tema, reducedMotion: 'reduce' });
+    await conDatos(page, { rutinas: [] });
+    await page.goto('/rutinas/nueva');
+    await page.getByRole('button', { name: /^Grupo muscular/ }).click();
+    await expect(page.getByRole('listbox', { name: 'Grupo muscular' })).toBeVisible();
+    await page.getByRole('option', { name: 'Espalda' }).hover();
+    await page.screenshot({ path: `capturas/constructor-selector-${nombre}.png` });
+  });
+
   test(`editando en ${nombre}, con el modal de configurar abierto`, async ({ page }) => {
     await page.emulateMedia({ colorScheme: tema, reducedMotion: 'reduce' });
     await conDatos(page);
@@ -318,6 +328,39 @@ test('buscar con / y filtrar por tipo', async ({ page }) => {
   await page.getByRole('button', { name: 'Borrar búsqueda' }).click();
   await page.getByRole('button', { name: 'Cardio', exact: true }).click();
   await expect(page.getByText('Catálogo · 1 de 6 ejercicios')).toBeVisible();
+});
+
+test('filtrar por grupo muscular con el mouse y con el teclado', async ({ page }) => {
+  await conDatos(page);
+  await page.goto(`/rutinas/${RUTINA.id}/editar`);
+  const selector = page.getByRole('button', { name: /^Grupo muscular/ });
+  await expect(selector).toHaveAccessibleName('Grupo muscular: Todos los grupos musculares');
+
+  await selector.click();
+  await expect(page.getByRole('option', { name: 'Todos los grupos musculares' })).toHaveAttribute('aria-selected', 'true');
+  await page.getByRole('option', { name: 'Pecho' }).click();
+  await expect(page.getByRole('listbox')).toHaveCount(0);
+  await expect(page.getByText('Catálogo · 2 de 6 ejercicios')).toBeVisible();
+  await expect(selector).toBeFocused();
+
+  // Teclado: abre en la elegida, una letra salta (sin tildes), Enter elige.
+  await page.keyboard.press('ArrowDown');
+  await expect(page.getByRole('listbox')).toBeVisible();
+  await page.keyboard.press('c');
+  await page.keyboard.press('Enter');
+  await expect(selector).toHaveAccessibleName('Grupo muscular: Cuádriceps');
+  await expect(page.getByText('Catálogo · 1 de 6 ejercicios')).toBeVisible();
+
+  // Esc cierra sin cambiar y no sale del constructor; un clic afuera tambien.
+  await page.keyboard.press('Enter');
+  await page.keyboard.press('Home');
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('listbox')).toHaveCount(0);
+  await expect(selector).toHaveAccessibleName('Grupo muscular: Cuádriceps');
+  await selector.click();
+  await page.mouse.click(900, 600);
+  await expect(page.getByRole('listbox')).toHaveCount(0);
+  await expect(page).toHaveURL(new RegExp(`/rutinas/${RUTINA.id}/editar$`));
 });
 
 test('salir con cambios pide confirmar; el borrador sobrevive a recargar', async ({ page }) => {

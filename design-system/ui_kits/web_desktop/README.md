@@ -224,6 +224,7 @@ Orden de los botones en el pie de un modal:
 - **Deshabilitado**: relleno `surface-chip`, sin halo, texto `text-disabled`. Nunca opacidad.
 - **Cargando**: en botones, la ruedita reemplaza al icono y el texto queda (no salta el ancho, `aria-busy`); en páginas, esqueletos con la forma del contenido. Nunca las dos juntas.
 - `prefers-reduced-motion`: sin deriva de luces, sin animación de iconos, esqueletos quietos.
+- **Selector** (`Select`): nunca el desplegable del sistema. La caja mediana del campo con el valor y las flechas; abajo, la lista en vidrio opaco (`surface-raised-opaco`), del ancho de la caja, con 360 px de alto como mucho y desplazamiento adentro. La elegida lleva el check en `signal`; la activa, el relleno `surface-chip`. Teclado: flechas, Inicio y Fin recorren, Enter o Espacio eligen, Esc cierra sin cambiar y una letra salta a la opción que empieza con ella (sin tildes).
 - **Autocompletado** (`:autofill`, del navegador o de un gestor como Bitwarden): el campo se ve igual que con texto escrito. Sin el relleno celeste ni el texto oscuro del navegador; el vidrio, el color del texto (`text-primary`) y el cursor (`signal`) se mantienen.
 
 Componentes nuevos del sistema (no existían en la app): `Tooltip`, `Kbd`, `Menu`,

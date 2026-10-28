@@ -246,6 +246,9 @@ section + section { margin-top: var(--space-11); }
 .w-select .w-campo__caja { cursor: pointer; }
 .w-select-wrap { position: relative; }
 .w-select-menu { position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: var(--z-tooltip); }
+/* La lista del selector reemplaza al desplegable del sistema: toma el ancho de la caja, se desplaza
+   adentro si es larga y va en el vidrio opaco, porque se abre sobre otras listas en vidrio. */
+.w-select-menu .w-menu { max-height: min(360px, 60vh); overflow-y: auto; scrollbar-width: thin; background: var(--surface-raised-opaco); -webkit-backdrop-filter: none; backdrop-filter: none; }
 .w-menu { position: relative; display: flex; flex-direction: column; padding: var(--space-2); min-width: 220px; border-radius: var(--radius-lg);
   background: var(--surface-raised); border: 1px solid var(--glass-line); box-shadow: var(--shadow-lg); -webkit-backdrop-filter: var(--sheet-filter); backdrop-filter: var(--sheet-filter); z-index: var(--z-tooltip); }
 .w-menu__item { display: flex; align-items: center; gap: var(--space-4); height: 38px; padding: 0 var(--space-4); border-radius: var(--radius-sm); cursor: pointer; font: var(--fw-medium) 14px/1 var(--font-sans); color: var(--text-primary); }

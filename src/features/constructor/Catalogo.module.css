@@ -16,9 +16,9 @@
 .fila { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
 .chips { display: flex; gap: var(--space-2); flex-wrap: wrap; }
 
-/* Busqueda y selector: la caja mediana del campo (.w-campo--md). */
-.busqueda,
-.selector {
+/* Busqueda: la caja mediana del campo (.w-campo--md); el selector de grupo
+   muscular es el componente Selector. */
+.busqueda {
   position: relative;
   display: flex;
   align-items: center;
@@ -35,10 +35,8 @@
     box-shadow var(--dur-fast) var(--ease-out);
 }
 .busqueda { cursor: text; }
-.busqueda:hover,
-.selector:hover { border-color: var(--border-default); background: var(--surface-card-elevated); }
-.busqueda:focus-within,
-.selector:focus-within {
+.busqueda:hover { border-color: var(--border-default); background: var(--surface-card-elevated); }
+.busqueda:focus-within {
   background: var(--surface-card-elevated);
   border-color: var(--signal);
   box-shadow: var(--shadow-glass), 0 0 0 1px var(--signal), var(--halo-signal);
@@ -61,22 +59,6 @@
 .campo::placeholder { color: var(--text-tertiary); opacity: 1; }
 .campo::-webkit-search-cancel-button { display: none; }
 
-.selector { padding-right: var(--space-4); cursor: pointer; }
-.select {
-  flex: 1;
-  min-width: 0;
-  height: 100%;
-  padding: 0;
-  border: 0;
-  outline: 0;
-  background: transparent;
-  appearance: none;
-  cursor: pointer;
-  font: var(--fw-regular) 15px/22px var(--font-sans);
-  color: var(--text-primary);
-}
-.select option { background: var(--surface-raised-opaco); color: var(--text-primary); }
-.flechas { flex: none; color: var(--text-tertiary); pointer-events: none; }
 
 .lista {
   flex: 1;

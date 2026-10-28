@@ -405,7 +405,7 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
         return;
       }
       const destino = evento.target as HTMLElement | null;
-      if (evento.ctrlKey || evento.metaKey || evento.altKey || destino?.closest('input, textarea, select, [contenteditable="true"]')) return;
+      if (evento.ctrlKey || evento.metaKey || evento.altKey || destino?.closest('input, textarea, select, [aria-haspopup="listbox"], [contenteditable="true"]')) return;
       if (evento.key === '/') {
         evento.preventDefault();
         enfocarBusqueda();

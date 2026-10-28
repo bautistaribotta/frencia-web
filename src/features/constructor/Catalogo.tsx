@@ -5,13 +5,14 @@
    catalogo es la zona para quitarla (la unica en carmin). */
 
 import { useDraggable, useDroppable } from '@dnd-kit/core';
-import { ChevronsUpDown, Dumbbell, Footprints, GripVertical, HeartPulse, PanelLeftClose, Plus, RotateCw, Search, Target, Timer, Trash2, X } from 'lucide-react';
+import { Dumbbell, Footprints, GripVertical, HeartPulse, PanelLeftClose, Plus, RotateCw, Search, Target, Timer, Trash2, X } from 'lucide-react';
 import { memo, useMemo, useState, type PointerEventHandler, type Ref } from 'react';
 
 import { Boton } from '@/design/components/Boton';
 import { BotonIcono } from '@/design/components/BotonIcono';
 import { Tipo } from '@/design/components/datos';
 import { Icono, IconosQuietos } from '@/design/components/Icono';
+import { Selector } from '@/design/components/Selector';
 import { Chip, Esqueleto, Kbd } from '@/design/components/varios';
 import texto from '@/design/texto.module.css';
 import { detalleCatalogo, filtrarCatalogo, gruposDelCatalogo, type EjercicioCatalogo } from '@/lib/catalogo';
@@ -90,18 +91,13 @@ export function Catalogo({ catalogo, cargando, error, onReintentar, onAgregar, d
             </Chip>
           ))}
         </div>
-        <label className={styles.selector}>
-          <Icono icono={Target} tamano={18} className={styles.lupa} />
-          <select value={grupo} onChange={(evento) => setGrupo(evento.target.value)} aria-label="Grupo muscular" className={styles.select}>
-            <option value="todos">Todos los grupos musculares</option>
-            {grupos.map((g) => (
-              <option key={g.slug} value={g.slug}>
-                {g.name}
-              </option>
-            ))}
-          </select>
-          <Icono icono={ChevronsUpDown} tamano={16} className={styles.flechas} />
-        </label>
+        <Selector
+          etiqueta="Grupo muscular"
+          icono={Target}
+          valor={grupo}
+          opciones={[{ valor: 'todos', etiqueta: 'Todos los grupos musculares' }, ...grupos.map((g) => ({ valor: g.slug, etiqueta: g.name }))]}
+          alCambiar={setGrupo}
+        />
       </div>
 
       <div className={styles.lista}>
