@@ -6,7 +6,7 @@ import texto from '../texto.module.css';
 import { Icono } from './Icono';
 import styles from './varios.module.css';
 
-/** El nombre FRENCIA. en Instrument Sans condensada y negrita. Una sola tinta. */
+/** El nombre FRENCIA. en Geist negrita, apretada. Una sola tinta. */
 export function Marca({ grande = false, className = '' }: { grande?: boolean; className?: string }) {
   return (
     <span className={`${styles.marca} ${grande ? styles.marcaGrande : ''} ${className}`} aria-label="Frencia">
@@ -19,7 +19,7 @@ interface PropsTarjeta extends HTMLAttributes<HTMLDivElement> {
   elevada?: boolean;
 }
 
-/** Panel de vidrio: todo lo que agrupa contenido. */
+/** Tarjeta (Card de shadcn): todo lo que agrupa contenido. */
 export function Tarjeta({ elevada = false, className = '', ...resto }: PropsTarjeta) {
   return <div {...resto} className={`${styles.tarjeta} ${elevada ? styles.tarjetaElevada : ''} ${className}`} />;
 }
@@ -49,7 +49,7 @@ export function Divisor({ children }: { children: ReactNode }) {
   );
 }
 
-/** Insignia en mayusculas. signal: estado (En curso); intensity: la racha. */
+/** Insignia (Badge de shadcn). signal: estado (En curso); intensity: la racha. */
 export function Insignia({
   tono,
   icono,
@@ -126,7 +126,7 @@ export function Casilla({ marcada, onChange, children }: { marcada: boolean; onC
     <label className={styles.casilla}>
       <input type="checkbox" checked={marcada} onChange={(evento) => onChange(evento.target.checked)} className={styles.casillaNativa} />
       <span className={styles.casillaCaja} aria-hidden="true">
-        {marcada ? <Check size={14} strokeWidth={2.25} /> : null}
+        {marcada ? <Check size={12} strokeWidth={3} /> : null}
       </span>
       {children}
     </label>

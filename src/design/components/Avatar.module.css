@@ -20,7 +20,7 @@
 .foto { display: block; object-fit: cover; }
 
 .mascara { fill: oklch(100% 0 0); }
-.acento { fill: var(--accent); }
+.acento { fill: var(--primary); }
 .fondo { fill: var(--bg-app); }
-.trazoAcento { stroke: var(--accent); }
+.trazoAcento { stroke: var(--primary); }
 .trazoFondo { stroke: var(--bg-app); }

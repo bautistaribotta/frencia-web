@@ -1,7 +1,14 @@
+/* Boton sobre el Button de shadcn/ui. Conserva la API de la app:
+   primary (default), secondary (outline), ghost, soft (ghost con el texto en
+   foreground) y danger (destructive), en sm (32 px), md (36 px) y lg (40 px).
+   Los iconos siguen animando (Icono). Cargando: la ruedita reemplaza al
+   icono y el texto queda, para que no salte el ancho. */
+
 import type { LucideIcon } from 'lucide-react';
 import type { ButtonHTMLAttributes } from 'react';
 
-import styles from './Boton.module.css';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import { Icono } from './Icono';
 import { Ruedita } from './Ruedita';
 
@@ -16,6 +23,20 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   cargando?: boolean;
 }
 
+const VARIANTE = {
+  primary: 'default',
+  secondary: 'outline',
+  ghost: 'ghost',
+  soft: 'ghost',
+  danger: 'destructive',
+} as const;
+
+const TAMANO = {
+  sm: 'h-8 gap-1.5 px-3 text-[13px]',
+  md: 'h-9 gap-2 px-4',
+  lg: 'h-10 gap-2 px-5',
+};
+
 export function Boton({
   variante = 'primary',
   tamano = 'md',
@@ -29,21 +50,19 @@ export function Boton({
   type = 'button',
   ...resto
 }: Props) {
-  const tamanoIcono = tamano === 'sm' ? 16 : 18;
-  const clases = [
-    styles.boton,
-    styles[variante],
-    tamano === 'md' ? '' : styles[tamano],
-    ancho ? styles.ancho : '',
-    cargando ? styles.cargando : '',
-    className,
-  ].join(' ');
-
+  const tamanoIcono = tamano === 'sm' ? 16 : 16;
   return (
-    <button {...resto} type={type} className={clases} disabled={disabled || cargando} aria-busy={cargando || undefined}>
+    <Button
+      {...resto}
+      type={type}
+      variant={VARIANTE[variante]}
+      className={cn(TAMANO[tamano], ancho && 'w-full', cargando && 'cursor-progress', className)}
+      disabled={disabled || cargando}
+      aria-busy={cargando || undefined}
+    >
       {cargando ? <Ruedita /> : icono ? <Icono icono={icono} tamano={tamanoIcono} /> : null}
       {children ? <span>{children}</span> : null}
       {iconoDer && !cargando ? <Icono icono={iconoDer} tamano={tamanoIcono} /> : null}
-    </button>
+    </Button>
   );
 }

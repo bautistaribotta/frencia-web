@@ -1,8 +1,8 @@
 /* Configuracion (/configuracion). Junta lo que en la app esta repartido entre
-   Perfil y Configuracion (kit web, Web · 7): tema, reducir transparencia,
-   unidades y medidor de esfuerzo, los textos legales (en el modal de
+   Perfil y Configuracion (kit web, Web · 7): tema, unidades y medidor de
+   esfuerzo, los textos legales (en el modal de
    lectura) y la eliminacion de la cuenta.
-   Todo menos la transparencia se guarda en profiles y se aplica en el acto;
+   Todo se guarda en profiles y se aplica en el acto;
    si la base no lo acepta vuelve a lo anterior y avisa, como en la app.
    Eliminar cuenta: dos pasos, como en la app (docs/specs/eliminacion-de-cuenta.md
    del repo mobile). El foco arranca en Cancelar; el segundo aviso no se
@@ -17,13 +17,11 @@ import { Boton } from '@/design/components/Boton';
 import { DocumentoLegal, type Documento } from '@/design/components/DocumentoLegal';
 import { Fondo } from '@/design/components/Fondo';
 import { Icono } from '@/design/components/Icono';
-import { Interruptor } from '@/design/components/Interruptor';
 import { Modal } from '@/design/components/Modal';
 import { claseFila, Encabezado, Fila, Lista, Pagina } from '@/design/components/Pagina';
 import { Segmentado } from '@/design/components/Segmentado';
 import { aplicarPreferencia, preferenciaAPerfil, usePreferenciaTema, type PreferenciaTema } from '@/design/tema';
 import texto from '@/design/texto.module.css';
-import { useTransparenciaReducida } from '@/design/transparencia';
 import { DIAS_DE_GRACIA, fechaPurga, solicitarEliminacionCuenta } from '@/lib/cuenta';
 import { usePerfil, useGuardarPreferencias, type CambioPreferencias } from '@/lib/perfil';
 import { supabase } from '@/lib/supabase';
@@ -72,7 +70,6 @@ export function Configuracion() {
   const guardar = useGuardarPreferencias();
   const avisar = useAvisos();
   const tema = usePreferenciaTema();
-  const [transparenciaReducida, setTransparenciaReducida] = useTransparenciaReducida();
   const [paso, setPaso] = useState<PasoEliminar>(null);
   const [eliminando, setEliminando] = useState(false);
   const [documento, setDocumento] = useState<Documento | null>(null);
@@ -123,12 +120,6 @@ export function Configuracion() {
                   { valor: 'light', etiqueta: 'Claro', icono: Sun },
                 ]}
               />
-            </Ajuste>
-            <Ajuste
-              titulo="Reducir transparencia"
-              sub="Superficies opacas y luces más bajas. Se guarda en este navegador y arranca siguiendo al sistema."
-            >
-              <Interruptor encendido={transparenciaReducida} onChange={setTransparenciaReducida} etiqueta="Reducir transparencia" />
             </Ajuste>
           </Lista>
 

@@ -1,46 +1,47 @@
-/* Campo de texto en vidrio: rotulo arriba, caja con icono y una accion final
-   opcional, y debajo la ayuda o el error. */
+/* Campo con el aspecto del Input de shadcn/ui: rotulo text-sm medium, caja
+   de 36 px con borde input, fondo transparente (input/30 en oscuro) y el
+   anillo de foco de 3 px en ring/50. */
 
 .campo { display: flex; flex-direction: column; gap: var(--space-3); min-width: 0; }
 
 .rotulo { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-3); }
+.etiqueta { font: var(--fw-medium) 14px/1 var(--font-sans); color: var(--text-primary); }
+.extra { font: var(--fw-regular) 13px/1 var(--font-sans); color: var(--text-secondary); }
+.extra a { text-underline-offset: 4px; }
+.extra a:hover { color: var(--text-primary); text-decoration: underline; }
 
 .caja {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
-  height: var(--control-h-lg);
-  padding: 0 var(--space-5);
-  border-radius: var(--radius-lg);
+  gap: var(--space-3);
+  height: var(--control-h-md);
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-md);
   cursor: text;
-  background: var(--surface-card);
-  border: 1px solid var(--glass-line);
-  box-shadow: var(--shadow-glass);
-  -webkit-backdrop-filter: var(--glass-filter);
-  backdrop-filter: var(--glass-filter);
+  background: transparent;
+  border: 1px solid var(--input);
+  box-shadow: var(--shadow-sm);
   transition:
     border-color var(--dur-fast) var(--ease-out),
-    background var(--dur-fast) var(--ease-out),
     box-shadow var(--dur-fast) var(--ease-out);
 }
+@media (prefers-color-scheme: dark) {
+  :global(:root:not([data-theme='light'])) .caja { background: color-mix(in oklch, var(--input) 30%, transparent); }
+}
+:global([data-theme='dark']) .caja { background: color-mix(in oklch, var(--input) 30%, transparent); }
 
-.caja > svg:first-child { color: var(--text-tertiary); flex: none; }
-
-.caja:hover { border-color: var(--border-default); background: var(--surface-card-elevated); }
+.caja > svg:first-child,
+.caja > span:first-child { color: var(--text-tertiary); flex: none; }
 
 .caja:focus-within {
-  background: var(--surface-card-elevated);
-  border-color: var(--signal);
-  box-shadow: var(--shadow-glass), 0 0 0 1px var(--signal), var(--halo-signal);
+  border-color: var(--ring);
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--ring) 50%, transparent);
 }
-.caja:focus-within > svg:first-child { color: var(--signal); }
 
 .error .caja,
-.error .caja:focus-within { border-color: var(--danger); box-shadow: var(--shadow-glass), 0 0 0 1px var(--danger); }
+.error .caja:focus-within { border-color: var(--destructive); box-shadow: 0 0 0 3px color-mix(in oklch, var(--destructive) 20%, transparent); }
 
-.off .caja { background: var(--surface-chip); border-color: transparent; box-shadow: none; cursor: not-allowed; }
-.off .valor,
-.off .caja > svg:first-child { color: var(--text-disabled); }
+.off .caja { opacity: 0.5; cursor: not-allowed; }
 
 .valor {
   flex: 1;
@@ -50,85 +51,27 @@
   border: 0;
   outline: 0;
   background: transparent;
-  font: var(--fw-regular) 16px/22px var(--font-sans);
+  font: var(--fw-regular) 14px/20px var(--font-sans);
   color: var(--text-primary);
 }
 .valor::placeholder { color: var(--text-tertiary); opacity: 1; }
 .valor:disabled { cursor: not-allowed; }
 
-/* Autocompletado (del navegador o de un gestor como Bitwarden): el navegador
-   pinta el fondo celeste con !important, asi que no se puede pisar; se
-   demora su transicion para que nunca llegue y el vidrio quede a la vista.
-   El texto y el cursor siguen con los colores del campo. Va con .campo para
-   ganarle a las transiciones del flotante. */
+/* Autocompletado: el navegador pinta su fondo con !important; se demora su
+   transicion para que nunca llegue y la caja quede como esta. */
 .campo .valor:autofill,
 .campo .valor:-webkit-autofill {
   -webkit-text-fill-color: var(--text-primary);
-  caret-color: var(--signal);
-  transition:
-    background-color 0s 100000s,
-    color 0s 100000s,
-    padding var(--dur-base) var(--ease-out);
-}
-.off .valor:autofill,
-.off .valor:-webkit-autofill { -webkit-text-fill-color: var(--text-disabled); }
-
-.ayuda { font: var(--text-body-sm); color: var(--text-tertiary); }
-
-.mensajeError { display: flex; align-items: center; gap: var(--space-2); font: var(--text-body-sm); color: var(--danger-text); }
-
-/* Flotante (.w-campo--flotante): caja de 60 px y el rotulo adentro. Sube con
-   el foco o cuando hay texto (el input lleva placeholder=" ", asi que
-   :placeholder-shown dice si esta vacio); tambien con el autocompletado del
-   navegador, que puede llenar el campo sin que el texto este disponible. */
-.flotante .caja { height: 60px; }
-.cuerpo { position: relative; flex: 1; min-width: 0; align-self: stretch; display: flex; align-items: center; }
-.flota {
-  position: absolute;
-  left: 0;
-  top: 50%;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  pointer-events: none;
-  font: var(--fw-regular) 16px/22px var(--font-sans);
-  color: var(--text-tertiary);
-  transform: translateY(-50%);
-  transform-origin: left center;
-  transition: transform var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out);
-}
-.flotante .valor { transition: padding var(--dur-base) var(--ease-out); }
-.flotante .valor::placeholder { color: transparent; }
-
-.cuerpo:focus-within .flota,
-.cuerpo:has(.valor:not(:placeholder-shown)) .flota,
-.cuerpo:has(.valor:autofill) .flota { transform: translateY(calc(-50% - 13px)) scale(0.75); color: var(--text-secondary); }
-.flotante .valor:focus,
-.flotante .valor:not(:placeholder-shown),
-.flotante .valor:autofill { padding-top: 18px; }
-
-.cuerpo:focus-within .flota { color: var(--signal-text); }
-.error .flota,
-.error .cuerpo:focus-within .flota { color: var(--danger-text); }
-.off .flota { color: var(--text-disabled); }
-
-/* La unidad dentro de la caja (.w-campo__sufijo). En el flotante va a la
-   altura del valor y se esconde mientras el rotulo esta adentro. */
-.sufijo { flex: none; font: var(--fw-medium) 15px/22px var(--font-sans); color: var(--text-primary); }
-.flotante .sufijo { align-self: flex-end; padding-bottom: 12px; }
-.flotante .caja:not(:focus-within):not(:has(.valor:not(:placeholder-shown))) .sufijo { visibility: hidden; }
-
-/* Debajo de la caja: la ayuda o el error a la izquierda, el extra a la derecha. */
-.pie { display: flex; justify-content: space-between; align-items: center; gap: var(--space-4); min-height: 20px; }
-.extra { margin-left: auto; white-space: nowrap; font: var(--fw-semibold) 13px/1 var(--font-sans); color: var(--signal-text); }
-
-@media (prefers-reduced-motion: reduce) {
-  .flota,
-  .flotante .valor { transition: none; }
-  .campo .valor:autofill,
-  .campo .valor:-webkit-autofill { transition: background-color 0s 100000s, color 0s 100000s; }
+  caret-color: var(--text-primary);
+  transition: background-color 0s 100000s, color 0s 100000s;
 }
 
-/* Caja mas baja (kit web, .w-campo--md). */
-.md .caja { height: var(--control-h-md); border-radius: var(--radius-md); padding: 0 var(--space-4); }
+.ayuda { font: var(--text-body-sm); color: var(--text-secondary); }
+
+.mensajeError { display: flex; align-items: center; gap: var(--space-2); font: var(--text-body-sm); color: var(--destructive); }
+
+/* La unidad dentro de la caja. */
+.sufijo { flex: none; font: var(--fw-regular) 14px/20px var(--font-sans); color: var(--text-secondary); }
+
+/* Caja mas baja, para barras y paneles. */
+.md .caja { height: var(--control-h-sm); padding: 0 var(--space-3); }

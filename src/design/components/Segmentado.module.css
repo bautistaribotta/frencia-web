@@ -1,39 +1,43 @@
-/* Selector segmentado (kit web, .w-seg). */
+/* Selector segmentado con el aspecto de los Tabs de shadcn/ui: riel en muted
+   y la elegida en background con sombra chica. */
 
 .seg {
   align-self: flex-start;
   display: inline-flex;
   flex: none;
   padding: 3px;
-  gap: 2px;
-  border-radius: var(--radius-md);
-  background: var(--surface-inset);
-  border: 1px solid var(--glass-line);
+  gap: 0;
+  border-radius: var(--radius-lg);
+  background: var(--muted);
 }
 .ancho { display: flex; align-self: stretch; }
 .ancho .opcion { flex: 1; }
 
 .opcion {
-  height: 34px;
-  padding: 0 var(--space-5);
+  height: 28px;
+  padding: 0 var(--space-4);
   border: 1px solid transparent;
-  border-radius: 11px;
+  border-radius: var(--radius-md);
   background: transparent;
   cursor: pointer;
-  font: var(--fw-semibold) 13.5px/1 var(--font-sans);
-  color: var(--text-secondary);
+  font: var(--fw-medium) 13px/1 var(--font-sans);
+  color: var(--muted-foreground);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
+  transition: color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
 }
-.opcion:hover { color: var(--text-primary); background: var(--surface-chip); }
-.opcion:focus-visible { outline: var(--foco-w) solid var(--focus-ring); outline-offset: -2px; }
+.opcion:hover { color: var(--text-primary); }
+.opcion:focus-visible { outline: 0; border-color: var(--ring); box-shadow: 0 0 0 3px var(--focus-ring); }
 .elegida,
 .elegida:hover {
-  background: var(--surface-card-elevated);
+  background: var(--background);
   color: var(--text-primary);
-  box-shadow: var(--shadow-glass);
-  border-color: var(--glass-line);
+  box-shadow: var(--shadow-sm);
 }
-.opcion:disabled { color: var(--text-disabled); cursor: not-allowed; background: transparent; }
+:global([data-theme='dark']) .elegida { background: color-mix(in oklch, var(--input) 30%, transparent); border-color: var(--input); }
+@media (prefers-color-scheme: dark) {
+  :global(:root:not([data-theme='light'])) .elegida { background: color-mix(in oklch, var(--input) 30%, transparent); border-color: var(--input); }
+}
+.opcion:disabled { opacity: 0.5; cursor: not-allowed; }

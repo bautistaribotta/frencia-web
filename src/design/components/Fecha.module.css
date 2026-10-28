@@ -1,4 +1,4 @@
-/* Fecha en tres cajas (kit web, .w-fecha). */
+/* Fecha en tres cajas, con el borde y el foco del Input de shadcn/ui. */
 
 .fecha { display: flex; flex-direction: column; align-items: center; gap: var(--space-4); }
 .fila { display: flex; align-items: flex-start; }
@@ -7,29 +7,26 @@
 .segmento { display: flex; flex-direction: column; align-items: center; gap: var(--space-2); }
 
 .caja {
-  width: 88px;
-  height: 72px;
+  width: 80px;
+  height: 64px;
   padding: 0;
   text-align: center;
   border-radius: var(--radius-lg);
-  background: var(--surface-card);
-  border: 1px solid var(--glass-line);
-  box-shadow: var(--shadow-glass);
-  -webkit-backdrop-filter: var(--glass-filter);
-  backdrop-filter: var(--glass-filter);
-  font: var(--fw-medium) 40px/1 var(--font-sans);
-  font-variation-settings: var(--vs-condensed);
+  background: transparent;
+  border: 1px solid var(--input);
+  box-shadow: var(--shadow-sm);
+  font: var(--fw-semibold) 32px/1 var(--font-sans);
+  letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
   color: var(--text-primary);
   outline: none;
 }
 .caja::placeholder { color: var(--text-tertiary); }
-.caja::selection { background: var(--surface-signal-soft); color: var(--text-primary); }
-.caja:hover { border-color: var(--border-default); }
-.caja:focus { border-color: var(--signal); box-shadow: var(--shadow-glass), 0 0 0 1px var(--signal), var(--halo-signal); background: var(--surface-card-elevated); }
-.anio { width: 132px; }
-.conError { border-color: var(--danger); }
+.caja::selection { background: var(--accent); color: var(--text-primary); }
+.caja:focus { border-color: var(--ring); box-shadow: 0 0 0 3px var(--focus-ring); }
+.anio { width: 120px; }
+.conError { border-color: var(--destructive); }
 
-.separador { font: var(--fw-medium) 34px/72px var(--font-sans); color: var(--text-tertiary); }
-.rotulo { font: var(--text-label); font-variation-settings: var(--vs-semi); letter-spacing: var(--ls-wider); text-transform: uppercase; color: var(--text-tertiary); }
+.separador { font: var(--fw-regular) 28px/64px var(--font-sans); color: var(--text-tertiary); }
+.rotulo { font: var(--text-label); color: var(--text-secondary); }
 .error { font: var(--text-body-sm); color: var(--danger-text); }

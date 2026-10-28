@@ -22,4 +22,9 @@ export default defineConfig([
       globals: globals.browser,
     },
   },
+  // Los componentes de shadcn/ui exportan tambien sus variantes (cva).
+  {
+    files: ['src/components/ui/**/*.tsx'],
+    rules: { 'react-refresh/only-export-components': 'off' },
+  },
 ]);

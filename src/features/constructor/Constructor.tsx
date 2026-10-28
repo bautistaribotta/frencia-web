@@ -399,7 +399,7 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
         if (!arrastre) void guardarRef.current();
         return;
       }
-      if (arrastre || document.querySelector('dialog[open]')) return;
+      if (arrastre || document.querySelector('[role="dialog"]')) return;
       if (evento.key === 'Escape' && seleccion) {
         setSeleccion(null);
         return;

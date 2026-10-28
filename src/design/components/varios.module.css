@@ -1,25 +1,24 @@
-/* Piezas chicas del sistema: la marca, la tarjeta de vidrio, el atajo de
-   teclado y el divisor con texto. */
+/* Piezas chicas del sistema con el aspecto de shadcn/ui: la marca, la
+   tarjeta (Card), el atajo (Kbd), el divisor con texto, la insignia (Badge),
+   la casilla (Checkbox), el esqueleto (Skeleton) y el chip. */
 
 .marca {
-  font: var(--fw-bold) 22px/1 var(--font-sans);
-  font-variation-settings: "wdth" 75;
-  letter-spacing: -0.01em;
+  font: var(--fw-bold) 18px/1 var(--font-sans);
+  letter-spacing: -0.04em;
   color: var(--text-primary);
 }
-.marcaGrande { font-size: 40px; }
+.marcaGrande { font-size: 32px; }
 
 .tarjeta {
   position: relative;
   padding: var(--pad-card);
   border-radius: var(--radius-xl);
-  background: var(--surface-card);
-  border: 1px solid var(--glass-line);
-  box-shadow: var(--shadow-glass);
-  -webkit-backdrop-filter: var(--glass-filter);
-  backdrop-filter: var(--glass-filter);
+  background: var(--card);
+  color: var(--card-foreground);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
 }
-.tarjetaElevada { background: var(--surface-card-elevated); }
+.tarjetaElevada { box-shadow: var(--shadow-md); }
 
 .kbd {
   display: inline-flex;
@@ -27,13 +26,11 @@
   justify-content: center;
   min-width: 20px;
   height: 20px;
-  padding: 0 5px;
-  border-radius: 6px;
-  background: var(--surface-inset);
-  border: 1px solid var(--border-default);
-  border-bottom-width: 2px;
-  font: var(--fw-medium) 11px/1 var(--font-mono);
-  color: var(--text-secondary);
+  padding: 0 4px;
+  border-radius: var(--radius-sm);
+  background: var(--muted);
+  font: var(--fw-medium) 12px/1 var(--font-sans);
+  color: var(--muted-foreground);
 }
 
 .divisor { display: flex; align-items: center; gap: var(--space-4); }
@@ -43,21 +40,18 @@
 .insignia {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
   height: 22px;
   padding: 0 8px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-default);
-  font: var(--fw-semibold) 10.5px/1 var(--font-sans);
-  font-variation-settings: var(--vs-semi);
-  letter-spacing: var(--ls-wider);
-  text-transform: uppercase;
-  color: var(--text-secondary);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  font: var(--fw-medium) 12px/1 var(--font-sans);
+  color: var(--text-primary);
   white-space: nowrap;
 }
-.signal { border-color: var(--surface-signal-line); color: var(--signal-text); background: var(--surface-signal-soft); }
-.intensity { border-color: var(--surface-intensity-line); color: var(--intensity-text); background: var(--surface-intensity-soft); }
-.danger { border-color: var(--danger); color: var(--danger-text); }
+.signal { border-color: transparent; color: var(--primary-foreground); background: var(--primary); }
+.intensity { border-color: transparent; color: var(--secondary-foreground); background: var(--secondary); }
+.danger { border-color: transparent; color: var(--destructive); background: color-mix(in oklch, var(--destructive) 10%, transparent); }
 
 .semana { display: flex; gap: 4px; }
 .semana span {
@@ -67,39 +61,38 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font: var(--fw-semibold) 11px/1 var(--font-sans);
+  font: var(--fw-medium) 11px/1 var(--font-sans);
   color: var(--text-tertiary);
-  background: var(--surface-inset);
+  background: var(--muted);
 }
-.semana .semanaOn { background: var(--text-primary); color: var(--bg-app); }
+.semana .semanaOn { background: var(--primary); color: var(--primary-foreground); }
 
 .esqueleto {
   display: block;
   height: 12px;
-  border-radius: var(--radius-sm);
-  background: linear-gradient(90deg, var(--surface-chip) 0%, var(--surface-card-elevated) 50%, var(--surface-chip) 100%);
-  background-size: 200% 100%;
-  animation: brillo 1.6s var(--ease-in-out) infinite;
+  border-radius: var(--radius-md);
+  background: var(--accent);
+  animation: pulso 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
-@keyframes brillo { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+@keyframes pulso { 50% { opacity: 0.5; } }
 @media (prefers-reduced-motion: reduce) { .esqueleto { animation: none; } }
 
 /* Tira editable (kit web, .w-semana--edit). */
 .semanaEditable button {
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   padding: 0;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--glass-line);
-  background: var(--surface-inset);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: transparent;
   cursor: pointer;
-  font: var(--fw-semibold) 11px/1 var(--font-sans);
-  color: var(--text-tertiary);
+  font: var(--fw-medium) 12px/1 var(--font-sans);
+  color: var(--text-secondary);
 }
-.semanaEditable button:hover { color: var(--text-primary); border-color: var(--border-strong); }
+.semanaEditable button:hover { color: var(--text-primary); background: var(--accent); }
 .semanaEditable button:focus-visible { outline: var(--foco-w) solid var(--focus-ring); outline-offset: var(--foco-offset); }
-.semanaEditable .semanaOn { background: var(--accent); color: var(--text-on-accent); border-color: var(--accent); }
-.semanaEditable .semanaOn:hover { color: var(--text-on-accent); border-color: var(--accent); }
+.semanaEditable .semanaOn { background: var(--primary); color: var(--text-on-accent); border-color: var(--primary); }
+.semanaEditable .semanaOn:hover { color: var(--primary-foreground); background: var(--primary); border-color: var(--primary); }
 
 /* Filtro en pildora (kit web, .w-chip). */
 .chip {
@@ -108,43 +101,45 @@
   gap: var(--space-2);
   height: 32px;
   padding: 0 var(--space-4);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-md);
   cursor: pointer;
   white-space: nowrap;
-  background: var(--surface-card);
-  border: 1px solid var(--glass-line);
-  font: var(--fw-medium) 13.5px/1 var(--font-sans);
-  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  font: var(--fw-medium) 13px/1 var(--font-sans);
+  color: var(--text-primary);
   transition: background var(--dur-fast) var(--ease-out);
 }
-.chip:hover { background: var(--surface-card-elevated); color: var(--text-primary); }
+.chip:hover { background: var(--accent); }
 .chip:focus-visible { outline: var(--foco-w) solid var(--focus-ring); outline-offset: var(--foco-offset); }
 .chipElegido,
-.chipElegido:hover { background: var(--accent); border-color: var(--accent); color: var(--text-on-accent); }
+.chipElegido:hover { background: var(--primary); border-color: var(--primary); color: var(--text-on-accent); }
 
 /* Casilla (kit web, .w-check): la nativa queda invisible pero enfocable. */
 .casilla { position: relative; display: inline-flex; align-items: center; gap: var(--space-3); cursor: pointer; font: var(--text-body-sm); color: var(--text-secondary); white-space: nowrap; }
-.casillaNativa { position: absolute; opacity: 0; width: 20px; height: 20px; margin: 0; cursor: pointer; }
+.casillaNativa { position: absolute; opacity: 0; width: 16px; height: 16px; margin: 0; cursor: pointer; }
 .casillaCaja {
   flex: none;
-  width: 20px;
-  height: 20px;
-  border-radius: 6px;
-  border: 1.5px solid var(--border-strong);
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1px solid var(--input);
+  box-shadow: var(--shadow-sm);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-on-accent);
+  color: var(--primary-foreground);
 }
-.casilla:hover .casillaCaja { border-color: var(--text-primary); }
-.casillaNativa:checked + .casillaCaja { background: var(--accent); border-color: var(--accent); }
+.casilla:hover .casillaCaja { border-color: var(--ring); }
+.casillaNativa:checked + .casillaCaja { background: var(--primary); border-color: var(--primary); }
 .casillaNativa:focus-visible + .casillaCaja { outline: var(--foco-w) solid var(--focus-ring); outline-offset: var(--foco-offset); }
 
 /* Avance de un paso a paso (kit web, .w-escala). */
 .escala { display: flex; gap: 4px; }
-.escala span { flex: 1; height: 3px; border-radius: 2px; background: var(--data-track); }
-.escala .escalaHecha { background: var(--text-primary); }
-.escala .escalaActual { background: var(--signal); box-shadow: var(--halo-signal); }
+.escala span { flex: 1; height: 4px; border-radius: 2px; background: var(--muted); }
+.escala .escalaHecha { background: color-mix(in oklch, var(--primary) 40%, transparent); }
+.escala .escalaActual { background: var(--primary); }
 
 /* Teléfono: sin teclado no hay atajos que mostrar. */
 @media (max-width: 767px) {

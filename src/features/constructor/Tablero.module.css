@@ -97,8 +97,8 @@
     background var(--dur-fast) var(--ease-out);
 }
 .tarjeta:hover { border-color: var(--border-default); }
-.seleccionada { border-color: var(--accent); box-shadow: inset 0 0 0 0.5px var(--accent); }
-.seleccionada:hover { border-color: var(--accent); }
+.seleccionada { border-color: var(--primary); box-shadow: inset 0 0 0 0.5px var(--primary); }
+.seleccionada:hover { border-color: var(--primary); }
 /* Recien agregado: borde de lume hasta el proximo clic. */
 .nueva,
 .nueva:hover { border-color: var(--signal); box-shadow: 0 0 0 1px var(--signal), var(--halo-signal); }

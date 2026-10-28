@@ -1,23 +1,18 @@
-/* Marco comun del acceso (login, registro, recuperar y nueva contraseña): el fondo de luces (cumbre, anima, como
-   todo el onboarding), el boton de tema arriba del lado del formulario, el
-   formulario en vidrio y el billete, que lleva la marca. Los terminos y la
-   politica de privacidad se leen en el modal de lectura, sin salir de la
-   pantalla. */
+/* Marco comun del acceso (login, registro, recuperar y nueva contraseña),
+   con el formato de los bloques de login de shadcn/ui: fondo muted, la marca
+   arriba, el formulario en una Card centrada (titulo, bajada y campos) y,
+   debajo, los terminos y la politica de privacidad, que se leen en el modal
+   de lectura sin salir de la pantalla. El boton de tema va en la esquina de
+   arriba a la derecha. */
 
 import { useState, type FormEvent, type ReactNode } from 'react';
 
-import { DocumentoLegal, type Documento } from '@/design/components/DocumentoLegal';
-import { Fondo } from '@/design/components/Fondo';
 import { BotonTema } from '@/design/components/BotonTema';
-import { Tarjeta } from '@/design/components/varios';
-import texto from '@/design/texto.module.css';
+import { DocumentoLegal, type Documento } from '@/design/components/DocumentoLegal';
+import { Marca } from '@/design/components/varios';
 import styles from './Acceso.module.css';
-import { Billete } from './Billete';
-import './transicion.css';
 
 interface Props {
-  /** Login lleva el billete a la izquierda; el registro, a la derecha. */
-  billete: 'izquierda' | 'derecha';
   titulo: string;
   bajada: ReactNode;
   /** Lo que va arriba del titulo: volver al login, el sello con el icono. */
@@ -26,52 +21,37 @@ interface Props {
   children: ReactNode;
 }
 
-export function Acceso({ billete, titulo, bajada, cabeza, onSubmit = (evento) => evento.preventDefault(), children }: Props) {
-  const izquierda = billete === 'izquierda';
+export function Acceso({ titulo, bajada, cabeza, onSubmit = (evento) => evento.preventDefault(), children }: Props) {
   const [documento, setDocumento] = useState<Documento | null>(null);
-
-  const columna = (
-    <div className={styles.columna}>
-      <BotonTema className={styles.tema} />
-      <Tarjeta className={styles.tarjeta}>
-        <form className={styles.formulario} onSubmit={onSubmit} noValidate>
-          {cabeza}
-          <div className={styles.encabezado}>
-            <h1 className={texto.title}>{titulo}</h1>
-            <span className={`${texto.bodySm} ${texto.secundario}`}>{bajada}</span>
-          </div>
-          {children}
-        </form>
-      </Tarjeta>
-      <span className={`${texto.bodySm} ${texto.terciario} ${styles.legal}`}>
-        Al continuar, aceptás los{' '}
-        <button type="button" className={`${styles.enlace} ${styles.enlaceBoton}`} onClick={() => setDocumento('terminos')}>
-          Términos y condiciones
-        </button>{' '}
-        y la{' '}
-        <button type="button" className={`${styles.enlace} ${styles.enlaceBoton}`} onClick={() => setDocumento('privacidad')}>
-          Política de privacidad
-        </button>
-        .
-      </span>
-    </div>
-  );
 
   return (
     <>
-      <Fondo posicion="cumbre" animado />
-      <main className={`${styles.acceso} ${izquierda ? styles.billeteIzq : ''}`}>
-        {izquierda ? (
-          <>
-            <Billete />
-            {columna}
-          </>
-        ) : (
-          <>
-            {columna}
-            <Billete />
-          </>
-        )}
+      <main className={styles.acceso}>
+        <BotonTema className={styles.tema} />
+        <div className={styles.columna}>
+          <Marca className={styles.marca} />
+          <div className={styles.tarjeta}>
+            <form className={styles.formulario} onSubmit={onSubmit} noValidate>
+              {cabeza}
+              <div className={styles.encabezado}>
+                <h1 className={styles.titulo}>{titulo}</h1>
+                <p className={styles.bajada}>{bajada}</p>
+              </div>
+              {children}
+            </form>
+          </div>
+          <p className={styles.legal}>
+            Al continuar, aceptás los{' '}
+            <button type="button" className={styles.enlaceLegal} onClick={() => setDocumento('terminos')}>
+              Términos y condiciones
+            </button>{' '}
+            y la{' '}
+            <button type="button" className={styles.enlaceLegal} onClick={() => setDocumento('privacidad')}>
+              Política de privacidad
+            </button>
+            .
+          </p>
+        </div>
       </main>
       <DocumentoLegal documento={documento} onCerrar={() => setDocumento(null)} />
     </>

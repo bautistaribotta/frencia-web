@@ -1,5 +1,4 @@
-/* Crear cuenta (/signup). Variante billete: el formulario a la izquierda y
-   el billete a la derecha. Mismas reglas que la app: nombre de 2 letras o
+/* Crear cuenta (/signup), en la tarjeta del acceso. Mismas reglas que la app: nombre de 2 letras o
    mas, contraseña de 6 o mas y repetida igual.
    Debajo de Crear cuenta, Apple y Google como en el login: si la cuenta no
    existe la crean.
@@ -46,11 +45,10 @@ export function Signup() {
   }
 
   return (
-    <Acceso billete="derecha" titulo="Creá tu cuenta" bajada="Empezá a registrar cada serie desde hoy." onSubmit={crearCuenta}>
+    <Acceso titulo="Creá tu cuenta" bajada="Empezá a registrar cada serie desde hoy." onSubmit={crearCuenta}>
       <div className={styles.campos}>
         <div className={styles.fila}>
           <Campo
-            flotante
             rotulo="Nombre"
             icono={User}
             autoComplete="given-name"
@@ -59,7 +57,6 @@ export function Signup() {
             autoFocus
           />
           <Campo
-            flotante
             rotulo="Apellido"
             icono={User}
             autoComplete="family-name"
@@ -68,7 +65,6 @@ export function Signup() {
           />
         </div>
         <Campo
-          flotante
           rotulo="Correo electrónico"
           icono={Mail}
           type="email"
@@ -77,7 +73,6 @@ export function Signup() {
           onChange={(e) => setEmail(e.target.value)}
         />
         <Campo
-          flotante
           rotulo="Contraseña"
           icono={Lock}
           type="password"
@@ -87,7 +82,6 @@ export function Signup() {
           onChange={(e) => setContrasena(e.target.value)}
         />
         <Campo
-          flotante
           rotulo="Repetí la contraseña"
           icono={Lock}
           type="password"

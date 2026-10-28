@@ -137,7 +137,7 @@ export function PanelEjercicio({ ejercicio, rotulo, detalle, unidades, despachar
         {detalle ? <span className={`${texto.label} ${texto.terciario}`}>{detalle}</span> : null}
       </div>
 
-      <div ref={cuerpo} className={styles.cuerpo}>
+      <div ref={cuerpo} data-foco-inicial className={styles.cuerpo}>
         {unica ? (
           <>
             <div className={styles.grilla}>

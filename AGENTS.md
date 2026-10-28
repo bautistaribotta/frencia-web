@@ -18,7 +18,12 @@ revisar lo hecho.
 ## Stack
 
 - Vite + React + TypeScript + React Router (SPA, sin SSR).
-- Estilos con CSS Modules y custom properties. Sin Tailwind.
+- Rama `shadcn`: la interfaz usa **shadcn/ui** (estilo `base-nova`, primitivas
+  de Base UI, paleta neutral) con **Tailwind CSS v4** (`@tailwindcss/vite`).
+  Los componentes de shadcn viven en `src/components/ui/` (se suman con
+  `npx shadcn@latest add <nombre>`, ver `components.json`). Las pantallas
+  conservan sus CSS Modules, que leen las mismas variables que shadcn.
+  Fuente: Geist y Geist Mono (`@fontsource-variable`).
 - TanStack Query para leer y cachear datos de Supabase.
 - dnd-kit (`@dnd-kit/core` + `@dnd-kit/sortable`) para arrastrar y reordenar.
 - Iconos de Lucide (`lucide-react`).
@@ -26,33 +31,34 @@ revisar lo hecho.
 
 ## Design system
 
-- La fuente de verdad del diseño es `design-system/`, en este repo: el design
-  system "Frencia 2.0" (Lume), que nacio en Claude Design y ahora se mantiene
-  aca. El artifact de Claude Design quedo como antecedente y ya no se
-  sincroniza. **Siempre**, antes de diseñar o modificar cualquier pantalla o
-  componente, revisá:
-  - `design-system/ui_kits/web_desktop/README.md` (estructura, estados, reglas)
-  - `design-system/ui_kits/web_desktop/web.css` y `web-base.jsx` (componentes de referencia)
-  - la página del kit que corresponda (`Web - N ….html` y su `web-N.jsx`)
-  - `design-system/README.md` (marca: voz, color, vidrio, fondo de luces)
-- Si el codigo y el design system difieren, manda el design system; si el
-  design system no cubre el caso, avisar antes de inventar.
-- Un cambio de diseño se hace primero en `design-system/` (README del kit,
-  `web.css`, la pagina `Web - N` y su `web-N.jsx`, tokens) y despues en el
-  codigo, en el mismo commit o en uno anterior. Si se suma una pagina o una
-  regla nueva, se documenta en el README que corresponda.
-- Usá los tokens: viven en `src/design/tokens/` como custom properties (copia
-  de `design-system/ui_kits/web_desktop/tokens.web.css`, que solo cambia la
-  ruta de las fuentes). Un token nuevo o cambiado se edita en los dos archivos
-  a la vez. No inventes colores,
-  radios, espaciados ni tipografías: si falta algo, proponelo como token nuevo.
-  Nada de colores hardcodeados en componentes: siempre `var(--token)`.
-- CSS Modules + custom properties (ver "Codigo y estilos": oklch y sin estilos
-  en linea).
-- Cada pantalla tiene que funcionar en tema oscuro y claro, con la posición del
-  fondo de luces que indica el README del kit. Los dos temas comparten las
-  mismas claves; el tema sobreescribe colores, sombras y la ganancia de las
-  luces del fondo.
+- En la rama `shadcn` la fuente de verdad del **aspecto** es shadcn/ui: sus
+  componentes (`src/components/ui/`), sus variables (`--background`,
+  `--primary`, `--muted`, `--border`, `--ring`, `--radius`...) y su
+  documentacion (ui.shadcn.com, componentes de Base UI). Antes de diseñar o
+  modificar una pantalla o un componente, revisá el componente de shadcn que
+  corresponda y usalo (o seguí su aspecto) en lugar de inventar uno.
+- `design-system/` (el kit Lume) queda como **referencia de estructura**: de
+  cada pantalla se toman el layout, los estados (vacio, error, carga) y las
+  reglas de tablet y telefono del README del kit
+  (`design-system/ui_kits/web_desktop/README.md` y la pagina `Web - N`). Su
+  estetica (vidrio, fondo de luces, verde lume, Instrument Sans) **no** se
+  usa en esta rama, y el kit no se actualiza con los cambios visuales.
+- Los colores todavia no estan definidos: se usa la paleta neutral de shadcn
+  tal cual, en `src/design/global.css` (claro en `:root`, oscuro con
+  `data-theme="dark"` o siguiendo al sistema). No se cambia hasta que se
+  decida la paleta.
+- Los tokens de `src/design/tokens/tokens.css` ya no son copia del kit:
+  conservan los nombres que leen los CSS Modules (`--text-primary`,
+  `--surface-card`, `--glass-line`...) y apuntan a las variables de shadcn.
+  Nada de colores hardcodeados: siempre `var(--token)` en CSS o las clases de
+  color de Tailwind/shadcn (`bg-background`, `text-muted-foreground`...).
+- Componentes de la app (`src/design/components/`): `Boton`, `BotonIcono`,
+  `Modal`, `Menu` e `Interruptor` envuelven a los de shadcn (Button, Dialog,
+  DropdownMenu, Switch) y conservan su API. Lo nuevo se escribe con los
+  componentes de shadcn y clases de Tailwind; lo que ya existe puede seguir en
+  su CSS Module.
+- Cada pantalla tiene que funcionar en tema oscuro y claro. Sin fondo de
+  luces: el fondo es `background` plano (el componente `Fondo` no pinta nada).
 - Iconos animados (`@animateicons/react/lucide`): animan al aparecer y en el
   hover o foco del control. Excepcion: la cruz de cerrar (`X`) y cualquier
   control que cierre (modales, avisos, paneles, borrar una busqueda) van
@@ -98,8 +104,9 @@ revisar lo hecho.
   1. Levantá el proyecto y abrí la ruta.
   2. Sacá capturas a 1440×900 en oscuro y en claro, y a 390×844 (telefono)
      y 768×1024 (tablet) al menos en oscuro.
-  3. Comparalas con la pantalla equivalente del kit y corregí las diferencias
-     antes de dar el cambio por terminado.
+  3. Comparalas con la estructura de la pantalla equivalente del kit y con el
+     aspecto de shadcn/ui, y corregí las diferencias antes de dar el cambio
+     por terminado.
   4. Revisá también hover, foco de teclado y estados vacío, error y carga.
 
   Las pruebas viven en `e2e/` (una por pantalla, como `e2e/perfil.spec.ts`) y
@@ -114,6 +121,9 @@ revisar lo hecho.
 - **Nunca** usar estilos en linea. Excepcion: un objeto `style` solo puede
   llevar valores que se conocen recien al renderizar (transform del arrastre,
   medidas, animacion), idealmente como variables CSS que lee el CSS Module.
+- Tailwind se usa en los componentes de shadcn y en lo nuevo. Las clases de
+  color de Tailwind valen (sus paletas ya son oklch); un valor arbitrario de
+  color tambien va en oklch.
 - **Nunca** usar emojis en los comentarios.
 - Imports desde `src` con el alias `@/`.
 
@@ -168,4 +178,4 @@ revisar lo hecho.
 
 Estilos:
 - Usar EXCLUSIVAMENTE el sistema de color oklch para cualquier declaración de color en CSS, HTML o JS (evitar Hexadecimal, RGB, HSL, etc).
-- Nunca usar estilos en línea (inline) con CSS. Solo se usarán si ya se estaba usando Tailwind en el proyecto.
+- Nunca usar estilos en línea (inline) con CSS. En la rama shadcn, Tailwind sí se usa (ver Stack).

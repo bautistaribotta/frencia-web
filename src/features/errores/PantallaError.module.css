@@ -19,8 +19,6 @@
 .textos { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); max-width: 560px; }
 .sello {
   font: var(--text-meta);
-  letter-spacing: var(--ls-wide);
-  text-transform: uppercase;
   color: var(--signal-text);
   padding: 6px 10px;
   border-radius: var(--radius-sm);

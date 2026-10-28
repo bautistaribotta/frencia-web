@@ -1,25 +1,17 @@
-/* Interruptor de encendido y apagado (role="switch"). */
+/* Interruptor de encendido y apagado sobre el Switch de shadcn/ui
+   (role="switch"). */
 
-import type { ButtonHTMLAttributes } from 'react';
+import { Switch } from '@/components/ui/switch';
 
-import styles from './Interruptor.module.css';
-
-interface Props extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onChange' | 'role'> {
+interface Props {
   encendido: boolean;
   onChange: (encendido: boolean) => void;
   etiqueta: string;
+  disabled?: boolean;
+  className?: string;
+  id?: string;
 }
 
-export function Interruptor({ encendido, onChange, etiqueta, className = '', ...resto }: Props) {
-  return (
-    <button
-      {...resto}
-      type="button"
-      role="switch"
-      aria-checked={encendido}
-      aria-label={etiqueta}
-      className={`${styles.interruptor} ${className}`}
-      onClick={() => onChange(!encendido)}
-    />
-  );
+export function Interruptor({ encendido, onChange, etiqueta, disabled, className, id }: Props) {
+  return <Switch id={id} checked={encendido} onCheckedChange={(valor) => onChange(valor)} aria-label={etiqueta} disabled={disabled} className={className} />;
 }

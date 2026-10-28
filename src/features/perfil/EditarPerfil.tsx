@@ -1,6 +1,6 @@
 /* Editar perfil (/perfil/editar, kit web, Web · 7). Los mismos datos que la
    pantalla de la app (nombre, apellido, sexo, fecha de nacimiento, altura y
-   peso) en una sola columna, con los campos flotantes del acceso en lugar de
+   peso) en una sola columna, con los campos del acceso (rotulo arriba) en lugar de
    rueda, regla y arco: todo se escribe, salvo el sexo, que es un selector.
    Ningun dato es obligatorio; los vacios se guardan como null.
    Altura y peso se escriben en la unidad de Configuracion, que va como sufijo
@@ -223,7 +223,6 @@ function Formulario({ perfil }: { perfil: Perfil }) {
       <Encabezado />
       <Tarjeta className={styles.tarjeta}>
         <Campo
-          flotante
           rotulo="Nombre"
           icono={User}
           value={v.nombre}
@@ -232,7 +231,6 @@ function Formulario({ perfil }: { perfil: Perfil }) {
           maxLength={MAX_NOMBRE}
         />
         <Campo
-          flotante
           rotulo="Apellido"
           icono={User}
           value={v.apellido}
@@ -241,11 +239,10 @@ function Formulario({ perfil }: { perfil: Perfil }) {
           maxLength={MAX_NOMBRE}
         />
         <div className={styles.grupo}>
-          <span className={`${texto.label} ${texto.terciario}`}>Sexo</span>
+          <span className={styles.rotulo}>Sexo</span>
           <Segmentado<Sexo | ''> opciones={SEXOS} valor={v.sexo} onChange={(sexo) => cambiar({ sexo })} etiqueta="Sexo" ancho />
         </div>
         <Campo
-          flotante
           rotulo="Fecha de nacimiento"
           icono={Calendar}
           value={v.fecha}
@@ -260,7 +257,6 @@ function Formulario({ perfil }: { perfil: Perfil }) {
         {imperial ? (
           <div className={styles.fila}>
             <Campo
-              flotante
               className={styles.crece}
               rotulo="Altura · pies"
               icono={Ruler}
@@ -273,7 +269,6 @@ function Formulario({ perfil }: { perfil: Perfil }) {
               {...foco('altura')}
             />
             <Campo
-              flotante
               className={styles.crece}
               rotulo="Pulgadas"
               sufijo="in"
@@ -285,7 +280,6 @@ function Formulario({ perfil }: { perfil: Perfil }) {
           </div>
         ) : (
           <Campo
-            flotante
             rotulo="Altura"
             icono={Ruler}
             sufijo="cm"
@@ -298,7 +292,6 @@ function Formulario({ perfil }: { perfil: Perfil }) {
           />
         )}
         <Campo
-          flotante
           rotulo="Peso"
           icono={Weight}
           sufijo={unidadPeso}

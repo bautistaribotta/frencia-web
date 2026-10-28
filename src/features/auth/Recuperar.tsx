@@ -1,5 +1,5 @@
-/* Recuperar la contraseña (/recuperar). Mismo marco que el login, con el
-   billete a la izquierda (kit web, Web · 3). Pide el correo y Supabase manda
+/* Recuperar la contraseña (/recuperar). Mismo marco que el login (la
+   tarjeta del acceso). Pide el correo y Supabase manda
    un enlace que vuelve a /nueva-contrasena. Siempre confirma "Revisá tu
    correo", exista o no la cuenta, para no revelar que correos estan
    registrados. Reenviar espera un minuto. */
@@ -70,7 +70,7 @@ export function Recuperar() {
   if (enviado)
     return (
       <Acceso
-        billete="izquierda"
+       
         titulo="Revisá tu correo"
         bajada={
           <>
@@ -100,7 +100,7 @@ export function Recuperar() {
 
   return (
     <Acceso
-      billete="izquierda"
+     
       titulo="Recuperá tu contraseña"
       bajada="Escribí tu correo y te mandamos un enlace para elegir una nueva."
       onSubmit={enviar}
@@ -114,7 +114,6 @@ export function Recuperar() {
       }
     >
       <Campo
-        flotante
         rotulo="Correo electrónico"
         icono={Mail}
         type="email"

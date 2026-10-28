@@ -1,6 +1,5 @@
-/* Iniciar sesion (/login). Variante billete: el billete a la izquierda y el
-   formulario a la derecha. Ingresar queda deshabilitado hasta tener correo y
-   contraseña; Enter envia siempre el formulario.
+/* Iniciar sesion (/login), en la tarjeta del acceso. Ingresar queda
+   deshabilitado hasta tener correo y contraseña; Enter envia siempre el formulario.
    Tras un ingreso exitoso no se navega a mano: la puerta SoloInvitado ve la
    sesion nueva y lleva al inicio, como el gate de la app. */
 
@@ -57,10 +56,9 @@ export function Login() {
   }
 
   return (
-    <Acceso billete="izquierda" titulo="Entrá a tu cuenta" bajada="Seguí donde la dejaste." onSubmit={ingresar}>
+    <Acceso titulo="Entrá a tu cuenta" bajada="Seguí donde la dejaste." onSubmit={ingresar}>
       <div className={styles.campos}>
         <Campo
-          flotante
           rotulo="Correo electrónico"
           icono={Mail}
           type="email"
@@ -71,7 +69,6 @@ export function Login() {
           autoFocus
         />
         <Campo
-          flotante
           rotulo="Contraseña"
           extra={
             <Link to="/recuperar" state={{ email: email.trim() }} className={styles.enlace} viewTransition>

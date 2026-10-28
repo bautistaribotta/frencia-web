@@ -1,6 +1,6 @@
-/* Navegacion lateral (kit web, .w-nav). Expandida mide 248 px; entre 1024 y
-   1279 px pasa a riel de 76 px con solo iconos, y el nombre y el atajo de
-   cada item quedan en el title. */
+/* Navegacion lateral con el aspecto del Sidebar de shadcn/ui. Expandida
+   mide 240 px; entre 1024 y 1279 px pasa a riel de 64 px con solo iconos,
+   y el nombre y el atajo de cada item quedan en el title. */
 
 .nav {
   position: sticky;
@@ -9,64 +9,45 @@
   z-index: var(--z-nav);
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
-  padding: var(--space-6) var(--space-4) var(--space-5);
-  background: var(--surface-raised);
-  border-right: 1px solid var(--glass-line);
-  -webkit-backdrop-filter: var(--sheet-filter);
-  backdrop-filter: var(--sheet-filter);
+  gap: var(--space-5);
+  padding: var(--space-5) var(--space-3) var(--space-3);
+  background: var(--sidebar);
+  color: var(--sidebar-foreground);
+  border-right: 1px solid var(--sidebar-border);
 }
 
-.cabeza { display: flex; align-items: center; padding: 0 var(--space-3); min-height: 36px; }
+.cabeza { display: flex; align-items: center; padding: 0 var(--space-3); min-height: 32px; }
 .marcaCorta {
   display: none;
-  font: var(--fw-bold) 22px/1 var(--font-sans);
-  font-variation-settings: "wdth" 75;
+  font: var(--fw-bold) 18px/1 var(--font-sans);
+  letter-spacing: -0.04em;
   color: var(--text-primary);
 }
 
 .grupo { display: flex; flex-direction: column; gap: var(--space-1); }
 
+/* Item del menu (SidebarMenuButton de shadcn): 32 px, text-sm, el activo
+   con fondo sidebar-accent y peso medium. */
 .item {
   position: relative;
   display: flex;
   align-items: center;
-  gap: var(--space-4);
-  height: 42px;
-  padding: 0 var(--space-4);
+  gap: var(--space-3);
+  height: 32px;
+  padding: 0 var(--space-3);
   border-radius: var(--radius-md);
-  border: 1px solid transparent;
-  font: var(--fw-medium) 15px/1 var(--font-sans);
-  color: var(--text-secondary);
+  font: var(--fw-regular) 14px/1 var(--font-sans);
+  color: var(--sidebar-foreground);
   text-decoration: none;
   transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
 }
-.item:hover { background: var(--surface-chip); color: var(--text-primary); }
-.item:focus-visible {
-  outline: var(--foco-w) solid var(--focus-ring);
-  outline-offset: calc(var(--foco-offset) * -1);
-  color: var(--text-primary);
-}
+.item:hover { background: var(--sidebar-accent); color: var(--sidebar-accent-foreground); }
+.item:focus-visible { outline: 0; box-shadow: 0 0 0 2px var(--sidebar-ring); }
 
-/* La pestaña activa: vidrio elevado, icono en lume y marca de 3 px pegada
-   al borde, como en la app. */
 .activo {
-  background: var(--surface-card-elevated);
-  border-color: var(--glass-line);
-  box-shadow: var(--shadow-glass);
-  color: var(--text-primary);
-}
-.activo .icono { color: var(--signal); }
-.activo::before {
-  content: '';
-  position: absolute;
-  left: -16px;
-  top: 11px;
-  bottom: 11px;
-  width: 3px;
-  border-radius: 0 3px 3px 0;
-  background: var(--signal);
-  box-shadow: var(--halo-signal);
+  background: var(--sidebar-accent);
+  color: var(--sidebar-accent-foreground);
+  font-weight: var(--fw-medium);
 }
 .icono { flex: none; }
 
@@ -74,7 +55,7 @@
 .item:hover .atajo,
 .item:focus-visible .atajo { opacity: 1; }
 
-.pie { margin-top: auto; display: flex; flex-direction: column; gap: var(--space-3); }
+.pie { margin-top: auto; display: flex; flex-direction: column; gap: var(--space-2); }
 
 .notaMovil {
   display: flex;
@@ -82,24 +63,25 @@
   align-items: flex-start;
   padding: var(--space-4);
   border-radius: var(--radius-lg);
-  background: var(--surface-inset);
-  border: 1px dashed var(--border-strong);
+  background: var(--background);
+  border: 1px solid var(--sidebar-border);
+  box-shadow: var(--shadow-sm);
 }
-.notaMovil svg { flex: none; }
+.notaMovil svg { flex: none; margin-top: 1px; }
 
 .usuario {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--space-3);
   padding: var(--space-3);
   border-radius: var(--radius-md);
   text-decoration: none;
 }
 .usuario:hover,
-.usuarioActivo { background: var(--surface-chip); }
-.usuario:focus-visible { outline: var(--foco-w) solid var(--focus-ring); outline-offset: calc(var(--foco-offset) * -1); }
-.usuarioTextos { display: flex; flex-direction: column; flex: 1; min-width: 0; }
-.semi { font-weight: var(--fw-semibold); }
+.usuarioActivo { background: var(--sidebar-accent); }
+.usuario:focus-visible { outline: 0; box-shadow: 0 0 0 2px var(--sidebar-ring); }
+.usuarioTextos { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+.semi { font-weight: var(--fw-medium); }
 .unaLinea { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* Riel: pantallas medianas. */
@@ -108,9 +90,8 @@
   .cabeza { padding: 0; justify-content: center; }
   .marca { display: none; }
   .marcaCorta { display: inline; }
-  .nav .nueva { width: 48px; padding: 0; }
-  .item { width: 48px; justify-content: center; padding: 0; }
-  .activo::before { left: -12px; }
+  .nav .nueva { width: 36px; padding: 0; }
+  .item { width: 36px; height: 36px; justify-content: center; padding: 0; }
   .texto,
   .atajo,
   .notaMovil,
@@ -118,8 +99,6 @@
   .usuario { padding: var(--space-2); }
 }
 
-.nav .nueva { cursor: pointer; background: var(--signal); color: var(--text-on-signal); box-shadow: var(--halo-signal); }
-.nav .nueva:hover, .nav .nueva:active { background: var(--signal-press); }
 
 /* Teléfono: la reemplaza la barra inferior (BarraMovil). */
 @media (max-width: 767px) {

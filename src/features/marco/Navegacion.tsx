@@ -94,7 +94,7 @@ export function Navegacion() {
       <div className={styles.grupo}>
         {ITEMS.map((item) => (
           <NavLink key={item.ruta} to={item.ruta} end={item.ruta === '/'} className={claseItem} title={`${item.etiqueta} (G ${item.tecla})`}>
-            <Icono icono={item.icono} tamano={20} className={styles.icono} />
+            <Icono icono={item.icono} tamano={16} className={styles.icono} />
             <span className={styles.texto}>{item.etiqueta}</span>
             <span className={styles.atajo}>
               <Kbd>G {item.tecla}</Kbd>
@@ -105,13 +105,13 @@ export function Navegacion() {
 
       <div className={styles.pie}>
         <div className={styles.notaMovil}>
-          <Icono icono={Smartphone} tamano={18} className={texto.secundario} />
+          <Icono icono={Smartphone} tamano={16} className={texto.secundario} />
           <span className={`${texto.bodySm} ${texto.secundario}`}>
             Para entrenar, abrí Frencia en el celular. Acá se planifica y se revisa.
           </span>
         </div>
         <NavLink to="/configuracion" className={claseItem} title="Configuración">
-          <Icono icono={Settings} tamano={20} className={styles.icono} />
+          <Icono icono={Settings} tamano={16} className={styles.icono} />
           <span className={styles.texto}>Configuración</span>
         </NavLink>
         <NavLink

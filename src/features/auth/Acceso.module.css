@@ -1,104 +1,105 @@
-/* Marco del acceso, variante billete: el formulario en vidrio de un lado y
-   el billete grabado del otro. El registro lleva el billete a la derecha; el
-   login lo espeja y lo lleva a la izquierda. */
+/* Marco del acceso con el formato de los bloques de login de shadcn/ui:
+   fondo muted, la marca arriba, una Card de 400 px centrada y el texto legal
+   debajo, chico y en muted-foreground. */
 
 .acceso {
   position: relative;
-  z-index: 1;
   min-height: 100dvh;
-  display: grid;
-  grid-template-columns: 1fr auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-9) var(--space-6);
+  background: var(--muted);
 }
 
-/* El billete ocupa lo que pide su proporcion; el resto es del formulario. */
-.billeteIzq { grid-template-columns: auto 1fr; }
+.tema { position: absolute; top: var(--space-5); right: var(--space-5); }
 
-/* La tarjeta y el texto legal van centrados en el espacio que deja el
-   billete hasta el borde de la pantalla. */
 .columna {
+  width: 100%;
+  max-width: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: var(--space-7);
-  padding: var(--space-9) var(--space-11);
-  /* Al pasar entre login y registro cruza de lado por detras del billete
-     (ver transicion.css). */
-  view-transition-name: formulario;
+  gap: var(--space-6);
 }
 
-/* El boton de tema, en la esquina de arriba del lado del formulario. */
-.tema { position: absolute; top: var(--space-8); left: var(--space-11); view-transition-name: tema; }
-.billeteIzq .tema { left: auto; right: var(--space-11); }
+.marca { font-size: 20px; }
 
-/* Dos clases para ganarle al padding propio de la Tarjeta. */
-.columna .tarjeta {
-  max-width: 460px;
+/* La Card de shadcn: borde, fondo card, sombra chica y radio xl. */
+.tarjeta {
   width: 100%;
-  padding: var(--space-8);
+  padding: var(--space-7);
+  border-radius: var(--radius-xl);
+  background: var(--card);
+  color: var(--card-foreground);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
 }
 
 .formulario { display: flex; flex-direction: column; gap: var(--space-6); }
 
-.legal { max-width: 460px; width: 100%; text-align: center; }
+.encabezado { display: flex; flex-direction: column; align-items: center; gap: var(--space-2); text-align: center; }
+.titulo { margin: 0; font: var(--fw-semibold) 20px/1.2 var(--font-sans); letter-spacing: -0.015em; }
+.bajada { margin: 0; font: var(--text-body-sm); color: var(--text-secondary); }
+
+.legal {
+  margin: 0;
+  padding: 0 var(--space-6);
+  text-align: center;
+  text-wrap: balance;
+  font: var(--fw-regular) 12px/1.5 var(--font-sans);
+  color: var(--text-secondary);
+}
+.enlaceLegal {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  border-radius: var(--radius-xs);
+}
+.enlaceLegal:hover { color: var(--text-primary); }
+.enlaceLegal:focus-visible { outline: 0; box-shadow: 0 0 0 3px var(--focus-ring); }
 
 /* "¿No tenés cuenta?" y "¿Ya tenés cuenta?", al pie de la tarjeta. */
-.alPie { text-align: center; }
-.encabezado { display: flex; flex-direction: column; gap: var(--space-2); margin: 0; }
-.encabezado h1 { margin: 0; }
-.campos { display: flex; flex-direction: column; gap: var(--space-4); }
-.fila { display: flex; gap: var(--space-3); }
+.alPie { text-align: center; font: var(--text-body-sm); color: var(--text-secondary); }
+.campos { display: flex; flex-direction: column; gap: var(--space-5); }
+.fila { display: flex; gap: var(--space-4); }
 .fila > * { flex: 1; min-width: 0; }
-.pista { display: flex; align-items: center; justify-content: center; gap: var(--space-2); }
+.pista { display: flex; align-items: center; justify-content: center; gap: var(--space-2); margin-top: calc(var(--space-3) * -1); font: var(--text-body-sm); color: var(--text-secondary); }
 .oculta { visibility: hidden; }
 .conLogo { display: inline-flex; align-items: center; gap: var(--space-3); }
 
 .enlace {
-  color: var(--signal-text);
-  font-weight: var(--fw-semibold);
-  text-decoration: none;
+  color: var(--text-primary);
+  font-weight: var(--fw-medium);
+  text-decoration: underline;
+  text-underline-offset: 4px;
   border-radius: var(--radius-xs);
 }
-.enlace:hover { text-decoration: underline; text-underline-offset: 3px; }
-.enlace:focus-visible { outline: var(--foco-w) solid var(--focus-ring); outline-offset: var(--foco-offset); }
-/* Los legales abren el modal de lectura: son botones con forma de enlace. */
-.enlaceBoton { padding: 0; border: 0; background: transparent; font: inherit; cursor: pointer; }
+.enlace:hover { color: var(--text-secondary); }
+.enlace:focus-visible { outline: 0; box-shadow: 0 0 0 3px var(--focus-ring); }
 
-.logo { width: 18px; height: 18px; flex: none; }
+.logo { width: 16px; height: 16px; flex: none; }
 .googleAzul { fill: oklch(63.04% 0.18 260); }
 .googleVerde { fill: oklch(64.75% 0.1603 148.5); }
 .googleAmarillo { fill: oklch(83.04% 0.1698 84); }
 .googleRojo { fill: oklch(62.57% 0.2058 29.1); }
 
-/* Pantallas bajas (una notebook de 1366 x 768): menos aire para que el
-   login entre sin scroll. */
-@media (max-height: 820px) {
-  .columna { gap: var(--space-5); padding-block: var(--space-6); }
-  .columna .tarjeta { padding: var(--space-7); }
-  .formulario { gap: var(--space-5); }
-}
-
-/* Debajo del ancho minimo de la web (1024 px) el billete se oculta y el
-   formulario queda centrado. */
-@media (max-width: 1023px) {
-  .acceso,
-  .billeteIzq { grid-template-columns: minmax(0, 1fr); }
-  .acceso > [aria-hidden='true'] { display: none; }
-  .columna { padding: var(--space-11) var(--space-6) var(--space-12); }
-  .tema,
-  .billeteIzq .tema { left: auto; right: var(--space-6); top: var(--space-6); }
-}
-/* Recuperar y nueva contraseña (.w-alinear-izq, .w-sello-ico). */
-.volver { align-self: flex-start; margin-left: calc(var(--space-4) * -1); }
+/* Recuperar y nueva contraseña: volver al login y el sello con el icono. */
+.volver { align-self: flex-start; margin: calc(var(--space-3) * -1) 0 0 calc(var(--space-3) * -1); }
 .sello {
-  width: 52px;
-  height: 52px;
+  align-self: center;
+  width: 44px;
+  height: 44px;
   border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--surface-inset);
-  border: 1px solid var(--glass-line);
+  background: var(--muted);
   color: var(--text-primary);
 }
 .requisitos { display: flex; flex-direction: column; gap: var(--space-2); margin: 0; padding: 0; list-style: none; }
@@ -107,9 +108,8 @@
 /* Teléfono: margenes de pad-screen, la tarjeta con menos relleno y sin la
    pista de Enter, que sin teclado fisico no tiene sentido. */
 @media (max-width: 767px) {
-  .columna { padding: var(--space-11) var(--pad-screen) var(--space-9); }
-  .columna .tarjeta { padding: var(--space-7) var(--space-6); }
-  .tema,
-  .billeteIzq .tema { right: var(--pad-screen); top: var(--space-5); }
+  .acceso { align-items: flex-start; padding: var(--space-11) var(--pad-screen) var(--space-9); }
+  .tarjeta { padding: var(--space-6); }
+  .tema { right: var(--pad-screen); top: var(--space-4); }
   .pista { display: none; }
 }

@@ -47,7 +47,7 @@ export function NuevaContrasena() {
   if (vencido || !session)
     return (
       <Acceso
-        billete="izquierda"
+       
         titulo="El enlace venció"
         bajada="Los enlaces para cambiar la contraseña duran una hora y sirven una sola vez, en el navegador donde los pediste. Pedí uno nuevo."
         cabeza={
@@ -92,10 +92,9 @@ export function NuevaContrasena() {
   );
 
   return (
-    <Acceso billete="izquierda" titulo="Elegí una contraseña nueva" bajada={session.user.email ? `Para ${session.user.email}` : ''} onSubmit={guardar}>
+    <Acceso titulo="Elegí una contraseña nueva" bajada={session.user.email ? `Para ${session.user.email}` : ''} onSubmit={guardar}>
       <div className={styles.campos}>
         <Campo
-          flotante
           rotulo="Contraseña nueva"
           icono={Lock}
           type={mostrar ? 'text' : 'password'}
@@ -110,7 +109,6 @@ export function NuevaContrasena() {
           autoFocus
         />
         <Campo
-          flotante
           rotulo="Repetila"
           icono={Lock}
           type={mostrar ? 'text' : 'password'}

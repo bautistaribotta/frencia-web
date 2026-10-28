@@ -51,7 +51,12 @@ test('perfil: orden de foco', async ({ page }) => {
     const nombre = (await foco.getAttribute('aria-label')) ?? (await foco.innerText()).trim();
     if (vistos.length || nombre === contenido[0]) {
       vistos.push(nombre);
-      await expect(foco).toHaveCSS('outline-style', 'solid');
+      // El foco se ve: el anillo de shadcn (box-shadow) o un contorno.
+      const anillo = await foco.evaluate((el) => {
+        const estilo = getComputedStyle(el);
+        return estilo.outlineStyle !== 'none' || estilo.boxShadow !== 'none';
+      });
+      expect(anillo).toBe(true);
     }
   }
   expect(vistos).toEqual(contenido);

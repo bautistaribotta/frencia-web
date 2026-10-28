@@ -75,7 +75,9 @@ async function arrastrar(page: Page, desde: Locator, hasta: Locator, { abajo = f
   await page.mouse.move(b.x + b.width / 2 + 2, y + 2, { steps: 2 });
 }
 
-const dia = (page: Page, nombre: string) => page.getByRole('region', { name: nombre, exact: true });
+// Por atributo y no por rol: con un modal abierto (Base UI) el resto de la
+// pagina queda fuera del arbol de accesibilidad, pero sigue a la vista.
+const dia = (page: Page, nombre: string) => page.locator(`section[aria-label="${nombre}"]`);
 const tarjetas = (zona: Locator) => zona.locator('ol > li:has([aria-roledescription="ejercicio arrastrable"])');
 /** Los seis puntos de la derecha: lo unico que arrastra una tarjeta. */
 const agarre = (tarjeta: Locator) => tarjeta.getByRole('button', { name: /^Mover / });

@@ -48,7 +48,7 @@
   border: 1px solid var(--border-strong);
   background: var(--surface-inset);
 }
-.checkOn { background: var(--accent); border-color: var(--accent); color: var(--text-on-accent); }
+.checkOn { background: var(--primary); border-color: var(--primary); color: var(--text-on-accent); }
 
 /* Cuenta en baja. */
 .sello {

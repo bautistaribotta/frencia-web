@@ -1,19 +1,18 @@
-/* Piezas de datos del kit web: .w-metrica, .w-res, .w-tipo, .w-serie-n y
-   .w-tabla. */
+/* Piezas de datos: la metrica, el resumen, el tipo de ejercicio, el numero
+   de serie y la tabla (Table de shadcn/ui). */
 
 .metrica { display: flex; flex-direction: column; gap: var(--space-2); min-width: 0; }
 .metricaValor {
-  font: var(--fw-medium) 34px/1 var(--font-sans);
-  font-variation-settings: var(--vs-condensed);
-  letter-spacing: -0.02em;
+  font: var(--fw-semibold) 30px/1 var(--font-sans);
+  letter-spacing: -0.025em;
   font-variant-numeric: tabular-nums;
   color: var(--text-primary);
 }
 .metricaValor small {
-  font-size: 15px;
+  font-size: 14px;
   margin-left: 4px;
-  font-variation-settings: var(--vs-normal);
   font-weight: var(--fw-medium);
+  color: var(--text-secondary);
 }
 
 .resumen {
@@ -36,8 +35,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--surface-inset);
-  border: 1px solid var(--glass-line);
+  background: var(--muted);
   color: var(--text-secondary);
 }
 .tipoGrande { width: 34px; height: 34px; }
@@ -49,38 +47,38 @@
   border-radius: 50%;
   align-items: center;
   justify-content: center;
-  background: var(--surface-inset);
-  border: 1px solid var(--glass-line);
-  font: var(--fw-semibold) 12px/1 var(--font-sans);
+  background: var(--muted);
+  font: var(--fw-medium) 12px/1 var(--font-sans);
   color: var(--text-secondary);
 }
 
-/* Tabla dentro de una Lista de vidrio. Toda la fila es el enlace: el clic
+/* Tabla dentro de una Lista (Card). Toda la fila es el enlace: el clic
    lo maneja la fila y el teclado, el enlace de la primera celda con texto. */
 .tabla { width: 100%; border-collapse: separate; border-spacing: 0; }
+/* Con el aspecto del Table de shadcn/ui: encabezado text-sm medium en
+   foreground, filas de 48 px con borde y hover en muted/50. */
 .tabla th {
   text-align: left;
-  padding: var(--space-4) var(--space-6);
-  font: var(--text-label);
-  font-variation-settings: var(--vs-semi);
-  letter-spacing: var(--ls-wider);
-  text-transform: uppercase;
-  color: var(--text-tertiary);
-  border-bottom: 1px solid var(--divider);
+  height: 40px;
+  padding: 0 var(--space-5);
+  font: var(--fw-medium) 14px/1 var(--font-sans);
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
 }
 .tabla td {
-  padding: var(--space-5) var(--space-6);
-  border-bottom: 1px solid var(--divider);
-  font: var(--text-body-sm);
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--border);
+  font: var(--fw-regular) 14px/1.4 var(--font-sans);
   color: var(--text-primary);
   vertical-align: middle;
 }
 .tabla tr:last-child td { border-bottom: 0; }
 .tabla .num { text-align: right; font-variant-numeric: tabular-nums; }
 .filaEnlace { cursor: pointer; transition: background var(--dur-fast) var(--ease-out); }
-.filaEnlace:hover td { background: var(--surface-chip); }
-.enlace { color: inherit; text-decoration: none; font-weight: var(--fw-semibold); border-radius: 4px; }
-.enlace:focus-visible { outline: var(--foco-w) solid var(--focus-ring); outline-offset: 2px; }
+.filaEnlace:hover td { background: color-mix(in oklch, var(--muted) 50%, transparent); }
+.enlace { color: inherit; text-decoration: none; font-weight: var(--fw-medium); border-radius: 4px; }
+.enlace:focus-visible { outline: 0; box-shadow: 0 0 0 3px var(--focus-ring); }
 .acc { width: 56px; text-align: right; color: var(--text-tertiary); }
 .acc > * { vertical-align: middle; }
 
