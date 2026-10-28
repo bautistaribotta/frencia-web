@@ -30,6 +30,7 @@ import { descargarTicket } from '@/lib/imagenTicket';
 import { archivoTicket } from '@/lib/ticket';
 import { fechaSesion, reloj } from '@/lib/tiempo';
 import { EliminarSesion } from '@/features/historial/EliminarSesion';
+import { useVolver } from '@/lib/volver';
 import { Ticket } from './Ticket';
 import styles from './DetalleSesion.module.css';
 
@@ -51,7 +52,7 @@ export function DetalleSesion() {
   const { id = '' } = useParams();
   const { user } = useSesion();
   const userId = user?.id ?? '';
-  const navegar = useNavigate();
+  const volver = useVolver('/historial');
   const sesion = useQuery({ queryKey: ['sesion', userId, id], queryFn: () => cargarDetalleSesion(userId, id), enabled: !!userId });
 
   let contenido;
@@ -72,8 +73,8 @@ export function DetalleSesion() {
       <Fondo posicion="velada" />
       <Pagina>
         <div className={styles.migas}>
-          <Boton variante="ghost" tamano="sm" icono={ChevronLeft} onClick={() => navegar('/historial')}>
-            Historial
+          <Boton variante="ghost" tamano="sm" icono={ChevronLeft} onClick={volver.volver}>
+            {volver.corta}
           </Boton>
         </div>
         {contenido}

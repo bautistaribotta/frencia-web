@@ -14,7 +14,7 @@
 
 import { Calendar, Check, ChevronLeft, Ruler, User, Weight } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { useBlocker, useNavigate } from 'react-router';
+import { useBlocker } from 'react-router';
 
 import { useAvisos } from '@/contexts/avisos';
 import { Boton } from '@/design/components/Boton';
@@ -29,6 +29,7 @@ import { cmAPiesPulgadas, piesPulgadasACm, type UnidadAltura } from '@/lib/altur
 import { EDAD_MAXIMA, EDAD_MINIMA, formatearFecha, leerFechaNacimiento } from '@/lib/edad';
 import { useGuardarDatosPersonales, usePerfil, type Perfil } from '@/lib/perfil';
 import { kgALb, mostrarPeso, pesoACanonico, type UnidadPeso } from '@/lib/peso';
+import { useVolver } from '@/lib/volver';
 import styles from './EditarPerfil.module.css';
 
 type Sexo = 'masculino' | 'femenino' | 'otro';
@@ -111,12 +112,12 @@ export function EditarPerfil() {
 }
 
 function Encabezado() {
-  const navegar = useNavigate();
+  const volver = useVolver('/perfil');
   return (
     <>
       <div className={styles.migas}>
-        <Boton variante="ghost" tamano="sm" icono={ChevronLeft} onClick={() => navegar('/perfil')}>
-          Perfil
+        <Boton variante="ghost" tamano="sm" icono={ChevronLeft} onClick={volver.volver}>
+          {volver.corta}
         </Boton>
       </div>
       <div className={styles.titulos}>
@@ -128,7 +129,7 @@ function Encabezado() {
 }
 
 function Formulario({ perfil }: { perfil: Perfil }) {
-  const navegar = useNavigate();
+  const volver = useVolver('/perfil');
   const avisar = useAvisos();
   const guardar = useGuardarDatosPersonales();
   const unidadAltura = (perfil.unidad_altura ?? 'cm') as UnidadAltura;
@@ -207,7 +208,8 @@ function Formulario({ perfil }: { perfil: Perfil }) {
     }
     guardado.current = true;
     avisar('Perfil actualizado');
-    navegar('/perfil');
+    // Guardar vuelve, como Cancelar, a la pantalla de la que se llego.
+    volver.volver();
   }
 
   return (
@@ -312,7 +314,7 @@ function Formulario({ perfil }: { perfil: Perfil }) {
         <Boton type="submit" tamano="lg" ancho icono={Check} disabled={!puedeGuardar} cargando={guardar.isPending}>
           Guardar
         </Boton>
-        <Boton variante="ghost" tamano="lg" ancho onClick={() => navegar('/perfil')} disabled={guardar.isPending}>
+        <Boton variante="ghost" tamano="lg" ancho onClick={volver.volver} disabled={guardar.isPending}>
           Cancelar
         </Boton>
       </div>

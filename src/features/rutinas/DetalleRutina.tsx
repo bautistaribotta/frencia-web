@@ -22,6 +22,7 @@ import type { UnidadDistancia } from '@/lib/distancia';
 import { usePerfil } from '@/lib/perfil';
 import type { UnidadPeso } from '@/lib/peso';
 import { cargarRutina, cuentaRutina, fechaCorta, resumenEjercicio, type DiaDetalle, type RutinaDetalle } from '@/lib/rutinas';
+import { useVolver } from '@/lib/volver';
 import { usePonerEnCurso } from './acciones';
 import styles from './DetalleRutina.module.css';
 
@@ -29,7 +30,7 @@ const PRONTO = 'Muy pronto';
 
 export function DetalleRutina() {
   const { id = '' } = useParams();
-  const navegar = useNavigate();
+  const volver = useVolver('/rutinas');
   const rutina = useQuery({ queryKey: ['rutina', id], queryFn: () => cargarRutina(id) });
 
   let contenido;
@@ -50,8 +51,8 @@ export function DetalleRutina() {
       <Fondo posicion="cumbre" />
       <Pagina>
         <div className={styles.migas}>
-          <Boton variante="ghost" tamano="sm" icono={ChevronLeft} onClick={() => navegar('/rutinas')}>
-            Rutinas
+          <Boton variante="ghost" tamano="sm" icono={ChevronLeft} onClick={volver.volver}>
+            {volver.corta}
           </Boton>
         </div>
         {contenido}

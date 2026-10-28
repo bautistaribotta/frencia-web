@@ -70,6 +70,7 @@ import type { UnidadDistancia } from '@/lib/distancia';
 import { usePerfil, useTemaDeCuenta } from '@/lib/perfil';
 import type { UnidadPeso } from '@/lib/peso';
 import { cargarRutina, cargarRutinas, guardarRutinaCompleta, MAXIMO_RUTINAS, totalRutinas, type RutinaDetalle } from '@/lib/rutinas';
+import { useVolver } from '@/lib/volver';
 import { Catalogo, ItemLevantado } from './Catalogo';
 import styles from './Constructor.module.css';
 import { PanelEjercicio } from './PanelEjercicio';
@@ -183,6 +184,7 @@ const deteccion: CollisionDetection = (args) => {
 function Editor({ routineId, rutina }: { routineId: string | null; rutina: RutinaDetalle | null }) {
   const navegar = useNavigate();
   const ubicacion = useLocation();
+  const volver = useVolver(routineId ? `/rutinas/${routineId}` : '/rutinas');
   const avisar = useAvisos();
   const cliente = useQueryClient();
   const { user } = useSesion();
@@ -638,7 +640,8 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
           motivo={problemasActuales.length > 0 ? MENSAJE_PROBLEMA[problemasActuales[0]] : null}
           catalogoOculto={oculto}
           onNombre={(valor) => despachar({ tipo: 'nombre', valor })}
-          onVolver={() => navegar(routineId ? `/rutinas/${routineId}` : '/rutinas')}
+          volverA={volver.larga}
+          onVolver={volver.volver}
           onMostrarCatalogo={() => alternarCatalogo(false)}
           onAtajos={() => setAtajos(true)}
           onDescartar={descartar}
@@ -863,6 +866,8 @@ interface PropsBarra {
   motivo: string | null;
   catalogoOculto: boolean;
   onNombre: (valor: string) => void;
+  /** El texto del volver: "Volver a Inicio", "Volver a la rutina". */
+  volverA: string;
   onVolver: () => void;
   onMostrarCatalogo: () => void;
   onAtajos: () => void;
@@ -870,7 +875,7 @@ interface PropsBarra {
   onGuardar: () => void;
 }
 
-function Barra({ nombre, nombreRef, nueva, cambios, estado, puedeGuardar, motivo, catalogoOculto, onNombre, onVolver, onMostrarCatalogo, onAtajos, onDescartar, onGuardar }: PropsBarra) {
+function Barra({ nombre, nombreRef, nueva, cambios, estado, puedeGuardar, motivo, catalogoOculto, onNombre, volverA, onVolver, onMostrarCatalogo, onAtajos, onDescartar, onGuardar }: PropsBarra) {
   let estadoTexto;
   if (estado === 'guardando')
     estadoTexto = (
@@ -904,7 +909,7 @@ function Barra({ nombre, nombreRef, nueva, cambios, estado, puedeGuardar, motivo
 
   return (
     <header className={styles.barra}>
-      <BotonIcono icono={ArrowLeft} etiqueta={nueva ? 'Volver a Rutinas' : 'Volver a la rutina'} onClick={onVolver} />
+      <BotonIcono icono={ArrowLeft} etiqueta={volverA} onClick={onVolver} />
       <label className={styles.nombre}>
         <input
           ref={nombreRef}

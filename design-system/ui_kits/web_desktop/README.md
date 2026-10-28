@@ -47,6 +47,14 @@ página), `tools/tokens_web.py` (regenera los tokens desde `tokens.json`).
 - Se colapsa a riel con `[` o con el botón de la cabecera (preferencia en `localStorage`).
 - El **constructor** es pantalla completa, sin navegación lateral: es una tarea de foco.
 - Atajos: `G I` / `G R` / `G H` navegar, `N` nueva rutina, `/` buscar, `Ctrl S` guardar, `?` ayuda.
+- **Volver tiene memoria**: lleva a la pantalla de la que se vino, no a un padre fijo, y su
+  texto dice a dónde va. Desde Inicio → Ver rutina, el volver del detalle dice «Inicio» y
+  vuelve a Inicio; desde Rutinas dice «Rutinas». Ir al constructor y volver no cuenta como
+  un paso. En las migas va el nombre corto («Inicio», «Rutina», «Sesión»); en un botón con
+  texto o un tooltip, el largo («Volver a Inicio», «Volver a la sesión»). Sin memoria (se
+  entró directo por la URL, o se vino del constructor o del acceso) va a la pantalla de
+  arriba: el detalle de una rutina a Rutinas, el de una sesión a Historial, Editar perfil a
+  Perfil, el ticket a su sesión. Guardar o Cancelar en Editar perfil también vuelven ahí.
 
 ### Rutas y fondo de luces
 

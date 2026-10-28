@@ -12,6 +12,8 @@
    - /cuenta-en-baja, /bienvenida y /bienvenida/perfil: las fases de la
      cuenta, con sesion pero sin la navegacion; ConSesion decide cual.
    - /historial/:id/ticket: el ticket solo, sin la navegacion.
+   MemoriaNavegacion, en la raiz, recuerda de donde se llego a cada pantalla
+   para los botones de volver (marco/Volver.tsx).
    Falta del kit /r/:codigo, la rutina compartida. */
 
 import { createBrowserRouter, Navigate } from 'react-router';
@@ -33,6 +35,7 @@ import { TicketGrande } from '@/features/historial/TicketGrande';
 import { Inicio } from '@/features/inicio/Inicio';
 import { Marco } from '@/features/marco/Marco';
 import { ConSesion, SoloInvitado } from '@/features/marco/Puertas';
+import { MemoriaNavegacion } from '@/features/marco/Volver';
 import { EditarPerfil } from '@/features/perfil/EditarPerfil';
 import { Perfil } from '@/features/perfil/Perfil';
 import { DetalleRutina } from '@/features/rutinas/DetalleRutina';
@@ -40,6 +43,7 @@ import { Rutinas } from '@/features/rutinas/Rutinas';
 
 export const router = createBrowserRouter([
   {
+    element: <MemoriaNavegacion />,
     errorElement: <ErrorRuta />,
     children: [
       {

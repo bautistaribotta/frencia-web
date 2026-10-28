@@ -21,6 +21,7 @@ import { copiarTicket, descargarTicket } from '@/lib/imagenTicket';
 import { usePerfil } from '@/lib/perfil';
 import type { UnidadPeso } from '@/lib/peso';
 import { archivoTicket } from '@/lib/ticket';
+import { useVolver } from '@/lib/volver';
 import { Ticket } from './Ticket';
 import styles from './TicketGrande.module.css';
 
@@ -43,7 +44,7 @@ export function TicketGrande() {
     return () => window.clearTimeout(t);
   }, [copiado]);
 
-  const volver = () => navegar(`/historial/${id}`);
+  const volver = useVolver(`/historial/${id}`);
 
   async function descargar() {
     if (!ticket.current || !sesion.data) return;
@@ -100,8 +101,8 @@ export function TicketGrande() {
           unidadDistancia={(perfil?.unidad_distancia ?? 'km') as UnidadDistancia}
         />
         <div className={styles.acciones}>
-          <Boton variante="ghost" icono={ArrowLeft} onClick={volver}>
-            Volver a la sesión
+          <Boton variante="ghost" icono={ArrowLeft} onClick={volver.volver}>
+            {volver.larga}
           </Boton>
           <Boton variante="secondary" icono={copiado ? Check : Copy} cargando={ocupado === 'copiando'} disabled={ocupado !== null && ocupado !== 'copiando'} onClick={() => void copiar()}>
             {copiado ? 'Copiado' : 'Copiar imagen'}
