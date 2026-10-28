@@ -19,6 +19,7 @@
   backdrop-filter: var(--sheet-filter);
 }
 .arriba { top: auto; bottom: calc(100% + 6px); }
+.derecha { right: auto; left: 0; }
 
 .item {
   display: flex;

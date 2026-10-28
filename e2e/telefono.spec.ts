@@ -139,7 +139,7 @@ for (const [tema, nombre] of [
   test(`teléfono: el constructor bloqueado vuelve a la rutina en ${nombre}`, async ({ page }) => {
     await entrar(page, TELEFONO, tema, [SIN_EJERCICIOS]);
     await page.goto(`/rutinas/${EN_CURSO.id}`);
-    await page.getByRole('button', { name: 'Editar rutina' }).click();
+    await page.getByRole('button', { name: 'Editar', exact: true }).click();
     await expect(page).toHaveURL(new RegExp(`/rutinas/${EN_CURSO.id}/editar$`));
     await expect(page.getByRole('heading', { name: 'Armá tus rutinas en la app o en la compu' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'App Store' })).toBeDisabled();
@@ -165,4 +165,29 @@ test('tablet: riel, sin desborde y el constructor entero', async ({ page }) => {
   await page.goto('/rutinas/nueva');
   await expect(page.getByRole('heading', { name: 'Armá tus rutinas en la app o en la compu' })).toHaveCount(0);
   await page.screenshot({ path: 'capturas/tablet-constructor.png' });
+});
+
+test('teléfono: las acciones del detalle van en una fila y el menú no se sale', async ({ page }) => {
+  const archivada = { ...SIN_EJERCICIOS, id: FULL_BODY.id, name: 'Full body', archived_at: '2026-08-31T12:00:00Z' };
+  for (const [rutina, acciones] of [
+    [SIN_EJERCICIOS, ['Editar', 'Compartir · Muy pronto']],
+    [archivada, ['Poner en curso', 'Editar rutina', 'Compartir · Muy pronto']],
+  ] as const) {
+    const id = rutina.id;
+    // El detalle lee una sola rutina: la simulacion devuelve solo esa.
+    await entrar(page, TELEFONO, 'dark', [rutina]);
+    await page.goto(`/rutinas/${id}`);
+    const botones = [...acciones.map((a) => page.getByRole('button', { name: a, exact: true })), page.getByRole('button', { name: /^Más acciones/ })];
+    const cajas = await Promise.all(botones.map(async (b) => (await b.boundingBox())!));
+    // Misma fila, de izquierda a derecha, todo dentro de la pantalla.
+    expect(new Set(cajas.map((c) => Math.round(c.y + c.height / 2))).size).toBe(1);
+    expect(cajas.map((c) => c.x)).toEqual(cajas.map((c) => c.x).sort((a, b) => a - b));
+    expect(cajas.at(-1)!.x + cajas.at(-1)!.width).toBeLessThanOrEqual(TELEFONO.width);
+    await botones.at(-1)!.click();
+    const menu = (await page.getByRole('menu').boundingBox())!;
+    expect(menu.x).toBeGreaterThanOrEqual(0);
+    expect(menu.x + menu.width).toBeLessThanOrEqual(TELEFONO.width);
+    await page.screenshot({ path: `capturas/telefono-detalle-${id === EN_CURSO.id ? 'en-curso' : 'archivada'}.png` });
+    await page.keyboard.press('Escape');
+  }
 });

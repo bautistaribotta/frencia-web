@@ -1,0 +1,9 @@
+/* Logos de marcas (Logos.tsx). Los colores de Google Play son los de la
+   marca, pasados a oklch. */
+
+.logo { width: 18px; height: 18px; flex: none; }
+.apple path { fill: currentColor; }
+.playAzul { fill: oklch(70.5% 0.15 232); }
+.playVerde { fill: oklch(72.5% 0.19 150); }
+.playAmarillo { fill: oklch(85% 0.17 88); }
+.playRojo { fill: oklch(63% 0.22 25); }

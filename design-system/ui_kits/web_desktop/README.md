@@ -152,11 +152,14 @@ consulta** y lleva a la app; en la tablet se usa entera.
 - **Totales**: la grilla de cuatro pasa a dos columnas.
 - **Inicio**: una columna; los días de la rutina, de a uno. Esta semana pasa a una fila por
   día, con la fecha, el plan y el estado en línea.
-- **Menú ⋯**: si abajo no entra (por la barra), se abre hacia arriba.
+- **Menú ⋯**: si abajo no entra (por la barra), se abre hacia arriba; si hacia la izquierda
+  se sale de la pantalla (un ⋯ que quedó a la izquierda), se abre hacia la derecha.
 - **Configuración**: si el control de un ajuste no entra al lado del texto (el tema,
   Eliminar cuenta), baja debajo.
-- **Detalle de una rutina**: las acciones bajo el nombre y los días en una columna. Editar
-  rutina lleva al constructor bloqueado.
+- **Detalle de una rutina**: las acciones bajo el nombre, en una sola fila y en el mismo
+  orden, y los días en una columna. Para que entren: Editar rutina dice solo «Editar» y
+  Compartir es solo el icono. En una archivada, Poner en curso mantiene su texto y Editar
+  también pasa a ser solo el icono (lápiz). Editar lleva al constructor bloqueado.
 - **Detalle de una sesión**: el ticket va debajo de las series.
 - **Modales**: se vuelven hoja desde abajo, a lo ancho, con las esquinas de arriba
   redondeadas y el margen seguro de abajo. El orden de los botones no cambia.
@@ -167,7 +170,8 @@ consulta** y lleva a la app; en la tablet se usa entera.
   navegación, fondo `centro`, con el icono del celular, «Armá tus rutinas en la app o en
   la compu», una línea que explica que arrastrar ejercicios y ver los días lado a lado
   necesita una pantalla más grande, y los botones Volver (con memoria: dice a dónde
-  vuelve), App Store y Google Play. Sin las tiendas publicadas, los dos quedan
+  vuelve), App Store y Google Play, cada uno con el logo de su tienda (la manzana en tinta,
+  el triángulo de Google Play con sus cuatro colores). Sin las tiendas publicadas, los dos quedan
   desactivados y debajo dice «Las apps llegan pronto a las tiendas.».
 
 ### Tablet

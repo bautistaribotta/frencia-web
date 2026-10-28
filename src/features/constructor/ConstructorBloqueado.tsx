@@ -1,6 +1,7 @@
 /* Constructor bloqueado (kit web, .w-bloqueo): en el teléfono, en lugar del
    constructor, una pantalla sin navegacion sobre la luz del centro que
-   explica por que no se arma ahi y ofrece bajar la app o volver. Sin las
+   explica por que no se arma ahi y ofrece bajar la app (cada boton con el
+   logo de su tienda) o volver. Sin las
    tiendas publicadas, sus botones quedan desactivados con una nota. Arrastrar
    ejercicios y ver los dias lado a lado necesita una pantalla mas grande. */
 
@@ -10,6 +11,7 @@ import { useParams } from 'react-router';
 import { Boton } from '@/design/components/Boton';
 import { Fondo } from '@/design/components/Fondo';
 import { Icono } from '@/design/components/Icono';
+import { LogoApple, LogoGooglePlay } from '@/design/components/Logos';
 import texto from '@/design/texto.module.css';
 import { useEsTelefono } from '@/lib/tamano';
 import { TIENDAS, type Tienda } from '@/lib/tiendas';
@@ -61,10 +63,12 @@ function BotonTienda({ tienda }: { tienda: Tienda }) {
       ancho
       disabled={!enlace}
       title={enlace ? undefined : 'Todavía no está publicada'}
-      icono={Smartphone}
       onClick={() => window.location.assign(enlace)}
     >
-      {nombre}
+      <span className={styles.conLogo}>
+        {tienda === 'appStore' ? <LogoApple /> : <LogoGooglePlay />}
+        {nombre}
+      </span>
     </Boton>
   );
 }

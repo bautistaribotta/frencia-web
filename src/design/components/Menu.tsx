@@ -3,7 +3,8 @@
    elige y Esc o un clic afuera lo cierran y devuelven el foco al boton.
    Una opcion puede llevar una linea arriba (separada) y su atajo a la
    derecha (como Supr en Eliminar). Si abajo no entra (el fin de la ventana
-   o, en el teléfono, la barra inferior), se abre hacia arriba. */
+   o, en el teléfono, la barra inferior), se abre hacia arriba; si hacia la
+   izquierda se sale de la pantalla, se abre hacia la derecha. */
 
 import { Ellipsis, type LucideIcon } from 'lucide-react';
 import { Fragment, useEffect, useId, useLayoutEffect, useRef, useState, type KeyboardEvent } from 'react';
@@ -37,6 +38,7 @@ interface Props {
 export function Menu({ etiqueta, opciones, className = '', variante = 'ghost', tamano = 'sm' }: Props) {
   const [abierto, setAbierto] = useState(false);
   const [haciaArriba, setHaciaArriba] = useState(false);
+  const [haciaDerecha, setHaciaDerecha] = useState(false);
   const caja = useRef<HTMLDivElement>(null);
   const menu = useRef<HTMLDivElement>(null);
   const id = useId();
@@ -55,6 +57,9 @@ export function Menu({ etiqueta, opciones, className = '', variante = 'ghost', t
     const alto = menu.current.offsetHeight + 6;
     const ancla = caja.current.getBoundingClientRect();
     setHaciaArriba(ancla.bottom + alto > piso && ancla.top - alto >= 0);
+    // Se alinea al borde derecho del boton; si asi se sale por la izquierda,
+    // al izquierdo.
+    setHaciaDerecha(ancla.right - menu.current.offsetWidth < 0);
   }, [abierto]);
 
   useEffect(() => {
@@ -95,7 +100,7 @@ export function Menu({ etiqueta, opciones, className = '', variante = 'ghost', t
         onClick={() => setAbierto((a) => !a)}
       />
       {abierto ? (
-        <div ref={menu} id={id} role="menu" aria-label={etiqueta} className={`${styles.menu} ${haciaArriba ? styles.arriba : ''}`}>
+        <div ref={menu} id={id} role="menu" aria-label={etiqueta} className={`${styles.menu} ${haciaArriba ? styles.arriba : ''} ${haciaDerecha ? styles.derecha : ''}`}>
           {opciones.map((o) => (
             <Fragment key={o.etiqueta}>
               {o.separada ? <div role="separator" className={styles.separador} /> : null}

@@ -14,6 +14,7 @@ import { useState, type ReactNode } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
 import { Boton } from '@/design/components/Boton';
+import { BotonIcono } from '@/design/components/BotonIcono';
 import { Menu } from '@/design/components/Menu';
 import { Resumen, Tipo } from '@/design/components/datos';
 import { Fondo } from '@/design/components/Fondo';
@@ -22,6 +23,7 @@ import { Esqueleto, Insignia, Tarjeta, TiraSemana } from '@/design/components/va
 import texto from '@/design/texto.module.css';
 import type { UnidadDistancia } from '@/lib/distancia';
 import { usePerfil } from '@/lib/perfil';
+import { useEsTelefono } from '@/lib/tamano';
 import type { UnidadPeso } from '@/lib/peso';
 import { cargarRutina, cuentaRutina, fechaCorta, resumenEjercicio, type DiaDetalle, type RutinaDetalle } from '@/lib/rutinas';
 import { useVolver } from '@/lib/volver';
@@ -69,6 +71,10 @@ function Contenido({ rutina }: { rutina: RutinaDetalle }) {
   const copia = useDuplicarRutina();
   const [activando, setActivando] = useState(false);
   const [eliminando, setEliminando] = useState(false);
+  // En el teléfono las acciones van en una fila: Editar corto y Compartir
+  // (y en una archivada, Editar) solo con el icono.
+  const telefono = useEsTelefono();
+  const editar = () => navegar(`/rutinas/${rutina.id}/editar`);
   async function activar() {
     setActivando(true);
     await ponerEnCurso(rutina);
@@ -87,22 +93,30 @@ function Contenido({ rutina }: { rutina: RutinaDetalle }) {
         </div>
         <div className={styles.acciones}>
           {rutina.activa ? (
-            <Boton icono={Pencil} onClick={() => navegar(`/rutinas/${rutina.id}/editar`)}>
-              Editar rutina
+            <Boton icono={Pencil} onClick={editar}>
+              {telefono ? 'Editar' : 'Editar rutina'}
             </Boton>
           ) : (
             <>
               <Boton icono={Play} cargando={activando} onClick={() => void activar()}>
                 Poner en curso
               </Boton>
-              <Boton variante="secondary" icono={Pencil} onClick={() => navegar(`/rutinas/${rutina.id}/editar`)}>
-                Editar rutina
-              </Boton>
+              {telefono ? (
+                <BotonIcono icono={Pencil} variante="surface" etiqueta="Editar rutina" onClick={editar} />
+              ) : (
+                <Boton variante="secondary" icono={Pencil} onClick={editar}>
+                  Editar rutina
+                </Boton>
+              )}
             </>
           )}
-          <Boton variante="secondary" icono={Share} disabled title={PRONTO}>
-            Compartir
-          </Boton>
+          {telefono ? (
+            <BotonIcono icono={Share} variante="surface" etiqueta={`Compartir · ${PRONTO}`} disabled />
+          ) : (
+            <Boton variante="secondary" icono={Share} disabled title={PRONTO}>
+              Compartir
+            </Boton>
+          )}
           <Menu
             etiqueta={`Más acciones de ${rutina.name}`}
             variante="surface"

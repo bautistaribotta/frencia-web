@@ -103,6 +103,42 @@ function HistorialTelefono({ hoja }) {
     </Telefono>
   );
 }
+function DetalleTelefono({ archivada, menu }) {
+  return (
+    <Telefono activo="routines">
+      <div className="w-migas"><Boton v="ghost" t="sm" ico="chevron-left">Rutinas</Boton></div>
+      <div className="w-encabezado">
+        <div className="w-encabezado__textos">
+          <div className="row g3">{archivada ? <Badge>Archivada</Badge> : <Badge tono="signal">En curso</Badge>}</div>
+          <span className="w-nombre-rutina w-nombre-rutina--movil">{archivada ? 'Fuerza 4 días' : 'Push Pull Legs'}</span>
+          <span className="t-data c-sec">{archivada ? '4 días · 22 ejercicios · archivada el 12 MAY 2026' : '3 días · 18 ejercicios · creada el 29 JUL 2026'}</span>
+        </div>
+        <div className="row g3">
+          {archivada ? <><Boton ico="play">Poner en curso</Boton><BotonIco ico="pencil" v="surface" label="Editar rutina" /></> : <Boton ico="pencil">Editar</Boton>}
+          <BotonIco ico="share" v="surface" estado="off" label="Compartir" />
+          <span className="w-ancla">
+            <BotonIco ico="ellipsis" v="surface" label="Más acciones" />
+            {menu ? <Menu className="w-menu--abajo"><MenuItem ico="copy">Duplicar</MenuItem><MenuItem ico="trash-2" dang>Eliminar</MenuItem></Menu> : null}
+          </span>
+        </div>
+      </div>
+    </Telefono>
+  );
+}
+const APPLE_D = 'M16.37 12.6c-.02-2.2 1.8-3.26 1.88-3.31-1.03-1.5-2.62-1.7-3.18-1.73-1.35-.14-2.65.8-3.33.8-.7 0-1.75-.78-2.88-.76-1.48.02-2.85.86-3.61 2.19-1.54 2.67-.39 6.62 1.1 8.79.74 1.06 1.61 2.25 2.75 2.21 1.11-.05 1.53-.71 2.86-.71 1.33 0 1.71.71 2.88.69 1.19-.02 1.94-1.08 2.66-2.15.85-1.23 1.19-2.43 1.21-2.49-.03-.01-2.31-.89-2.34-3.53zM14.19 6.14c.6-.74 1.01-1.75.9-2.77-.87.04-1.94.59-2.56 1.32-.55.64-1.05 1.69-.92 2.68.98.08 1.97-.49 2.58-1.23z';
+function LogoApple() {
+  return <svg className="w-logo w-logo--apple" viewBox="0 0 24 24" aria-hidden="true"><path d={APPLE_D} /></svg>;
+}
+function LogoGooglePlay() {
+  return (
+    <svg className="w-logo" viewBox="0 0 24 24" aria-hidden="true">
+      <path className="w-logo__play-azul" d="M3.6 1.8 13.8 12 3.6 22.2c-.4-.2-.6-.6-.6-1.1V2.9c0-.5.2-.9.6-1.1z" />
+      <path className="w-logo__play-verde" d="M3.6 1.8 13.8 12l3-3L5.2 2c-.6-.4-1.2-.4-1.6-.2z" />
+      <path className="w-logo__play-rojo" d="M3.6 22.2 13.8 12l3 3-11.6 7c-.6.4-1.2.4-1.6.2z" />
+      <path className="w-logo__play-amarillo" d="m16.8 9 3.6 2.1c.7.4.7 1.4 0 1.8L16.8 15l-3-3z" />
+    </svg>
+  );
+}
 function ConstructorBloqueado() {
   return (
     <div className="w-app w-app--sin-nav w-app--telefono">
@@ -112,7 +148,7 @@ function ConstructorBloqueado() {
           <span className="t-title">Armá tus rutinas en la app o en la compu</span>
           <span className="t-bodysm c-sec">Arrastrar ejercicios y ver los días lado a lado necesita una pantalla más grande.</span>
           <div className="w-bloqueo__acciones">
-            <div className="w-bloqueo__tiendas"><Boton v="secondary" ico="smartphone">App Store</Boton><Boton v="secondary" ico="smartphone">Google Play</Boton></div>
+            <div className="w-bloqueo__tiendas"><Boton v="secondary"><LogoApple />App Store</Boton><Boton v="secondary"><LogoGooglePlay />Google Play</Boton></div>
             <span className="t-bodysm c-ter">Las apps llegan pronto a las tiendas.</span>
             <Boton v="ghost" ico="chevron-left">Volver a la rutina</Boton>
           </div>
@@ -157,6 +193,8 @@ function AppWeb() {
         <Mesa nombre="Rutinas" movil ancho={390} alto={844} nota="En curso con los días debajo del nombre; la tabla de anteriores se queda con Rutina, Sesiones y ⋯." ruta="(main)/routines · teléfono" url="frencia.app/rutinas"><RutinasTelefono /></Mesa>
         <Mesa nombre="Historial" movil ancho={390} alto={844} nota="Totales en dos columnas; la tabla, con Fecha, Día, Series y la papelera." ruta="(main)/history · teléfono" fondo="velada" url="frencia.app/historial"><HistorialTelefono /></Mesa>
         <Mesa nombre="Modal como hoja" movil ancho={390} alto={844} nota="Los modales suben desde abajo, a lo ancho. El orden de los botones no cambia." ruta="(main)/history · alerta" fondo="velada" url="frencia.app/historial"><HistorialTelefono hoja /></Mesa>
+        <Mesa nombre="Detalle de una rutina" movil ancho={390} alto={844} nota="Las acciones en una fila: Editar (sin «rutina»), Compartir solo con el icono y el ⋯ a la derecha, con su menú hacia abajo y alineado a su borde derecho, dentro de la pantalla." ruta="routine · teléfono" fondo="cumbre" url="frencia.app/rutinas/push-pull-legs"><DetalleTelefono menu /></Mesa>
+        <Mesa nombre="Detalle de una archivada" movil ancho={390} alto={844} nota="Poner en curso conserva su texto; Editar pasa a ser solo el lápiz para que la fila entre." ruta="routine · teléfono" fondo="cumbre" url="frencia.app/rutinas/fuerza-4-dias"><DetalleTelefono archivada /></Mesa>
         <Mesa nombre="Constructor bloqueado" movil ancho={390} alto={844} nota="Nueva rutina y Editar rutina llegan acá. Volver tiene memoria; sin las tiendas publicadas, App Store y Google Play quedan desactivados con una nota debajo." ruta="/rutinas/:id/editar · teléfono" fondo="centro" url="frencia.app/rutinas/push-pull-legs/editar"><ConstructorBloqueado /></Mesa>
       </Seccion>
       <Seccion titulo="Teclado" nota="Todo lo que se hace con el mouse se puede hacer con el teclado. El foco visible es siempre el mismo anillo de 2 px en focus-ring (lume / oliva) con 2 px de separación.">

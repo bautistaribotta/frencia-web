@@ -65,7 +65,6 @@
 .enlaceBoton { padding: 0; border: 0; background: transparent; font: inherit; cursor: pointer; }
 
 .logo { width: 18px; height: 18px; flex: none; }
-.logoApple path { fill: currentColor; }
 .googleAzul { fill: oklch(63.04% 0.18 260); }
 .googleVerde { fill: oklch(64.75% 0.1603 148.5); }
 .googleAmarillo { fill: oklch(83.04% 0.1698 84); }
