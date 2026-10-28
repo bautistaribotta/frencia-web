@@ -275,6 +275,24 @@ function Setup({ paso, unidad }) {
   );
 }
 
+/* Cuenta con la baja pedida: la única pantalla mientras dura el período de gracia */
+function CuentaEnBaja({ recuperando }) {
+  return (
+    <div className="w-centrada">
+      <div className="w-tarjeta w-centrada__caja col g7">
+        <Marca />
+        <span className="w-sello-ico"><Ico n="life-buoy" s={26} /></span>
+        <div className="col g3"><span className="t-label c-ter">Cuenta en baja</span><span className="t-display">Tu cuenta se elimina el 26 de noviembre de 2026</span><span className="t-bodysm c-sec">Pediste eliminar tu cuenta y la solicitud sigue vigente. Si la recuperás ahora, todo queda como lo dejaste: rutinas, sesiones e historial.</span></div>
+        <div className="row g3"><Badge tono="danger">Se elimina en 30 días</Badge></div>
+        <div className="row entre g4">
+          <Boton v="ghost" t="sm" ico="log-out" estado={recuperando ? 'off' : undefined}>Cerrar sesión</Boton>
+          <Boton t="lg" ico={recuperando ? undefined : 'rotate-ccw'} estado={recuperando ? 'cargando' : 'foco'}>{recuperando ? 'Recuperando…' : 'Recuperar cuenta'}</Boton>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function EstadosFlotante() {
   const est_ = [
     ['Vacío', <Campo flotante rotulo="Correo electrónico" ico="mail" />],
@@ -338,6 +356,10 @@ function AppWeb() {
         <Mesa nombre="Paso 2 · Fecha de nacimiento" nota="Reemplaza la rueda de edad: la cuenta guarda fecha_nacimiento." ruta="setup" fondo="centro" animado url="frencia.app/bienvenida/perfil"><Setup paso={1} /></Mesa>
         <Mesa nombre="Paso 3 · Altura" ruta="setup" fondo="centro" animado url="frencia.app/bienvenida/perfil"><Setup paso={2} /></Mesa>
         <Mesa nombre="Paso 4 · Peso" ruta="setup" fondo="centro" animado url="frencia.app/bienvenida/perfil"><Setup paso={3} /></Mesa>
+      </Seccion>
+      <Seccion titulo="Cuenta con la baja pedida" nota="account-recovery — mientras dura el período de gracia es la única pantalla, se entre por donde se entre. Misma tarjeta centrada que los términos: Cerrar sesión a la izquierda y Recuperar cuenta a la derecha, con el foco. Al recuperar, la cuenta queda como estaba y sigue el ingreso normal (términos y setup, si faltan).">
+        <Mesa nombre="Recuperar la cuenta" ruta="account-recovery" fondo="cumbre" animado url="frencia.app/cuenta-en-baja"><CuentaEnBaja /></Mesa>
+        <Mesa nombre="Recuperando" ruta="account-recovery" fondo="cumbre" animado url="frencia.app/cuenta-en-baja"><CuentaEnBaja recuperando /></Mesa>
       </Seccion>
     </Lienzo>
   );

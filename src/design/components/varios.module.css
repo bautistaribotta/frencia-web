@@ -57,6 +57,7 @@
 }
 .signal { border-color: var(--surface-signal-line); color: var(--signal-text); background: var(--surface-signal-soft); }
 .intensity { border-color: var(--surface-intensity-line); color: var(--intensity-text); background: var(--surface-intensity-soft); }
+.danger { border-color: var(--danger); color: var(--danger-text); }
 
 .semana { display: flex; gap: 4px; }
 .semana span {
@@ -138,3 +139,9 @@
 .casilla:hover .casillaCaja { border-color: var(--text-primary); }
 .casillaNativa:checked + .casillaCaja { background: var(--accent); border-color: var(--accent); }
 .casillaNativa:focus-visible + .casillaCaja { outline: var(--foco-w) solid var(--focus-ring); outline-offset: var(--foco-offset); }
+
+/* Avance de un paso a paso (kit web, .w-escala). */
+.escala { display: flex; gap: 4px; }
+.escala span { flex: 1; height: 3px; border-radius: 2px; background: var(--data-track); }
+.escala .escalaHecha { background: var(--text-primary); }
+.escala .escalaActual { background: var(--signal); box-shadow: var(--halo-signal); }

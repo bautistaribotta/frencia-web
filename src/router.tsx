@@ -9,8 +9,9 @@
    la app en el lugar de la pagina, con la navegacion; afuera, en la raiz.
    - /recuperar: con las de invitado. /nueva-contrasena, afuera de las
      puertas: el enlace del correo llega con una sesion de recuperacion.
-   Las demas rutas del kit (bienvenida, ticket y /r/:codigo) y las fases de
-   legal y setup se suman en las etapas siguientes. */
+   - /cuenta-en-baja, /bienvenida y /bienvenida/perfil: las fases de la
+     cuenta, con sesion pero sin la navegacion; ConSesion decide cual.
+   Falta del kit /r/:codigo, la rutina compartida. */
 
 import { createBrowserRouter, Navigate } from 'react-router';
 
@@ -19,6 +20,9 @@ import { NuevaContrasena } from '@/features/auth/NuevaContrasena';
 import { Recuperar } from '@/features/auth/Recuperar';
 import { Signup } from '@/features/auth/Signup';
 import { Configuracion } from '@/features/configuracion/Configuracion';
+import { Consentimiento } from '@/features/bienvenida/Consentimiento';
+import { CuentaEnBaja } from '@/features/bienvenida/CuentaEnBaja';
+import { Setup } from '@/features/bienvenida/Setup';
 import { Constructor } from '@/features/constructor/Constructor';
 import { ErrorRuta } from '@/features/errores/ErrorRuta';
 import { NoEncontrada } from '@/features/errores/NoEncontrada';
@@ -49,6 +53,9 @@ export const router = createBrowserRouter([
       {
         element: <ConSesion />,
         children: [
+          { path: '/cuenta-en-baja', element: <CuentaEnBaja /> },
+          { path: '/bienvenida', element: <Consentimiento /> },
+          { path: '/bienvenida/perfil', element: <Setup /> },
           { path: '/rutinas/nueva', element: <Constructor /> },
           { path: '/rutinas/:id/editar', element: <Constructor /> },
           {

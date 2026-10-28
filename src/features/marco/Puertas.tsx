@@ -5,13 +5,26 @@
      ruta pedida.
    Mientras se resuelve la sesion inicial no se muestra nada: asi no parpadea
    el login cuando ya habia sesion guardada.
-   Pendiente: las fases de la app que van entre las dos (textos legales sin
-   aceptar, setup incompleto, cuenta con baja pedida) llegan con sus
-   pantallas. */
+   - Con sesion, antes de la app, el perfil decide la fase (README del kit,
+     "Fases de la cuenta"): la baja pedida lleva a /cuenta-en-baja, los
+     textos legales sin aceptar a /bienvenida y el setup sin terminar a
+     /bienvenida/perfil, recordando a donde se queria ir. Mientras se lee el
+     perfil no se muestra nada; si no se puede leer, la pantalla de sin
+     conexion (nunca el setup: una lectura fallida no es una cuenta nueva). */
 
 import { Navigate, Outlet, useLocation } from 'react-router';
 
 import { useSesion } from '@/contexts/sesion';
+import { PantallaError } from '@/features/errores/PantallaError';
+import { faseCuenta, usePerfil, type FaseCuenta } from '@/lib/perfil';
+
+/** La pantalla de cada fase antes de la app. */
+const RUTA_FASE: Record<Exclude<FaseCuenta, 'adentro'>, string> = {
+  baja: '/cuenta-en-baja',
+  legal: '/bienvenida',
+  setup: '/bienvenida/perfil',
+};
+const RUTAS_FASE = Object.values(RUTA_FASE);
 
 interface EstadoDesde {
   desde?: string;
@@ -34,5 +47,26 @@ export function ConSesion() {
     const desde = pathname === '/' || salio ? undefined : pathname + search;
     return <Navigate to="/login" replace state={{ desde }} />;
   }
+  return <FasesCuenta />;
+}
+
+function FasesCuenta() {
+  const perfil = usePerfil();
+  const { pathname, search, state } = useLocation();
+  if (perfil.isPending) return null;
+  if (perfil.isError) return <PantallaError tipo="red" />;
+
+  const fase = faseCuenta(perfil.data);
+  const enFase = RUTAS_FASE.includes(pathname);
+  // Lo que se pidio antes de la fase, para volver ahi al terminar.
+  const desde = (state as { desde?: string } | null)?.desde ?? (enFase || pathname === '/' ? undefined : pathname + search);
+
+  if (fase !== 'adentro') {
+    const destino = RUTA_FASE[fase];
+    if (pathname !== destino) return <Navigate to={destino} replace state={{ desde }} />;
+    return <Outlet />;
+  }
+  // Adentro, las pantallas de las fases ya no tienen nada que hacer.
+  if (enFase) return <Navigate to={desde ?? '/'} replace />;
   return <Outlet />;
 }

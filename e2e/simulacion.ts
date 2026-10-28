@@ -7,9 +7,18 @@ import { readFile } from 'node:fs/promises';
 import { resolve, basename } from 'node:path';
 
 import type { Tables } from '../src/lib/database.types';
+import { PRIVACIDAD_VERSION } from '../src/lib/privacidad';
+import { TERMINOS_VERSION } from '../src/lib/terminos';
 
-/** Las columnas de profiles que lee la app (src/lib/perfil.ts). */
-type Perfil = Partial<Tables<'profiles'>>;
+/** Las columnas de profiles que lee la app (src/lib/perfil.ts), con la
+ *  ultima aceptacion de los textos legales. */
+export type Perfil = Partial<Tables<'profiles'>> & {
+  aceptaciones_legales?: { version_terminos: string; version_privacidad: string }[];
+};
+
+/** La cuenta ya adentro: textos vigentes aceptados, setup terminado y sin
+ *  baja pedida. Las pruebas de las fases parten de aca. */
+export const ACEPTACION_VIGENTE = [{ version_terminos: TERMINOS_VERSION, version_privacidad: PRIVACIDAD_VERSION }];
 
 // supabase-js guarda la sesion en sb-<id del proyecto>-auth-token.
 const CLAVE_SESION = 'sb-dcxtqxdfkbqphuoyibyt-auth-token';
@@ -34,6 +43,9 @@ export const PERFIL: Perfil = {
   unidad_distancia: 'km',
   tema: 'sistema',
   created_at: '2026-06-10T12:00:00Z',
+  deletion_requested_at: null,
+  onboarding_completed: true,
+  aceptaciones_legales: ACEPTACION_VIGENTE,
 };
 
 /** Entra con una sesion falsa y responde los pedidos a Supabase: el perfil

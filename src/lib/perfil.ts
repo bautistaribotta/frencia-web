@@ -9,7 +9,9 @@ import { useCallback, useEffect } from 'react';
 import { useSesion } from '@/contexts/sesion';
 import { aplicarPreferencia, preferenciaDePerfil } from '@/design/tema';
 import type { Tables, TablesUpdate } from './database.types';
+import { PRIVACIDAD_VERSION } from './privacidad';
 import { supabase } from './supabase';
+import { TERMINOS_VERSION } from './terminos';
 
 export type Perfil = Pick<
   Tables<'profiles'>,
@@ -27,10 +29,15 @@ export type Perfil = Pick<
   | 'unidad_distancia'
   | 'tema'
   | 'created_at'
->;
+  | 'deletion_requested_at'
+  | 'onboarding_completed'
+> & {
+  /** La ultima aceptacion de los textos legales (como mucho una). */
+  aceptaciones_legales: Pick<Tables<'aceptaciones_legales'>, 'version_terminos' | 'version_privacidad'>[];
+};
 
 const COLUMNAS =
-  'name, surname, avatar_path, avatar_seed, sexo, fecha_nacimiento, altura, peso, medidor_esfuerzo, unidad_peso, unidad_altura, unidad_distancia, tema, created_at';
+  'name, surname, avatar_path, avatar_seed, sexo, fecha_nacimiento, altura, peso, medidor_esfuerzo, unidad_peso, unidad_altura, unidad_distancia, tema, created_at, deletion_requested_at, onboarding_completed, aceptaciones_legales(version_terminos, version_privacidad)';
 
 /** Lo que Configuracion puede cambiar sin pasar por Editar perfil. */
 export type CambioPreferencias = Pick<
@@ -41,9 +48,29 @@ export type CambioPreferencias = Pick<
 const clave = (userId: string | undefined) => ['perfil', userId];
 
 async function cargarPerfil(userId: string): Promise<Perfil | null> {
-  const { data, error } = await supabase.from('profiles').select(COLUMNAS).eq('id', userId).maybeSingle();
+  const { data, error } = await supabase
+    .from('profiles')
+    .select(COLUMNAS)
+    .eq('id', userId)
+    // De las aceptaciones solo importa la ultima.
+    .order('aceptada_el', { referencedTable: 'aceptaciones_legales', ascending: false })
+    .limit(1, { referencedTable: 'aceptaciones_legales' })
+    .maybeSingle();
   if (error) throw error;
   return data;
+}
+
+/** Fase de la cuenta antes de la app, en el orden del gate de la app movil
+ *  (README del kit, "Fases de la cuenta"). Sin fila de perfil es un primer
+ *  ingreso: faltan los textos legales y el setup. */
+export type FaseCuenta = 'baja' | 'legal' | 'setup' | 'adentro';
+
+export function faseCuenta(perfil: Perfil | null): FaseCuenta {
+  if (perfil?.deletion_requested_at) return 'baja';
+  const ultima = perfil?.aceptaciones_legales?.[0];
+  if (ultima?.version_terminos !== TERMINOS_VERSION || ultima.version_privacidad !== PRIVACIDAD_VERSION) return 'legal';
+  if (!perfil?.onboarding_completed) return 'setup';
+  return 'adentro';
 }
 
 export function usePerfil() {

@@ -1,0 +1,83 @@
+/* Regla y arco del setup (kit web, .w-regla, .w-arco, .w-regla__ayuda). */
+
+.regla { display: flex; flex-direction: column; align-items: center; gap: var(--space-5); width: 100%; }
+
+.lectura {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  padding: 0 var(--space-3);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: inherit;
+  cursor: text;
+}
+.lectura:hover { background: var(--surface-chip); }
+.lectura:focus-visible { outline: var(--foco-w) solid var(--focus-ring); outline-offset: var(--foco-offset); }
+.edita { background: var(--surface-card-elevated); box-shadow: 0 0 0 1px var(--signal), var(--halo-signal); }
+
+.numero {
+  font: var(--fw-medium) 72px/1 var(--font-sans);
+  font-variation-settings: var(--vs-condensed);
+  letter-spacing: -0.035em;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+input.numero { width: auto; padding: 0; border: 0; background: transparent; outline: none; text-align: center; }
+.unidad { font: var(--fw-medium) 20px/1 var(--font-sans); color: var(--text-primary); }
+
+.pista {
+  position: relative;
+  width: 100%;
+  height: 76px;
+  border-radius: var(--radius-lg);
+  cursor: ew-resize;
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+  background: var(--surface-card);
+  border: 1px solid var(--glass-line);
+  box-shadow: var(--shadow-glass);
+}
+.pista:hover { border-color: var(--border-default); }
+.pista:focus-visible { outline: none; border-color: var(--signal); box-shadow: var(--shadow-glass), 0 0 0 1px var(--signal); }
+
+.marcas { position: absolute; inset: 10px 0 auto; display: flex; justify-content: space-between; padding: 0 2px; }
+.marcas span { width: 1px; height: 12px; background: var(--data-tick); }
+.marcas .m { height: 18px; }
+.marcas .M { height: 28px; background: var(--text-tertiary); }
+
+.numeros { position: absolute; left: 0; right: 0; bottom: 10px; height: 14px; }
+.numeros span {
+  position: absolute;
+  transform: translateX(-50%);
+  font: var(--fw-medium) 12px/1 var(--font-sans);
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.aguja { position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: var(--signal); box-shadow: var(--halo-signal); }
+.aguja::before { content: ''; position: absolute; top: 0; left: -5px; border: 6px solid transparent; border-top-color: var(--signal); }
+
+.arco {
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  cursor: ew-resize;
+  touch-action: none;
+  user-select: none;
+  border-radius: var(--radius-lg);
+}
+.arco:focus-visible { outline: var(--foco-w) solid var(--focus-ring); outline-offset: var(--foco-offset); }
+.arco svg { flex: none; }
+.banda { fill: var(--surface-card); stroke: var(--glass-line); }
+.tick { stroke: var(--data-tick); stroke-width: 1; }
+.tickM { stroke: var(--text-tertiary); stroke-width: 1.25; }
+.num { fill: var(--text-tertiary); font: var(--fw-medium) 12px var(--font-sans); }
+.agujaArco { stroke: var(--signal); stroke-width: 2; }
+.punta { fill: var(--signal); }
+
+.ayuda { display: flex; gap: var(--space-5); align-items: center; flex-wrap: wrap; justify-content: center; }
+.ayuda span { display: inline-flex; gap: var(--space-2); align-items: center; font: var(--text-body-sm); color: var(--text-tertiary); }

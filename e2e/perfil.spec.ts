@@ -19,13 +19,14 @@ for (const [tema, nombre] of [
   });
 }
 
-test('perfil cargando', async ({ page }) => {
+test('perfil cargando: la puerta espera al perfil para decidir la fase', async ({ page }) => {
   await page.emulateMedia({ colorScheme: 'dark', reducedMotion: 'reduce' });
-  await conSesion(page, { demoraPerfil: 60_000 });
+  await conSesion(page, { demoraPerfil: 1500 });
   await page.goto('/perfil');
-  await expect(page.getByText('Sexo')).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Bautista Ribotta' })).toHaveCount(0);
-  await page.screenshot({ path: 'capturas/perfil-cargando.png' });
+  // Hasta leer el perfil no se sabe si faltan los terminos o el setup: no se
+  // muestra nada, ni la navegacion.
+  await expect(page.getByRole('navigation', { name: 'Principal' })).toHaveCount(0);
+  await expect(page.getByRole('heading', { name: 'Bautista Ribotta' })).toBeVisible();
 });
 
 test('perfil en pies y libras', async ({ page }) => {

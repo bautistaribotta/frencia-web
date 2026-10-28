@@ -24,6 +24,18 @@ export function Tarjeta({ elevada = false, className = '', ...resto }: PropsTarj
   return <div {...resto} className={`${styles.tarjeta} ${elevada ? styles.tarjetaElevada : ''} ${className}`} />;
 }
 
+/** Avance de un paso a paso (kit web, .w-escala): lo hecho en tinta, el
+ *  paso actual en lume. */
+export function Escala({ total, actual }: { total: number; actual: number }) {
+  return (
+    <div className={styles.escala} role="progressbar" aria-valuemin={1} aria-valuemax={total} aria-valuenow={actual + 1} aria-label={`Paso ${actual + 1} de ${total}`}>
+      {Array.from({ length: total }, (_, i) => (
+        <span key={i} className={i < actual ? styles.escalaHecha : i === actual ? styles.escalaActual : ''} />
+      ))}
+    </div>
+  );
+}
+
 export function Kbd({ children }: { children: ReactNode }) {
   return <kbd className={styles.kbd}>{children}</kbd>;
 }
@@ -43,7 +55,7 @@ export function Insignia({
   icono,
   children,
 }: {
-  tono?: 'signal' | 'intensity';
+  tono?: 'signal' | 'intensity' | 'danger';
   icono?: LucideIcon;
   children: ReactNode;
 }) {

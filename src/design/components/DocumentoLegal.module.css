@@ -30,3 +30,8 @@
   height: 1px;
   background: var(--text-tertiary);
 }
+
+/* Barra de lectura del gate de aceptacion (.w-progreso-lectura). */
+.progreso { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); }
+.barra { flex: 1; height: 3px; border-radius: 2px; background: var(--data-track); overflow: hidden; }
+.barra span { display: block; height: 100%; background: var(--signal); box-shadow: var(--halo-signal); transform-origin: left; transition: transform var(--dur-fast) var(--ease-out); }

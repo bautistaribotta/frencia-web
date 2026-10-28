@@ -57,6 +57,7 @@ cinco posiciones y la regla de lectura son las de la app.
 | Ruta (React Router) | Pantalla | Fondo |
 |---|---|---|
 | `/login`, `/signup`, `/recuperar`, `/nueva-contrasena` | Acceso | `flanco` · anima |
+| `/cuenta-en-baja` | Cuenta con la baja pedida | `cumbre` · anima |
 | `/bienvenida` | Términos y privacidad | `cumbre` · anima |
 | `/bienvenida/perfil` | Setup: sexo | `cumbre` · anima |
 | `/bienvenida/perfil` | Setup: fecha, altura, peso | `centro` · anima (fundido de 420 ms entre pasos) |
@@ -274,6 +275,26 @@ solo del kit y se reemplazan por las pseudoclases.
 - Reducir transparencia no está en `profiles`: se guarda en el navegador.
 - El límite de 5 rutinas todavía no está en la base: hoy lo cuida la web. La regla en
   la base va en una migración del repo de la app móvil.
+
+## Fases de la cuenta
+
+Con sesión, antes de la app, el perfil decide la pantalla, en este orden (como el gate de
+la app móvil):
+
+1. **Leyendo el perfil:** nada, para no parpadear.
+2. **No se pudo leer:** la pantalla de sin conexión con Reintentar. Nunca el setup: una
+   lectura fallida no es una cuenta nueva.
+3. **Baja pedida** (`deletion_requested_at`): `/cuenta-en-baja`, la única pantalla. Recuperar
+   cuenta cancela la solicitud (`cancelar_eliminacion_cuenta`) y sigue el ingreso normal;
+   Cerrar sesión vuelve al login.
+4. **Términos sin aceptar** (la última aceptación no es de las versiones vigentes):
+   `/bienvenida`. Cada documento se abre en el modal de lectura y se marca leído al llegar
+   al final; Aceptar y continuar registra la aceptación (`registrar_aceptacion_legal`).
+5. **Setup sin terminar** (`onboarding_completed` en falso): `/bienvenida/perfil` al entrar.
+   Saltar deja el dato vacío y avanza; Finalizar guarda lo cargado y las unidades y marca el
+   setup como terminado, aunque se hayan saltado datos. No se fuerza más que esa vez: si se
+   sale a mitad, vuelve en el próximo ingreso.
+6. **Adentro:** la app.
 
 ## Recuperar la contraseña
 
