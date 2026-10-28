@@ -181,7 +181,10 @@ test('detalle de una archivada: editar y poner en curso', async ({ page }) => {
   const editar = page.getByRole('button', { name: 'Editar rutina' });
   const poner = page.getByRole('button', { name: 'Poner en curso' });
   await expect(editar).toBeEnabled();
-  expect((await editar.boundingBox())!.x).toBeLessThan((await poner.boundingBox())!.x);
+  // Poner en curso · Editar rutina · Compartir · ⋯, de izquierda a derecha.
+  const orden = [poner, editar, page.getByRole('button', { name: 'Compartir' }), page.getByRole('button', { name: /^Más acciones/ })];
+  const xs = await Promise.all(orden.map(async (b) => (await b.boundingBox())!.x));
+  expect(xs).toEqual([...xs].sort((a, b) => a - b));
   await page.screenshot({ path: 'capturas/rutina-archivada.png' });
   await poner.click();
   await expect(page.getByText('Full body está en curso')).toBeVisible();

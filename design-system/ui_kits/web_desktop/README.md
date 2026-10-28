@@ -368,8 +368,10 @@ la app móvil):
   - Eliminar (carmín, `Supr` sobre la fila enfocada): pide confirmar en el modal
     chico; Cancelar a la izquierda con el foco inicial y Eliminar a la derecha. Se
     borra la rutina con sus días y ejercicios; las sesiones del historial quedan.
-- **Detalle de una archivada:** Compartir · Editar rutina (secundario) · Poner en
-  curso (principal) · ⋯.
+- **Acciones del detalle:** de izquierda a derecha, de la más importante a la menos, y
+  el ⋯ siempre a la derecha del todo. En curso: Editar rutina (principal) · Compartir ·
+  ⋯. Archivada: Poner en curso (principal) · Editar rutina (secundario) · Compartir ·
+  ⋯.
 - **Menú ⋯ del detalle** (en vidrio, mediano): Duplicar y Eliminar. Al eliminar vuelve a
   Rutinas.
 

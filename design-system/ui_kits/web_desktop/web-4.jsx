@@ -156,8 +156,8 @@ function Detalle({ archivada, capa }) {
             <span className="t-data c-sec">{archivada ? '4 días · 22 ejercicios · 38 sesiones · archivada el 12 MAY 2026' : '3 días · 18 ejercicios · 24 sesiones · creada el 29 JUL 2026'}</span>
           </div>
           <div className="row g3">
+            {archivada ? <><Boton ico="play">Poner en curso</Boton><Boton v="secondary" ico="pencil" anima>Editar rutina</Boton></> : <Boton ico="pencil" anima>Editar rutina</Boton>}
             <Boton v="secondary" ico="share" anima>Compartir</Boton>
-            {archivada ? <><Boton v="secondary" ico="pencil" anima>Editar rutina</Boton><Boton ico="play">Poner en curso</Boton></> : <Boton ico="pencil" anima>Editar rutina</Boton>}
             <BotonIco ico="ellipsis" v="surface" label="Más acciones" />
           </div>
         </div>
@@ -215,7 +215,7 @@ function AppWeb() {
       </Seccion>
       <Seccion titulo="Detalle de una rutina" nota="routine — los días en columnas, con cada ejercicio y su resumen (volumen · intensidad en tinta · descanso). Editar rutina abre el constructor.">
         <Mesa nombre="Rutina en curso" ruta="routine" url="frencia.app/rutinas/push-pull-legs"><Detalle /></Mesa>
-        <Mesa nombre="Rutina archivada" nota="La acción principal pasa a Poner en curso; Editar rutina queda al lado, en secundario, y la edita sin sacarla de archivadas." ruta="routine" url="frencia.app/rutinas/fuerza-4-dias"><Detalle archivada /></Mesa>
+        <Mesa nombre="Rutina archivada" nota="La acción principal pasa a Poner en curso, a la izquierda; Editar rutina queda al lado, en secundario, y la edita sin sacarla de archivadas. Compartir después y el ⋯ a la derecha del todo." ruta="routine" url="frencia.app/rutinas/fuerza-4-dias"><Detalle archivada /></Mesa>
         <Mesa nombre="Compartir · qué se comparte" nota="La hoja de la app pasa a un modal con las mismas dos opciones." ruta="routine · ShareModal" url="frencia.app/rutinas/push-pull-legs"><Detalle capa={<ModalCompartir />} /></Mesa>
         <Mesa nombre="Compartir · link listo" nota="En escritorio la acción principal es Copiar link (al copiar, el icono pasa a check y aparece el aviso); WhatsApp abre WhatsApp Web con el mensaje armado." ruta="routine · ShareModal" url="frencia.app/rutinas/push-pull-legs"><Detalle capa={<ModalCompartir paso={2} />} /></Mesa>
         <Mesa nombre="Confirmar eliminación" nota="El foco arranca en Cancelar: Enter no borra por accidente." ruta="routine · alerta" url="frencia.app/rutinas/push-pull-legs"><Detalle capa={<Modal chico titulo="Eliminar Push Pull Legs" texto="Se borra la rutina con sus 3 días y los ejercicios de cada uno. Tu historial de sesiones no se toca. No se puede deshacer." pie={<><Boton v="secondary" estado="foco">Cancelar</Boton><Boton v="danger" ico="trash-2">Eliminar</Boton></>} />} /></Mesa>

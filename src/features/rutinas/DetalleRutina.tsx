@@ -2,9 +2,10 @@
    ejercicio, su tipo y su resumen: volumen · intensidad en tinta · descanso
    (kit web, Web · 4).
    Editar rutina abre el constructor, tambien en una archivada (que sigue
-   archivada); en esa, la accion principal es Poner en curso. Compartir queda
-   a la vista pero desactivado por ahora. El menu ⋯: Duplicar y Eliminar
-   (al eliminar vuelve a Rutinas).
+   archivada); en esa, la accion principal es Poner en curso. Las acciones van
+   de la mas importante, a la izquierda, a la menos; el ⋯ a la derecha del
+   todo. Compartir queda a la vista pero desactivado por ahora. El menu ⋯:
+   Duplicar y Eliminar (al eliminar vuelve a Rutinas).
    Fondo: cumbre. */
 
 import { useQuery } from '@tanstack/react-query';
@@ -85,23 +86,23 @@ function Contenido({ rutina }: { rutina: RutinaDetalle }) {
           </span>
         </div>
         <div className={styles.acciones}>
-          <Boton variante="secondary" icono={Share} disabled title={PRONTO}>
-            Compartir
-          </Boton>
           {rutina.activa ? (
             <Boton icono={Pencil} onClick={() => navegar(`/rutinas/${rutina.id}/editar`)}>
               Editar rutina
             </Boton>
           ) : (
             <>
-              <Boton variante="secondary" icono={Pencil} onClick={() => navegar(`/rutinas/${rutina.id}/editar`)}>
-                Editar rutina
-              </Boton>
               <Boton icono={Play} cargando={activando} onClick={() => void activar()}>
                 Poner en curso
               </Boton>
+              <Boton variante="secondary" icono={Pencil} onClick={() => navegar(`/rutinas/${rutina.id}/editar`)}>
+                Editar rutina
+              </Boton>
             </>
           )}
+          <Boton variante="secondary" icono={Share} disabled title={PRONTO}>
+            Compartir
+          </Boton>
           <Menu
             etiqueta={`Más acciones de ${rutina.name}`}
             variante="surface"
