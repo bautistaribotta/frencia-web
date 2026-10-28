@@ -1,5 +1,5 @@
-/* Detalle de una sesion (kit web, Web · 6). Sin el ticket al costado, la
-   columna de la izquierda de .w-dos--ticket ocupa sola hasta 900 px. */
+/* Detalle de una sesion (kit web, Web · 6): las series a la izquierda y el
+   ticket al costado (.w-dos--ticket), pegado arriba al scrollear. */
 
 .sinMargen { margin: 0; }
 .fila { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); }
@@ -7,7 +7,11 @@
 /* Volver queda alineado con el texto: el boton fantasma tiene su padding. */
 .migas { display: flex; margin: 0 0 calc(var(--space-6) * -1) calc(var(--space-3) * -1); }
 
-.columna { display: flex; flex-direction: column; gap: var(--space-7); max-width: 900px; }
+.dos { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: var(--space-8); align-items: start; }
+.columna { display: flex; flex-direction: column; gap: var(--space-7); min-width: 0; }
+.lateral { position: sticky; top: var(--space-9); display: flex; flex-direction: column; gap: var(--space-5); }
+.accionesTicket { display: flex; gap: var(--space-3); }
+.accionesTicket > * { flex: 1; }
 .encabezado { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-4); }
 .nombre {
   margin: 0;

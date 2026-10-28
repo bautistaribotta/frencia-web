@@ -276,6 +276,21 @@ solo del kit y se reemplazan por las pseudoclases.
 - El límite de 5 rutinas todavía no está en la base: hoy lo cuida la web. La regla en
   la base va en una migración del repo de la app móvil.
 
+## Ticket de una sesión
+
+- En el detalle de la sesión, el ticket va al costado de las series (columna de 380 px,
+  pegada arriba al scrollear) con Descargar y Ver grande debajo.
+- `/historial/:id/ticket` muestra el ticket solo, sin la navegación, sobre la luz del centro:
+  Volver a la sesión · Copiar imagen · Descargar PNG.
+- Contenido: Nº (los 6 primeros del id), Sesión completa, día · fecha · hora; Duración y
+  Tonelaje grandes; la perforación con una muesca a cada lado; Ejercicios, Series y Mejor
+  marca (el peso más alto de la sesión, o — si no hubo peso); una fila por ejercicio con sus
+  series y su mejor serie; el código de barras y el código, los dos salen del id.
+- Va en el vidrio **opaco** (`surface-raised-opaco`), como en la app: así se ve igual en
+  pantalla y en la imagen, que se exporta en PNG con fondo transparente al doble de
+  resolución. Copiar imagen usa el portapapeles del navegador; si no lo permite, avisa y
+  ofrece descargar.
+
 ## Fases de la cuenta
 
 Con sesión, antes de la app, el perfil decide la pantalla, en este orden (como el gate de

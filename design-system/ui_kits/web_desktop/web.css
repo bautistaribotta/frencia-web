@@ -501,7 +501,7 @@ section + section { margin-top: var(--space-11); }
    TICKET (web): el pase de la sesión, mismo idioma que la app
    ============================================================ */
 .w-ticket { position: relative; width: 380px; padding: var(--space-8) var(--space-7) var(--space-7); border-radius: 22px; display: flex; flex-direction: column; gap: var(--space-6);
-  background: var(--surface-raised); border: 1px solid var(--glass-line); box-shadow: var(--shadow-lg); -webkit-backdrop-filter: var(--sheet-filter); backdrop-filter: var(--sheet-filter);
+  background: var(--surface-raised-opaco); border: 1px solid var(--glass-line); box-shadow: var(--shadow-lg);
   -webkit-mask: radial-gradient(circle 11px at 0 168px, transparent 10.5px, var(--text-primary) 11px) left / 51% 100% no-repeat, radial-gradient(circle 11px at 100% 168px, transparent 10.5px, var(--text-primary) 11px) right / 51% 100% no-repeat;
   mask: radial-gradient(circle 11px at 0 168px, transparent 10.5px, var(--text-primary) 11px) left / 51% 100% no-repeat, radial-gradient(circle 11px at 100% 168px, transparent 10.5px, var(--text-primary) 11px) right / 51% 100% no-repeat; }
 .w-ticket__marca { display: flex; justify-content: space-between; align-items: center; }

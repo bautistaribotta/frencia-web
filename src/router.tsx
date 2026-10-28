@@ -11,6 +11,7 @@
      puertas: el enlace del correo llega con una sesion de recuperacion.
    - /cuenta-en-baja, /bienvenida y /bienvenida/perfil: las fases de la
      cuenta, con sesion pero sin la navegacion; ConSesion decide cual.
+   - /historial/:id/ticket: el ticket solo, sin la navegacion.
    Falta del kit /r/:codigo, la rutina compartida. */
 
 import { createBrowserRouter, Navigate } from 'react-router';
@@ -28,6 +29,7 @@ import { ErrorRuta } from '@/features/errores/ErrorRuta';
 import { NoEncontrada } from '@/features/errores/NoEncontrada';
 import { DetalleSesion } from '@/features/historial/DetalleSesion';
 import { Historial } from '@/features/historial/Historial';
+import { TicketGrande } from '@/features/historial/TicketGrande';
 import { Inicio } from '@/features/inicio/Inicio';
 import { Marco } from '@/features/marco/Marco';
 import { ConSesion, SoloInvitado } from '@/features/marco/Puertas';
@@ -56,6 +58,7 @@ export const router = createBrowserRouter([
           { path: '/cuenta-en-baja', element: <CuentaEnBaja /> },
           { path: '/bienvenida', element: <Consentimiento /> },
           { path: '/bienvenida/perfil', element: <Setup /> },
+          { path: '/historial/:id/ticket', element: <TicketGrande /> },
           { path: '/rutinas/nueva', element: <Constructor /> },
           { path: '/rutinas/:id/editar', element: <Constructor /> },
           {

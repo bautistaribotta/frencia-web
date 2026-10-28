@@ -1,0 +1,43 @@
+/* Ticket de una sesion (kit web, .w-ticket). Las muescas son recortes de
+   verdad (mask) a la altura de la perforacion, que se mide al dibujar
+   (--y-muesca). */
+
+.ticket {
+  position: relative;
+  width: 380px;
+  max-width: 100%;
+  padding: var(--space-8) var(--space-7) var(--space-7);
+  border-radius: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  background: var(--surface-raised-opaco);
+  border: 1px solid var(--glass-line);
+  box-shadow: var(--shadow-lg);
+  -webkit-mask:
+    radial-gradient(circle 11px at 0 var(--y-muesca), transparent 10.5px, var(--text-primary) 11px) left / 51% 100% no-repeat,
+    radial-gradient(circle 11px at 100% var(--y-muesca), transparent 10.5px, var(--text-primary) 11px) right / 51% 100% no-repeat;
+  mask:
+    radial-gradient(circle 11px at 0 var(--y-muesca), transparent 10.5px, var(--text-primary) 11px) left / 51% 100% no-repeat,
+    radial-gradient(circle 11px at 100% var(--y-muesca), transparent 10.5px, var(--text-primary) 11px) right / 51% 100% no-repeat;
+}
+
+.cabeza { display: flex; flex-direction: column; gap: var(--space-4); }
+.marca { display: flex; justify-content: space-between; align-items: center; }
+
+.grandes { display: grid; grid-template-columns: 1fr 1px 1fr; gap: var(--space-5); align-items: end; }
+.grandes > i { background: var(--divider); height: 100%; }
+
+.perforacion { border-top: 1.5px dashed var(--border-default); margin: 0 calc(var(--space-7) * -1); }
+
+.conteos { display: flex; justify-content: space-between; gap: var(--space-4); }
+.conteo { display: flex; flex-direction: column; gap: var(--space-2); }
+
+.filas { display: flex; flex-direction: column; gap: var(--space-3); }
+.fila { display: flex; justify-content: space-between; gap: var(--space-4); font: var(--text-body-sm); color: var(--text-primary); }
+.filaIzq { display: flex; gap: var(--space-3); flex: 1; min-width: 0; }
+.unaLinea { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.codigo { display: flex; flex-direction: column; gap: var(--space-2); }
+.barras { height: 36px; display: flex; gap: 2px; align-items: stretch; overflow: hidden; }
+.barras i { flex: none; background: var(--text-primary); }

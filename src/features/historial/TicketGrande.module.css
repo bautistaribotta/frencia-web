@@ -1,0 +1,17 @@
+/* El ticket solo (kit web, Web · 6, .w-centrada): centrado sobre la luz,
+   con las acciones debajo. */
+
+.centrada {
+  position: relative;
+  z-index: 1;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  padding: var(--space-9) var(--space-6);
+}
+
+.acciones { display: flex; gap: var(--space-3); flex-wrap: wrap; justify-content: center; }
+.aviso { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); text-align: center; }

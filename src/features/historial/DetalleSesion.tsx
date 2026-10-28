@@ -2,15 +2,16 @@
    plan actual del dia: duracion, series, ejercicios y tonelaje arriba, y las
    series de cada ejercicio en una tabla con el esfuerzo en tinta y la llama
    (kit web, Web · 6).
-   Pendiente del diseño: el ticket al costado (descargar, ver grande), el
-   Nuevo PR en la mejor serie.
+   Al costado, el ticket con Descargar (PNG) y Ver grande (/historial/:id/ticket).
+   Pendiente del diseño: el Nuevo PR en la mejor serie.
    Fondo: velada. */
 
 import { useQuery } from '@tanstack/react-query';
-import { Check, ChevronLeft, Flame, RotateCw } from 'lucide-react';
-import type { ReactNode } from 'react';
+import { Check, ChevronLeft, Download, Flame, Maximize2, RotateCw } from 'lucide-react';
+import { useRef, useState, type ReactNode } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
+import { useAvisos } from '@/contexts/avisos';
 import { useSesion } from '@/contexts/sesion';
 import { Boton } from '@/design/components/Boton';
 import { Metrica, NumeroSerie, tabla } from '@/design/components/datos';
@@ -25,8 +26,11 @@ import { cargarDetalleSesion, tonelajeKg, type EjercicioRealizado, type SesionDe
 import { miles } from '@/lib/numeros';
 import { usePerfil } from '@/lib/perfil';
 import { mostrarPeso, type UnidadPeso } from '@/lib/peso';
+import { descargarTicket } from '@/lib/imagenTicket';
+import { archivoTicket } from '@/lib/ticket';
 import { fechaSesion, reloj } from '@/lib/tiempo';
 import { EliminarSesion } from '@/features/historial/EliminarSesion';
+import { Ticket } from './Ticket';
 import styles from './DetalleSesion.module.css';
 
 /** "58" + "min", o "1 h 12" + "min". */
@@ -87,35 +91,63 @@ function Contenido({ sesion }: { sesion: SesionDetalle }) {
   );
   const tonelaje = tonelajeKg(series);
   const duracion = partesDuracion(sesion.startedAt, sesion.finishedAt);
+  const navegar = useNavigate();
+  const avisar = useAvisos();
+  const ticket = useRef<HTMLDivElement>(null);
+  const [descargando, setDescargando] = useState(false);
+
+  async function descargar() {
+    if (!ticket.current) return;
+    setDescargando(true);
+    try {
+      await descargarTicket(ticket.current, archivoTicket(sesion.dayName, sesion.startedAt));
+    } catch {
+      avisar('No pudimos armar la imagen del ticket. Probá de nuevo.', 'error');
+    }
+    setDescargando(false);
+  }
 
   return (
-    <div className={styles.columna}>
-      <header className={styles.encabezado}>
-        <Insignia tono="signal" icono={Check}>
-          Completada
-        </Insignia>
-        <h1 className={styles.nombre}>{sesion.dayName ?? 'Día eliminado'}</h1>
-        <span className={`${texto.data} ${texto.secundario}`}>
-          {cuando(sesion.startedAt)}
-          {sesion.rutina ? ` · ${sesion.rutina}` : ''}
-        </span>
-        <EliminarSesion id={sesion.id} nombre={sesion.dayName} fecha={sesion.finishedAt} detalle />
-      </header>
-      <div className={styles.cuatro}>
-        <Metrica rotulo="Duración" valor={duracion.valor} unidad={duracion.unidad} />
-        <Metrica rotulo="Series" valor={series.length} />
-        <Metrica rotulo="Ejercicios" valor={sesion.ejercicios.length} />
-        <Metrica
-          rotulo="Tonelaje"
-          valor={tonelaje === null ? '—' : miles(mostrarPeso(tonelaje, unidadPeso))}
-          unidad={tonelaje === null ? undefined : unidadPeso}
-        />
+    <div className={styles.dos}>
+      <div className={styles.columna}>
+        <header className={styles.encabezado}>
+          <Insignia tono="signal" icono={Check}>
+            Completada
+          </Insignia>
+          <h1 className={styles.nombre}>{sesion.dayName ?? 'Día eliminado'}</h1>
+          <span className={`${texto.data} ${texto.secundario}`}>
+            {cuando(sesion.startedAt)}
+            {sesion.rutina ? ` · ${sesion.rutina}` : ''}
+          </span>
+          <EliminarSesion id={sesion.id} nombre={sesion.dayName} fecha={sesion.finishedAt} detalle />
+        </header>
+        <div className={styles.cuatro}>
+          <Metrica rotulo="Duración" valor={duracion.valor} unidad={duracion.unidad} />
+          <Metrica rotulo="Series" valor={series.length} />
+          <Metrica rotulo="Ejercicios" valor={sesion.ejercicios.length} />
+          <Metrica
+            rotulo="Tonelaje"
+            valor={tonelaje === null ? '—' : miles(mostrarPeso(tonelaje, unidadPeso))}
+            unidad={tonelaje === null ? undefined : unidadPeso}
+          />
+        </div>
+        {sesion.ejercicios.length === 0 ? (
+          <span className={`${texto.bodySm} ${texto.terciario}`}>Esta sesión terminó sin series registradas.</span>
+        ) : (
+          sesion.ejercicios.map((e) => <Ejercicio key={e.exerciseId} ejercicio={e} unidadPeso={unidadPeso} unidadDistancia={unidadDistancia} />)
+        )}
       </div>
-      {sesion.ejercicios.length === 0 ? (
-        <span className={`${texto.bodySm} ${texto.terciario}`}>Esta sesión terminó sin series registradas.</span>
-      ) : (
-        sesion.ejercicios.map((e) => <Ejercicio key={e.exerciseId} ejercicio={e} unidadPeso={unidadPeso} unidadDistancia={unidadDistancia} />)
-      )}
+      <aside className={styles.lateral} aria-label="Ticket de la sesión">
+        <Ticket ref={ticket} sesion={sesion} unidadPeso={unidadPeso} unidadDistancia={unidadDistancia} />
+        <div className={styles.accionesTicket}>
+          <Boton variante="secondary" icono={Download} cargando={descargando} onClick={() => void descargar()}>
+            Descargar
+          </Boton>
+          <Boton variante="secondary" icono={Maximize2} onClick={() => navegar(`/historial/${sesion.id}/ticket`)}>
+            Ver grande
+          </Boton>
+        </div>
+      </aside>
     </div>
   );
 }
