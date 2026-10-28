@@ -18,6 +18,7 @@
   -webkit-backdrop-filter: var(--sheet-filter);
   backdrop-filter: var(--sheet-filter);
 }
+.arriba { top: auto; bottom: calc(100% + 6px); }
 
 .item {
   display: flex;

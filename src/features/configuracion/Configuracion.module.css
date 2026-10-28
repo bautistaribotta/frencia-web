@@ -11,3 +11,10 @@
    mas largo (RIR / RPE) y las opciones se reparten parejo. */
 .unidad { width: 132px; }
 .unidad > * { flex: 1 1 0; }
+
+/* Teléfono: si el control no entra al lado del texto (el tema, Eliminar
+   cuenta), baja debajo en vez de aplastar el texto. */
+@media (max-width: 767px) {
+  .ajuste { flex-wrap: wrap; row-gap: var(--space-4); }
+  .ajusteTextos { flex-basis: 140px; }
+}

@@ -53,3 +53,17 @@
 .filaEnlace:hover { background: var(--surface-chip); }
 .filaEnlace:focus-visible { outline: var(--foco-w) solid var(--focus-ring); outline-offset: -2px; }
 .filaEnlace:disabled { cursor: not-allowed; }
+
+/* Tablet: márgenes de 24 px. */
+@media (max-width: 1023px) {
+  .pagina { padding-left: var(--space-7); padding-right: var(--space-7); }
+}
+
+/* Teléfono: márgenes de pad-screen y el encabezado apilado, con las acciones
+   debajo de los textos y en varias líneas si no entran. */
+@media (max-width: 767px) {
+  .pagina { padding: var(--space-6) var(--pad-screen) var(--space-9); gap: var(--space-7); }
+  .encabezado { flex-direction: column; align-items: stretch; gap: var(--space-5); }
+  .acciones { flex-wrap: wrap; }
+  .fila { padding-left: var(--space-5); padding-right: var(--space-5); }
+}

@@ -2,10 +2,11 @@
    app. Se abre con el boton ⋯; las flechas recorren las opciones, Enter
    elige y Esc o un clic afuera lo cierran y devuelven el foco al boton.
    Una opcion puede llevar una linea arriba (separada) y su atajo a la
-   derecha (como Supr en Eliminar). */
+   derecha (como Supr en Eliminar). Si abajo no entra (el fin de la ventana
+   o, en el teléfono, la barra inferior), se abre hacia arriba. */
 
 import { Ellipsis, type LucideIcon } from 'lucide-react';
-import { Fragment, useEffect, useId, useRef, useState, type KeyboardEvent } from 'react';
+import { Fragment, useEffect, useId, useLayoutEffect, useRef, useState, type KeyboardEvent } from 'react';
 
 import { BotonIcono } from './BotonIcono';
 import { Icono } from './Icono';
@@ -35,7 +36,9 @@ interface Props {
 
 export function Menu({ etiqueta, opciones, className = '', variante = 'ghost', tamano = 'sm' }: Props) {
   const [abierto, setAbierto] = useState(false);
+  const [haciaArriba, setHaciaArriba] = useState(false);
   const caja = useRef<HTMLDivElement>(null);
+  const menu = useRef<HTMLDivElement>(null);
   const id = useId();
 
   const items = () => [...(caja.current?.querySelectorAll<HTMLButtonElement>('[role="menuitem"]:not(:disabled)') ?? [])];
@@ -43,6 +46,16 @@ export function Menu({ etiqueta, opciones, className = '', variante = 'ghost', t
     setAbierto(false);
     if (devolverFoco) caja.current?.querySelector<HTMLButtonElement>('[aria-haspopup]')?.focus();
   };
+
+  // Antes de pintarlo: si abajo no entra y arriba si, se abre hacia arriba.
+  useLayoutEffect(() => {
+    if (!abierto || !menu.current || !caja.current) return;
+    const barra = document.querySelector('[data-barra-inferior]')?.getBoundingClientRect();
+    const piso = barra && barra.height > 0 ? barra.top : window.innerHeight;
+    const alto = menu.current.offsetHeight + 6;
+    const ancla = caja.current.getBoundingClientRect();
+    setHaciaArriba(ancla.bottom + alto > piso && ancla.top - alto >= 0);
+  }, [abierto]);
 
   useEffect(() => {
     if (!abierto) return;
@@ -82,7 +95,7 @@ export function Menu({ etiqueta, opciones, className = '', variante = 'ghost', t
         onClick={() => setAbierto((a) => !a)}
       />
       {abierto ? (
-        <div id={id} role="menu" aria-label={etiqueta} className={styles.menu}>
+        <div ref={menu} id={id} role="menu" aria-label={etiqueta} className={`${styles.menu} ${haciaArriba ? styles.arriba : ''}`}>
           {opciones.map((o) => (
             <Fragment key={o.etiqueta}>
               {o.separada ? <div role="separator" className={styles.separador} /> : null}

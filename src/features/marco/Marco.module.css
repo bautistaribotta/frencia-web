@@ -17,3 +17,10 @@
 @media (max-width: 1279px) {
   .marco { grid-template-columns: var(--nav-w-rail) minmax(0, 1fr); --nav-actual: var(--nav-w-rail); }
 }
+
+/* Teléfono: una sola columna; la navegacion pasa a la barra inferior, que
+   queda fija, y la pagina deja lugar abajo para no quedar tapada. */
+@media (max-width: 767px) {
+  .marco { grid-template-columns: minmax(0, 1fr); --nav-actual: 0px; }
+  .principal { padding-bottom: calc(var(--barra-movil-h) + var(--space-5) + env(safe-area-inset-bottom)); }
+}

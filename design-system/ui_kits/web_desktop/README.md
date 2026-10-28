@@ -16,7 +16,7 @@ posición del fondo de luces debajo. El conmutador de arriba deja ver un solo te
 
 | Página | Qué tiene |
 |---|---|
-| `Web - 1 Estructura.html` | Navegación lateral, riel en pantallas medianas, ancho mínimo, atajos |
+| `Web - 1 Estructura.html` | Navegación lateral, riel en pantallas medianas, tablet y teléfono, atajos |
 | `Web - 2 Componentes.html` | Todos los componentes con hover, foco, presionado, deshabilitado y carga; equivalentes de las piezas táctiles; reglas de iconos animados |
 | `Web - 3 Acceso y primer ingreso.html` | Login, signup, recuperar y nueva contraseña, términos y privacidad, setup del perfil |
 | `Web - 4 Inicio y Rutinas.html` | Inicio, lista de rutinas, detalle, compartir, confirmaciones |
@@ -33,7 +33,8 @@ página), `tools/tokens_web.py` (regenera los tokens desde `tokens.json`).
 
 | Ancho | Navegación | Contenido |
 |---|---|---|
-| < 1024 px | — | Aviso "Agrandá la ventana" (salvo `/r/:codigo`, que es responsive) |
+| < 768 px (teléfono) | Barra inferior | Modo consulta, ver «Tablet y teléfono» |
+| 768–1023 (tablet) | Riel de 76 px | Como la mediana, con márgenes de 24 px |
 | 1024–1279 (mediana) | Riel de 76 px, solo iconos; etiqueta y atajo en tooltip | Márgenes de 32 px; constructor con catálogo de 296 px |
 | 1280–1599 (grande) | Lateral de 248 px | Máximo 1200 px centrado, márgenes de 40 px |
 | ≥ 1600 (amplia) | Lateral de 248 px | Igual; el constructor gana columnas de días |
@@ -76,7 +77,7 @@ cinco posiciones y la regla de lectura son las de la app.
 | `/historial/:id/ticket` | Ticket | `centro` |
 | `/perfil`, `/perfil/editar`, `/configuracion` | Perfil y configuración | `cumbre` |
 | `/r/:codigo` | Rutina compartida | escritorio `flanco` · celular `cumbre` |
-| `*` con ancho < 1024 | Ventana chica | `centro` |
+| `/rutinas/nueva`, `/rutinas/:id/editar` en el teléfono | Constructor bloqueado | `centro` |
 
 ### Variante de acceso: billete grabado (propuesta)
 
@@ -108,6 +109,76 @@ con microtexto, número de serie y una cartela con la marca `FRENCIA.` (en lugar
   en claro, como único color de la imagen.
 - La foto de prueba es de Serjan Midili en Unsplash (licencia Unsplash, crédito opcional
   pero recomendado). Para producción, conviene una foto propia o elegida con ese fin.
+
+## Tablet y teléfono
+
+Frencia Web se piensa para escritorio, pero no se bloquea en pantallas chicas: los mails
+(confirmar la cuenta, restablecer la contraseña), los links compartidos y los textos
+legales se abren casi siempre desde el celular. En el teléfono la web queda en **modo
+consulta** y lleva a la app; en la tablet se usa entera.
+
+| Ancho | Tamaño | Navegación | Qué se puede hacer |
+|---|---|---|---|
+| < 768 px | Teléfono | Barra inferior | Todo menos el constructor |
+| 768–1023 | Tablet | Riel de 76 px | Todo, constructor incluido |
+| ≥ 1024 | Escritorio | Riel o lateral (ver arriba) | Todo |
+
+- Se decide por **ancho**, no por dispositivo. Lo táctil se decide aparte, con
+  `(hover: none)`: lo que en escritorio aparece al pasar el mouse queda siempre a la
+  vista y los objetivos miden 44 px como mínimo (`hit-min`).
+- Las pantallas públicas funcionan completas a 390 px: acceso, recuperar y nueva
+  contraseña, bienvenida y setup, términos y privacidad, errores y `/r/:codigo`.
+
+### Teléfono
+
+- **Barra inferior** en lugar de la navegación lateral: Inicio · Rutinas · Historial ·
+  Perfil, icono arriba y nombre abajo, en vidrio denso (`surface-raised` + `blur-sheet`),
+  fija abajo, de `barra-movil-h` (64 px) más el margen seguro del sistema. La activa lleva
+  el icono en `signal` y una marca de 3 px pegada al borde de arriba, como la lateral.
+  Perfil queda activa también en Editar perfil y en Configuración, que se entra desde
+  Perfil. No hay Nueva rutina: abre el constructor.
+- **Aviso de la app**, arriba del contenido: «Frencia anda mejor en la app», con
+  Descargar (la tienda del sistema: App Store en iPhone, Google Play en Android) y la cruz,
+  siempre estática. Al cerrarlo no vuelve (se guarda en el navegador). Mientras la app no
+  esté publicada, Descargar dice «Pronto» y queda desactivado. Reemplaza la nota «Para
+  entrenar, abrí Frencia en el celular» de la navegación lateral.
+- **Página**: una columna, márgenes de `pad-screen` (20 px) y espacio abajo para la barra.
+  El encabezado apila los textos y, debajo, las acciones, que bajan de línea si no entran.
+  El selector del Historial va a lo ancho.
+- **Tablas**: se quedan las columnas que identifican la fila y sus acciones. Rutinas
+  muestra Rutina, Sesiones y ⋯ (sin Días ni Fecha de creación); el Historial, Fecha, Día,
+  Series y la papelera (sin Rutina ni Duración). Las celdas bajan su relleno a 16 px.
+- **En curso** (Rutinas): el nombre arriba y los días debajo, sin la cuenta de ejercicios.
+- **Totales**: la grilla de cuatro pasa a dos columnas.
+- **Inicio**: una columna; los días de la rutina, de a uno. Esta semana pasa a una fila por
+  día, con la fecha, el plan y el estado en línea.
+- **Menú ⋯**: si abajo no entra (por la barra), se abre hacia arriba.
+- **Configuración**: si el control de un ajuste no entra al lado del texto (el tema,
+  Eliminar cuenta), baja debajo.
+- **Detalle de una rutina**: las acciones bajo el nombre y los días en una columna. Editar
+  rutina lleva al constructor bloqueado.
+- **Detalle de una sesión**: el ticket va debajo de las series.
+- **Modales**: se vuelven hoja desde abajo, a lo ancho, con las esquinas de arriba
+  redondeadas y el margen seguro de abajo. El orden de los botones no cambia.
+- **Avisos (toasts)**: arriba de la barra, a lo ancho.
+- **Atajos**: no se muestran (ni `Kbd`, ni el «N» de Nueva rutina, ni las pistas «Enter
+  para ingresar» del login y la bienvenida).
+- **Constructor bloqueado** (`/rutinas/nueva` y `/rutinas/:id/editar`): pantalla sin
+  navegación, fondo `centro`, con el icono del celular, «Armá tus rutinas en la app o en
+  la compu», una línea que explica que arrastrar ejercicios y ver los días lado a lado
+  necesita una pantalla más grande, y los botones Volver (con memoria: dice a dónde
+  vuelve), App Store y Google Play. Sin las tiendas publicadas, los dos quedan
+  desactivados y debajo dice «Las apps llegan pronto a las tiendas.».
+
+### Tablet
+
+- El riel de la pantalla mediana, con márgenes de página de 24 px.
+- En curso (Rutinas): el nombre en una columna de 200 px y los días sin la cuenta de
+  ejercicios.
+- Inicio: la rutina y lo último que pasó, uno debajo del otro.
+- Detalle de una sesión: el ticket va debajo de las series (hasta 420 px de ancho), sin
+  pegarse arriba: lado a lado no entran.
+- El constructor se usa entero, con el catálogo de 296 px plegable.
 
 ## El constructor de rutinas
 

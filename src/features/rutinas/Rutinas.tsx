@@ -86,7 +86,7 @@ function EnCurso({ rutina }: { rutina: RutinaResumen }) {
           </div>
         ))}
       </div>
-      <Icono icono={ChevronRight} tamano={20} className={texto.terciario} />
+      <Icono icono={ChevronRight} tamano={20} className={`${texto.terciario} ${styles.activaFlecha}`} />
     </Link>
   );
 }
@@ -121,8 +121,8 @@ function Anteriores({ rutinas, total }: { rutinas: RutinaResumen[]; total: numbe
           <thead>
             <tr>
               <th>Rutina</th>
-              <th>Días</th>
-              <th>Fecha de creación</th>
+              <th className={tabla.sinTelefono}>Días</th>
+              <th className={tabla.sinTelefono}>Fecha de creación</th>
               <th className={tabla.num}>Sesiones</th>
               <th aria-label="Acciones" />
             </tr>
@@ -135,10 +135,10 @@ function Anteriores({ rutinas, total }: { rutinas: RutinaResumen[]; total: numbe
                     {r.name}
                   </Link>
                 </td>
-                <td className={texto.secundario}>
+                <td className={`${texto.secundario} ${tabla.sinTelefono}`}>
                   {r.dias.length} {r.dias.length === 1 ? 'día' : 'días'} · {r.ejercicios} {r.ejercicios === 1 ? 'ejercicio' : 'ejercicios'}
                 </td>
-                <td className={texto.secundario}>{fechaCorta(r.creadaEl)}</td>
+                <td className={`${texto.secundario} ${tabla.sinTelefono}`}>{fechaCorta(r.creadaEl)}</td>
                 <td className={tabla.num}>{r.sesiones}</td>
                 <td className={tabla.acc} onClick={(e) => e.stopPropagation()}>
                   <Menu

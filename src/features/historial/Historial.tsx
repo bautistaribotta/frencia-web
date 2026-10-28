@@ -183,8 +183,8 @@ function Mes({ mes }: { mes: MesHistorial }) {
             <tr>
               <th>Fecha</th>
               <th>Día</th>
-              <th>Rutina</th>
-              <th className={tabla.num}>Duración</th>
+              <th className={tabla.sinTelefono}>Rutina</th>
+              <th className={`${tabla.num} ${tabla.sinTelefono}`}>Duración</th>
               <th className={tabla.num}>Series</th>
               <th aria-label="Acciones" />
             </tr>
@@ -202,8 +202,8 @@ function Mes({ mes }: { mes: MesHistorial }) {
                       {s.dayName ?? 'Día eliminado'}
                     </Link>
                   </td>
-                  <td className={texto.secundario}>{s.rutina ?? '—'}</td>
-                  <td className={tabla.num}>{duracionSesion(s.startedAt, s.finishedAt)}</td>
+                  <td className={`${texto.secundario} ${tabla.sinTelefono}`}>{s.rutina ?? '—'}</td>
+                  <td className={`${tabla.num} ${tabla.sinTelefono}`}>{duracionSesion(s.startedAt, s.finishedAt)}</td>
                   <td className={tabla.num}>{s.series}</td>
                   <td className={tabla.acc}>
                     <EliminarSesion id={s.id} nombre={s.dayName} fecha={s.finishedAt} />

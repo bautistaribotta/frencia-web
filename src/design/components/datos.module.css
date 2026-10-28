@@ -91,3 +91,11 @@
 .series td:first-child { padding-left: 0; width: 56px; }
 .esfuerzo { color: var(--intensity-text); font-weight: var(--fw-semibold); white-space: nowrap; }
 .esfuerzo > :first-child { margin-right: 4px; vertical-align: -2px; }
+
+/* Teléfono: celdas mas angostas y, en las tablas, las columnas de apoyo
+   (.sinTelefono) se esconden para que la tabla entre sin scroll lateral. */
+@media (max-width: 767px) {
+  .tabla th,
+  .tabla td { padding-left: var(--space-5); padding-right: var(--space-5); }
+  .tabla .sinTelefono { display: none; }
+}

@@ -125,3 +125,27 @@
 .esqTitulo { width: 70%; height: 22px; }
 .esqLinea { width: 55%; }
 .esqRotulo { width: 40%; }
+
+/* Tablet y teléfono: la rutina y lo ultimo que paso no entran lado a lado;
+   van uno debajo del otro. En el teléfono, los dias de a uno. */
+@media (max-width: 1023px) {
+  .dos { grid-template-columns: minmax(0, 1fr); }
+  .semana { gap: var(--space-2); }
+  .dia { padding: var(--space-3); }
+}
+
+@media (max-width: 767px) {
+  .tres,
+  .dos .tres { grid-template-columns: minmax(0, 1fr); }
+  /* La semana no entra en siete columnas: un dia por fila, con la fecha, el
+     plan y el estado en linea. */
+  .semana { display: flex; flex-direction: column; gap: var(--space-2); }
+  .dia {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-3) var(--space-4);
+  }
+  .diaEstado { margin-top: 0; }
+}

@@ -3,7 +3,8 @@
    - /, /rutinas, /historial, /perfil y /configuracion, con sus detalles y
      editar perfil: dentro del marco con la navegacion lateral (ConSesion).
    - /rutinas/nueva y /rutinas/:id/editar: el constructor, con sesion pero
-     a pantalla completa, sin la navegacion lateral.
+     a pantalla completa, sin la navegacion lateral. En el teléfono va
+     bloqueado, con salida a las tiendas (ConstructorBloqueado).
    - * : la 404, afuera de las puertas (con sesion, dentro del marco).
    Si una pagina falla, ErrorRuta muestra el 500 o el sin conexion: dentro de
    la app en el lugar de la pagina, con la navegacion; afuera, en la raiz.
@@ -26,7 +27,7 @@ import { Configuracion } from '@/features/configuracion/Configuracion';
 import { Consentimiento } from '@/features/bienvenida/Consentimiento';
 import { CuentaEnBaja } from '@/features/bienvenida/CuentaEnBaja';
 import { Setup } from '@/features/bienvenida/Setup';
-import { Constructor } from '@/features/constructor/Constructor';
+import { ConstructorSegunPantalla } from '@/features/constructor/ConstructorBloqueado';
 import { ErrorRuta } from '@/features/errores/ErrorRuta';
 import { NoEncontrada } from '@/features/errores/NoEncontrada';
 import { DetalleSesion } from '@/features/historial/DetalleSesion';
@@ -63,8 +64,8 @@ export const router = createBrowserRouter([
           { path: '/bienvenida', element: <Consentimiento /> },
           { path: '/bienvenida/perfil', element: <Setup /> },
           { path: '/historial/:id/ticket', element: <TicketGrande /> },
-          { path: '/rutinas/nueva', element: <Constructor /> },
-          { path: '/rutinas/:id/editar', element: <Constructor /> },
+          { path: '/rutinas/nueva', element: <ConstructorSegunPantalla /> },
+          { path: '/rutinas/:id/editar', element: <ConstructorSegunPantalla /> },
           {
             element: <Marco />,
             children: [

@@ -86,9 +86,18 @@ revisar lo hecho.
   anima una vez cada vez que se muestra. Los iconos de los botones (Ingresar,
   Crear cuenta, etc.) siguen animando. Se resuelve en `Campo`, que envuelve la
   caja con `IconosQuietos` y le pasa el error al icono como `disparo`.
+- La web no se bloquea en pantallas chicas: en la **tablet** (768 a 1023 px)
+  se usa entera con el riel, y en el **telefono** (menos de 768 px) queda en
+  modo consulta, con barra inferior, aviso de la app y el constructor
+  bloqueado. Toda pantalla o componente nuevo, o que cambie, sigue la
+  seccion «Tablet y telefono» del README del kit (barra inferior, modales
+  como hoja, columnas que se ocultan, atajos fuera, `(hover: none)` para lo
+  tactil). Si la seccion no cubre el caso, avisar antes de inventar. Los
+  cortes van como `@media (max-width: 767px)` y `(max-width: 1023px)`.
 - Al terminar un cambio visual, verificalo con Playwright:
   1. Levantá el proyecto y abrí la ruta.
-  2. Sacá capturas a 1440×900 en oscuro y en claro (y a 390×844 si la pantalla es pública).
+  2. Sacá capturas a 1440×900 en oscuro y en claro, y a 390×844 (telefono)
+     y 768×1024 (tablet) al menos en oscuro.
   3. Comparalas con la pantalla equivalente del kit y corregí las diferencias
      antes de dar el cambio por terminado.
   4. Revisá también hover, foco de teclado y estados vacío, error y carga.

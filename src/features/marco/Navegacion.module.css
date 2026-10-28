@@ -120,3 +120,8 @@
 
 .nav .nueva { cursor: pointer; background: var(--signal); color: var(--text-on-signal); box-shadow: var(--halo-signal); }
 .nav .nueva:hover, .nav .nueva:active { background: var(--signal-press); }
+
+/* Teléfono: la reemplaza la barra inferior (BarraMovil). */
+@media (max-width: 767px) {
+  .nav { display: none; }
+}

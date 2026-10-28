@@ -1,0 +1,24 @@
+/* Aviso de la app (kit web, .w-aviso-app). Solo en el teléfono. */
+
+.aviso { display: none; }
+
+@media (max-width: 767px) {
+  .aviso {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin: var(--space-5) var(--pad-screen) 0;
+    padding: var(--space-3) var(--space-2) var(--space-3) var(--space-4);
+    border-radius: var(--radius-lg);
+    background: var(--surface-card-elevated);
+    border: 1px solid var(--glass-line);
+    box-shadow: var(--shadow-glass);
+    -webkit-backdrop-filter: var(--glass-filter);
+    backdrop-filter: var(--glass-filter);
+  }
+}
+
+.icono { flex: none; color: var(--signal); }
+.texto { flex: 1; min-width: 0; }

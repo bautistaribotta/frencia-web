@@ -65,3 +65,22 @@
 .esqTitulo { width: 40%; height: 22px; }
 .esqLinea { width: 55%; }
 .esqRotulo { width: 25%; }
+
+/* Tablet: la columna del nombre de la en curso se angosta a 200 px y los
+   dias van sin la cuenta de ejercicios, para que el nombre del dia entre. */
+@media (max-width: 1023px) {
+  .activa { grid-template-columns: minmax(0, 200px) minmax(0, 1fr) auto; gap: var(--space-6); }
+  .activaDia { grid-template-columns: minmax(0, 1fr) auto; }
+  .activaCuenta { display: none; }
+}
+
+/* Teléfono: la en curso apila el nombre arriba y los dias debajo, sin la
+   cuenta de ejercicios; el vacio sin atajo de teclado. */
+@media (max-width: 767px) {
+  .activa { grid-template-columns: minmax(0, 1fr); gap: var(--space-5); }
+  .activaDia { gap: var(--space-4); }
+  .activaFlecha,
+  .vaciaAtajo { display: none; }
+  .vacia { padding: var(--space-9) var(--space-6); }
+  .vaciaAcciones { flex-direction: column; }
+}

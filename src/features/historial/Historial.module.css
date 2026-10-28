@@ -44,3 +44,11 @@
 .esqFila { padding: var(--space-5) var(--space-6); }
 .esqFila + .esqFila { border-top: 1px solid var(--divider); }
 .esqLinea { width: 60%; }
+
+/* Teléfono: el filtro a todo el ancho, los totales en dos columnas y el
+   vacio con menos aire. */
+@media (max-width: 767px) {
+  .filtro { width: 100%; }
+  .cuatro { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .vacio { padding: var(--space-9) var(--space-6); }
+}

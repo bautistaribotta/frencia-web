@@ -31,3 +31,14 @@
 .error .icono { color: var(--danger-text); }
 .info .icono { color: var(--text-secondary); }
 .mensaje { flex: 1; }
+
+/* Teléfono: arriba de la barra inferior y a todo el ancho. */
+@media (max-width: 767px) {
+  .avisos {
+    left: var(--pad-screen);
+    right: var(--pad-screen);
+    bottom: calc(var(--barra-movil-h) + var(--space-4) + env(safe-area-inset-bottom));
+    align-items: stretch;
+  }
+  .aviso { min-width: 0; max-width: none; }
+}

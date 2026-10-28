@@ -1,0 +1,34 @@
+/* Constructor bloqueado (kit web, .w-bloqueo): centrado, sobre la luz del
+   centro, con el icono del celular, el texto y las salidas. */
+
+.bloqueo {
+  position: relative;
+  z-index: 1;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-5);
+  padding: var(--space-9) var(--pad-screen) calc(var(--space-9) + env(safe-area-inset-bottom));
+  text-align: center;
+}
+
+.icono {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-xl);
+  background: var(--surface-card-elevated);
+  border: 1px solid var(--glass-line);
+  box-shadow: var(--shadow-glass);
+  color: var(--signal);
+}
+
+.titulo,
+.parrafo { margin: 0; max-width: 340px; text-wrap: balance; }
+
+.acciones { display: flex; flex-direction: column; gap: var(--space-3); width: 100%; max-width: 320px; }
+.tiendas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); }

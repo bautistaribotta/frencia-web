@@ -145,3 +145,8 @@
 .escala span { flex: 1; height: 3px; border-radius: 2px; background: var(--data-track); }
 .escala .escalaHecha { background: var(--text-primary); }
 .escala .escalaActual { background: var(--signal); box-shadow: var(--halo-signal); }
+
+/* Teléfono: sin teclado no hay atajos que mostrar. */
+@media (max-width: 767px) {
+  .kbd { display: none; }
+}

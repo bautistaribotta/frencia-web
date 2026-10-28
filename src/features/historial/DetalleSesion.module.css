@@ -28,3 +28,16 @@
 .esqTitulo { width: 40%; height: 20px; }
 .esqLinea { width: 60%; }
 .esqRotulo { width: 96px; }
+
+/* Tablet y teléfono: no entran las series y el ticket lado a lado; el ticket
+   baja debajo de las series y deja de pegarse arriba. */
+@media (max-width: 1023px) {
+  .dos { grid-template-columns: minmax(0, 1fr); }
+  .lateral { position: static; max-width: 420px; }
+}
+
+@media (max-width: 767px) {
+  .nombre { font-size: 34px; }
+  .cuatro { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lateral { max-width: none; }
+}

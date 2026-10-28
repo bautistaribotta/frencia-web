@@ -41,3 +41,13 @@
 .esqTitulo { width: 40%; height: 20px; }
 .esqLinea { width: 60%; }
 .esqRotulo { width: 80px; }
+
+/* Teléfono: las acciones debajo del nombre y en varias líneas si no entran;
+   los dias en una sola columna. */
+@media (max-width: 767px) {
+  .encabezado { flex-direction: column; align-items: stretch; gap: var(--space-5); }
+  .nombre { font-size: 34px; }
+  .acciones { flex-wrap: wrap; }
+  .dias { grid-template-columns: minmax(0, 1fr); }
+  .esqNombre { width: 70%; }
+}

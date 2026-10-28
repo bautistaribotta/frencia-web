@@ -55,7 +55,7 @@ const UNIDADES: { campo: CampoUnidad; titulo: string; sub?: string; etiqueta: st
 
 function Ajuste({ titulo, sub, children }: { titulo: string; sub?: string; children: ReactNode }) {
   return (
-    <Fila>
+    <Fila className={styles.ajuste}>
       <div className={styles.ajusteTextos}>
         <span className={`${texto.bodySm} ${texto.semi}`}>{titulo}</span>
         {sub ? <span className={`${texto.bodySm} ${texto.terciario}`}>{sub}</span> : null}
