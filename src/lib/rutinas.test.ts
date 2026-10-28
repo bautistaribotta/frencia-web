@@ -2,7 +2,7 @@
 
 import { assert, test, vi } from 'vitest';
 
-import { cuentaRutina, resumenEjercicio, type EjercicioPlan } from './rutinas';
+import { cuentaRutina, nombreCopia, resumenEjercicio, type EjercicioPlan } from './rutinas';
 
 // Solo se prueban funciones puras: sin cliente real, que pide el .env.local.
 vi.mock('./supabase', () => ({ supabase: {} }));
@@ -66,4 +66,18 @@ test('la cuenta de la rutina respeta el singular', () => {
   const dia = { id: 'd', name: 'Push', weekdays: [], ejercicios: 1 };
   assert.strictEqual(cuentaRutina({ dias: [dia], ejercicios: 1, sesiones: 1 }), '1 día · 1 ejercicio · 1 sesión');
   assert.strictEqual(cuentaRutina({ dias: [dia, dia, dia], ejercicios: 18, sesiones: 24 }), '3 días · 18 ejercicios · 24 sesiones');
+});
+
+test('el nombre de una copia sigue a Windows: " - copia" y despues (2), (3)', () => {
+  assert.equal(nombreCopia('Lunes', ['Lunes']), 'Lunes - copia');
+  assert.equal(nombreCopia('Lunes', ['Lunes', 'Lunes - copia']), 'Lunes - copia (2)');
+  assert.equal(nombreCopia('Lunes', ['Lunes', 'lunes - COPIA', 'Lunes - copia (2)']), 'Lunes - copia (3)');
+  // Duplicar una copia sale de la misma base, sin apilar sufijos.
+  assert.equal(nombreCopia('Lunes - copia (2)', ['Lunes', 'Lunes - copia', 'Lunes - copia (2)']), 'Lunes - copia (3)');
+  // Un hueco se vuelve a usar.
+  assert.equal(nombreCopia('Lunes', ['Lunes', 'Lunes - copia (2)']), 'Lunes - copia');
+  // Con 60 caracteres se recorta la base, nunca el sufijo.
+  const largo = 'A'.repeat(60);
+  assert.equal(nombreCopia(largo, [largo]), 'A'.repeat(52) + ' - copia');
+  assert.equal(nombreCopia(largo, [largo, 'A'.repeat(52) + ' - copia']), 'A'.repeat(48) + ' - copia (2)');
 });

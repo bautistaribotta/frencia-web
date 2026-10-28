@@ -75,7 +75,7 @@ for (const [tema, nombre] of [
     await main.getByRole('button', { name: 'Más acciones de Full body' }).click();
     const menu = page.getByRole('menu', { name: 'Más acciones de Full body' });
     await expect(menu.getByRole('menuitem', { name: 'Poner en curso' })).toBeFocused();
-    await expect(menu.getByRole('menuitem', { name: 'Duplicar' })).toBeDisabled();
+    await expect(menu.getByRole('menuitem', { name: 'Duplicar' })).toBeEnabled();
     await expect(menu.getByRole('menuitem', { name: 'Compartir' })).toBeDisabled();
     await expect(menu.getByRole('menuitem', { name: /Eliminar/ })).toBeEnabled();
     await page.screenshot({ path: `capturas/rutinas-menu-${nombre}.png` });
@@ -188,4 +188,75 @@ test('detalle de una archivada: editar y poner en curso', async ({ page }) => {
   expect(activadas).toEqual([FULL_BODY.id]);
   await editar.click();
   await expect(page).toHaveURL(new RegExp(`rutinas/${FULL_BODY.id}/editar$`));
+});
+
+test('duplicar: copia archivada con nombre al estilo de Windows, desde la lista y el detalle', async ({ page }) => {
+  const plan = (exercise_id: string) => ({
+    position: 0,
+    exercise_id,
+    sets: 4,
+    reps: 8,
+    duration_seconds: null,
+    distance_m: null,
+    weight_kg: null,
+    intensity_kind: 'rir',
+    intensity_value: 2,
+    rest_seconds: 120,
+    exercises: { name: 'Press de banca', kind: 'fuerza', tracks_weight: true, tracks_reps: true, tracks_duration: false, tracks_distance: false },
+  });
+  const conPlan = { ...FULL_BODY, training_days: [{ ...FULL_BODY.training_days[0], training_day_exercises: [plan('e1')] }] };
+  const copia = { ...FULL_BODY, id: '00000000-0000-0000-0000-0000000000a3', name: 'Full body - copia' };
+  await conAcciones(page, [EN_CURSO, conPlan, copia]);
+  // El detalle pide una sola rutina por id.
+  await page.route('**/rest/v1/routines?*', async (ruta) => {
+    const id = new URL(ruta.request().url()).searchParams.get('id');
+    if (ruta.request().method() !== 'GET' || !id) return ruta.fallback();
+    await ruta.fulfill({ json: [EN_CURSO, conPlan, copia].filter((r) => `eq.${r.id}` === id) });
+  });
+  const guardados: { p_routine_id: string | null; p_name: string; p_activar: boolean; p_dias: { id: string | null; name: string; weekdays: number[]; exercises: unknown[] }[] }[] = [];
+  await page.route('**/rest/v1/rpc/guardar_rutina_completa', async (ruta) => {
+    guardados.push(ruta.request().postDataJSON());
+    await ruta.fulfill({ json: '00000000-0000-0000-0000-0000000000a4' });
+  });
+
+  await page.goto('/rutinas');
+  await page.getByRole('button', { name: 'Más acciones de Full body', exact: true }).click();
+  await page.getByRole('menuitem', { name: 'Duplicar' }).click();
+  await expect(page.getByText('Creaste Full body - copia (2)')).toBeVisible();
+  expect(guardados[0].p_routine_id).toBeNull();
+  expect(guardados[0].p_name).toBe('Full body - copia (2)');
+  expect(guardados[0].p_activar).toBe(false);
+  expect(guardados[0].p_dias).toEqual([
+    {
+      id: null,
+      name: 'Día A',
+      weekdays: [0, 2, 4],
+      exercises: [expect.objectContaining({ exercise_id: 'e1', sets: 4, reps: 8, intensity_kind: 'rir', intensity_value: 2, rest_seconds: 120 })],
+    },
+  ]);
+  await page.getByRole('button', { name: 'Editar' }).click();
+  await expect(page).toHaveURL(/\/rutinas\/00000000-0000-0000-0000-0000000000a4\/editar$/);
+
+  // Desde el detalle: el menu ⋯ ya no esta desactivado.
+  await page.goto(`/rutinas/${EN_CURSO.id}`);
+  await page.getByRole('button', { name: 'Más acciones de Push Pull Legs' }).click();
+  await page.screenshot({ path: 'capturas/rutina-detalle-menu.png' });
+  await page.getByRole('menuitem', { name: 'Duplicar' }).click();
+  await expect(page.getByText('Creaste Push Pull Legs - copia')).toBeVisible();
+  expect(guardados[1].p_name).toBe('Push Pull Legs - copia');
+});
+
+test('duplicar con 5 rutinas abre el aviso del límite', async ({ page }) => {
+  const cinco = [EN_CURSO, ...[2, 3, 4, 5].map((n) => ({ ...FULL_BODY, id: `00000000-0000-0000-0000-0000000000b${n}`, name: `Rutina ${n}` }))];
+  await conAcciones(page, cinco);
+  let guardo = false;
+  await page.route('**/rest/v1/rpc/guardar_rutina_completa', async (ruta) => {
+    guardo = true;
+    await ruta.fulfill({ json: 'x' });
+  });
+  await page.goto('/rutinas');
+  await page.getByRole('button', { name: 'Más acciones de Rutina 2' }).click();
+  await page.getByRole('menuitem', { name: 'Duplicar' }).click();
+  await expect(page.getByRole('dialog', { name: 'Llegaste a 5 rutinas' })).toBeVisible();
+  expect(guardo).toBe(false);
 });

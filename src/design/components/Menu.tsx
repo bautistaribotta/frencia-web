@@ -27,9 +27,13 @@ interface Props {
   etiqueta: string;
   opciones: OpcionMenu[];
   className?: string;
+  /** El boton ⋯: chico y fantasma en las filas; en un encabezado, al lado de
+   *  botones grandes, va en vidrio y mediano. */
+  variante?: 'ghost' | 'surface';
+  tamano?: 'sm' | 'md';
 }
 
-export function Menu({ etiqueta, opciones, className = '' }: Props) {
+export function Menu({ etiqueta, opciones, className = '', variante = 'ghost', tamano = 'sm' }: Props) {
   const [abierto, setAbierto] = useState(false);
   const caja = useRef<HTMLDivElement>(null);
   const id = useId();
@@ -69,7 +73,8 @@ export function Menu({ etiqueta, opciones, className = '' }: Props) {
     <div ref={caja} className={`${styles.ancla} ${className}`} onKeyDown={abierto ? alTeclear : undefined}>
       <BotonIcono
         icono={Ellipsis}
-        tamano="sm"
+        variante={variante}
+        tamano={tamano}
         etiqueta={etiqueta}
         aria-haspopup="menu"
         aria-expanded={abierto}

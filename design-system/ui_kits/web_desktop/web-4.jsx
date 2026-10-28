@@ -111,7 +111,7 @@ function Rutinas({ menu, capa }) {
                       <Menu className="w-menu--flota">
                         <MenuItem ico="play" estado="hover">Poner en curso</MenuItem>
                         <MenuItem ico="pencil">Editar</MenuItem>
-                        <MenuItem ico="copy" estado="off">Duplicar</MenuItem>
+                        <MenuItem ico="copy">Duplicar</MenuItem>
                         <MenuItem ico="share" estado="off">Compartir</MenuItem>
                         <MenuSep />
                         <MenuItem ico="trash-2" dang kbd="Supr">Eliminar</MenuItem>
@@ -208,7 +208,7 @@ function AppWeb() {
         <Mesa nombre="Primera carga" nota="Esqueletos con la forma del contenido; la navegación ya está lista." ruta="(main)/home · cargando" url="frencia.app"><InicioCargando /></Mesa>
       </Seccion>
       <Seccion titulo="Rutinas" nota="(main)/routines — la en curso lleva un borde fino de lume, parejo en todo el contorno; a la izquierda su nombre (ancho fijo, hasta dos renglones) y a la derecha sus días en una lista vertical: nombre, días de la semana y cantidad de ejercicios, una fila por día, sin romperse con 4 o más. Las anteriores son una tabla, de la más nueva a la más vieja, sin orden a elegir. Sin botón Nueva rutina en el encabezado: ya está siempre en la navegación. Lo que en la app se hace deslizando, acá va en el menú ⋯ de cada fila. Cada cuenta gratuita tiene hasta 5 rutinas, contando la en curso y las archivadas.">
-        <Mesa nombre="Lista con menú de una fila" nota="El menú se abre con el botón ⋯ o con clic derecho sobre la fila. Poner en curso archiva la actual y avisa con Deshacer. Editar abre el constructor, también en una archivada (sigue archivada). Duplicar y Compartir quedan desactivados hasta tenerlos. Supr elimina la fila enfocada (pide confirmar)." ruta="(main)/routines" url="frencia.app/rutinas"><Rutinas menu /></Mesa>
+        <Mesa nombre="Lista con menú de una fila" nota="El menú se abre con el botón ⋯ o con clic derecho sobre la fila. Poner en curso archiva la actual y avisa con Deshacer. Editar abre el constructor, también en una archivada (sigue archivada). Duplicar crea una copia archivada, «Lunes - copia» (y «Lunes - copia (2)» si ya existe). Compartir queda desactivado hasta tenerlo. Supr elimina la fila enfocada (pide confirmar)." ruta="(main)/routines" url="frencia.app/rutinas"><Rutinas menu /></Mesa>
         <Mesa nombre="Confirmar eliminación desde la lista" nota="Lo que borra va a la derecha; el foco arranca en Cancelar." ruta="(main)/routines · alerta" url="frencia.app/rutinas"><Rutinas capa={<Modal chico titulo="Eliminar Fuerza 4 días" texto="Se borra la rutina con sus 4 días y los ejercicios de cada uno. Tu historial de sesiones no se toca. No se puede deshacer." pie={<><Boton v="secondary" estado="foco">Cancelar</Boton><Boton v="danger" ico="trash-2">Eliminar</Boton></>} />} /></Mesa>
         <Mesa nombre="Límite de rutinas" nota="Con 5 rutinas, Nueva rutina (en la navegación o con N) abre este aviso en lugar del constructor." ruta="(main)/routines · alerta" url="frencia.app/rutinas"><Rutinas capa={<Modal chico titulo="Llegaste a 5 rutinas" texto="Por ahora podés tener hasta 5, contando la en curso y las archivadas. Eliminá una para crear otra." pie={<Boton estado="foco">Entendido</Boton>} />} /></Mesa>
         <Mesa nombre="Sin rutinas" ruta="(main)/routines" url="frencia.app/rutinas"><RutinasVacia /></Mesa>

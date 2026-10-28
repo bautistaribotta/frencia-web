@@ -5,7 +5,11 @@
    - Eliminar: modal chico con Cancelar a la izquierda (foco inicial) y
      Eliminar a la derecha. Las sesiones quedan en el historial.
    - Nueva rutina: con el limite de rutinas alcanzado abre el aviso en lugar
-     del constructor. */
+     del constructor.
+   - Duplicar: crea una copia archivada con el nombre al estilo de Windows
+     ("Lunes - copia", "Lunes - copia (2)") y avisa con Editar. Copia los dias,
+     sus dias de la semana y los ejercicios con su configuracion; no el
+     historial. Con el limite alcanzado abre el mismo aviso. */
 
 import { useMutation, useQuery, useQueryClient, type QueryClient } from '@tanstack/react-query';
 import { Trash2 } from 'lucide-react';
@@ -17,7 +21,18 @@ import { useSesion } from '@/contexts/sesion';
 import { Boton } from '@/design/components/Boton';
 import { Modal } from '@/design/components/Modal';
 import texto from '@/design/texto.module.css';
-import { activarRutina, cargarRutinas, eliminarRutina, MAXIMO_RUTINAS, totalRutinas, type RutinaResumen } from '@/lib/rutinas';
+import { borradorDeRutina, diasParaGuardar } from '@/lib/constructor';
+import {
+  activarRutina,
+  cargarRutina,
+  cargarRutinas,
+  eliminarRutina,
+  guardarRutinaCompleta,
+  MAXIMO_RUTINAS,
+  nombreCopia,
+  totalRutinas,
+  type RutinaResumen,
+} from '@/lib/rutinas';
 
 /** Lo que muestra rutinas o sesiones con el nombre de su dia. */
 const CLAVES = ['rutinas', 'rutina', 'rutina-activa', 'historial', 'historial-totales', 'fechas-entrenadas', 'ultimas-sesiones'];
@@ -121,19 +136,65 @@ export function useNuevaRutina() {
     else navegar('/rutinas/nueva');
   }, [lleno, navegar]);
 
-  const modal = (
+  return { abrir, modal: <AvisoLimite abierto={aviso} onCerrar={() => setAviso(false)} /> };
+}
+
+/** El aviso de que se llego al limite de rutinas. */
+function AvisoLimite({ abierto, onCerrar }: { abierto: boolean; onCerrar: () => void }) {
+  return (
     <Modal
-      abierto={aviso}
+      abierto={abierto}
       chico
       titulo={`Llegaste a ${MAXIMO_RUTINAS} rutinas`}
       texto={`Por ahora podés tener hasta ${MAXIMO_RUTINAS}, contando la en curso y las archivadas. Eliminá una para crear otra.`}
-      onCerrar={() => setAviso(false)}
+      onCerrar={onCerrar}
       pie={
-        <Boton data-foco-inicial onClick={() => setAviso(false)}>
+        <Boton data-foco-inicial onClick={onCerrar}>
           Entendido
         </Boton>
       }
     />
   );
-  return { abrir, modal };
+}
+
+/** Duplica una rutina. `duplicando` es el id de la que se esta copiando. */
+// eslint-disable-next-line react-refresh/only-export-components
+export function useDuplicarRutina() {
+  const { user } = useSesion();
+  const userId = user?.id ?? '';
+  const cliente = useQueryClient();
+  const avisar = useAvisos();
+  const navegar = useNavigate();
+  const [aviso, setAviso] = useState(false);
+  const [duplicando, setDuplicando] = useState<string | null>(null);
+
+  const duplicar = useCallback(
+    async (rutina: Pick<RutinaResumen, 'id' | 'name'>) => {
+      setDuplicando(rutina.id);
+      try {
+        // La lista al dia: el limite y los nombres que ya existen.
+        const lista = await cliente.fetchQuery({ queryKey: ['rutinas', userId], queryFn: () => cargarRutinas(userId), staleTime: 0 });
+        if (totalRutinas(lista) >= MAXIMO_RUTINAS) {
+          setAviso(true);
+          return;
+        }
+        const detalle = await cargarRutina(rutina.id);
+        if (!detalle) throw new Error('La rutina no existe');
+        const nombres = [...(lista.activa ? [lista.activa.name] : []), ...lista.anteriores.map((r) => r.name)];
+        const nombre = nombreCopia(detalle.name, nombres);
+        // Sin ids: los dias se crean de nuevo y quedan de la copia.
+        const dias = diasParaGuardar(borradorDeRutina(detalle)).map((d) => ({ ...d, id: null }));
+        const id = await guardarRutinaCompleta(null, nombre, dias, false);
+        await refrescar(cliente);
+        avisar(`Creaste ${nombre}`, 'ok', { etiqueta: 'Editar', alHacer: () => navegar(`/rutinas/${id}/editar`) });
+      } catch {
+        avisar(`No pudimos duplicar ${rutina.name}. Probá de nuevo.`, 'error');
+      } finally {
+        setDuplicando(null);
+      }
+    },
+    [userId, cliente, avisar, navegar],
+  );
+
+  return { duplicar, duplicando, modal: <AvisoLimite abierto={aviso} onCerrar={() => setAviso(false)} /> };
 }

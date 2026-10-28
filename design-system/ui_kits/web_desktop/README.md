@@ -357,12 +357,21 @@ la app móvil):
   - Poner en curso: archiva la actual y avisa «X está en curso» con Deshacer, que
     vuelve a poner en curso la anterior.
   - Editar: abre el constructor. Una archivada se edita y sigue archivada.
-  - Duplicar y Compartir: desactivados hasta tenerlos.
+  - Duplicar: crea una copia **archivada** (no reemplaza la en curso) con los días, sus
+    días de la semana y los ejercicios con su configuración; el historial no se copia.
+    El nombre sigue a Windows: «Lunes - copia», y si ya existe «Lunes - copia (2)»,
+    «(3)»… Duplicar una copia sale de la misma base, sin apilar sufijos; si no entra en
+    60 caracteres se recorta la base. Avisa «Creaste Lunes - copia» con Editar, que abre
+    el constructor de la copia. Cuenta para el límite: con 5 abre el mismo aviso que
+    Nueva rutina.
+  - Compartir: desactivado hasta tenerlo.
   - Eliminar (carmín, `Supr` sobre la fila enfocada): pide confirmar en el modal
     chico; Cancelar a la izquierda con el foco inicial y Eliminar a la derecha. Se
     borra la rutina con sus días y ejercicios; las sesiones del historial quedan.
 - **Detalle de una archivada:** Compartir · Editar rutina (secundario) · Poner en
   curso (principal) · ⋯.
+- **Menú ⋯ del detalle** (en vidrio, mediano): Duplicar y Eliminar. Al eliminar vuelve a
+  Rutinas.
 
 ## Eliminar una sesión
 

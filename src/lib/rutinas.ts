@@ -253,6 +253,22 @@ export async function guardarRutinaCompleta(
   return data;
 }
 
+/** Largo maximo del nombre de una rutina (el campo del constructor). */
+export const LARGO_NOMBRE_RUTINA = 60;
+
+/** El nombre de una copia, como Windows: "Lunes - copia", y si ya existe,
+ *  "Lunes - copia (2)", "(3)"... Duplicar una copia no apila sufijos: sale de
+ *  la misma base. Si no entra en el largo maximo, se recorta la base. */
+export function nombreCopia(nombre: string, existentes: string[]): string {
+  const base = nombre.trim().replace(/ - copia(?: \(\d+\))?$/, '');
+  const tomados = new Set(existentes.map((n) => n.trim().toLowerCase()));
+  for (let n = 1; ; n++) {
+    const sufijo = n === 1 ? ' - copia' : ` - copia (${n})`;
+    const candidato = base.slice(0, LARGO_NOMBRE_RUTINA - sufijo.length).trimEnd() + sufijo;
+    if (!tomados.has(candidato.toLowerCase())) return candidato;
+  }
+}
+
 /** Rutinas por cuenta gratuita, contando la en curso y las archivadas. La
  *  base todavia no lo fuerza: lo cuida la web. */
 export const MAXIMO_RUTINAS = 5;

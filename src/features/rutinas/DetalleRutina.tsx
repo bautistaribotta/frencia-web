@@ -2,17 +2,18 @@
    ejercicio, su tipo y su resumen: volumen · intensidad en tinta · descanso
    (kit web, Web · 4).
    Editar rutina abre el constructor, tambien en una archivada (que sigue
-   archivada); en esa, la accion principal es Poner en curso. Compartir y el
-   menu quedan a la vista pero desactivados por ahora.
+   archivada); en esa, la accion principal es Poner en curso. Compartir queda
+   a la vista pero desactivado por ahora. El menu ⋯: Duplicar y Eliminar
+   (al eliminar vuelve a Rutinas).
    Fondo: cumbre. */
 
 import { useQuery } from '@tanstack/react-query';
-import { ChevronLeft, Ellipsis, Pencil, Play, RotateCw, Share } from 'lucide-react';
+import { ChevronLeft, Copy, Pencil, Play, RotateCw, Share, Trash2 } from 'lucide-react';
 import { useState, type ReactNode } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
 import { Boton } from '@/design/components/Boton';
-import { BotonIcono } from '@/design/components/BotonIcono';
+import { Menu } from '@/design/components/Menu';
 import { Resumen, Tipo } from '@/design/components/datos';
 import { Fondo } from '@/design/components/Fondo';
 import { Pagina } from '@/design/components/Pagina';
@@ -23,7 +24,7 @@ import { usePerfil } from '@/lib/perfil';
 import type { UnidadPeso } from '@/lib/peso';
 import { cargarRutina, cuentaRutina, fechaCorta, resumenEjercicio, type DiaDetalle, type RutinaDetalle } from '@/lib/rutinas';
 import { useVolver } from '@/lib/volver';
-import { usePonerEnCurso } from './acciones';
+import { EliminarRutina, useDuplicarRutina, usePonerEnCurso } from './acciones';
 import styles from './DetalleRutina.module.css';
 
 const PRONTO = 'Muy pronto';
@@ -64,7 +65,9 @@ export function DetalleRutina() {
 function Contenido({ rutina }: { rutina: RutinaDetalle }) {
   const navegar = useNavigate();
   const ponerEnCurso = usePonerEnCurso();
+  const copia = useDuplicarRutina();
   const [activando, setActivando] = useState(false);
+  const [eliminando, setEliminando] = useState(false);
   async function activar() {
     setActivando(true);
     await ponerEnCurso(rutina);
@@ -99,9 +102,19 @@ function Contenido({ rutina }: { rutina: RutinaDetalle }) {
               </Boton>
             </>
           )}
-          <BotonIcono icono={Ellipsis} variante="surface" etiqueta="Más acciones: muy pronto" disabled />
+          <Menu
+            etiqueta={`Más acciones de ${rutina.name}`}
+            variante="surface"
+            tamano="md"
+            opciones={[
+              { etiqueta: 'Duplicar', icono: Copy, alElegir: () => void copia.duplicar(rutina), disabled: copia.duplicando !== null },
+              { etiqueta: 'Eliminar', icono: Trash2, alElegir: () => setEliminando(true), peligro: true, separada: true },
+            ]}
+          />
         </div>
       </header>
+      <EliminarRutina rutina={eliminando ? rutina : null} onCerrar={() => setEliminando(false)} alEliminar={() => navegar('/rutinas', { replace: true })} />
+      {copia.modal}
       <div className={styles.dias}>
         {rutina.dias.map((d) => (
           <Dia key={d.id} dia={d} />

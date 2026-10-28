@@ -4,7 +4,7 @@
    cuenta contra el limite de rutinas.
    Sin rutinas, el vacio ofrece Crear rutina (o N).
    El menu de cada fila (boton ⋯ o clic derecho): Poner en curso, Editar,
-   Duplicar y Compartir (desactivados por ahora) y Eliminar, tambien con Supr
+   Duplicar, Compartir (desactivado por ahora) y Eliminar, tambien con Supr
    sobre la fila. Toda la fila abre el detalle.
    Fondo: cumbre. */
 
@@ -23,7 +23,7 @@ import { Encabezado, Lista, Pagina } from '@/design/components/Pagina';
 import { Esqueleto, Kbd, Tarjeta, TiraSemana } from '@/design/components/varios';
 import texto from '@/design/texto.module.css';
 import { cargarRutinas, cuentaRutina, fechaCorta, MAXIMO_RUTINAS, totalRutinas, type RutinaResumen } from '@/lib/rutinas';
-import { EliminarRutina, usePonerEnCurso } from './acciones';
+import { EliminarRutina, useDuplicarRutina, usePonerEnCurso } from './acciones';
 import styles from './Rutinas.module.css';
 
 export function Rutinas() {
@@ -94,6 +94,7 @@ function EnCurso({ rutina }: { rutina: RutinaResumen }) {
 function Anteriores({ rutinas, total }: { rutinas: RutinaResumen[]; total: number }) {
   const navegar = useNavigate();
   const ponerEnCurso = usePonerEnCurso();
+  const copia = useDuplicarRutina();
   const [aEliminar, setAEliminar] = useState<RutinaResumen | null>(null);
 
   // Clic derecho sobre la fila: abre su menu ⋯.
@@ -145,7 +146,7 @@ function Anteriores({ rutinas, total }: { rutinas: RutinaResumen[]; total: numbe
                     opciones={[
                       { etiqueta: 'Poner en curso', icono: Play, alElegir: () => void ponerEnCurso(r) },
                       { etiqueta: 'Editar', icono: Pencil, alElegir: () => navegar(`/rutinas/${r.id}/editar`) },
-                      { etiqueta: 'Duplicar', icono: Copy, alElegir: () => {}, disabled: true },
+                      { etiqueta: 'Duplicar', icono: Copy, alElegir: () => void copia.duplicar(r), disabled: copia.duplicando !== null },
                       { etiqueta: 'Compartir', icono: Share, alElegir: () => {}, disabled: true },
                       { etiqueta: 'Eliminar', icono: Trash2, alElegir: () => setAEliminar(r), peligro: true, separada: true, atajo: 'Supr' },
                     ]}
@@ -157,6 +158,7 @@ function Anteriores({ rutinas, total }: { rutinas: RutinaResumen[]; total: numbe
         </table>
       </Lista>
       <EliminarRutina rutina={aEliminar} onCerrar={() => setAEliminar(null)} />
+      {copia.modal}
     </section>
   );
 }
