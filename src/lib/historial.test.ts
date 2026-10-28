@@ -82,7 +82,7 @@ const AHORA = new Date('2026-10-25T12:00:00Z');
 
 test('la primera pagina trae los ultimos tres meses y deja seguir con lo anterior', async () => {
   const consultas = responder([fila('a', '2026-10-20T10:00:00+00:00'), fila('b', '2026-09-01T10:00:00+00:00')]);
-  const pagina = await cargarPaginaHistorial('u', null, undefined, AHORA);
+  const pagina = await cargarPaginaHistorial('u', null, undefined, null, AHORA);
   const desde = inicioPrimeraPagina(AHORA);
   assert.deepEqual(consultas[0].gte, ['finished_at', desde]);
   assert.deepEqual(consultas[0].limit, [PRIMERA_PAGINA_MAX + 1]);
@@ -95,7 +95,7 @@ test('la primera pagina trae los ultimos tres meses y deja seguir con lo anterio
 
 test('sin sesiones en tres meses, la primera pagina sigue con las anteriores', async () => {
   const consultas = responder([], [fila('z', '2026-01-10T10:00:00+00:00')]);
-  const pagina = await cargarPaginaHistorial('u', null, undefined, AHORA);
+  const pagina = await cargarPaginaHistorial('u', null, undefined, null, AHORA);
   assert.strictEqual(consultas.length, 2);
   assert.deepEqual(consultas[1].lte, ['finished_at', inicioPrimeraPagina(AHORA)]);
   assert.deepEqual(consultas[1].limit, [HISTORIAL_PAGINA + 1]);

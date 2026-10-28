@@ -373,6 +373,19 @@ la app móvil):
 - **Menú ⋯ del detalle** (en vidrio, mediano): Duplicar y Eliminar. Al eliminar vuelve a
   Rutinas.
 
+## Filtrar el historial por rutina
+
+- En el encabezado del Historial, a la derecha, un Selector mediano de 280 px con el icono
+  de capas: «Todas las rutinas» primero, después la en curso y las archivadas. Si no hay
+  ninguna rutina no se muestra.
+- Filtra la lista y los totales (sesiones, tiempo, tonelaje). Se guarda en la URL
+  (`/historial?rutina=id`), así que volver de una sesión o recargar lo conserva; un id que
+  no es de una rutina del usuario se toma como «Todas las rutinas».
+- Sin sesiones de la rutina elegida, el vacío propio: «Sin sesiones de {rutina}» con
+  «Ver todas las rutinas», que quita el filtro.
+- Las sesiones de un día que ya se borró no tienen rutina: solo aparecen con «Todas las
+  rutinas».
+
 ## Eliminar una sesión
 
 La lista ofrece una papelera visible por fila; no abre el detalle al pulsarla. El detalle

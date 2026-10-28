@@ -5,13 +5,16 @@
    HISTORIAL_PAGINA mas viejas hasta el principio, como en la app. El total
    de un mes aparece cuando ya no quedan paginas por traer.
    Toda la fila abre el detalle.
-   Pendiente del diseño: el filtro por rutina (falta el selector) y el ticket de cada fila.
+   Arriba a la derecha, el filtro por rutina (Todas las rutinas, la en curso y
+   las anteriores): cambia la lista y los totales y queda en la URL
+   (?rutina=id), asi sobrevive a recargar y a volver desde una sesion.
+   Pendiente del diseño: el ticket de cada fila.
    Fondo: velada. */
 
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { History, RotateCw } from 'lucide-react';
+import { History, Layers, RotateCw } from 'lucide-react';
 import { useEffect, useRef, type ReactNode } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link, useNavigate, useSearchParams } from 'react-router';
 
 import { useSesion } from '@/contexts/sesion';
 import { Boton } from '@/design/components/Boton';
@@ -20,6 +23,7 @@ import { Fondo } from '@/design/components/Fondo';
 import { Icono } from '@/design/components/Icono';
 import { Encabezado, Lista, Pagina } from '@/design/components/Pagina';
 import { Ruedita } from '@/design/components/Ruedita';
+import { Selector } from '@/design/components/Selector';
 import { Esqueleto, Tarjeta } from '@/design/components/varios';
 import texto from '@/design/texto.module.css';
 import {
@@ -30,6 +34,7 @@ import {
   type TotalesHistorial,
 } from '@/lib/historial';
 import { miles } from '@/lib/numeros';
+import { cargarRutinas } from '@/lib/rutinas';
 import { duracionSesion, indiceSemanaLunes, MESES_LARGO } from '@/lib/tiempo';
 import { EliminarSesion } from '@/features/historial/EliminarSesion';
 import styles from './Historial.module.css';
@@ -43,13 +48,26 @@ function nombreMes(epochMs: number): string {
   return d.getFullYear() === new Date().getFullYear() ? mes : `${mes} ${d.getFullYear()}`;
 }
 
+const TODAS = 'todas';
+
 export function Historial() {
   const { user } = useSesion();
   const userId = user?.id ?? '';
+  const [parametros, setParametros] = useSearchParams();
+
+  // Las rutinas para el filtro: la en curso primero y despues las anteriores.
+  const lista = useQuery({ queryKey: ['rutinas', userId], queryFn: () => cargarRutinas(userId), enabled: !!userId });
+  const rutinas = lista.data ? [...(lista.data.activa ? [lista.data.activa] : []), ...lista.data.anteriores] : [];
+  const pedida = parametros.get('rutina');
+  // Una rutina que ya no existe vuelve a todas.
+  const rutinaId = pedida && (!lista.data || rutinas.some((r) => r.id === pedida)) ? pedida : null;
+  const filtrada = rutinas.find((r) => r.id === rutinaId) ?? null;
+  const filtrar = (valor: string) =>
+    setParametros(valor === TODAS ? {} : { rutina: valor }, { replace: true });
 
   const historial = useInfiniteQuery({
-    queryKey: ['historial', userId],
-    queryFn: ({ pageParam, signal }) => cargarPaginaHistorial(userId, pageParam, signal),
+    queryKey: ['historial', userId, rutinaId],
+    queryFn: ({ pageParam, signal }) => cargarPaginaHistorial(userId, pageParam, signal, rutinaId),
     initialPageParam: null as Parameters<typeof cargarPaginaHistorial>[1],
     getNextPageParam: (ultima) => ultima.siguiente,
     enabled: !!userId,
@@ -64,7 +82,8 @@ export function Historial() {
   if (historial.isPending) contenido = <Cargando />;
   else if (historial.isError && sesiones.length === 0)
     contenido = <AvisoPie texto="No pudimos cargar tus entrenamientos." onReintentar={() => void historial.refetch()} />;
-  else if (sesiones.length === 0 && !historial.hasNextPage) contenido = <Vacio />;
+  else if (sesiones.length === 0 && !historial.hasNextPage)
+    contenido = filtrada ? <VacioFiltro nombre={filtrada.name} onTodas={() => filtrar(TODAS)} /> : <Vacio />;
   else
     contenido = (
       <>
@@ -95,8 +114,23 @@ export function Historial() {
     <>
       <Fondo posicion="velada" />
       <Pagina>
-        <Encabezado rotulo="Historial" titulo="Listado de los días entrenados" />
-        <Totales userId={userId} />
+        <Encabezado
+          rotulo="Historial"
+          titulo="Listado de los días entrenados"
+          acciones={
+            rutinas.length > 0 ? (
+              <Selector
+                etiqueta="Filtrar por rutina"
+                icono={Layers}
+                valor={rutinaId ?? TODAS}
+                opciones={[{ valor: TODAS, etiqueta: 'Todas las rutinas' }, ...rutinas.map((r) => ({ valor: r.id, etiqueta: r.name }))]}
+                alCambiar={filtrar}
+                className={styles.filtro}
+              />
+            ) : null
+          }
+        />
+        <Totales userId={userId} rutinaId={rutinaId} />
         {contenido}
       </Pagina>
     </>
@@ -104,8 +138,12 @@ export function Historial() {
 }
 
 /** Sesiones y tiempo de todo el historial: no cambian al scrollear. */
-function Totales({ userId }: { userId: string }) {
-  const totales = useQuery({ queryKey: ['historial-totales', userId], queryFn: () => cargarTotales(userId), enabled: !!userId });
+function Totales({ userId, rutinaId }: { userId: string; rutinaId: string | null }) {
+  const totales = useQuery({
+    queryKey: ['historial-totales', userId, rutinaId],
+    queryFn: () => cargarTotales(userId, rutinaId),
+    enabled: !!userId,
+  });
   return (
     <div className={styles.cuatro}>
       <Tarjeta>{valorTotal('Sesiones', totales.data, (t) => ({ valor: miles(t.sesiones) }))}</Tarjeta>
@@ -222,6 +260,19 @@ function Vacio() {
       <span className={`${texto.bodySm} ${texto.secundario}`}>
         Cuando termines tu primer entrenamiento en la app, va a aparecer acá con cada serie y el peso que levantaste.
       </span>
+    </div>
+  );
+}
+
+function VacioFiltro({ nombre, onTodas }: { nombre: string; onTodas: () => void }) {
+  return (
+    <div className={styles.vacio}>
+      <Icono icono={Layers} tamano={28} className={texto.terciario} />
+      <span className={texto.subtitle}>Sin sesiones de {nombre}</span>
+      <span className={`${texto.bodySm} ${texto.secundario}`}>Cuando entrenes un día de esta rutina en la app, va a aparecer acá.</span>
+      <Boton variante="secondary" tamano="sm" onClick={onTodas}>
+        Ver todas las rutinas
+      </Boton>
     </div>
   );
 }

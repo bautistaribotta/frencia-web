@@ -5,6 +5,9 @@
 .crece { flex: 1; min-width: 0; }
 .fila { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); }
 
+/* El filtro por rutina, en las acciones del encabezado. */
+.filtro { width: 280px; }
+
 .cuatro { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-5); }
 
 .mes { display: flex; flex-direction: column; gap: var(--space-4); }

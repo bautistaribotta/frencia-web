@@ -15,6 +15,7 @@ const SESIONES = Array.from({ length: 60 }, (_, i) => {
     id: `00000000-0000-0000-0000-${String(1000 + i).padStart(12, '0')}`,
     started_at: new Date(fin.getTime() - 60 * 60 * 1000).toISOString(),
     finished_at: fin.toISOString(),
+    training_day_id: ['dp', 'dpl', 'dl'][i % 3],
     training_days: { name: ['Push', 'Pull', 'Legs'][i % 3], routines: { name: 'Push Pull Legs' } },
     session_sets: [{ count: 15 }],
   };
@@ -39,6 +40,8 @@ async function conSesiones(page: Page) {
     }
     if (p.has('id')) return ruta.fulfill({ json: guardadas.find((s) => `eq.${s.id}` === p.get('id')) ?? null });
     let filas = guardadas;
+    const dias = p.get('training_day_id')?.match(/^in\.\((.*)\)$/)?.[1].split(',');
+    if (dias) filas = filas.filter((f) => dias.includes(f.training_day_id));
     for (const filtro of p.getAll('finished_at')) {
       const [op, valor] = [filtro.slice(0, filtro.indexOf('.')), filtro.slice(filtro.indexOf('.') + 1)];
       const t = Date.parse(valor);
@@ -161,4 +164,47 @@ test('historial vacío', async ({ page }) => {
   await expect(page.getByText('Todavía no hay sesiones')).toBeVisible();
   await expect(page.getByRole('button', { name: /^Eliminar/ })).toHaveCount(0);
   await page.screenshot({ path: 'capturas/historial-vacio.png' });
+});
+
+test('filtrar por rutina: lista, totales, URL y vacío del filtro', async ({ page }) => {
+  await page.clock.setFixedTime(AHORA);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  const rutina = (id: string, name: string, archived_at: string | null) => ({ id, name, archived_at, created_at: '2026-01-01T12:00:00Z', training_days: [] });
+  const PPL = rutina('00000000-0000-0000-0000-0000000000a1', 'Push Pull Legs', null);
+  const FULL = rutina('00000000-0000-0000-0000-0000000000a2', 'Full body', '2026-01-02T12:00:00Z');
+  await conSesion(page, { tablas: { routines: [PPL, FULL] } });
+  await conSesiones(page);
+  // Los dias de cada rutina: el Pull no es de Push Pull Legs, para ver el filtro.
+  await page.route('**/rest/v1/training_days?*', (ruta) => {
+    const id = new URL(ruta.request().url()).searchParams.get('routine_id');
+    return ruta.fulfill({ json: id === `eq.${PPL.id}` ? [{ id: 'dp' }, { id: 'dl' }] : [{ id: 'df' }] });
+  });
+
+  await page.goto('/historial');
+  const selector = page.getByRole('button', { name: /^Filtrar por rutina/ });
+  await expect(selector).toHaveAccessibleName('Filtrar por rutina: Todas las rutinas');
+  await expect(page.getByText('Sesiones', { exact: true }).locator('..')).toContainText('60');
+
+  await selector.click();
+  await expect(page.getByRole('option')).toHaveText(['Todas las rutinas', 'Push Pull Legs', 'Full body']);
+  await page.screenshot({ path: 'capturas/historial-filtro-abierto.png' });
+  await page.getByRole('option', { name: 'Push Pull Legs' }).click();
+  await expect(page).toHaveURL(/\/historial\?rutina=00000000-0000-0000-0000-0000000000a1$/);
+  await expect(page.getByText('Sesiones', { exact: true }).locator('..')).toContainText('40');
+  await expect(page.getByRole('link', { name: 'Pull' })).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'Push' }).first()).toBeVisible();
+  await page.screenshot({ path: 'capturas/historial-filtrado.png' });
+
+  // Volver de una sesion mantiene el filtro.
+  await page.getByRole('link', { name: 'Push' }).first().click();
+  await page.getByRole('button', { name: 'Historial', exact: true }).click();
+  await expect(selector).toHaveAccessibleName('Filtrar por rutina: Push Pull Legs');
+
+  await selector.click();
+  await page.getByRole('option', { name: 'Full body' }).click();
+  await expect(page.getByText('Sin sesiones de Full body')).toBeVisible();
+  await expect(page.getByText('Sesiones', { exact: true }).locator('..')).toContainText('0');
+  await page.getByRole('button', { name: 'Ver todas las rutinas' }).click();
+  await expect(page).toHaveURL(/\/historial$/);
+  await expect(selector).toHaveAccessibleName('Filtrar por rutina: Todas las rutinas');
 });

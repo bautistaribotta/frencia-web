@@ -78,7 +78,20 @@ export interface PaginaHistorial {
 
 const COLUMNAS_LISTA = 'id, started_at, finished_at, training_days(name, routines(name)), session_sets(count)';
 
-function consultaLista(userId: string, limite: number, signal?: AbortSignal) {
+/** Los dias de una rutina, para filtrar por ella: una sesion apunta a su
+ *  dia, no a la rutina. null = sin filtro. Las sesiones cuyo dia se borro
+ *  quedan sin rutina y solo aparecen con todas. */
+async function diasDeRutina(rutinaId: string | null, signal?: AbortSignal): Promise<string[] | null> {
+  if (rutinaId === null) return null;
+  if (!esUuid(rutinaId)) return [];
+  const consulta = supabase.from('training_days').select('id').eq('routine_id', rutinaId);
+  if (signal) consulta.abortSignal(signal);
+  const { data, error } = await consulta;
+  if (error) throw error;
+  return data.map((d) => d.id);
+}
+
+function consultaLista(userId: string, limite: number, dias: string[] | null, signal?: AbortSignal) {
   const consulta = supabase
     .from('workout_sessions')
     .select(COLUMNAS_LISTA)
@@ -87,9 +100,12 @@ function consultaLista(userId: string, limite: number, signal?: AbortSignal) {
     .order('finished_at', { ascending: false })
     .order('id', { ascending: false })
     .limit(limite + 1);
+  if (dias) consulta.in('training_day_id', dias);
   if (signal) consulta.abortSignal(signal);
   return consulta;
 }
+
+const PAGINA_VACIA: PaginaHistorial = { sesiones: [], siguiente: null, proximaFecha: null };
 
 type FilaLista = NonNullable<Awaited<ReturnType<typeof consultaLista>>['data']>[number];
 
@@ -114,18 +130,32 @@ function aPagina(data: FilaLista[], limite: number): PaginaHistorial {
 
 /** Una pagina, sin OFFSET ni COUNT: el registro extra dice si quedan mas.
  *  Sin cursor es la primera: los ultimos tres meses (con tope). Si ahi no
- *  hay nada, sigue con las anteriores para no mostrar un vacio que no es. */
+ *  hay nada, sigue con las anteriores para no mostrar un vacio que no es.
+ *  Con `rutinaId`, solo las sesiones de los dias de esa rutina. */
 export async function cargarPaginaHistorial(
   userId: string,
   cursor: CursorHistorial | null,
   signal?: AbortSignal,
+  rutinaId: string | null = null,
   ahora = new Date(),
+): Promise<PaginaHistorial> {
+  const dias = await diasDeRutina(rutinaId, signal);
+  if (dias?.length === 0) return PAGINA_VACIA;
+  return paginaHistorial(userId, cursor, dias, signal, ahora);
+}
+
+async function paginaHistorial(
+  userId: string,
+  cursor: CursorHistorial | null,
+  dias: string[] | null,
+  signal: AbortSignal | undefined,
+  ahora: Date,
 ): Promise<PaginaHistorial> {
   if (!cursor) {
     const desde = inicioPrimeraPagina(ahora);
-    const { data, error } = await consultaLista(userId, PRIMERA_PAGINA_MAX, signal).gte('finished_at', desde);
+    const { data, error } = await consultaLista(userId, PRIMERA_PAGINA_MAX, dias, signal).gte('finished_at', desde);
     if (error) throw error;
-    if (data.length === 0) return cargarPaginaHistorial(userId, { id: UUID_MINIMO, finishedAt: desde }, signal);
+    if (data.length === 0) return paginaHistorial(userId, { id: UUID_MINIMO, finishedAt: desde }, dias, signal, ahora);
     const pagina = aPagina(data, PRIMERA_PAGINA_MAX);
     if (pagina.siguiente) return pagina;
     // Entro todo el periodo: lo que sigue es lo anterior a esa fecha, si hay.
@@ -135,7 +165,7 @@ export async function cargarPaginaHistorial(
 
   // Los valores se interpolan en sintaxis PostgREST; validar antes de usar.
   if (!esCursorValido(cursor.id, cursor.finishedAt)) throw new Error('cursor invalido');
-  const { data, error } = await consultaLista(userId, HISTORIAL_PAGINA, signal)
+  const { data, error } = await consultaLista(userId, HISTORIAL_PAGINA, dias, signal)
     .lte('finished_at', cursor.finishedAt)
     .or(`finished_at.lt.${cursor.finishedAt},and(finished_at.eq.${cursor.finishedAt},id.lt.${cursor.id})`);
   if (error) throw error;
@@ -176,12 +206,14 @@ export interface TotalesHistorial {
 
 const TOTALES_PAGINA = 1000;
 
-/** Sesiones y tiempo de todo el historial. Lee solo inicio y fin de cada
- *  sesion, de a mil: sin series, cada pedido es liviano. */
-export async function cargarTotales(userId: string): Promise<TotalesHistorial> {
+/** Sesiones y tiempo de todo el historial, o de una rutina. Lee solo inicio
+ *  y fin de cada sesion, de a mil: sin series, cada pedido es liviano. */
+export async function cargarTotales(userId: string, rutinaId: string | null = null): Promise<TotalesHistorial> {
   const totales: TotalesHistorial = { sesiones: 0, segundos: 0 };
+  const dias = await diasDeRutina(rutinaId);
+  if (dias?.length === 0) return totales;
   for (let pagina = 0; ; pagina += TOTALES_PAGINA) {
-    const { data, error } = await supabase
+    const consulta = supabase
       .from('workout_sessions')
       .select('started_at, finished_at')
       .eq('user_id', userId)
@@ -189,6 +221,8 @@ export async function cargarTotales(userId: string): Promise<TotalesHistorial> {
       .order('finished_at', { ascending: false })
       .order('id', { ascending: false })
       .range(pagina, pagina + TOTALES_PAGINA - 1);
+    if (dias) consulta.in('training_day_id', dias);
+    const { data, error } = await consulta;
     if (error) throw error;
     for (const fila of data) {
       totales.sesiones += 1;
