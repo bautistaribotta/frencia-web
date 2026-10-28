@@ -216,6 +216,10 @@ section + section { margin-top: var(--space-11); }
 .w-campo.is-off .w-campo__valor, .w-campo.is-off .w-ico { color: var(--text-disabled); }
 .w-campo__valor { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font: var(--fw-regular) 16px/22px var(--font-sans); color: var(--text-primary); }
 .w-campo__valor--ph { color: var(--text-tertiary); }
+/* Autocompletado: el navegador pinta el fondo con !important, asi que se
+   demora su transicion para que nunca llegue y el vidrio quede a la vista. */
+.w-campo__valor:autofill, .w-campo__valor:-webkit-autofill { -webkit-text-fill-color: var(--text-primary); caret-color: var(--signal);
+  transition: background-color 0s 100000s, color 0s 100000s, padding var(--dur-base) var(--ease-out); }
 .w-campo__ayuda { font: var(--text-body-sm); color: var(--text-tertiary); }
 .w-campo__error { display: flex; align-items: center; gap: var(--space-2); font: var(--text-body-sm); color: var(--danger-text); }
 .w-cursor { display: inline-block; width: 1.5px; height: 1.1em; margin-left: 1px; vertical-align: -0.15em; background: var(--signal); animation: w-cursor 1s steps(1) infinite; }

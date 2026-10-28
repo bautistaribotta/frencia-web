@@ -216,6 +216,7 @@ Orden de los botones en el pie de un modal:
 - **Deshabilitado**: relleno `surface-chip`, sin halo, texto `text-disabled`. Nunca opacidad.
 - **Cargando**: en botones, la ruedita reemplaza al icono y el texto queda (no salta el ancho, `aria-busy`); en páginas, esqueletos con la forma del contenido. Nunca las dos juntas.
 - `prefers-reduced-motion`: sin deriva de luces, sin animación de iconos, esqueletos quietos.
+- **Autocompletado** (`:autofill`, del navegador o de un gestor como Bitwarden): el campo se ve igual que con texto escrito. Sin el relleno celeste ni el texto oscuro del navegador; el vidrio, el color del texto (`text-primary`) y el cursor (`signal`) se mantienen.
 
 Componentes nuevos del sistema (no existían en la app): `Tooltip`, `Kbd`, `Menu`,
 `Select`, `Modal`, `Panel`, `FilterChip`, `DateField`, `RulerSlider`, `ArcSlider`,
