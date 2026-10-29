@@ -412,6 +412,14 @@ la app móvil):
 - La dirección de vuelta (`https://frencia.fit/nueva-contrasena` y la de desarrollo) tiene
   que estar en las Redirect URLs de Supabase Auth; si no, el correo vuelve a la Site URL.
 
+## Configuración
+
+- Secciones: Apariencia, Preferencias (peso, altura, distancia y el medidor de esfuerzo),
+  Legal y Cuenta.
+- Cada cambio de Preferencias se guarda en el acto y lo confirma un aviso (toast) con la
+  opción elegida: «El peso ahora va en libras», «El esfuerzo ahora se mide con RPE».
+  Si la base no lo acepta, vuelve a lo anterior y el aviso es de error.
+
 ## Inicio sin rutinas
 
 - Arriba, la tarjeta «Tu primera rutina» con Crear primera rutina. Debajo, los tres pasos

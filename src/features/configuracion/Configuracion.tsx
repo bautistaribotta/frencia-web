@@ -3,7 +3,8 @@
    unidades y medidor de esfuerzo, los textos legales (en el modal de
    lectura) y la eliminacion de la cuenta.
    Todo menos la transparencia se guarda en profiles y se aplica en el acto;
-   si la base no lo acepta vuelve a lo anterior y avisa, como en la app.
+   si la base no lo acepta vuelve a lo anterior y avisa, como en la app. Un
+   cambio de Preferencias guardado se confirma con un aviso.
    Eliminar cuenta: dos pasos, como en la app (docs/specs/eliminacion-de-cuenta.md
    del repo mobile). El foco arranca en Cancelar; el segundo aviso no se
    puede descartar y Entendido cierra la sesion.
@@ -40,6 +41,18 @@ type CampoUnidad = 'unidad_peso' | 'unidad_altura' | 'unidad_distancia' | 'medid
 
 // Las tres unidades y el medidor van juntos, con el selector del mismo ancho.
 // La primera opcion es el valor por defecto de la base.
+// El aviso que confirma cada opcion guardada.
+const CONFIRMACION: Record<string, string> = {
+  kg: 'El peso ahora va en kilos',
+  lb: 'El peso ahora va en libras',
+  cm: 'La altura ahora va en centímetros',
+  ft: 'La altura ahora va en pies',
+  km: 'La distancia ahora va en kilómetros',
+  mi: 'La distancia ahora va en millas',
+  rir: 'El esfuerzo ahora se mide con RIR',
+  rpe: 'El esfuerzo ahora se mide con RPE',
+};
+
 const UNIDADES: { campo: CampoUnidad; titulo: string; sub?: string; etiqueta: string; opciones: [string, string] }[] = [
   { campo: 'unidad_peso', titulo: 'Peso', etiqueta: 'Unidad de peso', opciones: ['kg', 'lb'] },
   { campo: 'unidad_altura', titulo: 'Altura', etiqueta: 'Unidad de altura', opciones: ['cm', 'ft'] },
@@ -80,8 +93,9 @@ export function Configuracion() {
   const p = perfil.data;
   const listo = !!p;
 
-  function cambiar(cambio: CambioPreferencias) {
+  function cambiar(cambio: CambioPreferencias, confirmacion?: string) {
     guardar.mutate(cambio, {
+      onSuccess: confirmacion ? () => avisar(confirmacion) : undefined,
       onError: () => avisar('No pudimos guardar el ajuste. Probá de nuevo.', 'error'),
     });
   }
@@ -132,14 +146,14 @@ export function Configuracion() {
             </Ajuste>
           </Lista>
 
-          <span className={`${texto.label} ${texto.terciario}`}>Unidades / medidores</span>
+          <span className={`${texto.label} ${texto.terciario}`}>Preferencias</span>
           <Lista>
             {UNIDADES.map((u) => (
               <Ajuste key={u.campo} titulo={u.titulo} sub={u.sub}>
                 <Segmentado
                   etiqueta={u.etiqueta}
                   valor={p?.[u.campo] ?? u.opciones[0]}
-                  onChange={(v) => cambiar({ [u.campo]: v })}
+                  onChange={(v) => cambiar({ [u.campo]: v }, CONFIRMACION[v])}
                   disabled={!listo}
                   className={styles.unidad}
                   opciones={u.opciones.map((o) => ({ valor: o, etiqueta: u.campo === 'medidor_esfuerzo' ? o.toUpperCase() : o }))}

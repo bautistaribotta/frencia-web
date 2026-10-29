@@ -94,7 +94,7 @@ function Configuracion({ capa, tema = 'system' }) {
             <div className="w-fila"><div className="col g1 f1"><span className="t-bodysm semi">Tema</span><span className="t-bodysm c-ter">{sub}</span></div><Seg ops={[['system', 'Sistema', 'monitor'], ['dark', 'Oscuro', 'moon'], ['light', 'Claro', 'sun']]} sel={tema} /></div>
             <div className="w-fila"><div className="col g1 f1"><span className="t-bodysm semi">Reducir transparencia</span><span className="t-bodysm c-ter">Superficies opacas y luces más bajas. Se guarda en este navegador y arranca siguiendo al sistema.</span></div><Switch /></div>
           </div>
-          <span className="t-label c-ter">Unidades / medidores</span>
+          <span className="t-label c-ter">Preferencias</span>
           <div className="w-lista">
             <div className="w-fila"><span className="t-bodysm semi f1">Peso</span><Seg ops={[['kg', 'kg'], ['lb', 'lb']]} sel="kg" parejo /></div>
             <div className="w-fila"><span className="t-bodysm semi f1">Altura</span><Seg ops={[['cm', 'cm'], ['ft', 'ft']]} sel="cm" parejo /></div>
