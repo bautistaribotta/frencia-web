@@ -424,6 +424,10 @@ la app móvil):
 
 ## Rutinas
 
+- Sin rutinas, la tarjeta punteada del vacío. Al pie, una columna centrada: arriba el
+  atajo («Apretá N para crear una rutina», en terciario) y debajo Crear rutina, botón
+  primario. Los dos centrados en la tarjeta y el atajo centrado sobre el botón. En el
+  teléfono el atajo no se muestra.
 - Título «Todas las rutinas», con la bajada «Una en curso, al poner otra en curso, la
   actual se archiva.» Sin botón Nueva rutina: ya está siempre en la navegación.
 - La en curso arriba, en una tarjeta con borde de lume: a la izquierda el nombre (ancho

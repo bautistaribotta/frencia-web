@@ -136,7 +136,7 @@ function RutinasVacia() {
           <Ico n="layers" s={28} c="c-ter" />
           <span className="t-subtitle">Todavía no tenés rutinas</span>
           <span className="t-bodysm c-sec">Cuando crees una va a aparecer acá, junto con las que archives más adelante.</span>
-          <div className="row g3"><Boton ico="plus">Crear rutina</Boton><span className="row g2 t-bodysm c-ter">o apretá <Kbd>N</Kbd></span></div>
+          <div className="col g3 centro"><span className="row g2 t-bodysm c-ter">Apretá <Kbd>N</Kbd> para crear una rutina</span><Boton ico="plus">Crear rutina</Boton></div>
         </div>
       </Pagina>
     </App>

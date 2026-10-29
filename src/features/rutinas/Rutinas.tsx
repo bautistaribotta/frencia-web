@@ -2,7 +2,7 @@
    lume, y las anteriores en una tabla de la mas nueva a la mas vieja (kit web,
    Web · 4). Nueva rutina vive solo en la navegacion. Al lado de Anteriores, la
    cuenta contra el limite de rutinas.
-   Sin rutinas, el vacio ofrece Crear rutina (o N).
+   Sin rutinas, el vacio ofrece Crear rutina, con el atajo N centrado arriba.
    El menu de cada fila (boton ⋯ o clic derecho): Poner en curso, Editar,
    Duplicar, Compartir (desactivado por ahora) y Eliminar, tambien con Supr
    sobre la fila. Toda la fila abre el detalle.
@@ -173,12 +173,12 @@ function Vacia() {
         Cuando crees una va a aparecer acá, junto con las que archives más adelante.
       </span>
       <div className={styles.vaciaAcciones}>
+        <span className={`${texto.bodySm} ${texto.terciario} ${styles.vaciaAtajo}`}>
+          Apretá <Kbd>N</Kbd> para crear una rutina
+        </span>
         <Boton icono={Plus} onClick={() => navegar('/rutinas/nueva')}>
           Crear rutina
         </Boton>
-        <span className={`${texto.bodySm} ${texto.terciario} ${styles.vaciaAtajo}`}>
-          o apretá <Kbd>N</Kbd>
-        </span>
       </div>
     </div>
   );

@@ -263,3 +263,25 @@ test('duplicar con 5 rutinas abre el aviso del límite', async ({ page }) => {
   await expect(page.getByRole('dialog', { name: 'Llegaste a 5 rutinas' })).toBeVisible();
   expect(guardo).toBe(false);
 });
+
+for (const [tema, nombre] of [
+  ['dark', 'oscuro'],
+  ['light', 'claro'],
+] as const) {
+  test(`sin rutinas: el atajo centrado arriba de Crear rutina en ${nombre}`, async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.emulateMedia({ colorScheme: tema, reducedMotion: 'reduce' });
+    await conSesion(page, { tablas: { routines: [] } });
+    await page.goto('/rutinas');
+    const boton = page.getByRole('main').getByRole('button', { name: 'Crear rutina' });
+    const atajo = page.getByText('para crear una rutina');
+    await expect(boton).toBeVisible();
+    const [b, a] = [(await boton.boundingBox())!, (await atajo.boundingBox())!];
+    const caja = (await boton.evaluate((n) => n.closest('[class*="vacia"]:not([class*="vaciaAcciones"])')!.getBoundingClientRect().toJSON())) as DOMRect;
+    // El atajo va arriba; los dos centrados en la tarjeta y entre si.
+    expect(a.y + a.height).toBeLessThanOrEqual(b.y);
+    expect(Math.abs(b.x + b.width / 2 - (caja.x + caja.width / 2))).toBeLessThanOrEqual(1);
+    expect(Math.abs(a.x + a.width / 2 - (b.x + b.width / 2))).toBeLessThanOrEqual(1);
+    await page.screenshot({ path: `capturas/rutinas-vacia-${nombre}.png` });
+  });
+}
