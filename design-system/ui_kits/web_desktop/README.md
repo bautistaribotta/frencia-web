@@ -93,6 +93,10 @@ con microtexto, número de serie y una cartela con la marca `FRENCIA.` (en lugar
 - Login y signup llevan Apple y Google debajo del botón principal, con el divisor "o
   continuá con". En el signup crean la cuenta si no existe; el alta sigue por términos y
   el setup del perfil, igual que con correo.
+- **Por ahora solo Google:** Apple queda oculto hasta tener la cuenta de Apple Developer y
+  habilitarlo en Supabase (`PROVEEDORES_ACTIVOS` en `src/lib/oauth.ts`). Con un solo
+  proveedor, su botón ocupa el ancho de la fila. Las maquetas muestran los dos, que es el
+  diseño final.
 - Al tocar Apple o Google, ese botón cambia el logo por la ruedita y el otro queda apagado
   hasta que el navegador sale a la pantalla del proveedor. Al volver, si se entró, la puerta
   lleva al inicio (o a donde se quería ir); una cuenta nueva pasa por términos y setup.

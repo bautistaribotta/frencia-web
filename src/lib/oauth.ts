@@ -10,6 +10,10 @@ export type Proveedor = 'google' | 'apple';
 
 export const NOMBRE_PROVEEDOR: Record<Proveedor, string> = { google: 'Google', apple: 'Apple' };
 
+/** Los que se ofrecen en el acceso, en orden. Apple vuelve cuando haya
+ *  cuenta de Apple Developer y este habilitado en Supabase. */
+export const PROVEEDORES_ACTIVOS: Proveedor[] = ['google'];
+
 const CLAVE = 'frencia.oauth';
 
 interface Intento {

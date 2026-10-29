@@ -3,7 +3,8 @@
    Al tocar uno, ese cambia el logo por la ruedita y el otro queda apagado
    hasta que el navegador sale hacia el proveedor (lib/oauth.ts). Al volver
    con un error (cancelado, proveedor caido) se avisa y se limpia la URL; si
-   se entro, la puerta SoloInvitado lleva al inicio. */
+   se entro, la puerta SoloInvitado lleva al inicio. Solo se muestran los
+   proveedores activos (PROVEEDORES_ACTIVOS): con uno solo, ocupa el ancho. */
 
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
@@ -12,7 +13,7 @@ import { useAvisos } from '@/contexts/avisos';
 import { Boton } from '@/design/components/Boton';
 import { LogoApple } from '@/design/components/Logos';
 import { Divisor } from '@/design/components/varios';
-import { borrarIntento, entrarCon, errorDeVuelta, leerIntento, NOMBRE_PROVEEDOR, type Proveedor } from '@/lib/oauth';
+import { borrarIntento, entrarCon, errorDeVuelta, leerIntento, NOMBRE_PROVEEDOR, PROVEEDORES_ACTIVOS, type Proveedor } from '@/lib/oauth';
 import styles from './Acceso.module.css';
 
 function LogoGoogle() {
@@ -74,6 +75,7 @@ export function Sociales({ deshabilitado = false }: Props) {
     const esEste = cargando === proveedor;
     return (
       <Boton
+        key={proveedor}
         variante="secondary"
         disabled={deshabilitado || (cargando !== null && !esEste)}
         cargando={esEste}
@@ -91,10 +93,7 @@ export function Sociales({ deshabilitado = false }: Props) {
   return (
     <>
       <Divisor>o continuá con</Divisor>
-      <div className={styles.fila}>
-        {boton('apple')}
-        {boton('google')}
-      </div>
+      <div className={styles.fila}>{PROVEEDORES_ACTIVOS.map((proveedor) => boton(proveedor))}</div>
     </>
   );
 }

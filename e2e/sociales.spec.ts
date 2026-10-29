@@ -1,6 +1,6 @@
 /* Ingreso con Apple y Google desde el login y el signup: la salida al
    proveedor (con PKCE y vuelta a la misma pantalla), la ruedita en el boton
-   tocado y el otro apagado, y la vuelta con un error (cancelado o proveedor
+   tocado, Apple oculto hasta tener la cuenta de Apple Developer, y la vuelta con un error (cancelado o proveedor
    caido), que se avisa y limpia la URL. Nada sale a la red: la pantalla del
    proveedor se simula. */
 
@@ -39,15 +39,15 @@ for (const [tema, nombre] of [
     });
     await page.evaluate(() => {
       new MutationObserver(() => {
-        const botones = [...document.querySelectorAll('button')].filter((b) => ['Apple', 'Google'].includes(b.textContent?.trim() ?? ''));
+        const botones = [...document.querySelectorAll('button')].filter((b) => b.textContent?.trim() === 'Google');
         console.log('botones ' + botones.map((b) => `${b.textContent?.trim()}:${b.getAttribute('aria-busy') ?? '-'}:${b.disabled ? 'apagado' : 'activo'}`).join(' '));
       }).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['aria-busy', 'disabled'] });
     });
     const saliendo = page.waitForRequest(/auth[/]v1[/]authorize/);
     const clic = page.getByRole('button', { name: 'Google' }).click();
     await saliendo;
-    // El tocado carga y el otro queda apagado mientras el navegador sale.
-    expect(estados).toContain('Apple:-:apagado Google:true:apagado');
+    // El tocado carga mientras el navegador sale.
+    expect(estados).toContain('Google:true:apagado');
 
     proveedor.soltar();
     await clic;
@@ -59,14 +59,15 @@ for (const [tema, nombre] of [
   });
 }
 
-test('signup: Apple vuelve al signup', async ({ page }) => {
+test('signup: Google vuelve al signup y Apple no se ofrece', async ({ page }) => {
   const proveedor = await sinSesion(page);
   proveedor.soltar();
   await page.goto('/signup');
-  await page.getByRole('button', { name: 'Apple' }).click();
+  await expect(page.getByRole('button', { name: 'Apple' })).toHaveCount(0);
+  await page.getByRole('button', { name: 'Google' }).click();
   await expect(page.getByRole('heading', { name: 'Pantalla del proveedor' })).toBeVisible();
   const url = new URL(proveedor.pedida());
-  expect(url.searchParams.get('provider')).toBe('apple');
+  expect(url.searchParams.get('provider')).toBe('google');
   expect(url.searchParams.get('redirect_to')).toMatch(/\/signup$/);
 });
 
@@ -82,27 +83,27 @@ test('volver cancelado: aviso informativo y URL limpia', async ({ page }) => {
 
 test('volver con el proveedor caido: aviso de error', async ({ page }) => {
   await sinSesion(page);
-  await page.addInitScript(() => sessionStorage.setItem('frencia.oauth', JSON.stringify({ proveedor: 'apple' })));
+  await page.addInitScript(() => sessionStorage.setItem('frencia.oauth', JSON.stringify({ proveedor: 'google' })));
   await page.goto('/signup#error=server_error&error_description=Unable+to+exchange+external+code');
-  await expect(page.getByText('No pudimos entrar con Apple. Probá de nuevo.')).toBeVisible();
+  await expect(page.getByText('No pudimos entrar con Google. Probá de nuevo.')).toBeVisible();
   await expect(page).toHaveURL(/\/signup$/);
 });
 
-test('telefono: los dos botones entran a lo ancho', async ({ page }) => {
+test('telefono: Google a lo ancho', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.emulateMedia({ colorScheme: 'dark', reducedMotion: 'reduce' });
   await sinSesion(page);
   await page.goto('/login');
   await page.getByRole('button', { name: 'Google' }).scrollIntoViewIfNeeded();
-  await expect(page.getByRole('button', { name: 'Apple' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Google' })).toBeVisible();
   await page.screenshot({ path: 'capturas/sociales-telefono.png' });
 });
 
-test('tablet: el acceso con los dos botones', async ({ page }) => {
+test('tablet: el acceso con Google', async ({ page }) => {
   await page.setViewportSize({ width: 768, height: 1024 });
   await page.emulateMedia({ colorScheme: 'dark', reducedMotion: 'reduce' });
   await sinSesion(page);
   await page.goto('/signup');
-  await expect(page.getByRole('button', { name: 'Apple' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Google' })).toBeVisible();
   await page.screenshot({ path: 'capturas/sociales-tablet.png' });
 });
