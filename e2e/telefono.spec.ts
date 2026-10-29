@@ -191,3 +191,15 @@ test('teléfono: las acciones del detalle van en una fila y el menú no se sale'
     await page.keyboard.press('Escape');
   }
 });
+
+test('tablet: en la barra del constructor, volver, el nombre y Guardar entran', async ({ page }) => {
+  await entrar(page, TABLET, 'dark', [SIN_EJERCICIOS]);
+  await page.goto(`/rutinas/${EN_CURSO.id}/editar`);
+  const guardar = page.getByRole('button', { name: /^Guardar/ });
+  await expect(guardar).toBeVisible();
+  const caja = (await guardar.boundingBox())!;
+  expect(caja.x + caja.width).toBeLessThanOrEqual(TABLET.width);
+  expect((await page.getByRole('textbox', { name: 'Nombre de la rutina' }).boundingBox())!.width).toBeGreaterThan(100);
+  await sinDesborde(page);
+  await page.screenshot({ path: 'capturas/tablet-constructor-barra.png' });
+});

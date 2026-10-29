@@ -421,3 +421,43 @@ test('nueva rutina desde la navegacion y con N', async ({ page }) => {
   await page.getByRole('button', { name: 'Editar rutina' }).click();
   await expect(page).toHaveURL(/editar$/);
 });
+
+test('el catalogo ocupa todo el alto y la barra solo el ancho del tablero', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await conDatos(page);
+  await page.goto(`/rutinas/${RUTINA.id}/editar`);
+  const catalogo = page.getByRole('complementary', { name: 'Catálogo de ejercicios' });
+  const barra = page.locator('header').filter({ has: page.getByRole('textbox', { name: 'Nombre de la rutina' }) });
+  await expect(catalogo).toBeVisible();
+  const c = (await catalogo.boundingBox())!;
+  const b = (await barra.boundingBox())!;
+  expect(c.y).toBe(0);
+  expect(Math.round(c.height)).toBe(900);
+  expect(Math.round(b.x)).toBe(Math.round(c.x + c.width));
+  expect(Math.round(b.x + b.width)).toBe(1440);
+
+  // Con el catalogo oculto, la barra vuelve a todo el ancho.
+  await page.getByRole('button', { name: /^Ocultar catálogo/ }).click();
+  await expect(catalogo).toHaveCount(0);
+  expect(Math.round((await barra.boundingBox())!.x)).toBe(0);
+});
+
+test('un nombre que no entra se mueve en cinta; con reducir movimiento, no', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  const largo = { ...CATALOGO[0], id: 'e9', name: 'Press de banca inclinado con mancuernas y agarre neutro' };
+  await conSesion(page, { tablas: { exercises: [largo, ...CATALOGO.slice(1)], routines: [RUTINA] } });
+  await page.goto(`/rutinas/${RUTINA.id}/editar`);
+  const catalogo = page.getByRole('complementary', { name: 'Catálogo de ejercicios' });
+  const nombre = catalogo.getByText(largo.name, { exact: true });
+  // Dos copias: la que se lee y la que la sigue.
+  await expect(nombre).toHaveCount(2);
+  const animaciones = () => page.evaluate(() => document.getAnimations().filter((a) => !(a instanceof CSSAnimation) && !(a instanceof CSSTransition)).length);
+  expect(await animaciones()).toBeGreaterThan(0);
+  // Uno corto queda quieto, sin copia.
+  await expect(catalogo.getByText('Plancha', { exact: true })).toHaveCount(1);
+  await page.screenshot({ path: 'capturas/constructor-cinta.png' });
+
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect(nombre).toHaveCount(1);
+});

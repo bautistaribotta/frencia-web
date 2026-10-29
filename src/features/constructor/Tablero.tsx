@@ -12,6 +12,7 @@ import { memo, type MouseEvent, type ReactNode } from 'react';
 
 import { Boton } from '@/design/components/Boton';
 import { Resumen, Tipo } from '@/design/components/datos';
+import { Cinta } from '@/design/components/Cinta';
 import { Icono } from '@/design/components/Icono';
 import { Menu } from '@/design/components/Menu';
 import { SemanaEditable } from '@/design/components/varios';
@@ -255,13 +256,25 @@ const TarjetaOrdenable = memo(function TarjetaOrdenable({ ejercicio, numero, dia
 
 // Con memo, como el resto de lo que va adentro de algo ordenable: useSortable
 // vuelve a dibujar la tarjeta en cada movimiento del puntero.
-const ContenidoTarjeta = memo(function ContenidoTarjeta({ ejercicio, numero, unidades }: { ejercicio: EjercicioBorrador; numero: number; unidades: Unidades }) {
+const ContenidoTarjeta = memo(function ContenidoTarjeta({
+  ejercicio,
+  numero,
+  unidades,
+  quieta = false,
+}: {
+  ejercicio: EjercicioBorrador;
+  numero: number;
+  unidades: Unidades;
+  quieta?: boolean;
+}) {
   return (
     <>
       <span className={styles.numero}>{String(numero).padStart(2, '0')}</span>
       <Tipo tipo={ejercicio.kind} />
       <span className={styles.textos}>
-        <span className={`${texto.bodySm} ${texto.semi} ${texto.primario} ${styles.unaLinea}`}>{ejercicio.name}</span>
+        <Cinta className={`${texto.bodySm} ${texto.semi} ${texto.primario}`} quieta={quieta}>
+          {ejercicio.name}
+        </Cinta>
         <Resumen {...resumenEjercicio(ejercicio, unidades.peso, unidades.distancia)} />
       </span>
     </>
@@ -284,7 +297,7 @@ export function TarjetaLevantada({ ejercicio, numero, unidades, estado }: { ejer
   return (
     <div className={`${styles.tarjeta} ${styles.levantada} ${estado === 'invalida' ? styles.invalida : ''} ${estado === 'quitar' ? styles.quitar : ''}`}>
       <span className={styles.abrir}>
-        <ContenidoTarjeta ejercicio={ejercicio} numero={numero} unidades={unidades} />
+        <ContenidoTarjeta ejercicio={ejercicio} numero={numero} unidades={unidades} quieta />
       </span>
       <span className={styles.agarre} aria-hidden="true">
         <Icono icono={GripVertical} tamano={16} />

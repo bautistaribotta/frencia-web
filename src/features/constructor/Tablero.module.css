@@ -123,7 +123,6 @@
 
 .numero { width: 20px; flex: none; text-align: right; font: var(--fw-semibold) 12px/1 var(--font-sans); color: var(--text-tertiary); font-variant-numeric: tabular-nums; }
 .textos { display: flex; flex-direction: column; gap: var(--space-2); flex: 1; min-width: 0; }
-.unaLinea { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .agarre {
   flex: none;

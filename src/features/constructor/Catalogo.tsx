@@ -11,6 +11,7 @@ import { memo, useMemo, useState, type PointerEventHandler, type Ref } from 'rea
 import { Boton } from '@/design/components/Boton';
 import { BotonIcono } from '@/design/components/BotonIcono';
 import { Tipo } from '@/design/components/datos';
+import { Cinta } from '@/design/components/Cinta';
 import { Icono, IconosQuietos } from '@/design/components/Icono';
 import { Selector } from '@/design/components/Selector';
 import { Chip, Esqueleto, Kbd } from '@/design/components/varios';
@@ -177,7 +178,7 @@ const CuerpoItem = memo(function CuerpoItem({
 });
 
 /** El contenido de un item, tambien para la copia que se levanta. */
-export function FilaCatalogo({ ejercicio }: { ejercicio: EjercicioCatalogo }) {
+export function FilaCatalogo({ ejercicio, quieta = false }: { ejercicio: EjercicioCatalogo; quieta?: boolean }) {
   return (
     <>
       <span className={styles.agarre} aria-hidden="true">
@@ -185,7 +186,9 @@ export function FilaCatalogo({ ejercicio }: { ejercicio: EjercicioCatalogo }) {
       </span>
       <Tipo tipo={ejercicio.kind} grande />
       <div className={styles.textos}>
-        <span className={`${texto.bodySm} ${texto.semi} ${texto.primario} ${styles.unaLinea}`}>{ejercicio.name}</span>
+        <Cinta className={`${texto.bodySm} ${texto.semi} ${texto.primario}`} quieta={quieta}>
+          {ejercicio.name}
+        </Cinta>
         <span className={`${texto.label} ${texto.terciario} ${styles.unaLinea}`}>{detalleCatalogo(ejercicio)}</span>
       </div>
     </>
@@ -196,7 +199,7 @@ export function FilaCatalogo({ ejercicio }: { ejercicio: EjercicioCatalogo }) {
 export function ItemLevantado({ ejercicio, invalido }: { ejercicio: EjercicioCatalogo; invalido: boolean }) {
   return (
     <div className={`${styles.item} ${styles.levantado} ${invalido ? styles.invalido : ''}`}>
-      <FilaCatalogo ejercicio={ejercicio} />
+      <FilaCatalogo ejercicio={ejercicio} quieta />
     </div>
   );
 }

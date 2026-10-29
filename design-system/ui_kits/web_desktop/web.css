@@ -437,9 +437,12 @@ section + section { margin-top: var(--space-11); }
 /* ============================================================
    CONSTRUCTOR: arrastrar y soltar
    ============================================================ */
-.w-builder { position: absolute; inset: 0; display: grid; grid-template-rows: var(--barra-h) 1fr; z-index: 1; }
-.w-builder__barra { display: flex; align-items: center; gap: var(--space-5); padding: 0 var(--space-6); background: var(--surface-raised); border-bottom: 1px solid var(--glass-line); -webkit-backdrop-filter: var(--sheet-filter); backdrop-filter: var(--sheet-filter); }
-.w-builder__cuerpo { position: relative; display: grid; grid-template-columns: var(--catalogo-w) 1fr; min-height: 0; }
+/* El catalogo ocupa todo el alto a la izquierda; la barra queda solo sobre el tablero. */
+.w-builder { position: absolute; inset: 0; display: grid; grid-template-columns: var(--catalogo-w) minmax(0, 1fr); grid-template-rows: var(--barra-h) minmax(0, 1fr); grid-template-areas: 'catalogo barra' 'catalogo tablero'; z-index: 1; }
+.w-builder__barra { grid-area: barra; display: flex; align-items: center; gap: var(--space-5); padding: 0 var(--space-6); background: var(--surface-raised); border-bottom: 1px solid var(--glass-line); -webkit-backdrop-filter: var(--sheet-filter); backdrop-filter: var(--sheet-filter); }
+.w-builder__cuerpo { display: contents; }
+.w-builder__cuerpo > .w-catalogo { grid-area: catalogo; }
+.w-builder__cuerpo > .w-tablero, .w-builder__cuerpo > .w-anuncio { grid-area: tablero; }
 .w-estado-guardado { display: inline-flex; align-items: center; gap: var(--space-2); font: var(--fw-medium) 13px/1 var(--font-sans); color: var(--text-tertiary); white-space: nowrap; }
 .w-estado-guardado .w-punto { width: 7px; height: 7px; border-radius: 50%; background: var(--text-primary); }
 .w-catalogo { position: relative; display: flex; flex-direction: column; min-height: 0; border-right: 1px solid var(--glass-line); background: var(--surface-card); -webkit-backdrop-filter: var(--glass-filter); backdrop-filter: var(--glass-filter); }
@@ -619,8 +622,10 @@ section + section { margin-top: var(--space-11); }
    PANTALLAS: constructor
    ============================================================ */
 .w-builder__nombre { min-width: 300px; max-width: 420px; }
+/* Cinta: un nombre que no entra se desplaza a la izquierda y vuelve a entrar por la derecha. */
+.w-cinta { overflow: hidden; white-space: nowrap; min-width: 0; }
 .w-builder__atajo { margin-left: calc(var(--space-2) * -1); }
-.w-builder__cuerpo--mediana { grid-template-columns: 296px 1fr; }
+.w-builder:has(.w-builder__cuerpo--mediana) { grid-template-columns: 296px minmax(0, 1fr); }
 .w-builder__cuerpo--mediana .w-tablero { -webkit-mask-image: linear-gradient(90deg, var(--text-primary) calc(100% - 48px), transparent); mask-image: linear-gradient(90deg, var(--text-primary) calc(100% - 48px), transparent); }
 .w-dia__agregar { align-self: flex-start; color: var(--text-secondary); }
 .w-agarre { display: inline-flex; cursor: grab; }

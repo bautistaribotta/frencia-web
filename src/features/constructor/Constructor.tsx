@@ -629,7 +629,7 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
   return (
     <>
       <Fondo posicion="velada" />
-      <div className={styles.pantalla}>
+      <div className={`${styles.pantalla} ${oculto ? styles.sinCatalogo : ''}`}>
         <Barra
           nombre={borrador.name}
           nombreRef={nombre}
@@ -662,7 +662,7 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
           onDragEnd={alSoltar}
           onDragCancel={terminar}
         >
-          <div className={`${styles.cuerpo} ${oculto ? styles.sinCatalogo : ''}`}>
+          <div className={styles.cuerpo}>
             {oculto ? null : (
               <Catalogo
                 catalogo={catalogo.data}

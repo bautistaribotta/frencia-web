@@ -1,0 +1,11 @@
+/* Cinta (kit web, .w-cinta). La caja recorta; adentro, la cinta con el texto
+   y, si se mueve, su copia a 40 px. */
+
+.caja { display: block; min-width: 0; overflow: hidden; white-space: nowrap; }
+.cortada { text-overflow: ellipsis; }
+
+.cinta { display: inline-flex; gap: 40px; will-change: transform; }
+/* Quieta, la cinta es texto en linea: asi entran los puntos suspensivos. */
+.cortada .cinta { display: inline; will-change: auto; }
+
+.texto { flex: none; }

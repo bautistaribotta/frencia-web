@@ -1,19 +1,24 @@
 /* Constructor de rutinas (kit web, .w-builder): pantalla completa, sin la
-   navegacion lateral. Barra arriba; abajo el catalogo (340 px, 296 entre
-   1024 y 1279) y el tablero, que se desplaza de costado con el borde
-   fundido. El panel va por encima del tablero, a la derecha. */
+   navegacion lateral. El catalogo (340 px, 296 entre 1024 y 1279) va a la
+   izquierda de arriba a abajo; a su derecha, la barra arriba y el tablero
+   debajo, que se desplaza de costado con el borde fundido. Con el catalogo
+   oculto, la barra va a todo el ancho. */
 
 .pantalla {
   position: fixed;
   inset: 0;
   z-index: 1;
   display: grid;
+  grid-template-columns: var(--catalogo-w) minmax(0, 1fr);
   grid-template-rows: var(--barra-h) minmax(0, 1fr);
+  grid-template-areas: 'catalogo barra' 'catalogo tablero';
 }
+.sinCatalogo { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'barra' 'tablero'; }
 
 /* --- Barra --- */
 
 .barra {
+  grid-area: barra;
   display: flex;
   align-items: center;
   gap: var(--space-5);
@@ -68,15 +73,13 @@
 
 /* --- Cuerpo --- */
 
-.cuerpo {
-  position: relative;
-  display: grid;
-  grid-template-columns: var(--catalogo-w) minmax(0, 1fr);
-  min-height: 0;
-}
-.sinCatalogo { grid-template-columns: minmax(0, 1fr); }
+/* El cuerpo agrupa al catalogo y al tablero para el arrastre, pero no arma
+   caja: cada uno va a su area de la pantalla. */
+.cuerpo { display: contents; }
+.cuerpo > aside { grid-area: catalogo; }
 
 .tablero {
+  grid-area: tablero;
   position: relative;
   overflow: auto;
   min-height: 0;
@@ -120,7 +123,9 @@
 .selloTinta > :first-child { color: var(--text-secondary); }
 
 /* Aviso del arrastre con teclado (.w-anuncio). */
+/* Absoluto dentro del area del tablero: va centrado abajo del tablero. */
 .anuncio {
+  grid-area: tablero;
   position: absolute;
   left: 50%;
   bottom: var(--space-6);
@@ -162,13 +167,13 @@
 }
 
 .esqNombre { width: 320px; height: 22px; }
-.esqCatalogo { border-right: 1px solid var(--glass-line); background: var(--surface-card); }
+.esqCatalogo { grid-area: catalogo; border-right: 1px solid var(--glass-line); background: var(--surface-card); }
 .esqDia { flex: none; width: var(--columna-dia-w); display: flex; flex-direction: column; gap: var(--space-4); }
 .esqTitulo { width: 50%; height: 18px; }
 .esqTarjeta { height: 58px; border-radius: var(--radius-md); }
 
 @media (max-width: 1279px) {
-  .cuerpo { grid-template-columns: 296px minmax(0, 1fr); }
+  .pantalla { grid-template-columns: 296px minmax(0, 1fr); }
   .sinCatalogo { grid-template-columns: minmax(0, 1fr); }
   .tablero {
     -webkit-mask-image: linear-gradient(90deg, var(--text-primary) calc(100% - 48px), transparent);
@@ -176,4 +181,14 @@
   }
   .nombre { min-width: 200px; }
   .atajoGuardar { display: none; }
+}
+
+/* Tablet: la barra tiene solo el ancho del tablero. Se compacta y el nombre
+   y el estado ceden ancho para que Guardar siempre entre. */
+@media (max-width: 1023px) {
+  .barra { gap: var(--space-3); padding: 0 var(--space-4); }
+  .nombre { min-width: 0; flex: 1 1 160px; }
+  /* En bloque, para que entren los puntos suspensivos. */
+  .estado { display: block; min-width: 0; flex: 0 1 auto; overflow: hidden; text-overflow: ellipsis; }
+  .estado > svg { vertical-align: -3px; margin-right: var(--space-2); }
 }

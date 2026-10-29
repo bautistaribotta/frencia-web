@@ -182,14 +182,25 @@ consulta** y lleva a la app; en la tablet se usa entera.
 - Inicio: la rutina y lo último que pasó, uno debajo del otro.
 - Detalle de una sesión: el ticket va debajo de las series (hasta 420 px de ancho), sin
   pegarse arriba: lado a lado no entran.
-- El constructor se usa entero, con el catálogo de 296 px plegable.
+- El constructor se usa entero, con el catálogo de 296 px plegable. Como el catálogo va a
+  todo el alto, la barra tiene el ancho del tablero: se compacta (márgenes y espacios de
+  12 px), el nombre cede ancho y el estado de guardado se corta con puntos suspensivos;
+  volver, el nombre y Guardar siempre entran.
 
 ## El constructor de rutinas
 
-Anatomía: barra superior (volver, nombre editable, estado de guardado, Guardar) · catálogo
-de 340 px (búsqueda, chips por tipo, selector de grupo muscular) · tablero con un día por
-columna (300 px, desplazamiento horizontal con borde fundido) · modal centrado para configurar
-un ejercicio.
+Anatomía: catálogo de 340 px a la izquierda, de arriba a abajo (búsqueda, chips por tipo,
+selector de grupo muscular) · a su derecha, la barra superior (volver, nombre editable,
+estado de guardado, Guardar), que ocupa solo el ancho del tablero · debajo, el tablero con
+un día por columna (300 px, desplazamiento horizontal con borde fundido) · modal centrado
+para configurar un ejercicio. Con el catálogo oculto, la barra va a todo el ancho.
+
+- **Nombres en cinta** (como `MarqueeText` de la app): el nombre de un ejercicio que no
+  entra en su renglón, en el catálogo y en las tarjetas de los días, se desplaza lento
+  (28 px/s) de derecha a izquierda. Lleva dos copias separadas por 40 px, así la segunda
+  ocupa el lugar de la primera y el reinicio no se nota. Cada vuelta arranca con 2 s quieto
+  para leer el comienzo. Si entra, queda quieto. Con «reducir movimiento» no se mueve y se
+  corta con puntos suspensivos; la copia que sigue al puntero al arrastrar, tampoco.
 
 ### dnd-kit
 
