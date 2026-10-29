@@ -193,7 +193,17 @@ Anatomía: catálogo de 340 px a la izquierda, de arriba a abajo (búsqueda, chi
 selector de grupo muscular) · a su derecha, la barra superior (volver, nombre editable,
 estado de guardado, Guardar), que ocupa solo el ancho del tablero · debajo, el tablero con
 un día por columna (300 px, desplazamiento horizontal con borde fundido) · modal centrado
-para configurar un ejercicio. Con el catálogo oculto, la barra va a todo el ancho.
+para configurar un ejercicio.
+
+- **Barra**: a la derecha, Atajos de teclado, Guardar con su `Ctrl S` y, si hay cambios,
+  Descartar a la derecha del todo. Guardar es la acción importante: va antes.
+- **Catálogo oculto** (botón de la cabecera o `[`): se pliega a un riel de 48 px
+  (`catalogo-w-riel`), de arriba a abajo, con el borde del catálogo y solo el botón Mostrar
+  catálogo arriba, a la misma altura que tenía Ocultar catálogo. La barra y el tablero
+  ganan ese ancho.
+- **Cómo se arma**: la tarjeta de ayuda al final del tablero, mientras la rutina no tiene
+  ejercicios. Lleva la cruz arriba a la derecha (estática, como todo lo que cierra); al
+  cerrarla no vuelve, se guarda en el navegador.
 
 - **Nombres en cinta** (como `MarqueeText` de la app): el nombre de un ejercicio que no
   entra en su renglón, en el catálogo y en las tarjetas de los días, se desplaza lento

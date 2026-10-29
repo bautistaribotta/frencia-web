@@ -94,9 +94,9 @@ function Barra({ nombre = 'Push Pull Legs', guardado = 'guardado', nombreFoco })
       <span className="w-estado-guardado" role="status">{txt}</span>
       <span className="f1"></span>
       <BotonIco ico="keyboard" tip="Atajos  ?" label="Atajos de teclado" />
-      {puede ? <Boton v="ghost">Descartar</Boton> : null}
       <Boton ico={guardado === 'guardando' ? undefined : 'check'} estado={guardado === 'guardando' ? 'cargando' : puede ? undefined : 'off'}>{guardado === 'guardando' ? 'Guardando…' : 'Guardar'}</Boton>
       <span className="row g1 c-ter t-bodysm w-builder__atajo"><Kbd>Ctrl</Kbd><Kbd>S</Kbd></span>
+      {puede ? <Boton v="ghost">Descartar</Boton> : null}
     </div>
   );
 }
@@ -163,7 +163,7 @@ function Constructor({ caso, capa, panel, rail }) {
         <div className="w-tablero">
           {dias.map((x) => <Dia key={x.d.n} d={x.d} items={x.items} estado={x.estado} />)}
           <div className="w-dia w-dia--nuevo"><Ico n="plus" s={22} /><span className="t-bodysm semi">Agregar día</span><span className="t-label c-ter">{dias.length} de 7</span></div>
-          {caso === 'vacia' ? <div className="w-tarjeta w-pista col g3"><span className="t-label c-acc">Cómo se arma</span><span className="t-bodysm c-pri">Arrastrá ejercicios del catálogo a un día, o elegí un día y tocá + en el ejercicio.</span><span className="t-bodysm c-sec">Cada ejercicio se configura en el modal que se abre al agregarlo o al hacer clic. Guardar se habilita con un nombre y al menos un ejercicio.</span></div> : null}
+          {caso === 'vacia' ? <div className="w-tarjeta w-pista col g3"><div className="row entre"><span className="t-label c-acc">Cómo se arma</span><BotonIco ico="x" t="sm" label="Cerrar Cómo se arma" /></div><span className="t-bodysm c-pri">Arrastrá ejercicios del catálogo a un día, o elegí un día y tocá + en el ejercicio.</span><span className="t-bodysm c-sec">Cada ejercicio se configura en el modal que se abre al agregarlo o al hacer clic. Guardar se habilita con un nombre y al menos un ejercicio.</span></div> : null}
           {extraTablero}
         </div>
         {caso === 'teclado' ? <div className="w-anuncio" role="status" aria-live="assertive"><Ico n="move" s={18} c="c-acc" /><span className="t-bodysm c-pri"><span className="semi">Press inclinado con mancuernas</span> levantado · 3 de 4 en Push</span><span className="row g1 t-bodysm c-ter"><Kbd>↑</Kbd><Kbd>↓</Kbd>mover <Kbd>←</Kbd><Kbd>→</Kbd>otro día <Kbd>Espacio</Kbd>soltar <Kbd>Esc</Kbd>cancelar</span></div> : null}

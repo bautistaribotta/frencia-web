@@ -441,7 +441,10 @@ section + section { margin-top: var(--space-11); }
 .w-builder { position: absolute; inset: 0; display: grid; grid-template-columns: var(--catalogo-w) minmax(0, 1fr); grid-template-rows: var(--barra-h) minmax(0, 1fr); grid-template-areas: 'catalogo barra' 'catalogo tablero'; z-index: 1; }
 .w-builder__barra { grid-area: barra; display: flex; align-items: center; gap: var(--space-5); padding: 0 var(--space-6); background: var(--surface-raised); border-bottom: 1px solid var(--glass-line); -webkit-backdrop-filter: var(--sheet-filter); backdrop-filter: var(--sheet-filter); }
 .w-builder__cuerpo { display: contents; }
-.w-builder__cuerpo > .w-catalogo { grid-area: catalogo; }
+.w-builder__cuerpo > .w-catalogo, .w-builder__cuerpo > .w-catalogo-riel { grid-area: catalogo; }
+/* Catalogo oculto: un riel fino con Mostrar catalogo arriba. */
+.w-builder:has(.w-catalogo-riel) { grid-template-columns: var(--catalogo-w-riel) minmax(0, 1fr); }
+.w-catalogo-riel { display: flex; flex-direction: column; align-items: center; padding-top: var(--space-6); border-right: 1px solid var(--glass-line); background: var(--surface-card); }
 .w-builder__cuerpo > .w-tablero, .w-builder__cuerpo > .w-anuncio { grid-area: tablero; }
 .w-estado-guardado { display: inline-flex; align-items: center; gap: var(--space-2); font: var(--fw-medium) 13px/1 var(--font-sans); color: var(--text-tertiary); white-space: nowrap; }
 .w-estado-guardado .w-punto { width: 7px; height: 7px; border-radius: 50%; background: var(--text-primary); }

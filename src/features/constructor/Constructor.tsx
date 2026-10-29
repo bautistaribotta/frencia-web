@@ -36,7 +36,7 @@ import {
 } from '@dnd-kit/core';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { ArrowLeft, ArrowRightLeft, Ban, Check, CircleCheck, CloudOff, CornerDownRight, Keyboard, Move, PanelLeftOpen, Pencil, RotateCw } from 'lucide-react';
+import { ArrowLeft, ArrowRightLeft, Ban, Check, CircleCheck, CloudOff, CornerDownRight, Keyboard, Move, PanelLeftOpen, Pencil, RotateCw, X } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useBlocker, useLocation, useNavigate, useParams } from 'react-router';
 
@@ -157,6 +157,17 @@ function leerOculto(): boolean {
   }
 }
 
+// Cómo se arma, una vez cerrada, no vuelve en este navegador.
+const CLAVE_PISTA_CERRADA = 'frencia:constructor:pista-cerrada';
+
+function leerPistaCerrada(): boolean {
+  try {
+    return window.localStorage.getItem(CLAVE_PISTA_CERRADA) === '1';
+  } catch {
+    return false;
+  }
+}
+
 /** Colisiones del constructor. Un dia se reordena contra los otros dias. Un
  *  ejercicio cae en el dia que esta bajo el puntero, junto a la tarjeta mas
  *  cercana; sobre el catalogo, en la zona para quitar; fuera de todo, en
@@ -206,6 +217,7 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
   const [seleccion, setSeleccion] = useState<{ uid: string; teclado: boolean } | null>(null);
   const [nuevo, setNuevo] = useState<string | null>(null);
   const [oculto, setOculto] = useState(leerOculto);
+  const [pistaCerrada, setPistaCerrada] = useState(leerPistaCerrada);
   const [atajos, setAtajos] = useState(false);
   const [preguntaActivar, setPreguntaActivar] = useState(false);
   const [estadoGuardado, setEstadoGuardado] = useState<EstadoGuardado>('reposo');
@@ -275,6 +287,15 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
       return siguiente;
     });
   }, []);
+
+  function cerrarPista() {
+    setPistaCerrada(true);
+    try {
+      window.localStorage.setItem(CLAVE_PISTA_CERRADA, '1');
+    } catch {
+      // Sin almacenamiento vuelve a aparecer la proxima vez.
+    }
+  }
 
   const enfocarBusqueda = useCallback(() => {
     alternarCatalogo(false);
@@ -638,11 +659,9 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
           estado={estadoGuardado}
           puedeGuardar={puedeGuardar}
           motivo={problemasActuales.length > 0 ? MENSAJE_PROBLEMA[problemasActuales[0]] : null}
-          catalogoOculto={oculto}
           onNombre={(valor) => despachar({ tipo: 'nombre', valor })}
           volverA={volver.larga}
           onVolver={volver.volver}
-          onMostrarCatalogo={() => alternarCatalogo(false)}
           onAtajos={() => setAtajos(true)}
           onDescartar={descartar}
           onGuardar={() => void guardar()}
@@ -663,7 +682,12 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
           onDragCancel={terminar}
         >
           <div className={styles.cuerpo}>
-            {oculto ? null : (
+            {oculto ? (
+              // Oculto, el catalogo queda como un riel fino con Mostrar catalogo arriba.
+              <aside className={styles.riel} aria-label="Catálogo de ejercicios oculto">
+                <BotonIcono icono={PanelLeftOpen} tamano="sm" etiqueta="Mostrar catálogo  [" onClick={() => alternarCatalogo(false)} />
+              </aside>
+            ) : (
               <Catalogo
                 catalogo={catalogo.data}
                 cargando={catalogo.isPending}
@@ -701,9 +725,12 @@ function Editor({ routineId, rutina }: { routineId: string | null; rutina: Rutin
                 ))}
               </ContextoDias>
               <AgregarDia total={borrador.dias.length} onAgregar={() => despachar({ tipo: 'agregarDia' })} />
-              {contarEjercicios(borrador) === 0 ? (
+              {contarEjercicios(borrador) === 0 && !pistaCerrada ? (
                 <Tarjeta className={styles.pista}>
-                  <span className={`${texto.label} ${texto.acento}`}>Cómo se arma</span>
+                  <div className={styles.pistaCabeza}>
+                    <span className={`${texto.label} ${texto.acento}`}>Cómo se arma</span>
+                    <BotonIcono icono={X} tamano="sm" etiqueta="Cerrar Cómo se arma" onClick={cerrarPista} />
+                  </div>
                   <span className={`${texto.bodySm} ${texto.primario}`}>Arrastrá ejercicios del catálogo a un día, o elegí un día y tocá + en el ejercicio.</span>
                   <span className={`${texto.bodySm} ${texto.secundario}`}>
                     Cada ejercicio se configura en el modal que se abre al agregarlo o al hacer clic. Guardar se habilita con un nombre y al menos un ejercicio.
@@ -864,18 +891,16 @@ interface PropsBarra {
   estado: EstadoGuardado;
   puedeGuardar: boolean;
   motivo: string | null;
-  catalogoOculto: boolean;
   onNombre: (valor: string) => void;
   /** El texto del volver: "Volver a Inicio", "Volver a la rutina". */
   volverA: string;
   onVolver: () => void;
-  onMostrarCatalogo: () => void;
   onAtajos: () => void;
   onDescartar: () => void;
   onGuardar: () => void;
 }
 
-function Barra({ nombre, nombreRef, nueva, cambios, estado, puedeGuardar, motivo, catalogoOculto, onNombre, volverA, onVolver, onMostrarCatalogo, onAtajos, onDescartar, onGuardar }: PropsBarra) {
+function Barra({ nombre, nombreRef, nueva, cambios, estado, puedeGuardar, motivo, onNombre, volverA, onVolver, onAtajos, onDescartar, onGuardar }: PropsBarra) {
   let estadoTexto;
   if (estado === 'guardando')
     estadoTexto = (
@@ -927,13 +952,7 @@ function Barra({ nombre, nombreRef, nueva, cambios, estado, puedeGuardar, motivo
         {estadoTexto}
       </span>
       <span className={styles.crece} />
-      {catalogoOculto ? <BotonIcono icono={PanelLeftOpen} etiqueta="Mostrar catálogo  [" onClick={onMostrarCatalogo} /> : null}
       <BotonIcono icono={Keyboard} etiqueta="Atajos de teclado  ?" onClick={onAtajos} />
-      {cambios > 0 || estado === 'error' ? (
-        <Boton variante="ghost" onClick={onDescartar} disabled={estado === 'guardando'}>
-          Descartar
-        </Boton>
-      ) : null}
       <Boton
         icono={Check}
         cargando={estado === 'guardando'}
@@ -950,6 +969,12 @@ function Barra({ nombre, nombreRef, nueva, cambios, estado, puedeGuardar, motivo
         <Kbd>Ctrl</Kbd>
         <Kbd>S</Kbd>
       </span>
+      {/* Guardar es lo importante: va antes; Descartar, a la derecha del todo. */}
+      {cambios > 0 || estado === 'error' ? (
+        <Boton variante="ghost" onClick={onDescartar} disabled={estado === 'guardando'}>
+          Descartar
+        </Boton>
+      ) : null}
     </header>
   );
 }

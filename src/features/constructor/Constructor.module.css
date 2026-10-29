@@ -13,7 +13,6 @@
   grid-template-rows: var(--barra-h) minmax(0, 1fr);
   grid-template-areas: 'catalogo barra' 'catalogo tablero';
 }
-.sinCatalogo { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'barra' 'tablero'; }
 
 /* --- Barra --- */
 
@@ -77,6 +76,20 @@
    caja: cada uno va a su area de la pantalla. */
 .cuerpo { display: contents; }
 .cuerpo > aside { grid-area: catalogo; }
+.sinCatalogo { grid-template-columns: var(--catalogo-w-riel) minmax(0, 1fr); }
+
+/* Catalogo oculto: un riel fino de arriba a abajo, con Mostrar catalogo a la
+   altura que tenia Ocultar catalogo. */
+.riel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: var(--space-6);
+  border-right: 1px solid var(--glass-line);
+  background: var(--surface-card);
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+}
 
 .tablero {
   grid-area: tablero;
@@ -93,6 +106,8 @@
 /* Con el panel abierto, lo ultimo del tablero se puede traer a la vista. */
 
 .pista { flex: none; width: 300px; display: flex; flex-direction: column; gap: var(--space-3); }
+/* El rotulo y la cruz, que queda arriba a la derecha. */
+.pistaCabeza { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); margin: calc(var(--space-2) * -1) calc(var(--space-2) * -1) 0 0; }
 
 /* --- Arrastre --- */
 
@@ -174,7 +189,7 @@
 
 @media (max-width: 1279px) {
   .pantalla { grid-template-columns: 296px minmax(0, 1fr); }
-  .sinCatalogo { grid-template-columns: minmax(0, 1fr); }
+  .pantalla.sinCatalogo { grid-template-columns: var(--catalogo-w-riel) minmax(0, 1fr); }
   .tablero {
     -webkit-mask-image: linear-gradient(90deg, var(--text-primary) calc(100% - 48px), transparent);
     mask-image: linear-gradient(90deg, var(--text-primary) calc(100% - 48px), transparent);

@@ -427,7 +427,7 @@ test('el catalogo ocupa todo el alto y la barra solo el ancho del tablero', asyn
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await conDatos(page);
   await page.goto(`/rutinas/${RUTINA.id}/editar`);
-  const catalogo = page.getByRole('complementary', { name: 'Catálogo de ejercicios' });
+  const catalogo = page.getByRole('complementary', { name: 'Catálogo de ejercicios', exact: true });
   const barra = page.locator('header').filter({ has: page.getByRole('textbox', { name: 'Nombre de la rutina' }) });
   await expect(catalogo).toBeVisible();
   const c = (await catalogo.boundingBox())!;
@@ -437,10 +437,45 @@ test('el catalogo ocupa todo el alto y la barra solo el ancho del tablero', asyn
   expect(Math.round(b.x)).toBe(Math.round(c.x + c.width));
   expect(Math.round(b.x + b.width)).toBe(1440);
 
-  // Con el catalogo oculto, la barra vuelve a todo el ancho.
-  await page.getByRole('button', { name: /^Ocultar catálogo/ }).click();
+  // Oculto, el catalogo queda como un riel fino con Mostrar catalogo arriba,
+  // a la altura que tenia Ocultar; la barra gana el resto del ancho.
+  const ocultar = page.getByRole('button', { name: /^Ocultar catálogo/ });
+  const yOcultar = (await ocultar.boundingBox())!.y;
+  await ocultar.click();
   await expect(catalogo).toHaveCount(0);
-  expect(Math.round((await barra.boundingBox())!.x)).toBe(0);
+  const riel = page.getByRole('complementary', { name: 'Catálogo de ejercicios oculto' });
+  const r = (await riel.boundingBox())!;
+  expect(Math.round(r.width)).toBe(48);
+  expect(Math.round(r.height)).toBe(900);
+  expect(Math.round((await barra.boundingBox())!.x)).toBe(48);
+  const mostrar = riel.getByRole('button', { name: /^Mostrar catálogo/ });
+  expect(Math.round((await mostrar.boundingBox())!.y)).toBe(Math.round(yOcultar));
+  await page.screenshot({ path: 'capturas/constructor-catalogo-oculto.png' });
+  await mostrar.click();
+  await expect(catalogo).toBeVisible();
+});
+
+test('Guardar va antes que Descartar en la barra', async ({ page }) => {
+  await conDatos(page);
+  await page.goto(`/rutinas/${RUTINA.id}/editar`);
+  await page.getByRole('textbox', { name: 'Nombre de la rutina' }).fill('Push Pull Legs');
+  const guardar = (await page.getByRole('button', { name: /^Guardar/ }).boundingBox())!;
+  const descartar = (await page.getByRole('button', { name: 'Descartar', exact: true }).boundingBox())!;
+  expect(guardar.x).toBeLessThan(descartar.x);
+  await page.screenshot({ path: 'capturas/constructor-barra-cambios.png' });
+});
+
+test('Cómo se arma se cierra con la cruz y no vuelve', async ({ page }) => {
+  await conDatos(page, { rutinas: [] });
+  await page.goto('/rutinas/nueva');
+  const pista = page.getByText('Cómo se arma', { exact: true });
+  await expect(pista).toBeVisible();
+  await page.screenshot({ path: 'capturas/constructor-pista.png' });
+  await page.getByRole('button', { name: 'Cerrar Cómo se arma' }).click();
+  await expect(pista).toHaveCount(0);
+  await page.reload();
+  await expect(page.getByRole('textbox', { name: 'Nombre de la rutina' })).toBeVisible();
+  await expect(pista).toHaveCount(0);
 });
 
 test('un nombre que no entra se mueve en cinta; con reducir movimiento, no', async ({ page }) => {
@@ -448,7 +483,7 @@ test('un nombre que no entra se mueve en cinta; con reducir movimiento, no', asy
   const largo = { ...CATALOGO[0], id: 'e9', name: 'Press de banca inclinado con mancuernas y agarre neutro' };
   await conSesion(page, { tablas: { exercises: [largo, ...CATALOGO.slice(1)], routines: [RUTINA] } });
   await page.goto(`/rutinas/${RUTINA.id}/editar`);
-  const catalogo = page.getByRole('complementary', { name: 'Catálogo de ejercicios' });
+  const catalogo = page.getByRole('complementary', { name: 'Catálogo de ejercicios', exact: true });
   const nombre = catalogo.getByText(largo.name, { exact: true });
   // Dos copias: la que se lee y la que la sigue.
   await expect(nombre).toHaveCount(2);

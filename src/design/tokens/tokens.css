@@ -132,6 +132,7 @@
   --pad-pagina: 40px;        /* margen lateral del contenido (32px en mediana) */
   --barra-h: 64px;           /* barra superior del constructor */
   --catalogo-w: 340px;       /* catálogo del constructor (296px en mediana) */
+  --catalogo-w-riel: 48px;   /* catálogo oculto: el riel con Mostrar catálogo */
   --panel-w: 400px;          /* panel lateral de configuración */
   --barra-movil-h: 64px;     /* barra inferior del teléfono, sin el margen seguro */
   --columna-dia-w: 300px;    /* columna de un día en el constructor */
