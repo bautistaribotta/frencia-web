@@ -796,9 +796,11 @@ section + section { margin-top: var(--space-11); }
 .w-campo__sufijo { flex: none; align-self: flex-end; padding-bottom: 12px; font: var(--fw-medium) 15px/22px var(--font-sans); color: var(--text-primary); }
 .w-campo--flotante:not(.is-arriba) .w-campo__sufijo { visibility: hidden; }
 
-/* Nueva rutina conserva el verde aun mientras se anuncia como proxima. */
-.w-nueva-rutina { cursor: pointer; background: var(--signal); color: var(--text-on-signal); box-shadow: var(--halo-signal); }
-.w-nueva-rutina:hover, .w-nueva-rutina:active { background: var(--signal-press); color: var(--text-on-signal); }
+/* Nueva rutina es un boton primario como Crear primera rutina: lima en
+   oscuro, negro en claro. En el riel tambien va relleno. */
+.w-nueva-rutina { cursor: pointer; background: var(--accent); color: var(--text-on-accent); box-shadow: var(--halo-accent); }
+.w-nueva-rutina:hover { background: var(--accent-hover); color: var(--text-on-accent); }
+.w-nueva-rutina:active { background: var(--accent-press); color: var(--text-on-accent); }
 
 /* ============================================================
    TABLET Y TELÉFONO (README, «Tablet y teléfono»). En el kit el tamaño lo

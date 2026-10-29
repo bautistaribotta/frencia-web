@@ -41,7 +41,7 @@ página), `tools/tokens_web.py` (regenera los tokens desde `tokens.json`).
 
 - La barra de pestañas se vuelve navegación lateral en vidrio denso (`surface-raised` +
   `blur-sheet`): Inicio, Rutinas, Historial; Configuración y el usuario (→ Perfil) al pie.
-- **Nueva rutina** reemplaza al botón central de la barra. Va con relleno `signal` y texto `text-on-signal`: lima en oscuro, oliva en claro.
+- **Nueva rutina** reemplaza al botón central de la barra. Es un botón primario, igual que «Crear primera rutina»: relleno `accent` y texto `text-on-accent`, lima en oscuro y negro en claro.
   Abre el constructor (`/rutinas/nueva`), también con `N`, con el cursor de mano (`pointer`). Vive solo en la barra
   lateral: el encabezado de Rutinas no lo repite. Con 5 rutinas abre el aviso de límite (ver «Rutinas»).
 - La pestaña activa: icono en lume y marca de 3 px pegada al borde, como en la app.

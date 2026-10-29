@@ -201,7 +201,7 @@ function ModalCompartir({ paso }) {
 
 function AppWeb() {
   return (
-    <Lienzo titulo="Inicio y Rutinas" bajada="Nueva rutina destaca en verde Lume en la navegación. Inicio responde qué toca esta semana y qué pasó; no hay Empezar, porque desde la web no se entrena. Rutinas lista los planes y el detalle muestra los días lado a lado. Fondo cumbre en todas: la luz arriba a la derecha queda detrás del encabezado y de los números grandes.">
+    <Lienzo titulo="Inicio y Rutinas" bajada="Inicio responde qué toca esta semana y qué pasó; no hay Empezar, porque desde la web no se entrena. Rutinas lista los planes y el detalle muestra los días lado a lado. Fondo cumbre en todas: la luz arriba a la derecha queda detrás del encabezado y de los números grandes.">
       <Seccion titulo="Inicio" nota="(main)/home — la semana en curso arriba, la rutina con sus días y, a la derecha, lo último que pasó.">
         <Mesa nombre="Con rutina en curso" nota="La semana muestra lo hecho en tinta, hoy en lume y lo no entrenado en terciario. Solo el día de hoy sube a vidrio elevado. Las mejores marcas llevan la llama, sin color." ruta="(main)/home" url="frencia.app"><Inicio /></Mesa>
         <Mesa nombre="Cuenta nueva" ruta="(main)/home" url="frencia.app"><InicioVacio /></Mesa>
