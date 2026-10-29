@@ -425,7 +425,11 @@ la app móvil):
    Cerrar sesión vuelve al login.
 4. **Términos sin aceptar** (la última aceptación no es de las versiones vigentes):
    `/bienvenida`. Cada documento se abre en el modal de lectura y se marca leído al llegar
-   al final; Aceptar y continuar registra la aceptación (`registrar_aceptacion_legal`).
+   al final. El modal no se cierra solo: queda abierto para terminar de leer el último
+   renglón y se cierra con la cruz o con Esc. Aceptar y continuar registra la aceptación
+   (`registrar_aceptacion_legal`). Si la cuenta no tiene fila en `profiles` (cuentas viejas
+   que la borraron cuando la política lo permitía), antes de aceptar se crea con el nombre
+   que trae el proveedor.
 5. **Setup sin terminar** (`onboarding_completed` en falso): `/bienvenida/perfil` al entrar.
    Saltar deja el dato vacío y avanza; Finalizar guarda lo cargado y las unidades y marca el
    setup como terminado, aunque se hayan saltado datos. No se fuerza más que esa vez: si se

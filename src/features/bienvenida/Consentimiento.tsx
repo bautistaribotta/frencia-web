@@ -1,8 +1,9 @@
 /* Terminos y privacidad (/bienvenida), la fase legal de la cuenta (kit web,
    Web · 3). Cada documento se abre en el modal de lectura y se marca leido
    al llegar al final; con los dos leidos, Aceptar y continuar registra la
-   aceptacion de las versiones vigentes y la puerta deja pasar. La otra
-   salida es cerrar sesion. Fondo: cumbre, anima. */
+   aceptacion de las versiones vigentes y la puerta deja pasar. El modal no
+   se cierra solo al llegar al final: se marca leido y queda abierto para
+   terminar de leer. La otra salida es cerrar sesion. Fondo: cumbre, anima. */
 
 import { useQueryClient } from '@tanstack/react-query';
 import { ArrowUpRight, Check, LogOut } from 'lucide-react';
@@ -16,6 +17,7 @@ import { Fondo } from '@/design/components/Fondo';
 import { Icono } from '@/design/components/Icono';
 import { Marca, Tarjeta } from '@/design/components/varios';
 import texto from '@/design/texto.module.css';
+import { usePerfil } from '@/lib/perfil';
 import { PRIVACIDAD_VERSION, PRIVACIDAD_VIGENCIA } from '@/lib/privacidad';
 import { supabase } from '@/lib/supabase';
 import { TERMINOS_VERSION, TERMINOS_VIGENCIA } from '@/lib/terminos';
@@ -28,6 +30,7 @@ const DOCUMENTOS: { id: Documento; titulo: string; vigencia: string }[] = [
 
 export function Consentimiento() {
   const { user } = useSesion();
+  const perfil = usePerfil();
   const cliente = useQueryClient();
   const avisar = useAvisos();
   const [abierto, setAbierto] = useState<Documento | null>(null);
@@ -38,6 +41,20 @@ export function Consentimiento() {
   async function aceptar() {
     if (!ambos || aceptando) return;
     setAceptando(true);
+    // Hasta el 21/10/2026 la politica dejaba borrar la fila propia de
+    // profiles, y hay cuentas que quedaron sin ella: la aceptacion apunta a
+    // profiles y fallaria (409). Se crea con lo que trae el proveedor.
+    if (user && perfil.data === null) {
+      const datos = user.user_metadata as { name?: string; full_name?: string };
+      const { error: sinPerfil } = await supabase
+        .from('profiles')
+        .upsert({ id: user.id, name: datos.name ?? datos.full_name ?? null }, { onConflict: 'id', ignoreDuplicates: true });
+      if (sinPerfil) {
+        setAceptando(false);
+        avisar('No pudimos registrar la aceptación. Probá de nuevo.', 'error');
+        return;
+      }
+    }
     const { error } = await supabase.rpc('registrar_aceptacion_legal', {
       p_version_terminos: TERMINOS_VERSION,
       p_version_privacidad: PRIVACIDAD_VERSION,
@@ -97,9 +114,8 @@ export function Consentimiento() {
         documento={abierto}
         onCerrar={() => setAbierto(null)}
         onLeido={(d) => {
+          // Al 100 % se marca; el modal lo cierra la persona, con la cruz o Esc.
           setLeidos((actuales) => (actuales.includes(d) ? actuales : [...actuales, d]));
-          // Al 100 % se marca y, despues de ver la barra llena, vuelve a la lista.
-          window.setTimeout(() => setAbierto((actual) => (actual === d ? null : actual)), 600);
         }}
       />
     </>

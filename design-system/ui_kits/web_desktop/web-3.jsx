@@ -410,7 +410,7 @@ function AppWeb() {
       </Seccion>
       <Seccion titulo="Términos y privacidad" nota="legal-consent — tarjeta centrada; fondo cumbre (la luz arriba a la derecha queda lejos del texto chico). El documento se abre en un modal de lectura y se marca al llegar al final.">
         <Mesa nombre="Ninguno leído" nota="La próxima fila a leer se adelanta con el hover." ruta="legal-consent" fondo="cumbre" animado url="frencia.app/bienvenida"><Consentimiento /></Mesa>
-        <Mesa nombre="Leyendo un documento" nota="La barra de abajo avanza con el scroll; al 100 % se marca y vuelve a la lista." ruta="legal-consent · terms" fondo="cumbre" animado url="frencia.app/bienvenida"><DocumentoLegal /></Mesa>
+        <Mesa nombre="Leyendo un documento" nota="La barra de abajo avanza con el scroll; al 100 % el documento se marca Leído, pero el modal sigue abierto para terminar de leer: se cierra con la cruz o con Esc y recién ahí vuelve a la lista." ruta="legal-consent · terms" fondo="cumbre" animado url="frencia.app/bienvenida"><DocumentoLegal /></Mesa>
         <Mesa nombre="Los dos leídos" ruta="legal-consent" fondo="cumbre" animado url="frencia.app/bienvenida"><Consentimiento leidos={['t', 'p']} /></Mesa>
       </Seccion>
       <Seccion titulo="Términos y privacidad públicos" nota="/terminos y /privacidad — las mismas secciones del modal de lectura en una página que se abre sin sesión: son los links que piden Google, Apple y las tiendas. Van afuera de las puertas: con sesión no redirigen y la cabecera ofrece Ir a Frencia; sin sesión, Entrar y Crear cuenta. El segmentado pasa de un documento al otro (cambia la URL). Columna de lectura de 760 px en una tarjeta; fondo velada, como las pantallas de mucho texto. El título de la pestaña es el del documento.">

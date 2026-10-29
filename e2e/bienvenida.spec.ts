@@ -57,10 +57,17 @@ for (const [tema, nombre] of [
     await expect(page.getByText(/Leído \d+ %/)).toBeVisible();
     await page.screenshot({ path: `capturas/bienvenida-leyendo-${nombre}.png` });
     await leerHastaElFinal(page, 'Términos y condiciones');
-    await expect(page.getByRole('dialog', { name: 'Términos y condiciones' })).toBeHidden();
+    // Al llegar al final se marca, pero el modal sigue abierto: lo cierra la persona.
+    const terminos = page.getByRole('dialog', { name: 'Términos y condiciones' });
+    await expect(terminos.getByText('Leído', { exact: true })).toBeVisible();
+    await page.waitForTimeout(800);
+    await expect(terminos).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(terminos).toBeHidden();
     await expect(aceptar).toBeDisabled();
     await page.getByRole('button', { name: 'Leer Política de privacidad' }).click();
     await leerHastaElFinal(page, 'Política de privacidad');
+    await page.getByRole('dialog', { name: 'Política de privacidad' }).getByRole('button', { name: 'Cerrar' }).click();
     await expect(page.getByRole('dialog', { name: 'Política de privacidad' })).toBeHidden();
     await expect(page.getByRole('button', { name: 'Volver a leer Términos y condiciones' })).toBeVisible();
     await expect(aceptar).toBeEnabled();
@@ -113,6 +120,33 @@ for (const [tema, nombre] of [
     });
   });
 }
+
+test('cuenta sin fila en profiles: se crea antes de aceptar', async ({ page }) => {
+  // Cuentas viejas que borraron su perfil cuando la politica lo permitia.
+  const enviado = await conPerfil(page, { aceptaciones_legales: [] });
+  let creado: unknown = null;
+  let existe = false;
+  await page.route('**/rest/v1/profiles?*', async (ruta) => {
+    if (ruta.request().method() === 'POST') {
+      creado = ruta.request().postDataJSON();
+      existe = true;
+      return ruta.fulfill({ status: 201, body: '' });
+    }
+    if (!existe) return ruta.fulfill({ json: [] });
+    await ruta.fulfill({ json: { ...PERFIL, aceptaciones_legales: ACEPTACION_VIGENTE } });
+  });
+  await page.goto('/');
+  await expect(page).toHaveURL(/\/bienvenida$/);
+  for (const titulo of ['Términos y condiciones', 'Política de privacidad']) {
+    await page.getByRole('button', { name: `Leer ${titulo}` }).click();
+    await leerHastaElFinal(page, titulo);
+    await expect(page.getByRole('dialog', { name: titulo }).getByText('Leído', { exact: true })).toBeVisible();
+    await page.keyboard.press('Escape');
+  }
+  await page.getByRole('button', { name: 'Aceptar y continuar' }).click();
+  await expect.poll(() => enviado.aceptacion).toBeTruthy();
+  expect(creado).toMatchObject({ id: expect.any(String) });
+});
 
 test('setup: Atrás vuelve con lo cargado y la altura en pies', async ({ page }) => {
   await conPerfil(page, { onboarding_completed: false, sexo: 'masculino', altura: 178 });
