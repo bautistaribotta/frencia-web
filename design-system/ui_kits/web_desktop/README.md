@@ -412,6 +412,16 @@ la app móvil):
 - La dirección de vuelta (`https://frencia.fit/nueva-contrasena` y la de desarrollo) tiene
   que estar en las Redirect URLs de Supabase Auth; si no, el correo vuelve a la Site URL.
 
+## Inicio sin rutinas
+
+- Arriba, la tarjeta «Tu primera rutina» con Crear primera rutina. Debajo, los tres pasos
+  (Armá tu rutina acá · Entrená con la app · Revisá tu progreso), los tres en la tarjeta
+  punteada de lo vacío, porque todavía no hay nada hecho. El primero, el que toca ahora,
+  se distingue solo por el número relleno en `accent`.
+- Los textos de los pasos entran en dos líneas a 1440 px, para que las tres tarjetas
+  queden del mismo alto: «Revisá tu progreso» dice «Historial y mejores marcas, en la
+  pantalla grande.»
+
 ## Rutinas
 
 - Título «Todas las rutinas», con la bajada «Una en curso, al poner otra en curso, la

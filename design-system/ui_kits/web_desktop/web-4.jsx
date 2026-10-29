@@ -55,7 +55,7 @@ function Inicio() {
   );
 }
 function InicioVacio() {
-  const pasos = [['1', 'Armá tu rutina acá', 'Con el catálogo al lado y arrastrando ejercicios.', true], ['2', 'Entrená con la app', 'Registrá peso, reps y RIR desde el celular.'], ['3', 'Revisá tu progreso', 'Historial, mejores marcas y tonelaje, en la pantalla grande.']];
+  const pasos = [['1', 'Armá tu rutina acá', 'Con el catálogo al lado y arrastrando ejercicios.', true], ['2', 'Entrená con la app', 'Registrá peso, reps y RIR desde el celular.'], ['3', 'Revisá tu progreso', 'Historial y mejores marcas, en la pantalla grande.']];
   return (
     <App activo="home">
       <Pagina>
@@ -66,7 +66,7 @@ function InicioVacio() {
           <span className="t-body c-sec w-hero__texto">Todavía no tenés rutinas. Cargala acá con el teclado y el catálogo a mano; después la entrenás desde el celular.</span>
           <Boton t="lg" ico="plus">Crear primera rutina</Boton>
         </div>
-        <div className="w-tres">{pasos.map(([n, t, s, on]) => <div key={n} className={`w-tarjeta col g3${on ? '' : ' w-tarjeta--punteada'}`}><span className={`w-paso-n${on ? ' is-on' : ''}`}>{n}</span><span className="t-bodysm semi">{t}</span><span className="t-bodysm c-sec">{s}</span></div>)}</div>
+        <div className="w-tres">{pasos.map(([n, t, s, on]) => <div key={n} className="w-tarjeta w-tarjeta--punteada col g3"><span className={`w-paso-n${on ? ' is-on' : ''}`}>{n}</span><span className="t-bodysm semi">{t}</span><span className="t-bodysm c-sec">{s}</span></div>)}</div>
       </Pagina>
     </App>
   );

@@ -245,7 +245,7 @@ function BotonEnlace({ to, children }: { to: string; children: string }) {
 const PASOS = [
   ['Armá tu rutina acá', 'Con el catálogo al lado y arrastrando ejercicios.'],
   ['Entrená con la app', 'Registrá peso, reps y RIR desde el celular.'],
-  ['Revisá tu progreso', 'Historial, mejores marcas y tonelaje, en la pantalla grande.'],
+  ['Revisá tu progreso', 'Historial y mejores marcas, en la pantalla grande.'],
 ];
 
 function Vacio() {
@@ -264,7 +264,7 @@ function Vacio() {
       </Tarjeta>
       <div className={styles.tres}>
         {PASOS.map(([titulo, detalle], i) => (
-          <div key={titulo} className={i === 0 ? styles.paso : `${styles.paso} ${styles.punteada}`}>
+          <div key={titulo} className={`${styles.paso} ${styles.punteada}`}>
             <span className={`${styles.pasoN} ${i === 0 ? styles.pasoOn : ''}`}>{i + 1}</span>
             <span className={`${texto.bodySm} ${texto.primario} ${texto.semi}`}>{titulo}</span>
             <span className={`${texto.bodySm} ${texto.secundario}`}>{detalle}</span>
