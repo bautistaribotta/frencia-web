@@ -1,7 +1,11 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { armarActividad, diaQueToca, type SesionHecha } from './actividad';
 import type { DiaResumen } from './inicio';
+
+// Lo que se prueba es puro: el cliente real pide las variables del .env.local,
+// que en CI no estan.
+vi.mock('./supabase', () => ({ supabase: { from: vi.fn() } }));
 
 const sesion = (fecha: string, diaId: string | null = 'd1', series = 15): SesionHecha => ({ fecha, diaId, diaNombre: 'Push', series });
 // Jueves 29 de octubre de 2026.
