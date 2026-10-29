@@ -253,7 +253,14 @@ Reglas de cada flujo:
 
 - **El icono de la app no cambia.** `assets/Brand/app-icon-light.png` y `app-icon-dark.png`: FREN / CIA con el punto. En el acceso (login y registro) no va el icono: va solo el nombre `FRENCIA.` con esas mismas letras, centrado arriba, en blanco en el tema oscuro y en negro en el claro (`ui_kits/ios_app/marca/`).
 - **Wordmark** `FRENCIA.` en Instrument Sans condensada y negrita: `frencia-wordmark.svg` (marfil sobre grafito) y `frencia-wordmark-light.svg` (tinta sobre marfil). Una sola tinta, nunca en lume, sin degradados.
-- **Marca** `F.` en un cuadrado de grafito: `frencia-mark.svg`, para avatar de redes y favicon chico.
+- **Marca** `F.` en un cuadrado de grafito: `frencia-mark.svg`, para avatar de redes.
+- **Favicon de la web** (`assets/Brand/favicon/`, copiado a `public/` del repo web): el icono de
+  la app en su versión clara (FREN / CIA con el punto, tinta sobre marfil) con las esquinas
+  redondeadas y un borde negro de cerca de 1 px. Es uno solo, no cambia con el tema: la
+  pestaña la pinta el navegador, y el blanco se distingue sobre pestañas oscuras y el borde
+  sobre las claras. `favicon.ico` (16, 32 y 48), `favicon-16.png`, `favicon-32.png` y
+  `apple-touch-icon.png` (180, el icono sin borde: el celular redondea solo). Se regeneran
+  desde `app-icon-light.png` del repo de la app.
 - En texto corrido el nombre se escribe "Frencia", nunca en mayúsculas.
 
 **Imágenes.** Si aparece fotografía, es en blanco y negro o desaturada, con grano, nunca
