@@ -382,6 +382,12 @@ section + section { margin-top: var(--space-11); }
 .w-toast .w-ico:first-child { color: var(--signal); }
 .w-toast--error .w-ico:first-child { color: var(--danger-text); }
 .w-toast--info .w-ico:first-child { color: var(--text-secondary); }
+/* Entra desde la derecha; .is-saliendo vuelve a salir por la derecha. */
+@keyframes w-toast-entra { from { transform: translateX(calc(100% + var(--space-7))); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes w-toast-sale { from { transform: none; opacity: 1; } to { transform: translateX(calc(100% + var(--space-7))); opacity: 0; } }
+.w-toast { animation: w-toast-entra var(--dur-slow) var(--ease-out); }
+.w-toast.is-saliendo { animation: w-toast-sale var(--dur-slow) var(--ease-in-out) forwards; }
+@media (prefers-reduced-motion: reduce) { .w-toast, .w-toast.is-saliendo { animation: none; } }
 .w-ruedita { display: inline-block; flex: none; width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--data-track); border-top-color: currentColor; animation: w-gira 1.2s linear infinite; }
 .w-ruedita--lg { width: 28px; height: 28px; border-width: 2.5px; }
 @keyframes w-gira { to { transform: rotate(360deg); } }
@@ -627,7 +633,7 @@ section + section { margin-top: var(--space-11); }
 .w-builder__nombre { min-width: 300px; max-width: 420px; }
 /* Cinta: un nombre que no entra se desplaza a la izquierda y vuelve a entrar por la derecha. */
 .w-cinta { overflow: hidden; white-space: nowrap; min-width: 0; }
-.w-builder__atajo { margin-left: calc(var(--space-2) * -1); }
+.w-builder__atajo { margin-right: calc(var(--space-2) * -1); }
 .w-builder:has(.w-builder__cuerpo--mediana) { grid-template-columns: 296px minmax(0, 1fr); }
 .w-builder__cuerpo--mediana .w-tablero { -webkit-mask-image: linear-gradient(90deg, var(--text-primary) calc(100% - 48px), transparent); mask-image: linear-gradient(90deg, var(--text-primary) calc(100% - 48px), transparent); }
 .w-dia__agregar { align-self: flex-start; color: var(--text-secondary); }

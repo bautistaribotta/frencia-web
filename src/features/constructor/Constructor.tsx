@@ -953,6 +953,10 @@ function Barra({ nombre, nombreRef, nueva, cambios, estado, puedeGuardar, motivo
       </span>
       <span className={styles.crece} />
       <BotonIcono icono={Keyboard} etiqueta="Atajos de teclado  ?" onClick={onAtajos} />
+      <span className={styles.atajoGuardar} aria-hidden="true">
+        <Kbd>Ctrl</Kbd>
+        <Kbd>S</Kbd>
+      </span>
       <Boton
         icono={Check}
         cargando={estado === 'guardando'}
@@ -965,10 +969,6 @@ function Barra({ nombre, nombreRef, nueva, cambios, estado, puedeGuardar, motivo
       >
         {estado === 'guardando' ? 'Guardando…' : 'Guardar'}
       </Boton>
-      <span className={styles.atajoGuardar} aria-hidden="true">
-        <Kbd>Ctrl</Kbd>
-        <Kbd>S</Kbd>
-      </span>
       {/* Guardar es lo importante: va antes; Descartar, a la derecha del todo. */}
       {cambios > 0 || estado === 'error' ? (
         <Boton variante="ghost" onClick={onDescartar} disabled={estado === 'guardando'}>

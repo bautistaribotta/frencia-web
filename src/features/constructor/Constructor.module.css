@@ -68,7 +68,7 @@
 .guardarOff,
 .guardarOff:hover { background: var(--surface-chip); color: var(--text-disabled); border-color: transparent; box-shadow: none; cursor: not-allowed; }
 
-.atajoGuardar { display: inline-flex; gap: var(--space-1); margin-left: calc(var(--space-2) * -1); }
+.atajoGuardar { display: inline-flex; gap: var(--space-1); margin-right: calc(var(--space-2) * -1); }
 
 /* --- Cuerpo --- */
 

@@ -163,7 +163,8 @@ consulta** y lleva a la app; en la tablet se usa entera.
 - **Detalle de una sesión**: el ticket va debajo de las series.
 - **Modales**: se vuelven hoja desde abajo, a lo ancho, con las esquinas de arriba
   redondeadas y el margen seguro de abajo. El orden de los botones no cambia.
-- **Avisos (toasts)**: arriba de la barra, a lo ancho.
+- **Avisos (toasts)**: arriba de la barra, a lo ancho. Entran y salen por la derecha,
+  como en escritorio.
 - **Atajos**: no se muestran (ni `Kbd`, ni el «N» de Nueva rutina, ni las pistas «Enter
   para ingresar» del login y la bienvenida).
 - **Constructor bloqueado** (`/rutinas/nueva` y `/rutinas/:id/editar`): pantalla sin
@@ -195,8 +196,8 @@ estado de guardado, Guardar), que ocupa solo el ancho del tablero · debajo, el 
 un día por columna (300 px, desplazamiento horizontal con borde fundido) · modal centrado
 para configurar un ejercicio.
 
-- **Barra**: a la derecha, Atajos de teclado, Guardar con su `Ctrl S` y, si hay cambios,
-  Descartar a la derecha del todo. Guardar es la acción importante: va antes.
+- **Barra**: a la derecha, Atajos de teclado, `Ctrl S` pegado a la izquierda de Guardar,
+  Guardar y, si hay cambios, Descartar a la derecha del todo. Guardar es la acción importante: va antes.
 - **Catálogo oculto** (botón de la cabecera o `[`): se pliega a un riel de 48 px
   (`catalogo-w-riel`), de arriba a abajo, con el borde del catálogo y solo el botón Mostrar
   catálogo arriba, a la misma altura que tenía Ocultar catálogo. La barra y el tablero
@@ -310,7 +311,7 @@ Orden de los botones en el pie de un modal:
 | Regla curva de peso | La misma lectura sobre la banda en arco; flechas ±0,5, Shift ±5 | `ArcSlider` |
 | Deslizar una fila | ⋯ al hover + menú; `Supr` sobre la fila enfocada | `Menu` |
 | Mantener apretado para reordenar | Agarre al hover; dnd-kit con mouse o teclado | `Sortable` |
-| Toast arriba | Toast abajo a la derecha, apilado | `Toast` |
+| Toast arriba | Toast abajo a la derecha, apilado. Entra deslizándose desde la derecha y se va deslizándose hacia la derecha (`dur-slow`, 280 ms); con «reducir movimiento», solo aparece y desaparece | `Toast` |
 
 ## Estados de los componentes
 

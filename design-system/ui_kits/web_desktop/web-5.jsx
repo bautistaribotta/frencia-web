@@ -94,8 +94,8 @@ function Barra({ nombre = 'Push Pull Legs', guardado = 'guardado', nombreFoco })
       <span className="w-estado-guardado" role="status">{txt}</span>
       <span className="f1"></span>
       <BotonIco ico="keyboard" tip="Atajos  ?" label="Atajos de teclado" />
-      <Boton ico={guardado === 'guardando' ? undefined : 'check'} estado={guardado === 'guardando' ? 'cargando' : puede ? undefined : 'off'}>{guardado === 'guardando' ? 'Guardando…' : 'Guardar'}</Boton>
       <span className="row g1 c-ter t-bodysm w-builder__atajo"><Kbd>Ctrl</Kbd><Kbd>S</Kbd></span>
+      <Boton ico={guardado === 'guardando' ? undefined : 'check'} estado={guardado === 'guardando' ? 'cargando' : puede ? undefined : 'off'}>{guardado === 'guardando' ? 'Guardando…' : 'Guardar'}</Boton>
       {puede ? <Boton v="ghost">Descartar</Boton> : null}
     </div>
   );

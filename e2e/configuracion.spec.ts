@@ -35,3 +35,17 @@ test('preferencias: si no se guarda, el aviso es de error', async ({ page }) => 
   await expect(page.getByRole('status').filter({ hasText: 'No pudimos guardar el ajuste' })).toBeVisible();
   await expect(page.getByRole('status').filter({ hasText: 'millas' })).toHaveCount(0);
 });
+
+test('el aviso entra desde la derecha y sale hacia la derecha', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await conSesion(page);
+  await page.goto('/configuracion');
+  await page.getByRole('radiogroup', { name: 'Unidad de altura' }).getByRole('radio', { name: 'ft' }).click();
+  const aviso = page.getByRole('status').filter({ hasText: 'La altura ahora va en pies' });
+  const nombres = () => aviso.evaluate((n) => n.getAnimations().map((a) => (a as CSSAnimation).animationName));
+  await expect.poll(nombres).toEqual([expect.stringMatching(/entra/)]);
+  await aviso.getByRole('button', { name: 'Cerrar aviso' }).click();
+  await expect.poll(nombres).toEqual([expect.stringMatching(/sale/)]);
+  await expect(aviso).toHaveCount(0);
+});

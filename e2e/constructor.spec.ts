@@ -455,13 +455,18 @@ test('el catalogo ocupa todo el alto y la barra solo el ancho del tablero', asyn
   await expect(catalogo).toBeVisible();
 });
 
-test('Guardar va antes que Descartar en la barra', async ({ page }) => {
+test('en la barra: Ctrl S, Guardar y Descartar, en ese orden', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   await conDatos(page);
   await page.goto(`/rutinas/${RUTINA.id}/editar`);
   await page.getByRole('textbox', { name: 'Nombre de la rutina' }).fill('Push Pull Legs');
   const guardar = (await page.getByRole('button', { name: /^Guardar/ }).boundingBox())!;
   const descartar = (await page.getByRole('button', { name: 'Descartar', exact: true }).boundingBox())!;
   expect(guardar.x).toBeLessThan(descartar.x);
+  await expect(page.getByRole('button', { name: /^Guardar/ })).not.toHaveAttribute('aria-disabled');
+  const atajo = (await page.locator('header kbd', { hasText: 'Ctrl' }).boundingBox())!;
+  expect(atajo.x).toBeLessThan(guardar.x);
   await page.screenshot({ path: 'capturas/constructor-barra-cambios.png' });
 });
 

@@ -3,7 +3,8 @@
    ok: check en lume; error: triangulo en carmin; info: en tinta. Se van
    solos a los 4 s y tienen su cruz para cerrarlos antes. Pueden traer una
    accion (Deshacer, Reintentar), que tambien los cierra; con accion duran
-   el doble, para dar tiempo a usarla. */
+   el doble, para dar tiempo a usarla. Entran deslizandose desde la derecha
+   y al cerrarse salen hacia la derecha; recien despues se quitan. */
 
 import { Check, Info, TriangleAlert, X } from 'lucide-react';
 import { createContext, useCallback, useContext, useRef, useState, type ReactNode } from 'react';
@@ -26,6 +27,7 @@ interface Aviso {
   mensaje: string;
   tipo: TipoAviso;
   accion?: AccionAviso;
+  saliendo?: boolean;
 }
 
 type Avisar = (mensaje: string, tipo?: TipoAviso, accion?: AccionAviso) => void;
@@ -34,12 +36,18 @@ const ContextoAvisos = createContext<Avisar>(() => {});
 
 const ICONO = { ok: Check, error: TriangleAlert, info: Info };
 const DURACION_MS = 4000;
+// Lo que dura la salida: --dur-slow, la duracion de la animacion en el CSS.
+const SALIDA_MS = 280;
 
 export function ProveedorAvisos({ children }: { children: ReactNode }) {
   const [avisos, setAvisos] = useState<Aviso[]>([]);
   const siguiente = useRef(0);
 
-  const cerrar = useCallback((id: number) => setAvisos((lista) => lista.filter((a) => a.id !== id)), []);
+  // Primero sale deslizandose; al terminar la animacion se quita de la lista.
+  const cerrar = useCallback((id: number) => {
+    setAvisos((lista) => lista.map((a) => (a.id === id ? { ...a, saliendo: true } : a)));
+    window.setTimeout(() => setAvisos((lista) => lista.filter((a) => a.id !== id)), SALIDA_MS);
+  }, []);
 
   const avisar = useCallback<Avisar>(
     (mensaje, tipo = 'ok', accion) => {
@@ -55,7 +63,7 @@ export function ProveedorAvisos({ children }: { children: ReactNode }) {
       {children}
       <div className={styles.avisos} aria-live="polite">
         {avisos.map((a) => (
-          <div key={a.id} className={`${styles.aviso} ${styles[a.tipo]}`} role="status">
+          <div key={a.id} className={`${styles.aviso} ${styles[a.tipo]} ${a.saliendo ? styles.saliendo : ''}`} role="status">
             <Icono icono={ICONO[a.tipo]} tamano={20} className={styles.icono} />
             <span className={`${texto.bodySm} ${texto.primario} ${styles.mensaje}`}>{a.mensaje}</span>
             {a.accion ? (
