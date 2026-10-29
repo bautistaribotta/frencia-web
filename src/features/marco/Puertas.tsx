@@ -1,6 +1,7 @@
 /* Puertas del router: deciden entre el acceso y la app segun haya sesion.
    - SoloInvitado: login y registro. Con sesion lleva al inicio (o a donde
-     se queria ir antes de que pidiera entrar).
+     se queria ir antes de que pidiera entrar; si se entro con Apple o
+     Google, eso viajo en sessionStorage, ver lib/oauth.ts).
    - ConSesion: todo lo de adentro. Sin sesion lleva al login y recuerda la
      ruta pedida.
    Mientras se resuelve la sesion inicial no se muestra nada: asi no parpadea
@@ -12,10 +13,12 @@
      perfil no se muestra nada; si no se puede leer, la pantalla de sin
      conexion (nunca el setup: una lectura fallida no es una cuenta nueva). */
 
+import { useEffect } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router';
 
 import { useSesion } from '@/contexts/sesion';
 import { PantallaError } from '@/features/errores/PantallaError';
+import { borrarIntento, leerIntento } from '@/lib/oauth';
 import { faseCuenta, usePerfil, type FaseCuenta } from '@/lib/perfil';
 
 /** La pantalla de cada fase antes de la app. */
@@ -33,8 +36,12 @@ interface EstadoDesde {
 export function SoloInvitado() {
   const { session, iniciando } = useSesion();
   const { state } = useLocation();
+  // El intento de Apple o Google ya cumplio al haber sesion.
+  useEffect(() => {
+    if (session) borrarIntento();
+  }, [session]);
   if (iniciando) return null;
-  if (session) return <Navigate to={(state as EstadoDesde | null)?.desde ?? '/'} replace />;
+  if (session) return <Navigate to={(state as EstadoDesde | null)?.desde ?? leerIntento()?.desde ?? '/'} replace />;
   return <Outlet />;
 }
 

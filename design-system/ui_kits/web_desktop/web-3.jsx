@@ -13,11 +13,21 @@ function LogoGoogle() {
 function LogoApple() {
   return <svg className="w-logo w-logo--apple" viewBox="0 0 24 24" aria-hidden="true"><path d="M16.37 12.6c-.02-2.2 1.8-3.26 1.88-3.31-1.03-1.5-2.62-1.7-3.18-1.73-1.35-.14-2.65.8-3.33.8-.7 0-1.75-.78-2.88-.76-1.48.02-2.85.86-3.61 2.19-1.54 2.67-.39 6.62 1.1 8.79.74 1.06 1.61 2.25 2.75 2.21 1.11-.05 1.53-.71 2.86-.71 1.33 0 1.71.71 2.88.69 1.19-.02 1.94-1.08 2.66-2.15.85-1.23 1.19-2.43 1.21-2.49-.03-.01-2.31-.89-2.34-3.53zM14.19 6.14c.6-.74 1.01-1.75.9-2.77-.87.04-1.94.59-2.56 1.32-.55.64-1.05 1.69-.92 2.68.98.08 1.97-.49 2.58-1.23z" /></svg>;
 }
-function Sociales() {
+/* Apple y Google. Al tocar uno, ese muestra la ruedita en lugar del logo y el otro queda
+   apagado hasta que el navegador sale hacia el proveedor. */
+function Sociales({ cargando }) {
+  const boton = (id, Logo, nombre) => {
+    const carga = cargando === id;
+    return (
+      <button className={`w-btn w-btn--secondary w-btn--md f1${carga ? ' is-cargando' : ''}`} disabled={!!cargando && !carga} aria-busy={carga || undefined}>
+        {carga ? <Ruedita /> : <Logo />}<span>{nombre}</span>
+      </button>
+    );
+  };
   return (
     <>
       <div className="w-divisor"><i></i><span className="t-label c-ter">o continuá con</span><i></i></div>
-      <div className="row g3"><button className="w-btn w-btn--secondary w-btn--md f1"><LogoApple /><span>Apple</span></button><button className="w-btn w-btn--secondary w-btn--md f1"><LogoGoogle /><span>Google</span></button></div>
+      <div className="row g3">{boton('apple', LogoApple, 'Apple')}{boton('google', LogoGoogle, 'Google')}</div>
     </>
   );
 }
@@ -112,7 +122,7 @@ function Acceso({ children, lema = true, variante, tema, temaEstado }) {
   );
 }
 
-function Login({ email, pass, foco, error, enviando, variante, tema, temaEstado }) {
+function Login({ email, pass, foco, error, enviando, variante, tema, temaEstado, social }) {
   const listo = email && pass;
   return (
     <Acceso variante={variante} tema={tema} temaEstado={temaEstado}>
@@ -123,7 +133,7 @@ function Login({ email, pass, foco, error, enviando, variante, tema, temaEstado 
       </div>
       <Boton t="lg" ancho icoDer={enviando ? undefined : 'arrow-right'} estado={enviando ? 'cargando' : listo ? (foco === 'pass' ? undefined : undefined) : 'off'}>{enviando ? 'Ingresando…' : 'Ingresar'}</Boton>
       {foco === 'pass' ? <span className="row centro g2 t-bodysm c-ter"><Kbd>Enter</Kbd>para ingresar</span> : null}
-      <Sociales />
+      <Sociales cargando={social} />
       <span className="t-bodysm c-sec w-acceso__pie">¿No tenés cuenta? <span className="c-acc semi">Creá una</span></span>
     </Acceso>
   );
@@ -369,6 +379,8 @@ function AppWeb() {
         <Mesa nombre="Login · escribiendo" nota="El campo en foco toma el borde de lume con su halo. Debajo del botón, centrado, se recuerda que Enter envía." ruta="(auth)/login" fondo="flanco" animado url="frencia.app/login"><Login email="bauti@correo.com" pass="••••••" foco="pass" /></Mesa>
         <Mesa nombre="Login · credenciales inválidas" ruta="(auth)/login" fondo="flanco" animado url="frencia.app/login"><Login email="bauti@correo.com" pass="••••••••" error="Correo o contraseña incorrectos." /></Mesa>
         <Mesa nombre="Login · ingresando" nota="Los campos se bloquean y el botón muestra la ruedita sin cambiar de ancho." ruta="(auth)/login" fondo="flanco" animado url="frencia.app/login"><Login email="bauti@correo.com" pass="••••••••" enviando /></Mesa>
+        <Mesa nombre="Login · entrando con Google" nota="Al tocar Google o Apple, ese botón cambia el logo por la ruedita y el otro queda apagado; enseguida el navegador sale a la pantalla del proveedor. Si se vuelve con la flecha del navegador, los dos quedan como antes." ruta="(auth)/login" fondo="flanco" animado url="frencia.app/login"><Login social="google" /></Mesa>
+        <Mesa nombre="Login · volvió sin entrar" nota="Si la persona cancela en Google o Apple, vuelve al login con un aviso informativo («Cancelaste el ingreso con Google.»). Si falla el proveedor o la red, el aviso es de error («No pudimos entrar con Google. Probá de nuevo.»). El formulario queda como estaba y la URL se limpia." ruta="(auth)/login" fondo="flanco" animado url="frencia.app/login"><><Login /><Toasts><Toast tipo="info" texto="Cancelaste el ingreso con Google." /></Toasts></></Mesa>
       </Seccion>
       <Seccion titulo="Campos con etiqueta flotante" nota="Los campos del acceso no llevan placeholder: el rótulo va adentro mientras el campo está vacío y, al hacer clic o al tener texto, sube al borde de arriba de la caja (al 75 %, 180 ms ease-out) y deja lugar para escribir. En foco el rótulo toma el color de señal; con error, el carmín de texto. ¿La olvidaste? baja a la línea de debajo del campo.">
         <Mesa nombre="Estados del campo" alto={420} ruta="ui/FloatingField" fondo="cumbre" url="frencia.app/login"><EstadosFlotante /></Mesa>

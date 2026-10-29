@@ -1,9 +1,18 @@
 /* Ingreso con Apple y Google, debajo del formulario. Los logos son los de
-   cada marca: el de Google lleva sus cuatro colores, el de Apple la tinta. */
+   cada marca: el de Google lleva sus cuatro colores, el de Apple la tinta.
+   Al tocar uno, ese cambia el logo por la ruedita y el otro queda apagado
+   hasta que el navegador sale hacia el proveedor (lib/oauth.ts). Al volver
+   con un error (cancelado, proveedor caido) se avisa y se limpia la URL; si
+   se entro, la puerta SoloInvitado lleva al inicio. */
 
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router';
+
+import { useAvisos } from '@/contexts/avisos';
 import { Boton } from '@/design/components/Boton';
 import { LogoApple } from '@/design/components/Logos';
 import { Divisor } from '@/design/components/varios';
+import { borrarIntento, entrarCon, errorDeVuelta, leerIntento, NOMBRE_PROVEEDOR, type Proveedor } from '@/lib/oauth';
 import styles from './Acceso.module.css';
 
 function LogoGoogle() {
@@ -17,27 +26,74 @@ function LogoGoogle() {
   );
 }
 
+const LOGO: Record<Proveedor, () => React.JSX.Element> = { apple: LogoApple, google: LogoGoogle };
+
 interface Props {
   deshabilitado?: boolean;
 }
 
 export function Sociales({ deshabilitado = false }: Props) {
+  const [cargando, setCargando] = useState<Proveedor | null>(null);
+  const avisar = useAvisos();
+  const navegar = useNavigate();
+  const { pathname, state } = useLocation();
+
+  // Volvio del proveedor con un error: se avisa una vez y se limpia la URL.
+  useEffect(() => {
+    const vuelta = errorDeVuelta(window.location.href);
+    if (!vuelta) return;
+    const nombre = NOMBRE_PROVEEDOR[leerIntento()?.proveedor ?? 'google'];
+    borrarIntento();
+    if (vuelta.cancelado) avisar(`Cancelaste el ingreso con ${nombre}.`, 'info');
+    else avisar(`No pudimos entrar con ${nombre}. Probá de nuevo.`, 'error');
+    navegar(pathname, { replace: true, state });
+    // Solo al llegar a la pantalla.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Volver con la flecha del navegador puede traer la pagina de la cache
+  // tal como quedo, con la ruedita: los botones vuelven a como estaban.
+  useEffect(() => {
+    const alMostrar = (evento: PageTransitionEvent) => {
+      if (evento.persisted) setCargando(null);
+    };
+    window.addEventListener('pageshow', alMostrar);
+    return () => window.removeEventListener('pageshow', alMostrar);
+  }, []);
+
+  async function entrar(proveedor: Proveedor) {
+    setCargando(proveedor);
+    const { error } = await entrarCon(proveedor, (state as { desde?: string } | null)?.desde);
+    if (!error) return;
+    setCargando(null);
+    avisar(`No pudimos conectar con ${NOMBRE_PROVEEDOR[proveedor]}. Probá de nuevo.`, 'error');
+  }
+
+  const boton = (proveedor: Proveedor) => {
+    const Logo = LOGO[proveedor];
+    const esEste = cargando === proveedor;
+    return (
+      <Boton
+        variante="secondary"
+        disabled={deshabilitado || (cargando !== null && !esEste)}
+        cargando={esEste}
+        onClick={() => entrar(proveedor)}
+      >
+        <span className={styles.conLogo}>
+          {/* Mientras carga, la ruedita del boton ocupa el lugar del logo. */}
+          {esEste ? null : <Logo />}
+          {NOMBRE_PROVEEDOR[proveedor]}
+        </span>
+      </Boton>
+    );
+  };
+
   return (
     <>
       <Divisor>o continuá con</Divisor>
       <div className={styles.fila}>
-        <Boton variante="secondary" disabled={deshabilitado}>
-          <span className={styles.conLogo}>
-            <LogoApple />
-            Apple
-          </span>
-        </Boton>
-        <Boton variante="secondary" disabled={deshabilitado}>
-          <span className={styles.conLogo}>
-            <LogoGoogle />
-            Google
-          </span>
-        </Boton>
+        {boton('apple')}
+        {boton('google')}
       </div>
     </>
   );

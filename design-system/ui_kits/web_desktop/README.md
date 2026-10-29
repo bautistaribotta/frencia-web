@@ -93,6 +93,14 @@ con microtexto, número de serie y una cartela con la marca `FRENCIA.` (en lugar
 - Login y signup llevan Apple y Google debajo del botón principal, con el divisor "o
   continuá con". En el signup crean la cuenta si no existe; el alta sigue por términos y
   el setup del perfil, igual que con correo.
+- Al tocar Apple o Google, ese botón cambia el logo por la ruedita y el otro queda apagado
+  hasta que el navegador sale a la pantalla del proveedor. Al volver, si se entró, la puerta
+  lleva al inicio (o a donde se quería ir); una cuenta nueva pasa por términos y setup.
+  Si se vuelve con la flecha del navegador, los botones quedan como antes.
+- Si la persona cancela en el proveedor, vuelve a la misma pantalla con un aviso informativo
+  («Cancelaste el ingreso con Google.»); si falla el proveedor o la red, el aviso es de error
+  («No pudimos entrar con Google. Probá de nuevo.»). La URL se limpia y el formulario queda
+  como estaba.
 - Arriba, en la esquina del lado del formulario, va el switch de tema (sol · interruptor ·
   luna; encendido = oscuro) en el lugar donde estaba la marca. Sin sesión la elección se
   guarda en el navegador; con sesión manda `profiles.tema`.
