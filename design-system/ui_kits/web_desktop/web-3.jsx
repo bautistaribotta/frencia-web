@@ -240,6 +240,56 @@ function DocumentoLegal() {
   );
 }
 
+/* Textos legales publicos: /terminos y /privacidad, sin sesion, para los links de Google,
+   Apple y las tiendas. Mismo texto que el modal de lectura. */
+const LEGAL = {
+  t: ['Términos y condiciones', [
+    ['1. Aceptación', ['Estos Términos y condiciones regulan el uso de Frencia, en la app y en la web. Para usar Frencia tenés que aceptarlos de forma expresa, junto con la Política de privacidad.']],
+    ['3. Qué es Frencia', ['Frencia es una herramienta para registrar entrenamientos de fuerza, de cardio e isométricos. Te permite cargar y organizar tus rutinas, consultar tu historial, tu racha y tu progreso, y consultar un catálogo de ejercicios.']],
+    ['4. Tu cuenta', ['La cuenta es personal. Sos responsable de mantener la confidencialidad de tu contraseña y de la actividad que ocurra con ella.']],
+  ]],
+  p: ['Política de privacidad', [
+    ['1. Quién es responsable de tus datos', ['El responsable de la base de datos y del tratamiento de tus datos personales es Bautista Ribotta, con domicilio en la ciudad de Córdoba, República Argentina.']],
+    ['2. Qué datos recolectamos', ['Datos de tu cuenta:', ['Nombre y apellido.', 'Correo electrónico.', 'Contraseña, que se guarda cifrada.']]],
+  ]],
+};
+function CabezaLegal({ sesion, movil }) {
+  return (
+    <header className={`w-publica__cabeza${movil ? ' w-publica__cabeza--movil' : ''}`}>
+      <Marca />
+      {sesion
+        ? <Boton v="secondary" t={movil ? 'sm' : 'md'} icoDer="arrow-right">Ir a Frencia</Boton>
+        : movil ? <Boton v="ghost" t="sm">Entrar</Boton> : <div className="row g3"><Boton v="ghost">Entrar</Boton><Boton v="secondary">Crear cuenta</Boton></div>}
+    </header>
+  );
+}
+function LegalPublica({ doc = 't', sesion, movil }) {
+  const [titulo, secciones] = LEGAL[doc];
+  return (
+    <div className="w-publica">
+      <CabezaLegal sesion={sesion} movil={movil} />
+      <main className={`w-legal${movil ? ' w-legal--movil' : ''}`}>
+        <Seg ops={[['t', 'Términos'], ['p', 'Privacidad']]} sel={doc} ancho={movil} />
+        <div className="w-legal__cabeza">
+          <span className="t-display">{titulo}</span>
+          <span className="t-label c-ter">Última actualización · 30 de septiembre de 2026</span>
+        </div>
+        <div className="w-tarjeta w-legal__doc">
+          {secciones.map(([s, bloques]) => (
+            <div key={s} className="w-legal__seccion">
+              <span className="t-subtitle">{s}</span>
+              {bloques.map((b, i) => Array.isArray(b)
+                ? <ul key={i} className="w-legal__lista">{b.map((li) => <li key={li} className="t-body c-sec">{li}</li>)}</ul>
+                : <span key={i} className="t-body c-sec">{b}</span>)}
+            </div>
+          ))}
+        </div>
+        <span className="t-bodysm c-ter w-legal__pie">¿Dudas? Escribinos a <a href="#">bautistaribotta@hotmail.com</a></span>
+      </main>
+    </div>
+  );
+}
+
 /* Setup del perfil: un dato por paso, en una tarjeta centrada */
 const PASOS = [
   ['Tu perfil · Sexo', '¿Con qué sexo te identificás?', 'Afina los cálculos de progreso.'],
@@ -350,6 +400,11 @@ function AppWeb() {
         <Mesa nombre="Ninguno leído" nota="La próxima fila a leer se adelanta con el hover." ruta="legal-consent" fondo="cumbre" animado url="frencia.app/bienvenida"><Consentimiento /></Mesa>
         <Mesa nombre="Leyendo un documento" nota="La barra de abajo avanza con el scroll; al 100 % se marca y vuelve a la lista." ruta="legal-consent · terms" fondo="cumbre" animado url="frencia.app/bienvenida"><DocumentoLegal /></Mesa>
         <Mesa nombre="Los dos leídos" ruta="legal-consent" fondo="cumbre" animado url="frencia.app/bienvenida"><Consentimiento leidos={['t', 'p']} /></Mesa>
+      </Seccion>
+      <Seccion titulo="Términos y privacidad públicos" nota="/terminos y /privacidad — las mismas secciones del modal de lectura en una página que se abre sin sesión: son los links que piden Google, Apple y las tiendas. Van afuera de las puertas: con sesión no redirigen y la cabecera ofrece Ir a Frencia; sin sesión, Entrar y Crear cuenta. El segmentado pasa de un documento al otro (cambia la URL). Columna de lectura de 760 px en una tarjeta; fondo velada, como las pantallas de mucho texto. El título de la pestaña es el del documento.">
+        <Mesa nombre="Términos · sin sesión" ruta="/terminos" fondo="velada" url="frencia.fit/terminos"><LegalPublica doc="t" /></Mesa>
+        <Mesa nombre="Privacidad · con sesión" nota="Llega desde un link con la sesión abierta: no se cierra la sesión ni se pasa por el inicio." ruta="/privacidad" fondo="velada" url="frencia.fit/privacidad"><LegalPublica doc="p" sesion /></Mesa>
+        <Mesa nombre="Privacidad en el celular" nota="Cabecera chica con Entrar; el segmentado va a lo ancho y la tarjeta baja su relleno a space-6." movil ancho={390} alto={844} ruta="/privacidad · móvil" fondo="velada" url="frencia.fit/privacidad"><LegalPublica doc="p" movil /></Mesa>
       </Seccion>
       <Seccion titulo="Setup del perfil" nota="setup — el mismo marco de wizard de la app (barra, contador, escala, enunciado, control, pie) en una tarjeta de 640 px. Sexo va con fondo cumbre; fecha, altura y peso con fondo centro: el control protagonista queda sobre la luz, en vidrio.">
         <Mesa nombre="Paso 1 · Sexo" ruta="setup" fondo="cumbre" animado url="frencia.app/bienvenida/perfil"><Setup paso={0} /></Mesa>

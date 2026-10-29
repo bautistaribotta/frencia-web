@@ -4,7 +4,8 @@
    funden al pie. Port de src/components/LegalDocument.tsx del repo mobile.
    Con `onLeido` (el gate de aceptacion, /bienvenida) muestra al pie la
    barra de lectura, que avanza con el scroll; al llegar al final avisa una
-   vez que el documento quedo leido. */
+   vez que el documento quedo leido. Las secciones (SeccionesLegales) son
+   las mismas que muestran las paginas publicas /terminos y /privacidad. */
 
 import { useEffect, useRef, useState } from 'react';
 
@@ -17,7 +18,8 @@ import { Modal } from './Modal';
 
 export type Documento = 'terminos' | 'privacidad';
 
-const DOCUMENTOS = {
+// eslint-disable-next-line react-refresh/only-export-components
+export const DOCUMENTOS = {
   terminos: { titulo: 'Términos y condiciones', vigencia: TERMINOS_VIGENCIA, secciones: TERMINOS },
   privacidad: { titulo: 'Política de privacidad', vigencia: PRIVACIDAD_VIGENCIA, secciones: PRIVACIDAD },
 };
@@ -63,14 +65,7 @@ export function DocumentoLegal({ documento, onCerrar, onLeido }: Props) {
   return (
     <Modal abierto={documento !== null} documento titulo={doc.titulo} texto={`Última actualización · ${doc.vigencia}`} onCerrar={onCerrar}>
       <div ref={caja} className={styles.doc} tabIndex={0} aria-label={doc.titulo} onScroll={onLeido ? medir : undefined}>
-        {doc.secciones.map((seccion) => (
-          <section key={seccion.titulo} className={styles.seccion}>
-            <h3 className={`${texto.subtitle} ${styles.titulo}`}>{seccion.titulo}</h3>
-            {seccion.bloques.map((bloque, i) => (
-              <Bloque key={i} bloque={bloque} />
-            ))}
-          </section>
-        ))}
+        <SeccionesLegales documento={documento ?? 'terminos'} />
       </div>
       {onLeido ? (
         <div className={styles.progreso}>
@@ -82,6 +77,23 @@ export function DocumentoLegal({ documento, onCerrar, onLeido }: Props) {
         </div>
       ) : null}
     </Modal>
+  );
+}
+
+/** Las secciones de un documento, con su subtitulo, parrafos y vinetas. */
+export function SeccionesLegales({ documento, nivel = 'h3' }: { documento: Documento; nivel?: 'h2' | 'h3' }) {
+  const Titulo = nivel;
+  return (
+    <>
+      {DOCUMENTOS[documento].secciones.map((seccion) => (
+        <section key={seccion.titulo} className={styles.seccion}>
+          <Titulo className={`${texto.subtitle} ${styles.titulo}`}>{seccion.titulo}</Titulo>
+          {seccion.bloques.map((bloque, i) => (
+            <Bloque key={i} bloque={bloque} />
+          ))}
+        </section>
+      ))}
+    </>
   );
 }
 

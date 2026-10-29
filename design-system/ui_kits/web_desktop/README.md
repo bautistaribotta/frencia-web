@@ -68,6 +68,7 @@ cinco posiciones y la regla de lectura son las de la app.
 | `/login`, `/signup`, `/recuperar`, `/nueva-contrasena` | Acceso | `flanco` · anima |
 | `/cuenta-en-baja` | Cuenta con la baja pedida | `cumbre` · anima |
 | `/bienvenida` | Términos y privacidad | `cumbre` · anima |
+| `/terminos`, `/privacidad` | Términos y privacidad públicos | `velada` |
 | `/bienvenida/perfil` | Setup: sexo | `cumbre` · anima |
 | `/bienvenida/perfil` | Setup: fecha, altura, peso | `centro` · anima (fundido de 420 ms entre pasos) |
 | `/` | Inicio | `cumbre` |
@@ -418,6 +419,28 @@ la app móvil):
    setup como terminado, aunque se hayan saltado datos. No se fuerza más que esa vez: si se
    sale a mitad, vuelve en el próximo ingreso.
 6. **Adentro:** la app.
+
+## Términos y privacidad públicos
+
+`/terminos` y `/privacidad` muestran los textos legales en una página que se abre sin
+sesión: son los links que piden Google (pantalla de consentimiento de OAuth), Apple y las
+tiendas. En `Web - 3`, sección "Términos y privacidad públicos".
+
+- Van afuera de las puertas del router: con sesión no redirigen y sin sesión no mandan al
+  login. La cabecera es la pública (la de la 404 sin sesión): marca a la izquierda y, a la
+  derecha, Entrar y Crear cuenta sin sesión o Ir a Frencia con sesión.
+- Debajo, el segmentado Términos · Privacidad pasa de un documento al otro y cambia la URL.
+  Después el título (`t-display`), «Última actualización · fecha» y las secciones en una
+  tarjeta, con el mismo formato que el modal de lectura (subtítulo, párrafos en
+  `text-secondary`, viñetas de raya). Columna de lectura de 760 px, centrada.
+- Al pie, centrado: «¿Dudas? Escribinos a» y el correo de contacto, como link `mailto:`.
+- El texto sale de los mismos archivos que el modal (`terminos.ts`, `privacidad.ts`), así
+  que lo que se publica es siempre lo que se acepta. El título de la pestaña es el del
+  documento.
+- En el teléfono: cabecera chica (Entrar o Ir a Frencia en tamaño `sm`), el segmentado a
+  lo ancho y la tarjeta con relleno `space-6`.
+- En la tablet la cabecera baja su margen a `space-9`, alineada con la columna.
+- Fondo `velada`, como las pantallas de mucho texto.
 
 ## Recuperar la contraseña
 

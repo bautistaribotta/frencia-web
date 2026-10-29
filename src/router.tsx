@@ -13,6 +13,8 @@
    - /cuenta-en-baja, /bienvenida y /bienvenida/perfil: las fases de la
      cuenta, con sesion pero sin la navegacion; ConSesion decide cual.
    - /historial/:id/ticket: el ticket solo, sin la navegacion.
+   - /terminos y /privacidad: los textos legales, afuera de las puertas: se
+     ven con sesion y sin sesion (son los links de Google, Apple y las tiendas).
    MemoriaNavegacion, en la raiz, recuerda de donde se llego a cada pantalla
    para los botones de volver (marco/Volver.tsx).
    Falta del kit /r/:codigo, la rutina compartida. */
@@ -34,6 +36,7 @@ import { DetalleSesion } from '@/features/historial/DetalleSesion';
 import { Historial } from '@/features/historial/Historial';
 import { TicketGrande } from '@/features/historial/TicketGrande';
 import { Inicio } from '@/features/inicio/Inicio';
+import { Legal } from '@/features/legal/Legal';
 import { Marco } from '@/features/marco/Marco';
 import { ConSesion, SoloInvitado } from '@/features/marco/Puertas';
 import { MemoriaNavegacion } from '@/features/marco/Volver';
@@ -87,6 +90,8 @@ export const router = createBrowserRouter([
         ],
       },
       { path: '/nueva-contrasena', element: <NuevaContrasena /> },
+      { path: '/terminos', element: <Legal documento="terminos" /> },
+      { path: '/privacidad', element: <Legal documento="privacidad" /> },
       { path: '*', element: <NoEncontrada /> },
     ],
   },
