@@ -1,4 +1,4 @@
-/* Inicio (kit web, Web · 4): .w-semanal, .w-dos, .w-tres y .w-tarjeta. La
+/* Inicio (kit web, Web · 4): .w-dos, .w-tres y .w-tarjeta. La
    pagina, el encabezado y la lista vienen de Pagina. */
 
 .sinMargen { margin: 0; }
@@ -7,36 +7,8 @@
 .columna { display: flex; flex-direction: column; gap: var(--space-5); min-width: 0; }
 .nombreRutina { display: flex; align-items: center; gap: var(--space-4); min-width: 0; }
 
-/* Esta semana */
-.semanal { display: flex; flex-direction: column; gap: var(--space-5); }
+/* "Empezalo desde la app", en la tarjeta del dia que toca hoy. */
 .hoyToca { display: inline-flex; align-items: center; gap: var(--space-2); }
-.semana { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: var(--space-3); }
-.dia {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  padding: var(--space-4);
-  border-radius: var(--radius-md);
-  background: var(--surface-inset);
-  border: 1px solid transparent;
-  min-width: 0;
-}
-.diaPlan { color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.diaEstado {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
-  margin-top: var(--space-2);
-  font: var(--fw-medium) 12.5px/1 var(--font-sans);
-  color: var(--text-tertiary);
-}
-.hecho .diaEstado { color: var(--text-primary); }
-.hoy { background: var(--surface-card-elevated); border-color: var(--signal); box-shadow: 0 0 0 1px var(--signal), var(--halo-signal); }
-.hoy .diaEstado { color: var(--signal-text); font-weight: var(--fw-semibold); }
-/* Descanso: apagado como un control no disponible (relleno chip, texto
-   disabled), solo la fecha y "Descanso". */
-.libre { background: var(--surface-chip); }
-.libre > span { color: var(--text-disabled); }
 
 /* La rutina a la izquierda (dos tercios) y lo ultimo que paso a la derecha. */
 .dos { display: grid; grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr); gap: var(--space-8); align-items: start; }
@@ -125,27 +97,16 @@
 .esqTitulo { width: 70%; height: 22px; }
 .esqLinea { width: 55%; }
 .esqRotulo { width: 40%; }
+.esqActividad { display: flex; flex-direction: column; gap: var(--space-4); }
+.esqCuadro { height: 120px; }
 
 /* Tablet y teléfono: la rutina y lo ultimo que paso no entran lado a lado;
    van uno debajo del otro. En el teléfono, los dias de a uno. */
 @media (max-width: 1023px) {
   .dos { grid-template-columns: minmax(0, 1fr); }
-  .semana { gap: var(--space-2); }
-  .dia { padding: var(--space-3); }
 }
 
 @media (max-width: 767px) {
   .tres,
   .dos .tres { grid-template-columns: minmax(0, 1fr); }
-  /* La semana no entra en siete columnas: un dia por fila, con la fecha, el
-     plan y el estado en linea. */
-  .semana { display: flex; flex-direction: column; gap: var(--space-2); }
-  .dia {
-    display: grid;
-    grid-template-columns: 64px minmax(0, 1fr) auto;
-    align-items: center;
-    gap: var(--space-4);
-    padding: var(--space-3) var(--space-4);
-  }
-  .diaEstado { margin-top: 0; }
 }

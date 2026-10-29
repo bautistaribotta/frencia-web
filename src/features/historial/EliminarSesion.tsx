@@ -26,7 +26,7 @@ export function EliminarSesion({ id, nombre, fecha, detalle = false }: { id: str
       avisar('Entrenamiento eliminado.');
       if (detalle) navegar('/historial', { replace: true });
       abrir(false);
-      await Promise.all(['historial', 'historial-totales', 'fechas-entrenadas', 'ultimas-sesiones', 'rutinas', 'rutina', 'rutina-activa'].map(
+      await Promise.all(['historial', 'historial-totales', 'actividad', 'ultimas-sesiones', 'rutinas', 'rutina', 'rutina-activa'].map(
         (clave) => cliente.invalidateQueries({ queryKey: clave === 'rutina' ? [clave] : [clave, user?.id] }),
       ));
     },

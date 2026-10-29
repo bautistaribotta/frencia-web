@@ -1,24 +1,35 @@
 // Frencia Web · 4 Inicio y Rutinas.
 
-const SEMANA_PLAN = [
-  { d: 'Lun 19', n: 'Push', e: 'hecho' }, { d: 'Mar 20', n: 'Pull', e: 'hecho' }, { d: 'Mié 21', n: 'Legs', e: 'hecho' },
-  { d: 'Jue 22', n: 'Push', e: 'hecho' }, { d: 'Vie 23', n: 'Pull', e: 'salteado' }, { d: 'Sáb 24', n: 'Legs', e: 'hoy' }, { d: 'Dom 25', n: null, e: 'libre' },
-];
 const SESIONES = [['Push', 'Jue 22 oct', '58 min', '15 series'], ['Legs', 'Mié 21 oct', '1 h 12 min', '14 series'], ['Pull', 'Mar 20 oct', '49 min', '13 series']];
 const MARCAS = [['Press de banca con barra', '85 kg × 8', 'hace 2 días'], ['Sentadilla', '120 kg × 6', 'hace 3 días'], ['Dominadas', '+10 kg × 6', 'hace 4 días']];
 
-function Semanal() {
+/* Actividad: 53 semanas que terminan el sabado 24 de octubre (hoy). Un dia
+   se pinta si tuvo al menos una sesion; lunes, miercoles y viernes casi
+   siempre, con alguna falta. */
+const MESES_CORTO = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+function Actividad({ semanas = 53, rotulo = 'el último año' }) {
+  const hoy = new Date(2026, 9, 24);
+  const lunes = new Date(hoy); lunes.setDate(hoy.getDate() - ((hoy.getDay() + 6) % 7) - (semanas - 1) * 7);
+  const celdas = [], meses = [];
+  let total = 0, mesAnterior = -1;
+  for (let c = 0; c < semanas; c++) {
+    const inicio = new Date(lunes); inicio.setDate(lunes.getDate() + c * 7);
+    if (inicio.getMonth() !== mesAnterior) { if (c < semanas - 2) meses.push(<span key={'m' + c} className="w-actividad__mes" style={{ gridColumn: c + 2 }}>{MESES_CORTO[inicio.getMonth()]}</span>); mesAnterior = inicio.getMonth(); }
+    for (let f = 0; f < 7; f++) {
+      const d = new Date(inicio); d.setDate(inicio.getDate() + f);
+      const futuro = d > hoy, esHoy = d.getTime() === hoy.getTime();
+      const on = !futuro && (f === 0 || f === 2 || f === 4 || (f === 5 && c % 3 === 0)) && (c * 7 + f) % 11 !== 3;
+      if (on) total++;
+      celdas.push(<span key={c + '-' + f} className={`w-actividad__celda${on ? ' is-on' : ''}${esHoy ? ' is-hoy' : ''}${futuro ? ' is-futuro' : ''}`} style={{ gridColumn: c + 2, gridRow: f + 2 }} title={`${d.getDate()} ${MESES_CORTO[d.getMonth()]} · ${on ? 'Push · 15 series' : 'Sin entrenar'}`} />);
+    }
+  }
   return (
-    <div className="w-tarjeta col g5">
-      <div className="row entre"><span className="t-label c-ter">Esta semana · 4 de 6</span><span className="row g2 t-bodysm c-sec"><Ico n="smartphone" s={16} />Hoy toca Legs: empezalo desde la app</span></div>
-      <div className="w-semanal">
-        {SEMANA_PLAN.map((x) => (
-          <div key={x.d} className={`w-semanal__dia is-${x.e}`}>
-            <span className="t-label c-ter">{x.d}</span>
-            <span className="t-bodysm semi">{x.n || 'Descanso'}</span>
-            {x.e === 'libre' ? null : <span className="w-semanal__estado">{x.e === 'hecho' ? <><Ico n="check" s={14} />Hecho</> : x.e === 'hoy' ? 'Hoy' : x.e === 'salteado' ? 'No entrenado' : '—'}</span>}
-          </div>
-        ))}
+    <div className="w-tarjeta col g4">
+      <div className="row entre"><span className="t-label c-ter">Actividad</span><span className="t-bodysm c-sec">{total} sesiones en {rotulo}</span></div>
+      <div className="w-actividad" role="img" aria-label={`${total} sesiones en ${rotulo}`} style={{ '--semanas': semanas }}>
+        {meses}
+        {['L', '', 'X', '', 'V', '', ''].map((x, f) => <span key={'d' + f} className="w-actividad__dia" style={{ gridRow: f + 2 }}>{x}</span>)}
+        {celdas}
       </div>
     </div>
   );
@@ -26,7 +37,7 @@ function Semanal() {
 function DiaTarjeta({ d, i }) {
   return (
     <div className={`w-tarjeta w-tarjeta--link col g4${i === 2 ? ' w-tarjeta--elevada' : ''}`}>
-      <div className="row entre g3"><div className="col g1"><span className="t-subtitle">{d.n}</span><span className="t-label c-ter">{i === 2 ? <span className="c-acc">Hoy · </span> : null}{d.ej.length} ejercicios</span></div><BotonIco ico="pencil" t="sm" tip="Editar día" anima /></div>
+      <div className="row entre g3"><div className="col g1"><span className="t-subtitle">{d.n}</span><span className="t-label c-ter">{i === 2 ? <span className="c-acc">Hoy · </span> : null}{d.ej.length} ejercicios</span>{i === 2 ? <span className="row g2 t-bodysm c-sec"><Ico n="smartphone" s={16} />Empezalo desde la app</span> : null}</div><BotonIco ico="pencil" t="sm" tip="Editar día" anima /></div>
       <Semana on={d.sem} />
       <div className="col g3">{d.ej.slice(0, 3).map((e) => <div key={e.n} className="row entre g3"><span className="t-bodysm c-pri una-linea f1">{e.n}</span><Res vol={e.vol} int={e.int} /></div>)}</div>
     </div>
@@ -37,7 +48,7 @@ function Inicio() {
     <App activo="home">
       <Pagina>
         <Encabezado rotulo="Sábado 24 de octubre" titulo="Hola, Bautista" acciones={<Badge tono="intensity" ico="flame">12 días de racha</Badge>} />
-        <Semanal />
+        <Actividad />
         <div className="w-dos">
           <div className="col g5">
             <div className="row entre"><div className="row g4"><span className="t-subtitle">Push Pull Legs</span><Badge tono="signal">En curso</Badge></div><Boton v="ghost" t="sm" icoDer="arrow-right">Ver rutina</Boton></div>
@@ -201,9 +212,9 @@ function ModalCompartir({ paso }) {
 
 function AppWeb() {
   return (
-    <Lienzo titulo="Inicio y Rutinas" bajada="Inicio responde qué toca esta semana y qué pasó; no hay Empezar, porque desde la web no se entrena. Rutinas lista los planes y el detalle muestra los días lado a lado. Fondo cumbre en todas: la luz arriba a la derecha queda detrás del encabezado y de los números grandes.">
-      <Seccion titulo="Inicio" nota="(main)/home — la semana en curso arriba, la rutina con sus días y, a la derecha, lo último que pasó.">
-        <Mesa nombre="Con rutina en curso" nota="La semana muestra lo hecho en tinta, hoy en lume y lo no entrenado en terciario. Solo el día de hoy sube a vidrio elevado. Las mejores marcas llevan la llama, sin color." ruta="(main)/home" url="frencia.app"><Inicio /></Mesa>
+    <Lienzo titulo="Inicio y Rutinas" bajada="Inicio muestra la constancia (Actividad), qué toca y qué pasó; no hay Empezar, porque desde la web no se entrena. Rutinas lista los planes y el detalle muestra los días lado a lado. Fondo cumbre en todas: la luz arriba a la derecha queda detrás del encabezado y de los números grandes.">
+      <Seccion titulo="Inicio" nota="(main)/home — Actividad arriba (los días entrenados, solo informativa), la rutina con el día que toca marcado y, a la derecha, lo último que pasó. Actividad: 53 semanas en escritorio, 26 en la tablet y 5 en el teléfono.">
+        <Mesa nombre="Con rutina en curso" nota="Actividad: un día con sesión en lume, el resto en el riel; hoy con borde. El tooltip dice el día, el plan y las series. Solo el día que toca sube a vidrio elevado, con «Hoy» o «Próximo · Vie». Las mejores marcas llevan la llama, sin color." ruta="(main)/home" url="frencia.app"><Inicio /></Mesa>
         <Mesa nombre="Cuenta nueva" ruta="(main)/home" url="frencia.app"><InicioVacio /></Mesa>
         <Mesa nombre="Primera carga" nota="Esqueletos con la forma del contenido; la navegación ya está lista." ruta="(main)/home · cargando" url="frencia.app"><InicioCargando /></Mesa>
       </Seccion>

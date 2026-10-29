@@ -1,11 +1,10 @@
-/* Lecturas del inicio: la rutina activa con sus dias, las fechas entrenadas
-   (para la racha y la semana) y las ultimas sesiones. Las dos primeras son
-   las mismas consultas que usa la app (src/lib/rutinas.ts y history.ts del
-   repo mobile); las ultimas sesiones son propias del escritorio. */
+/* Lecturas del inicio: la rutina activa con sus dias, la misma consulta que
+   usa la app (src/lib/rutinas.ts del repo mobile), y las ultimas sesiones,
+   propias del escritorio. La actividad del ultimo año, que tambien da la
+   racha, vive en actividad.ts. */
 
 import type { QueryData } from '@supabase/supabase-js';
 
-import { fechaLocal, RACHA_TOPE_DIAS } from './streak';
 import { supabase } from './supabase';
 
 export interface DiaResumen {
@@ -61,22 +60,6 @@ export async function cargarRutinaActiva(userId: string): Promise<RutinaDetalle 
   const { data, error } = await consultaDetalle().eq('user_id', userId).is('archived_at', null).maybeSingle();
   if (error) throw error;
   return data ? aDetalle(data) : null;
-}
-
-/** Fechas locales ("YYYY-MM-DD") con alguna sesion terminada dentro del tope
- *  de la racha. null si falla: la racha no es critica y se oculta. */
-export async function cargarFechasEntrenadas(userId: string): Promise<string[] | null> {
-  const desde = new Date();
-  desde.setDate(desde.getDate() - RACHA_TOPE_DIAS);
-  const { data, error } = await supabase
-    .from('workout_sessions')
-    .select('finished_at')
-    .eq('user_id', userId)
-    .not('finished_at', 'is', null)
-    .gte('finished_at', desde.toISOString())
-    .order('finished_at', { ascending: false });
-  if (error || !data) return null;
-  return data.map((fila) => fechaLocal(Date.parse(fila.finished_at as string)));
 }
 
 /** Las ultimas sesiones terminadas, con la cantidad de series registradas. */

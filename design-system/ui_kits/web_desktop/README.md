@@ -150,8 +150,8 @@ consulta** y lleva a la app; en la tablet se usa entera.
   Series y la papelera (sin Rutina ni Duración). Las celdas bajan su relleno a 16 px.
 - **En curso** (Rutinas): el nombre arriba y los días debajo, sin la cuenta de ejercicios.
 - **Totales**: la grilla de cuatro pasa a dos columnas.
-- **Inicio**: una columna; los días de la rutina, de a uno. Esta semana pasa a una fila por
-  día, con la fecha, el plan y el estado en línea.
+- **Inicio**: una columna; los días de la rutina, de a uno. Actividad muestra las últimas 5
+  semanas (unos 30 días), con celdas de 28 px alineadas a la izquierda.
 - **Menú ⋯**: si abajo no entra (por la barra), se abre hacia arriba; si hacia la izquierda
   se sale de la pantalla (un ⋯ que quedó a la izquierda), se abre hacia la derecha.
 - **Configuración**: si el control de un ajuste no entra al lado del texto (el tema,
@@ -180,7 +180,8 @@ consulta** y lleva a la app; en la tablet se usa entera.
 - El riel de la pantalla mediana, con márgenes de página de 24 px.
 - En curso (Rutinas): el nombre en una columna de 200 px y los días sin la cuenta de
   ejercicios.
-- Inicio: la rutina y lo último que pasó, uno debajo del otro.
+- Inicio: la rutina y lo último que pasó, uno debajo del otro. Actividad muestra las
+  últimas 26 semanas (6 meses).
 - Detalle de una sesión: el ticket va debajo de las series (hasta 420 px de ancho), sin
   pegarse arriba: lado a lado no entran.
 - El constructor se usa entero, con el catálogo de 296 px plegable. Como el catálogo va a
@@ -441,6 +442,28 @@ la app móvil):
 - Cada cambio de Preferencias se guarda en el acto y lo confirma un aviso (toast) con la
   opción elegida: «El peso ahora va en libras», «El esfuerzo ahora se mide con RPE».
   Si la base no lo acepta, vuelve a lo anterior y el aviso es de error.
+
+## Inicio
+
+- Arriba, debajo del saludo, **Actividad**: los días entrenados, como el cuadro de
+  contribuciones de GitHub. Reemplaza a «Esta semana». Una columna por semana (de lunes a
+  domingo, de arriba a abajo) y la más reciente a la derecha; arriba el mes donde empieza,
+  a la izquierda L, X y V. En escritorio, las últimas 53 semanas (el último año); en la
+  tablet, 26; en el teléfono, 5.
+- Un solo tono: el día con al menos una sesión terminada va en `signal`; el resto, en
+  `data-track`. Los días que la rutina pedía y no se entrenaron no se marcan. Hoy lleva un
+  borde fino (`border-strong`); los días que todavía no llegaron no se dibujan.
+- Arriba a la derecha, el total: «96 sesiones en el último año» (o «en los últimos 6
+  meses», «en las últimas 5 semanas»).
+- Es **solo informativo**: no se hace clic ni lleva a ningún lado. Al pasar el mouse, un
+  tooltip con el día: «Mar 28 oct · Push · 15 series», o «Mar 28 oct · Sin entrenar».
+- La racha sigue en el encabezado, a la derecha del saludo.
+- **El día que toca**, en la rutina en curso: una sola tarjeta de día lleva el borde de
+  acento y su rótulo. Si hoy es día de entrenar y todavía no hay sesión terminada hoy, dice
+  «Hoy», con «Empezalo desde la app» debajo. Si no (hoy no toca o ya se entrenó), marca el
+  próximo día que toca, con el día de la semana: «Próximo · Vie». Si dos días de la rutina
+  caen el mismo día de la semana, gana el primero. Una rutina sin días de la semana
+  asignados marca, en orden, el que sigue al último que se entrenó («Próximo»).
 
 ## Inicio sin rutinas
 

@@ -1,8 +1,8 @@
 /* Inicio (/). Responde que toca esta semana y que paso; no hay Empezar,
    porque desde la web no se entrena (kit web, Web · 4).
-   - Con rutina en curso: la semana arriba (lo hecho en tinta, hoy en lume,
-     lo no entrenado en terciario), los dias de la rutina y, a la derecha,
-     las ultimas sesiones.
+   - Con rutina en curso: Actividad arriba (los dias entrenados del ultimo
+     año, solo informativa), los dias de la rutina con el que toca marcado
+     (hoy o el proximo) y, a la derecha, las ultimas sesiones.
    - Cuenta nueva: la invitacion a armar la primera rutina y los tres pasos.
    - Primera carga: esqueletos con la forma del contenido.
    La racha y la semana salen de las mismas lecturas que usa la app.
@@ -12,7 +12,7 @@
    Fondo: cumbre, quieto. */
 
 import { useQuery } from '@tanstack/react-query';
-import { ArrowRight, Check, Flame, Plus, RotateCw, Smartphone } from 'lucide-react';
+import { ArrowRight, Flame, Plus, RotateCw, Smartphone } from 'lucide-react';
 import { Link, useNavigate } from 'react-router';
 
 import { Boton } from '@/design/components/Boton';
@@ -22,11 +22,12 @@ import { claseFila, Encabezado, Lista, Pagina } from '@/design/components/Pagina
 import { Esqueleto, Insignia, Tarjeta, TiraSemana } from '@/design/components/varios';
 import texto from '@/design/texto.module.css';
 import { useSesion } from '@/contexts/sesion';
-import { cargarFechasEntrenadas, cargarRutinaActiva, cargarUltimasSesiones, type RutinaDetalle } from '@/lib/inicio';
+import { cargarActividad, diaQueToca, type SesionHecha } from '@/lib/actividad';
+import { cargarRutinaActiva, cargarUltimasSesiones, type RutinaDetalle } from '@/lib/inicio';
 import { useNombre } from '@/lib/perfil';
-import { semanaActual, type DiaSemana } from '@/lib/semana';
 import { calcularRacha, fechaLocal } from '@/lib/streak';
 import { duracionSesion, indiceSemanaLunes, MESES_CORTO, MESES_LARGO } from '@/lib/tiempo';
+import { Actividad } from './Actividad';
 import styles from './Inicio.module.css';
 
 const DIAS_LARGO = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
@@ -49,9 +50,9 @@ export function Inicio() {
   const ahora = new Date();
 
   const rutina = useQuery({ queryKey: ['rutina-activa', userId], queryFn: () => cargarRutinaActiva(userId), enabled: !!userId });
-  const fechas = useQuery({
-    queryKey: ['fechas-entrenadas', userId],
-    queryFn: () => cargarFechasEntrenadas(userId),
+  const actividad = useQuery({
+    queryKey: ['actividad', userId],
+    queryFn: () => cargarActividad(userId),
     enabled: !!userId,
   });
   const sesiones = useQuery({
@@ -62,7 +63,14 @@ export function Inicio() {
 
   const conRutina = rutina.data != null && rutina.data.dias.length > 0;
   const weekdays = conRutina ? rutina.data!.dias.flatMap((d) => d.weekdays) : [];
-  const racha = fechas.data && weekdays.length > 0 ? calcularRacha(weekdays, fechas.data, fechaLocal(ahora.getTime())) : null;
+  const racha =
+    actividad.data && weekdays.length > 0
+      ? calcularRacha(
+          weekdays,
+          actividad.data.map((s) => s.fecha),
+          fechaLocal(ahora.getTime()),
+        )
+      : null;
 
   // Llama en tinta con la racha viva; neutra si hoy toca y todavia no se
   // entreno. Racha cero: no se muestra nada.
@@ -87,12 +95,7 @@ export function Inicio() {
   else if (!conRutina) contenido = <Vacio />;
   else
     contenido = (
-      <ConRutina
-        rutina={rutina.data!}
-        dias={semanaActual(rutina.data!.dias, fechas.data ?? [], ahora)}
-        hoy={indiceSemanaLunes(ahora)}
-        sesiones={sesiones.data}
-      />
+      <ConRutina rutina={rutina.data!} actividad={actividad} sesiones={sesiones.data} />
     );
 
   return (
@@ -108,36 +111,32 @@ export function Inicio() {
 
 function ConRutina({
   rutina,
-  dias,
-  hoy,
+  actividad,
   sesiones,
 }: {
   rutina: RutinaDetalle;
-  dias: ReturnType<typeof semanaActual>;
-  hoy: number;
+  actividad: { data: SesionHecha[] | undefined; isError: boolean; refetch: () => unknown };
   sesiones: Awaited<ReturnType<typeof cargarUltimasSesiones>> | undefined;
 }) {
-  const deHoy = dias.dias[hoy];
+  // Mientras se lee la actividad no se marca ningun dia: podria ser hoy o no.
+  const toca = actividad.data ? diaQueToca(rutina.dias, actividad.data, new Date()) : null;
   return (
     <>
-      <Tarjeta className={styles.semanal}>
-        <div className={styles.fila}>
-          <span className={`${texto.label} ${texto.terciario}`}>
-            Esta semana · {dias.cumplidos} de {dias.planificados}
-          </span>
-          {deHoy.estado === 'hoy' ? (
-            <span className={`${styles.hoyToca} ${texto.bodySm} ${texto.secundario}`}>
-              <Icono icono={Smartphone} tamano={16} />
-              Hoy toca {deHoy.plan}: empezalo desde la app
-            </span>
-          ) : null}
-        </div>
-        <div className={styles.semana}>
-          {dias.dias.map((d) => (
-            <DiaDeLaSemana key={d.fecha.getTime()} dia={d} />
-          ))}
-        </div>
-      </Tarjeta>
+      {actividad.data ? (
+        <Actividad sesiones={actividad.data} />
+      ) : actividad.isError ? (
+        <Tarjeta className={styles.aviso}>
+          <span className={`${texto.bodySm} ${texto.secundario}`}>No pudimos cargar tu actividad.</span>
+          <Boton variante="secondary" tamano="sm" icono={RotateCw} onClick={() => void actividad.refetch()}>
+            Reintentar
+          </Boton>
+        </Tarjeta>
+      ) : (
+        <Tarjeta className={styles.esqActividad}>
+          <Esqueleto className={styles.esqLinea} />
+          <Esqueleto className={styles.esqCuadro} />
+        </Tarjeta>
+      )}
 
       <div className={styles.dos}>
         <section className={styles.columna}>
@@ -150,19 +149,25 @@ function ConRutina({
           </div>
           <div className={styles.tres}>
             {rutina.dias.map((d) => {
-              const esHoy = d.weekdays.includes(hoy);
+              const marca = toca?.id === d.id ? toca : null;
               return (
                 <Link
                   key={d.id}
                   to={`/rutinas/${rutina.id}`}
-                  className={`${styles.tarjetaDia} ${esHoy ? styles.tarjetaHoy : ''}`}
+                  className={`${styles.tarjetaDia} ${marca ? styles.tarjetaHoy : ''}`}
                 >
                   <span className={styles.diaTextos}>
                     <span className={`${texto.subtitle} ${texto.primario}`}>{d.name}</span>
                     <span className={`${texto.label} ${texto.terciario}`}>
-                      {esHoy ? <span className={texto.acento}>Hoy · </span> : null}
+                      {marca ? <span className={texto.acento}>{rotuloToca(marca)} · </span> : null}
                       {d.ejercicios} {d.ejercicios === 1 ? 'ejercicio' : 'ejercicios'}
                     </span>
+                    {marca?.cuando === 'hoy' ? (
+                      <span className={`${styles.hoyToca} ${texto.bodySm} ${texto.secundario}`}>
+                        <Icono icono={Smartphone} tamano={16} />
+                        Empezalo desde la app
+                      </span>
+                    ) : null}
                   </span>
                   <TiraSemana marcados={d.weekdays} />
                 </Link>
@@ -209,27 +214,10 @@ function ConRutina({
   );
 }
 
-function DiaDeLaSemana({ dia }: { dia: DiaSemana }) {
-  const estado =
-    dia.estado === 'hecho' ? (
-      <>
-        <Icono icono={Check} tamano={14} />
-        Hecho
-      </>
-    ) : dia.estado === 'hoy' ? (
-      'Hoy'
-    ) : dia.estado === 'salteado' ? (
-      'No entrenado'
-    ) : (
-      '—'
-    );
-  return (
-    <div className={`${styles.dia} ${styles[dia.estado] ?? ''}`}>
-      <span className={`${texto.label} ${texto.terciario}`}>{DIAS_CORTO[indiceSemanaLunes(dia.fecha)]} {dia.fecha.getDate()}</span>
-      <span className={`${texto.bodySm} ${texto.semi} ${styles.diaPlan}`}>{dia.plan ?? 'Descanso'}</span>
-      {dia.estado === 'libre' ? null : <span className={styles.diaEstado}>{estado}</span>}
-    </div>
-  );
+/** "Hoy", "Próximo · Vie" o, sin dias de la semana, "Próximo". */
+function rotuloToca(toca: NonNullable<ReturnType<typeof diaQueToca>>): string {
+  if (toca.cuando === 'hoy') return 'Hoy';
+  return toca.weekday === null ? 'Próximo' : `Próximo · ${DIAS_CORTO[toca.weekday]}`;
 }
 
 /** Boton fantasma chico que navega: "Ver rutina →", "Historial →". */

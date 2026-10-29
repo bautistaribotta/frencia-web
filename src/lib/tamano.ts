@@ -6,17 +6,26 @@
 import { useSyncExternalStore } from 'react';
 
 export const CONSULTA_TELEFONO = '(max-width: 767px)';
+/** Tablet o telefono: por debajo de 1024 px. */
+export const CONSULTA_TABLET = '(max-width: 1023px)';
 
-function suscribir(aviso: () => void) {
-  const consulta = window.matchMedia(CONSULTA_TELEFONO);
-  consulta.addEventListener('change', aviso);
-  return () => consulta.removeEventListener('change', aviso);
+function useCoincide(consulta: string) {
+  return useSyncExternalStore(
+    (aviso) => {
+      const medio = window.matchMedia(consulta);
+      medio.addEventListener('change', aviso);
+      return () => medio.removeEventListener('change', aviso);
+    },
+    () => window.matchMedia(consulta).matches,
+    () => false,
+  );
 }
 
 export function useEsTelefono() {
-  return useSyncExternalStore(
-    suscribir,
-    () => window.matchMedia(CONSULTA_TELEFONO).matches,
-    () => false,
-  );
+  return useCoincide(CONSULTA_TELEFONO);
+}
+
+/** Verdadero en la tablet y en el telefono. */
+export function useEsTabletOMenos() {
+  return useCoincide(CONSULTA_TABLET);
 }

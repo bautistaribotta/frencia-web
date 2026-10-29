@@ -596,15 +596,15 @@ section + section { margin-top: var(--space-11); }
 .w-dos { display: grid; grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr); gap: var(--space-8); align-items: start; }
 .w-tres { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-5); align-items: start; }
 .w-dos .w-tres { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
-.w-semanal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: var(--space-3); }
-.w-semanal__dia { display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-4); border-radius: var(--radius-md); background: var(--surface-inset); border: 1px solid transparent; }
-.w-semanal__estado { display: inline-flex; align-items: center; gap: var(--space-1); font: var(--fw-medium) 12.5px/1 var(--font-sans); color: var(--text-tertiary); margin-top: var(--space-2); }
-.w-semanal__dia.is-hecho .w-semanal__estado { color: var(--text-primary); }
-.w-semanal__dia.is-hoy { background: var(--surface-card-elevated); border-color: var(--signal); box-shadow: 0 0 0 1px var(--signal), var(--halo-signal); }
-.w-semanal__dia.is-hoy .w-semanal__estado { color: var(--signal-text); font-weight: var(--fw-semibold); }
+/* Actividad: los dias entrenados, una columna por semana (lunes arriba). */
+.w-actividad { display: grid; grid-template-columns: auto repeat(var(--semanas, 53), minmax(0, 1fr)); grid-template-rows: auto repeat(7, auto); column-gap: 3px; row-gap: 3px; }
+.w-actividad__mes { grid-row: 1; font: var(--fw-medium) 11px/1 var(--font-sans); color: var(--text-tertiary); white-space: nowrap; padding-bottom: var(--space-2); }
+.w-actividad__dia { grid-column: 1; font: var(--fw-medium) 11px/1 var(--font-sans); color: var(--text-tertiary); padding-right: var(--space-3); align-self: center; }
+.w-actividad__celda { aspect-ratio: 1; border-radius: 3px; background: var(--data-track); }
+.w-actividad__celda.is-on { background: var(--signal); }
+.w-actividad__celda.is-hoy { box-shadow: inset 0 0 0 1px var(--border-strong); }
+.w-actividad__celda.is-futuro { visibility: hidden; }
 /* Descanso: apagado como un control no disponible (relleno chip, texto disabled), solo la fecha y "Descanso". */
-.w-semanal__dia.is-libre { background: var(--surface-chip); }
-.w-semanal__dia.is-libre > span { color: var(--text-disabled); }
 .w-hero { padding: var(--space-9); }
 .w-hero__titulo { max-width: 560px; } .w-hero__texto { max-width: 560px; }
 .w-paso-n { width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font: var(--fw-semibold) 13px/1 var(--font-sans); color: var(--text-tertiary); border: 1px solid var(--border-default); }

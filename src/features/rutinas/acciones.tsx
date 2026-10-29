@@ -35,7 +35,7 @@ import {
 } from '@/lib/rutinas';
 
 /** Lo que muestra rutinas o sesiones con el nombre de su dia. */
-const CLAVES = ['rutinas', 'rutina', 'rutina-activa', 'historial', 'historial-totales', 'fechas-entrenadas', 'ultimas-sesiones'];
+const CLAVES = ['rutinas', 'rutina', 'rutina-activa', 'historial', 'historial-totales', 'actividad', 'ultimas-sesiones'];
 
 function refrescar(cliente: QueryClient) {
   return Promise.all(CLAVES.map((clave) => cliente.invalidateQueries({ queryKey: [clave] })));
