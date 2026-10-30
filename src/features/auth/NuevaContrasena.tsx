@@ -50,11 +50,7 @@ export function NuevaContrasena() {
         billete="izquierda"
         titulo="El enlace venció"
         bajada="Los enlaces para cambiar la contraseña duran una hora y sirven una sola vez, en el navegador donde los pediste. Pedí uno nuevo."
-        cabeza={
-          <span className={styles.sello}>
-            <Icono icono={Link2Off} tamano={26} />
-          </span>
-        }
+        sello={<Icono icono={Link2Off} tamano={26} />}
       >
         <Boton tamano="lg" ancho iconoDer={ArrowRight} onClick={() => navegar('/recuperar', { replace: true })}>
           Pedir otro enlace

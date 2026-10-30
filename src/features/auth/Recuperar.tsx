@@ -78,14 +78,8 @@ export function Recuperar() {
             contraseña nueva. Si no lo ves, mirá en spam.
           </>
         }
-        cabeza={
-          <>
-            {volver}
-            <span className={styles.sello}>
-              <Icono icono={MailCheck} tamano={26} />
-            </span>
-          </>
-        }
+        cabeza={volver}
+        sello={<Icono icono={MailCheck} tamano={26} />}
       >
         <Boton variante="secondary" tamano="lg" ancho icono={RotateCcw} disabled={espera > 0} cargando={enviando} onClick={() => void enviar()}>
           {espera > 0 ? `Reenviar en 0:${String(espera).padStart(2, '0')}` : 'Reenviar enlace'}
@@ -104,14 +98,8 @@ export function Recuperar() {
       titulo="Recuperá tu contraseña"
       bajada="Escribí tu correo y te mandamos un enlace para elegir una nueva."
       onSubmit={enviar}
-      cabeza={
-        <>
-          {volver}
-          <span className={styles.sello}>
-            <Icono icono={KeyRound} tamano={26} />
-          </span>
-        </>
-      }
+      cabeza={volver}
+      sello={<Icono icono={KeyRound} tamano={26} />}
     >
       <Campo
         flotante

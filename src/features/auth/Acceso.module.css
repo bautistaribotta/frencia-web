@@ -88,9 +88,11 @@
   .tema,
   .billeteIzq .tema { left: auto; right: var(--space-6); top: var(--space-6); }
 }
-/* Recuperar y nueva contraseña (.w-alinear-izq, .w-sello-ico). */
+/* Recuperar y nueva contraseña (.w-alinear-izq, .w-con-sello, .w-sello-ico). */
+.conSello { display: flex; align-items: center; gap: var(--space-4); }
 .volver { align-self: flex-start; margin-left: calc(var(--space-4) * -1); }
 .sello {
+  flex: none;
   width: 52px;
   height: 52px;
   border-radius: var(--radius-lg);

@@ -571,6 +571,8 @@ section + section { margin-top: var(--space-11); }
 .w-lema { font: var(--fw-medium) 112px/0.92 var(--font-display); font-variation-settings: var(--vs-condensed); letter-spacing: -0.04em; color: var(--text-primary); }
 .w-lema__sub { max-width: 440px; }
 .w-alinear-izq { align-self: flex-start; margin-left: calc(var(--space-4) * -1); }
+.w-con-sello { display: flex; align-items: center; gap: var(--space-4); }
+.w-con-sello > .w-sello-ico { flex: none; }
 .w-sello-ico { width: 52px; height: 52px; border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; background: var(--surface-inset); border: 1px solid var(--glass-line); color: var(--text-primary); }
 .w-centrada { position: absolute; inset: 0; z-index: 1; display: flex; align-items: center; justify-content: center; padding: var(--space-9); overflow: auto; }
 .w-centrada__caja { width: 600px; padding: var(--space-9); background: var(--surface-card); }

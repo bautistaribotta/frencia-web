@@ -20,15 +20,25 @@ interface Props {
   billete: 'izquierda' | 'derecha';
   titulo: string;
   bajada: ReactNode;
-  /** Lo que va arriba del titulo: volver al login, el sello con el icono. */
+  /** Lo que va arriba del titulo, solo: volver al login. */
   cabeza?: ReactNode;
+  /** Icono en sello (recuperar, enlace vencido): va a la izquierda del titulo
+   *  y la bajada, centrado en su alto (.w-con-sello). */
+  sello?: ReactNode;
   onSubmit?: (evento: FormEvent<HTMLFormElement>) => void;
   children: ReactNode;
 }
 
-export function Acceso({ billete, titulo, bajada, cabeza, onSubmit = (evento) => evento.preventDefault(), children }: Props) {
+export function Acceso({ billete, titulo, bajada, cabeza, sello, onSubmit = (evento) => evento.preventDefault(), children }: Props) {
   const izquierda = billete === 'izquierda';
   const [documento, setDocumento] = useState<Documento | null>(null);
+
+  const encabezado = (
+    <div className={styles.encabezado}>
+      <h1 className={texto.title}>{titulo}</h1>
+      <span className={`${texto.bodySm} ${texto.secundario}`}>{bajada}</span>
+    </div>
+  );
 
   const columna = (
     <div className={styles.columna}>
@@ -36,10 +46,14 @@ export function Acceso({ billete, titulo, bajada, cabeza, onSubmit = (evento) =>
       <Tarjeta className={styles.tarjeta}>
         <form className={styles.formulario} onSubmit={onSubmit} noValidate>
           {cabeza}
-          <div className={styles.encabezado}>
-            <h1 className={texto.title}>{titulo}</h1>
-            <span className={`${texto.bodySm} ${texto.secundario}`}>{bajada}</span>
-          </div>
+          {sello ? (
+            <div className={styles.conSello}>
+              <span className={styles.sello}>{sello}</span>
+              {encabezado}
+            </div>
+          ) : (
+            encabezado
+          )}
           {children}
         </form>
       </Tarjeta>

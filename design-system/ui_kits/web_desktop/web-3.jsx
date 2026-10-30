@@ -159,15 +159,14 @@ function Recuperar({ enviado }) {
   return (
     <Acceso variante="billete-izq">
       <Boton v="ghost" t="sm" ico="arrow-left" className="w-alinear-izq">Volver a iniciar sesión</Boton>
-      <span className="w-sello-ico"><Ico n={enviado ? 'mail-check' : 'key-round'} s={26} confirma={enviado} /></span>
       {enviado ? (
         <>
-          <div className="col g3"><span className="t-title">Revisá tu correo</span><span className="t-bodysm c-sec">Te mandamos un enlace a <span className="c-pri semi">bauti@correo.com</span> para elegir una contraseña nueva. Si no lo ves, mirá en spam.</span></div>
+          <div className="w-con-sello"><span className="w-sello-ico"><Ico n="mail-check" s={26} confirma /></span><div className="col g2"><span className="t-title">Revisá tu correo</span><span className="t-bodysm c-sec">Te mandamos un enlace a <span className="c-pri semi">bauti@correo.com</span> para elegir una contraseña nueva. Si no lo ves, mirá en spam.</span></div></div>
           <Boton v="secondary" t="lg" ancho ico="rotate-ccw" anima>Reenviar en 0:42</Boton>
         </>
       ) : (
         <>
-          <div className="col g3"><span className="t-title">Recuperá tu contraseña</span><span className="t-bodysm c-sec">Escribí tu correo y te mandamos un enlace para elegir una nueva.</span></div>
+          <div className="w-con-sello"><span className="w-sello-ico"><Ico n="key-round" s={26} /></span><div className="col g2"><span className="t-title">Recuperá tu contraseña</span><span className="t-bodysm c-sec">Escribí tu correo y te mandamos un enlace para elegir una nueva.</span></div></div>
           <Campo flotante rotulo="Correo electrónico" ico="mail" valor="bauti@correo.com" estado="foco" />
           <Boton t="lg" ancho icoDer="arrow-right">Enviar enlace</Boton>
         </>
@@ -179,8 +178,7 @@ function NuevaContrasena({ caso }) {
   if (caso === 'vencido') {
     return (
       <Acceso variante="billete-izq">
-        <span className="w-sello-ico"><Ico n="link-2-off" s={26} /></span>
-        <div className="col g3"><span className="t-title">El enlace venció</span><span className="t-bodysm c-sec">Los enlaces para cambiar la contraseña duran una hora y sirven una sola vez. Pedí uno nuevo.</span></div>
+        <div className="w-con-sello"><span className="w-sello-ico"><Ico n="link-2-off" s={26} /></span><div className="col g2"><span className="t-title">El enlace venció</span><span className="t-bodysm c-sec">Los enlaces para cambiar la contraseña duran una hora y sirven una sola vez. Pedí uno nuevo.</span></div></div>
         <Boton t="lg" ancho icoDer="arrow-right">Pedir otro enlace</Boton>
       </Acceso>
     );

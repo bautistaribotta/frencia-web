@@ -467,6 +467,10 @@ tiendas. En `Web - 3`, sección "Términos y privacidad públicos".
 
 ## Recuperar la contraseña
 
+- Recuperar, «Revisá tu correo» y «El enlace venció» llevan el sello del icono (52 px,
+  `.w-sello-ico`) a la izquierda del título y la bajada, centrado en su alto
+  (`.w-con-sello`, separación `space-4`). Volver a iniciar sesión queda arriba, solo.
+
 - «¿La olvidaste?» del login lleva a `/recuperar` con el correo ya escrito, si había uno.
   Mismo marco que el login (billete a la izquierda). Enviar enlace pide a Supabase el
   correo de recuperación con vuelta a `/nueva-contrasena`. Siempre confirma «Revisá tu
