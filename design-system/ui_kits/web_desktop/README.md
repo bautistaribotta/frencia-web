@@ -93,6 +93,13 @@ con microtexto, número de serie y una cartela con la marca `FRENCIA.` (en lugar
 - Login y signup llevan Apple y Google debajo del botón principal, con el divisor "o
   continuá con". En el signup crean la cuenta si no existe; el alta sigue por términos y
   el setup del perfil, igual que con correo.
+- Crear cuenta con correo da de alta en Supabase con el nombre (el trigger lo copia a
+  `profiles`) y después guarda el apellido. Mientras envía, el botón dice «Creando cuenta…»
+  con la ruedita y los campos y Google quedan apagados. Sin confirmación por correo la
+  sesión llega en el acto y la puerta sigue a términos y setup. Si el correo ya tiene
+  cuenta, el error va en el campo («Este correo ya tiene una cuenta.») con «¿Es tuya?
+  Entrá o recuperá la contraseña.»; los demás errores (red, demasiados intentos,
+  contraseña débil) salen como aviso de error, con los mismos textos que la app.
 - **Por ahora solo Google:** Apple queda oculto hasta tener la cuenta de Apple Developer y
   habilitarlo en Supabase (`PROVEEDORES_ACTIVOS` en `src/lib/oauth.ts`). Con un solo
   proveedor, su botón ocupa el ancho de la fila. Las maquetas muestran los dos, que es el
