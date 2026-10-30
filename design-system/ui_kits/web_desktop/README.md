@@ -45,6 +45,9 @@ página), `tools/tokens_web.py` (regenera los tokens desde `tokens.json`).
   Abre el constructor (`/rutinas/nueva`), también con `N`, con el cursor de mano (`pointer`). Vive solo en la barra
   lateral: el encabezado de Rutinas no lo repite. Con 5 rutinas abre el aviso de límite (ver «Rutinas»).
 - La pestaña activa: icono en lume y marca de 3 px pegada al borde, como en la app.
+- La marca de arriba (`FRENCIA.`, o `F.` en el riel) es un link al Inicio (`/`), con el
+  cursor de mano, el anillo de foco al tabular y el título «Inicio». No cambia de aspecto
+  al hover: el Inicio ya tiene su pestaña.
 - Se colapsa a riel con `[` o con el botón de la cabecera (preferencia en `localStorage`).
 - El **constructor** es pantalla completa, sin navegación lateral: es una tarea de foco.
 - Atajos: `G I` / `G R` / `G H` navegar, `N` nueva rutina, `/` buscar, `Ctrl S` guardar, `?` ayuda.

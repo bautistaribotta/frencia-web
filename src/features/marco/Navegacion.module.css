@@ -18,6 +18,8 @@
 }
 
 .cabeza { display: flex; align-items: center; padding: 0 var(--space-3); min-height: 36px; }
+.marcaLink { display: inline-flex; color: inherit; text-decoration: none; border-radius: var(--radius-sm); }
+.marcaLink:focus-visible { outline: var(--foco-w) solid var(--focus-ring); outline-offset: var(--foco-offset); }
 .marcaCorta {
   display: none;
   font: var(--fw-bold) 22px/1 var(--font-sans);

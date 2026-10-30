@@ -400,7 +400,7 @@ function Nav({ activo, rail, hover }) {
   return (
     <nav className={`w-nav${rail ? ' w-nav--rail' : ''}`} aria-label="Principal">
       <div className="w-nav__cabeza">
-        {rail ? <span className="w-marca">F.</span> : <Marca />}
+        <a className="w-nav__marca" href="#" aria-label="Frencia, ir al inicio" title="Inicio">{rail ? <span className="w-marca">F.</span> : <Marca />}</a>
         {rail ? null : <BotonIco ico="panel-left-close" t="sm" label="Colapsar navegación" />}
       </div>
       {rail ? <BotonIco ico="plus" v="surface" className="w-nueva-rutina" label="Nueva rutina" estado={hover === 'crear' ? 'hover' : undefined} tip="Nueva rutina  N" tipLado="der" />

@@ -148,3 +148,22 @@ for (const [tamano, semanas, rango, archivo] of [
     await page.screenshot({ path: `capturas/${archivo}-inicio-actividad.png`, fullPage: true });
   });
 }
+
+for (const [ancho, barra] of [
+  [1440, 'lateral'],
+  [1100, 'riel'],
+] as const) {
+  test(`la marca de la barra ${barra} lleva al inicio`, async ({ page }) => {
+    await page.setViewportSize({ width: ancho, height: 900 });
+    await page.emulateMedia({ colorScheme: 'dark', reducedMotion: 'reduce' });
+    await conSesion(page, { tablas: { routines: [], workout_sessions: [] } });
+    await page.goto('/historial');
+    const marca = page.getByRole('navigation', { name: 'Principal' }).getByRole('link', { name: 'Frencia, ir al inicio' });
+    await expect(marca).toBeVisible();
+    await marca.focus();
+    await page.screenshot({ path: `capturas/marca-inicio-foco-${barra}.png`, clip: { x: 0, y: 0, width: 320, height: 120 } });
+    await marca.click();
+    await expect(page).toHaveURL(/\/$/);
+    await expect(page.getByRole('button', { name: 'Crear primera rutina' })).toBeVisible();
+  });
+}

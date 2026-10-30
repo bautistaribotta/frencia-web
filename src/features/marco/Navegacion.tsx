@@ -1,5 +1,5 @@
 /* Navegacion lateral en vidrio denso: reemplaza la barra de pestañas de la
-   app. Arriba la marca y Nueva rutina (en lugar del boton central de la
+   app. Arriba la marca (link al Inicio) y Nueva rutina (en lugar del boton central de la
    barra), despues Inicio, Rutinas e Historial; al pie el recordatorio de que
    se entrena desde el celular, Configuracion y el usuario, que lleva al
    Perfil. Entre 1024 y 1279 px se vuelve riel de iconos (ver el CSS).
@@ -8,7 +8,7 @@
 
 import { History, House, Layers, Plus, Settings, Smartphone, type LucideIcon } from 'lucide-react';
 import { useEffect } from 'react';
-import { NavLink, useNavigate } from 'react-router';
+import { Link, NavLink, useNavigate } from 'react-router';
 
 import { Boton } from '@/design/components/Boton';
 import { Icono } from '@/design/components/Icono';
@@ -73,10 +73,13 @@ export function Navegacion() {
   return (
     <nav className={styles.nav} aria-label="Principal">
       <div className={styles.cabeza}>
-        <Marca className={styles.marca} />
-        <span className={styles.marcaCorta} aria-hidden="true">
-          F.
-        </span>
+        {/* La marca lleva al Inicio, como en cualquier sitio. */}
+        <Link to="/" className={styles.marcaLink} aria-label="Frencia, ir al inicio" title="Inicio">
+          <Marca className={styles.marca} />
+          <span className={styles.marcaCorta} aria-hidden="true">
+            F.
+          </span>
+        </Link>
       </div>
 
       <Boton
