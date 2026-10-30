@@ -31,3 +31,4 @@ Thumbs.db
 # editor y agentes
 .claude/settings.local.json
 .claude/launch.json
+src/assets/grano.png
