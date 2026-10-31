@@ -1,82 +1,163 @@
-/* Fondo de luces (web). Las cinco posiciones de la app con los radios de
-   ventana apaisada del kit (POS_WEB en web-base.jsx). Cada luz declara su
-   centro (--x, --y), su radio en % del ancho (--r) y su alfa (--a); la
-   ganancia del tema (--fondo-ganancia) multiplica el alfa, con tope 100 %. */
+/* Fondo vivo (prueba), copia del GradienteVivo de la landing. Cada mancha es
+   un gradiente radial (sin filter: blur, que es caro de animar) y se mueve
+   solo con transform. Los colores salen de los tokens que cambian con el
+   tema (--glow-a, --glow-b, --signal) y la intensidad, de --fondo-ganancia.
+   Fijo a la ventana, detras de todas las pantallas. */
 
 .fondo {
+  --g: var(--fondo-ganancia, 1);
   position: fixed;
   inset: 0;
   z-index: 0;
   overflow: hidden;
-  container-type: size;
   background: var(--bg-app);
   pointer-events: none;
 }
 
-.luz {
+.mancha {
   position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    circle calc(var(--r) * 1cqw) at var(--x) var(--y),
-    color-mix(in oklch, var(--glow) min(100%, calc(var(--a) * var(--fondo-ganancia, 1))), transparent) 0%,
-    color-mix(in oklch, var(--glow) min(100%, calc(var(--a) * 0.45 * var(--fondo-ganancia, 1))), transparent) 42%,
-    transparent 100%
+  border-radius: 50%;
+  will-change: transform;
+  animation-duration: var(--dur);
+  animation-timing-function: var(--ease-in-out);
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+/* Lima brillante arriba a la derecha: la luz principal. */
+.manchaA {
+  animation-name: deriva-a;
+  --dur: 26s;
+  width: 62vmax;
+  aspect-ratio: 1;
+  top: -22vmax;
+  right: -14vmax;
+  background: radial-gradient(closest-side, color-mix(in oklch, var(--glow-a) min(100%, calc(72% * var(--g))), transparent) 0%, color-mix(in oklch, var(--glow-a) min(100%, calc(26% * var(--g))), transparent) 55%, transparent 100%);
+}
+
+/* Bosque profundo abajo a la izquierda (en claro, un blanco que lava). */
+.manchaB {
+  animation-name: deriva-b;
+  --dur: 32s;
+  width: 80vmax;
+  aspect-ratio: 1;
+  bottom: -38vmax;
+  left: -26vmax;
+  background: radial-gradient(closest-side, color-mix(in oklch, var(--glow-b) min(100%, calc(95% * var(--g))), transparent) 0%, color-mix(in oklch, var(--glow-b) min(100%, calc(45% * var(--g))), transparent) 50%, transparent 100%);
+}
+
+/* Verde señal que cruza por el medio, detras del titulo. */
+.manchaC {
+  animation-name: deriva-c;
+  --dur: 22s;
+  width: 46vmax;
+  aspect-ratio: 1.4;
+  top: 6%;
+  left: 18%;
+  background: radial-gradient(closest-side, color-mix(in oklch, var(--signal) min(100%, calc(44% * var(--g))), transparent) 0%, transparent 100%);
+}
+
+/* Un destello claro que viaja: le da brillo al lima. */
+.manchaD {
+  animation-name: deriva-d;
+  --dur: 18s;
+  width: 26vmax;
+  aspect-ratio: 1;
+  top: 8%;
+  right: 18%;
+  background: radial-gradient(closest-side, color-mix(in oklch, var(--lume-300) min(100%, calc(40% * var(--g))), transparent) 0%, transparent 100%);
+}
+
+/* Musgo oscuro a la derecha, abajo: el contrapeso. */
+.manchaE {
+  animation-name: deriva-e;
+  --dur: 28s;
+  width: 52vmax;
+  aspect-ratio: 1;
+  bottom: -18vmax;
+  right: -10vmax;
+  background: radial-gradient(closest-side, color-mix(in oklch, var(--lume-800) min(100%, calc(60% * var(--g))), transparent) 0%, transparent 100%);
+}
+
+/* Lima tenue a la izquierda, a la altura de los CTA: equilibra la
+   composicion con la luz principal. */
+.manchaF {
+  animation-name: deriva-f;
+  --dur: 24s;
+  width: 48vmax;
+  aspect-ratio: 1;
+  top: 24%;
+  left: -20vmax;
+  background: radial-gradient(closest-side, color-mix(in oklch, var(--glow-a) min(100%, calc(30% * var(--g))), transparent) 0%, transparent 100%);
+}
+
+/* Un abanico conico que gira muy lento y mezcla las manchas entre si. */
+.aurora {
+  position: absolute;
+  inset: -40%;
+  background: conic-gradient(
+    from 0deg at 62% 38%,
+    transparent 0deg,
+    color-mix(in oklch, var(--glow-a) min(100%, calc(18% * var(--g))), transparent) 60deg,
+    transparent 130deg,
+    color-mix(in oklch, var(--signal) min(100%, calc(16% * var(--g))), transparent) 210deg,
+    transparent 280deg,
+    color-mix(in oklch, var(--lume-300) min(100%, calc(12% * var(--g))), transparent) 330deg,
+    transparent 360deg
   );
+  animation: giro 90s linear infinite;
+  will-change: transform;
 }
 
-.luzA { --glow: var(--glow-a); }
-.luzB { --glow: var(--glow-b); }
-.luzC { --glow: var(--glow-c); }
-
-.cumbre .luzA { --x: 90%; --y: 0%; --r: 52; --a: 50%; }
-.cumbre .luzB { --x: 6%; --y: 74%; --r: 70; --a: 90%; }
-.cumbre .luzC { --x: 98%; --y: 100%; --r: 40; --a: 22%; }
-
-.centro .luzA { --x: 56%; --y: 52%; --r: 46; --a: 42%; }
-.centro .luzB { --x: 4%; --y: 8%; --r: 60; --a: 85%; }
-.centro .luzC { --x: 100%; --y: 100%; --r: 40; --a: 20%; }
-
-.flanco .luzA { --x: 104%; --y: 46%; --r: 50; --a: 50%; }
-.flanco .luzB { --x: -2%; --y: 92%; --r: 70; --a: 90%; }
-.flanco .luzC { --x: -4%; --y: -6%; --r: 36; --a: 20%; }
-
-.base .luzA { --x: -2%; --y: 98%; --r: 52; --a: 42%; }
-.base .luzB { --x: 100%; --y: 10%; --r: 64; --a: 90%; }
-.base .luzC { --x: 72%; --y: 106%; --r: 36; --a: 18%; }
-
-.velada .luzA { --x: 102%; --y: 108%; --r: 46; --a: 40%; }
-.velada .luzB { --x: 10%; --y: 60%; --r: 66; --a: 85%; }
-.velada .luzC { --x: -4%; --y: -8%; --r: 36; --a: 22%; }
-
-/* Solo en el onboarding las luces derivan despacio (20, 26 y 31 s). */
-.animado .luz {
-  inset: -8%;
-  animation: deriva 20s ease-in-out infinite alternate;
-}
-.animado .luzB { animation-duration: 26s; animation-delay: -7s; }
-.animado .luzC { animation-duration: 31s; animation-delay: -13s; }
-
-@keyframes deriva {
-  0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(3%, -3%) scale(1.06); }
-  100% { transform: translate(-3%, 3%) scale(0.97); }
-}
-
-/* Grano fino para que el degradado no haga bandas. */
 .grano {
   position: absolute;
   inset: 0;
-  opacity: 0.18;
+  opacity: 0.22;
   mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
 }
 
+/* Arriba oscurece para la barra; abajo funde con la seccion siguiente. */
 .velo {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, var(--velo-top) 0%, transparent 18%, transparent 78%, var(--velo-bottom) 100%);
+  background: linear-gradient(180deg, var(--velo-top) 0%, transparent 16%, transparent 62%, var(--bg-app) 100%);
+}
+
+@keyframes deriva-a {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-12%, 10%) scale(1.12); }
+  100% { transform: translate(-22%, -4%) scale(0.94); }
+}
+@keyframes deriva-b {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(14%, -8%) scale(1.08); }
+  100% { transform: translate(6%, -16%) scale(1.16); }
+}
+@keyframes deriva-c {
+  0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+  50% { transform: translate(30%, -14%) rotate(24deg) scale(1.2); }
+  100% { transform: translate(-18%, 12%) rotate(-12deg) scale(0.9); }
+}
+@keyframes deriva-d {
+  0% { transform: translate(0, 0) scale(0.9); }
+  50% { transform: translate(-60%, 40%) scale(1.25); }
+  100% { transform: translate(-120%, 10%) scale(1); }
+}
+@keyframes deriva-e {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-26%, -18%) scale(1.18); }
+}
+@keyframes deriva-f {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(18%, 14%) scale(1.15); }
+  100% { transform: translate(8%, -12%) scale(0.92); }
+}
+@keyframes giro {
+  to { transform: rotate(1turn); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animado .luz { animation: none; }
+  .mancha,
+  .aurora { animation: none; }
 }

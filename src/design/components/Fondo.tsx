@@ -1,6 +1,7 @@
-/* Fondo de luces: la base bg-app, tres luces radiales en una de cinco
-   posiciones fijas, el grano y el velo. Cada pantalla elige la posicion
-   segun donde esta su contenido (ver el README del kit web). */
+/* Fondo vivo (prueba): el mismo gradiente animado del hero de la landing
+   (GradienteVivo.astro de frencia-landing). Manchas de verde Lume que derivan
+   despacio sobre bg-app, un abanico conico que gira, el grano y el velo. Por
+   ahora es igual en todas las pantallas: la posicion queda solo como dato. */
 
 import styles from './Fondo.module.css';
 
@@ -8,17 +9,20 @@ export type PosicionFondo = 'cumbre' | 'centro' | 'flanco' | 'base' | 'velada';
 
 interface Props {
   posicion: PosicionFondo;
-  /** Las luces derivan despacio. Solo en el onboarding. */
+  /** Sin efecto en el fondo vivo: siempre se mueve. */
   animado?: boolean;
 }
 
-export function Fondo({ posicion, animado = false }: Props) {
-  const clases = [styles.fondo, styles[posicion], animado ? styles.animado : ''].join(' ');
+export function Fondo({ posicion }: Props) {
   return (
-    <div className={clases} aria-hidden="true" data-posicion={posicion}>
-      <div className={`${styles.luz} ${styles.luzA}`} />
-      <div className={`${styles.luz} ${styles.luzB}`} />
-      <div className={`${styles.luz} ${styles.luzC}`} />
+    <div className={styles.fondo} aria-hidden="true" data-posicion={posicion}>
+      <div className={`${styles.mancha} ${styles.manchaA}`} />
+      <div className={`${styles.mancha} ${styles.manchaB}`} />
+      <div className={`${styles.mancha} ${styles.manchaC}`} />
+      <div className={`${styles.mancha} ${styles.manchaD}`} />
+      <div className={`${styles.mancha} ${styles.manchaE}`} />
+      <div className={`${styles.mancha} ${styles.manchaF}`} />
+      <div className={styles.aurora} />
       <div className={styles.grano} />
       <div className={styles.velo} />
     </div>
