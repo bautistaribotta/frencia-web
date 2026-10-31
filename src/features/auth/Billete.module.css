@@ -60,3 +60,13 @@
   letter-spacing: 0.12em;
   fill: var(--text-primary);
 }
+
+/* La marca abajo a la izquierda, bien adentro de la linea interior. Clara en
+   los dos temas, como la linea: la foto es oscura tambien en claro. Dos
+   clases para ganarle al color propio de la Marca. */
+.billete .marca {
+  position: absolute;
+  left: 40px;
+  bottom: 40px;
+  color: var(--ivory-50);
+}

@@ -1,4 +1,5 @@
 import { useId, useLayoutEffect, useRef, useState } from 'react';
+import { Marca } from '@/design/components/varios';
 import styles from './Billete.module.css';
 
 const FRASE = 'CADA SERIE CUENTA · FRENCIA · ';
@@ -63,6 +64,7 @@ export function Billete() {
           </>
         )}
       </svg>
+      <Marca grande className={styles.marca} />
     </div>
   );
 }
