@@ -10,7 +10,8 @@
   inset: 0;
   z-index: 0;
   overflow: hidden;
-  background: var(--bg-app);
+  /* Negro en el tema oscuro; en el claro, la base de siempre. */
+  background: light-dark(var(--bg-app), oklch(0% 0 0));
   pointer-events: none;
 }
 
@@ -27,7 +28,7 @@
 /* Lima brillante arriba a la derecha: la luz principal. */
 .manchaA {
   animation-name: deriva-a;
-  --dur: 26s;
+  --dur: 30s;
   width: 62vmax;
   aspect-ratio: 1;
   top: -22vmax;
@@ -38,7 +39,7 @@
 /* Bosque profundo abajo a la izquierda (en claro, un blanco que lava). */
 .manchaB {
   animation-name: deriva-b;
-  --dur: 32s;
+  --dur: 36s;
   width: 80vmax;
   aspect-ratio: 1;
   bottom: -38vmax;
@@ -49,7 +50,7 @@
 /* Verde señal que cruza por el medio, detras del titulo. */
 .manchaC {
   animation-name: deriva-c;
-  --dur: 22s;
+  --dur: 26s;
   width: 46vmax;
   aspect-ratio: 1.4;
   top: 6%;
@@ -60,7 +61,7 @@
 /* Un destello claro que viaja: le da brillo al lima. */
 .manchaD {
   animation-name: deriva-d;
-  --dur: 18s;
+  --dur: 22s;
   width: 26vmax;
   aspect-ratio: 1;
   top: 8%;
@@ -71,7 +72,7 @@
 /* Musgo oscuro a la derecha, abajo: el contrapeso. */
 .manchaE {
   animation-name: deriva-e;
-  --dur: 28s;
+  --dur: 32s;
   width: 52vmax;
   aspect-ratio: 1;
   bottom: -18vmax;
@@ -83,30 +84,12 @@
    composicion con la luz principal. */
 .manchaF {
   animation-name: deriva-f;
-  --dur: 24s;
+  --dur: 28s;
   width: 48vmax;
   aspect-ratio: 1;
   top: 24%;
   left: -20vmax;
   background: radial-gradient(closest-side, color-mix(in oklch, var(--glow-a) min(100%, calc(30% * var(--g))), transparent) 0%, transparent 100%);
-}
-
-/* Un abanico conico que gira muy lento y mezcla las manchas entre si. */
-.aurora {
-  position: absolute;
-  inset: -40%;
-  background: conic-gradient(
-    from 0deg at 62% 38%,
-    transparent 0deg,
-    color-mix(in oklch, var(--glow-a) min(100%, calc(18% * var(--g))), transparent) 60deg,
-    transparent 130deg,
-    color-mix(in oklch, var(--signal) min(100%, calc(16% * var(--g))), transparent) 210deg,
-    transparent 280deg,
-    color-mix(in oklch, var(--lume-300) min(100%, calc(12% * var(--g))), transparent) 330deg,
-    transparent 360deg
-  );
-  animation: giro 90s linear infinite;
-  will-change: transform;
 }
 
 .grano {
@@ -153,11 +136,7 @@
   50% { transform: translate(18%, 14%) scale(1.15); }
   100% { transform: translate(8%, -12%) scale(0.92); }
 }
-@keyframes giro {
-  to { transform: rotate(1turn); }
-}
 
 @media (prefers-reduced-motion: reduce) {
-  .mancha,
-  .aurora { animation: none; }
+  .mancha { animation: none; }
 }

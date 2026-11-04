@@ -1,6 +1,6 @@
 /* Fondo vivo (prueba): el mismo gradiente animado del hero de la landing
    (GradienteVivo.astro de frencia-landing). Manchas de verde Lume que derivan
-   despacio sobre bg-app, un abanico conico que gira, el grano y el velo. Por
+   despacio sobre negro (bg-app en el tema claro), el grano y el velo. Por
    ahora es igual en todas las pantallas: la posicion queda solo como dato. */
 
 import styles from './Fondo.module.css';
@@ -22,7 +22,6 @@ export function Fondo({ posicion }: Props) {
       <div className={`${styles.mancha} ${styles.manchaD}`} />
       <div className={`${styles.mancha} ${styles.manchaE}`} />
       <div className={`${styles.mancha} ${styles.manchaF}`} />
-      <div className={styles.aurora} />
       <div className={styles.grano} />
       <div className={styles.velo} />
     </div>
