@@ -22,7 +22,7 @@ revisar lo hecho.
 - TanStack Query para leer y cachear datos de Supabase.
 - dnd-kit (`@dnd-kit/core` + `@dnd-kit/sortable`) para arrastrar y reordenar.
 - Iconos de Lucide (`lucide-react`).
-- Se despliega en Cloudflare con deploy automatico desde GitHub, en frencia.fit.
+- Se despliega en Cloudflare con deploy automatico desde GitHub, en app.frencia.fit.
 
 ## Design system
 
